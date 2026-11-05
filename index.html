@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Launcher">
+<title>Movie Launcher</title>
+<style>
+:root { --bg: #f3f2ef; --fg: #1d1c1a; --muted: #6b6862; --accent: #e8662a; --ink: #fff; }
+@media (prefers-color-scheme: dark) { :root { --bg: #161513; --fg: #efede8; --muted: #a29e96; --accent: #f07a3e; --ink: #1a0f08; color-scheme: dark; } }
+body { margin: 0; background: var(--bg); color: var(--fg); font: 16px/1.5 -apple-system, system-ui, sans-serif; padding: 32px max(16px, env(safe-area-inset-left)); }
+main { max-width: 30rem; margin: 0 auto; display: grid; gap: 16px; }
+h1 { font-size: 24px; margin: 0; }
+p { margin: 0; color: var(--muted); }
+a.btn { display: block; text-align: center; text-decoration: none; background: var(--accent); color: var(--ink); font-weight: 600; font-size: 17px; padding: 16px; border-radius: 12px; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Does a link on a page open Infuse?</h1>
+  <p>Tap the button on your iPhone. Infuse should open on Back to the Future Part III.</p>
+  <a class="btn" href="infuse://movie/196">Open in Infuse</a>
+</main>
+</body>
+</html>
