@@ -102,8 +102,8 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--accent); outlin
     var c = $('chips'); c.innerHTML = '';
     if (state.shelf === 'Watch Next') { c.hidden = true; return; }
     c.hidden = false;
-    var cats = {}; list.forEach(function (i) { cats[i.category] = (cats[i.category] || 0) + 1; });
-    var names = ['All'].concat(Object.keys(cats).sort());
+    var cats = {}, ord = {}; list.forEach(function (i) { cats[i.category] = (cats[i.category] || 0) + 1; if (!(i.category in ord) || (i.order || '') < ord[i.category]) ord[i.category] = i.order || ''; });
+    var names = ['All'].concat(Object.keys(cats).sort(function (a, b) { return (ord[a] || '').localeCompare(ord[b] || '') || a.localeCompare(b); }));
     if (names.indexOf(state.cat) < 0) state.cat = 'All';
     names.forEach(function (n) {
       var b = document.createElement('button'); b.type = 'button';

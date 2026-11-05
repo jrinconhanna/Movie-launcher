@@ -32,6 +32,11 @@ def save(name, obj, root=False):
         f.write("\n")
 
 
+def cat_num(s):
+    m = re.match(r"^(\d+)-", s)
+    return f"{int(m.group(1)):03d}" if m else "999"
+
+
 def clean_cat(s):
     return CAT_RE.sub("", s).replace(":", " / ").strip()
 
@@ -75,18 +80,19 @@ def group_items(lines):
             cat = clean_cat(parts[2])
             t, y = title_year(fname)
             it = add("movie|" + "/".join(parts[2:]), group="Movies", category=cat,
-                     name=t, year=y, prefer="movie")
+                     order=cat_num(parts[2]), name=t, year=y, prefer="movie")
         elif parts[:2] == ["z- Other", "2- TV Series"] and len(parts) >= 4:
             show = parts[2]
             if show.lower().startswith("z-"):
                 continue
             t, y = title_year(show)
             it = add("tv|" + show, group="Series", category="TV series",
-                     name=t, year=y, prefer="tv")
+                     order="000", name=t, year=y, prefer="tv")
         elif parts[0] == "2- Docu-series" and len(parts) >= 3:
-            rest, cat = parts[1:], "Docs"
+            rest, cat, order = parts[1:], "Docs", []
             while len(rest) > 1 and CAT_RE.match(rest[0]):
                 cat = clean_cat(rest[0])
+                order.append(cat_num(rest[0]))
                 rest = rest[1:]
             if len(rest) == 1:
                 t, y = title_year(rest[0])
@@ -102,7 +108,8 @@ def group_items(lines):
                 t, y = title_year(rest[0])
                 idx = parts.index(rest[0])
                 key, prefer = "doc|" + "/".join(parts[1:idx + 1]), "tv"
-            it = add(key, group="Docs", category=cat, name=t, year=y, prefer=prefer)
+            it = add(key, group="Docs", category=cat, order=".".join(order) or "999",
+                     name=t, year=y, prefer=prefer)
         else:
             continue  # talks (1- Tech) and anything else: not in the MVP
         it["files"] += 1
@@ -237,7 +244,7 @@ def main():
                 status = "watched" if done == len(it["eps"]) else ("progress" if done else "unwatched")
             elif m["tmdb"] in watched_shows:
                 status = "progress"
-        out.append({"key": key, "group": it["group"], "category": it["category"],
+        out.append({"key": key, "group": it["group"], "category": it["category"], "order": it["order"],
                     "kind": m["kind"], "tmdb": m["tmdb"], "title": m["title"],
                     "date": m["date"], "poster": m["poster"], "overview": m["overview"],
                     "status": status, "progress": prog, "files": it["files"]})
