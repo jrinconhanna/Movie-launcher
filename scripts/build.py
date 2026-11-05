@@ -152,11 +152,21 @@ def tmdb_match(it, token):
 
 
 def trakt_get(path, client_id):
-    req = urllib.request.Request("https://api.trakt.tv" + path, headers={
-        "Content-Type": "application/json", "trakt-api-version": "2",
-        "trakt-api-key": client_id, "User-Agent": "movie-launcher/1.0"})
-    with urllib.request.urlopen(req, timeout=30) as r:
-        return json.load(r)
+    """GET a Trakt list, following pagination (Trakt caps pages at 100 items)."""
+    out, page = [], 1
+    while True:
+        sep = "&" if "?" in path else "?"
+        req = urllib.request.Request(f"https://api.trakt.tv{path}{sep}page={page}&limit=100", headers={
+            "Content-Type": "application/json", "trakt-api-version": "2",
+            "trakt-api-key": client_id, "User-Agent": "movie-launcher/1.0"})
+        with urllib.request.urlopen(req, timeout=30) as r:
+            data = json.load(r)
+            pages = int(r.headers.get("X-Pagination-Page-Count") or 1)
+        out.extend(data)
+        if page >= pages or not data:
+            return out
+        page += 1
+        time.sleep(0.3)
 
 
 def main():
@@ -193,7 +203,18 @@ def main():
                 watched_shows.add(tid)
                 watched_eps[tid] = {(se["number"], ep["number"])
                                     for se in s.get("seasons", []) for ep in se.get("episodes", [])}
-            print(f"Trakt: {len(watched_movies)} films, {len(watched_shows)} shows watched")
+            for h in trakt_get(f"/users/{TRAKT_USER}/history/movies", client):
+                tid = (h.get("movie") or {}).get("ids", {}).get("tmdb")
+                if tid:
+                    watched_movies.add(tid)
+            for h in trakt_get(f"/users/{TRAKT_USER}/history/episodes", client):
+                tid = (h.get("show") or {}).get("ids", {}).get("tmdb")
+                ep = h.get("episode") or {}
+                if tid and ep.get("season") is not None:
+                    watched_shows.add(tid)
+                    watched_eps.setdefault(tid, set()).add((ep["season"], ep["number"]))
+            print(f"Trakt: {len(watched_movies)} films, {len(watched_shows)} shows, "
+                  f"{sum(len(v) for v in watched_eps.values())} episodes watched")
         except Exception as e:  # keep building without watched status
             print("Trakt failed:", e)
 
