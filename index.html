@@ -4,23 +4,170 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Launcher">
+<meta name="theme-color" content="#131210">
 <title>Movie Launcher</title>
+<link rel="preconnect" href="https://image.tmdb.org">
 <style>
-:root { --bg: #f3f2ef; --fg: #1d1c1a; --muted: #6b6862; --accent: #e8662a; --ink: #fff; }
-@media (prefers-color-scheme: dark) { :root { --bg: #161513; --fg: #efede8; --muted: #a29e96; --accent: #f07a3e; --ink: #1a0f08; color-scheme: dark; } }
-body { margin: 0; background: var(--bg); color: var(--fg); font: 16px/1.5 -apple-system, system-ui, sans-serif; padding: 32px max(16px, env(safe-area-inset-left)); }
-main { max-width: 30rem; margin: 0 auto; display: grid; gap: 16px; }
-h1 { font-size: 24px; margin: 0; }
-p { margin: 0; color: var(--muted); }
-a.btn { display: block; text-align: center; text-decoration: none; background: var(--accent); color: var(--ink); font-weight: 600; font-size: 17px; padding: 16px; border-radius: 12px; }
+/* Layout: shelf tabs, category chips, poster grid; Infuse does the playing. */
+:root {
+  --bg: #f4f2ee; --surface: #ffffff; --fg: #1c1b19; --muted: #6d6a63; --line: #e2ded6;
+  --accent: #e8662a; --accent-ink: #ffffff; --chip: #ebe8e1; --good: #2f7d4f;
+  --font: -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root { --bg: #131210; --surface: #1d1c19; --fg: #f0eee9; --muted: #9c988f; --line: #2e2c28;
+    --accent: #f07a3e; --accent-ink: #1a0f08; --chip: #24221f; --good: #5fbf86; color-scheme: dark; }
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--bg); color: var(--fg); font: 15px/1.4 var(--font);
+  padding: env(safe-area-inset-top) max(14px, env(safe-area-inset-right)) calc(24px + env(safe-area-inset-bottom)) max(14px, env(safe-area-inset-left)); }
+header { position: sticky; top: env(safe-area-inset-top); z-index: 5; background: var(--bg); padding: 12px 0 8px; display: grid; gap: 10px; }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top); background: var(--bg); z-index: 6; }
+.tabs { display: flex; gap: 4px; background: var(--chip); border-radius: 10px; padding: 3px; }
+.tabs button { flex: 1; white-space: nowrap; border: 0; background: none; color: var(--muted); font: 600 14px var(--font); padding: 8px 4px; border-radius: 8px; cursor: pointer; }
+.tabs button[aria-selected="true"] { background: var(--surface); color: var(--fg); box-shadow: 0 1px 2px rgba(0,0,0,.12); }
+.tabs .n { font-weight: 500; opacity: .7; margin-left: 3px; font-size: 12px; }
+.chips { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; margin: 0 calc(-1 * max(14px, env(safe-area-inset-left))); padding: 0 max(14px, env(safe-area-inset-left)); }
+.chips::-webkit-scrollbar { display: none; }
+.chips button { flex: none; border: 1px solid var(--line); background: var(--surface); color: var(--fg); font: 500 13px var(--font); padding: 6px 12px; border-radius: 999px; cursor: pointer; white-space: nowrap; }
+.chips button[aria-pressed="true"] { background: var(--fg); color: var(--bg); border-color: var(--fg); }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(108px, 1fr)); gap: 14px 10px; margin-top: 6px; }
+@media (min-width: 700px) { .grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 20px 14px; } }
+.card { display: grid; gap: 6px; min-width: 0; }
+.poster { position: relative; display: block; aspect-ratio: 2 / 3; border-radius: 8px; overflow: hidden; background: var(--chip); }
+.poster img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.poster .ph { position: absolute; inset: 0; display: grid; place-items: center; padding: 8px; text-align: center; font-size: 12px; color: var(--muted); }
+.poster:active { transform: scale(.97); }
+.badge { position: absolute; left: 6px; bottom: 6px; background: rgba(0,0,0,.72); color: #fff; font: 600 11px var(--font); padding: 2px 6px; border-radius: 4px; }
+.t { font-size: 12.5px; font-weight: 600; line-height: 1.25; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+.y { font-size: 11.5px; color: var(--muted); }
+.acts { display: flex; gap: 6px; }
+.acts button { flex: 1; border: 1px solid var(--line); background: var(--surface); color: var(--muted); font: 600 12px var(--font); padding: 5px 0; border-radius: 6px; cursor: pointer; }
+.acts button.on { color: var(--accent); border-color: var(--accent); }
+.empty { color: var(--muted); padding: 40px 8px; text-align: center; }
+footer { margin-top: 28px; color: var(--muted); font-size: 12px; display: grid; gap: 10px; }
+details { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; }
+summary { cursor: pointer; color: var(--fg); font-weight: 600; font-size: 13px; }
+details ul { margin: 8px 0 0; padding-left: 18px; }
+details li { margin: 2px 0; }
+.toast { position: fixed; left: 50%; bottom: calc(18px + env(safe-area-inset-bottom)); transform: translateX(-50%); background: var(--fg); color: var(--bg); padding: 8px 14px; border-radius: 8px; font-size: 13px; z-index: 10; }
+button:focus-visible, a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 </style>
 </head>
 <body>
-<main>
-  <h1>Does a link on a page open Infuse?</h1>
-  <p>Tap the button on your iPhone. Infuse should open on Back to the Future Part III.</p>
-  <a class="btn" href="infuse://movie/196">Open in Infuse</a>
-</main>
+<header>
+  <div class="tabs" role="tablist" id="tabs"></div>
+  <div class="chips" id="chips"></div>
+</header>
+<main id="grid" class="grid"><div class="empty">Loading your library…</div></main>
+<footer id="foot"></footer>
+<div class="toast" id="toast" hidden></div>
+
+<script>
+(function () {
+  var SHELVES = ['Watch Next', 'Movies', 'Series', 'Docs'];
+  var items = [], unmatched = [], updated = '';
+  var state = { shelf: 'Movies', cat: 'All' };
+  var next = [], done = [];
+  function ls(k, d) { try { var v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch (e) { return d; } }
+  function lsSet(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
+  next = ls('next', []); done = ls('done', []); state = Object.assign(state, ls('view', {}));
+  var $ = function (id) { return document.getElementById(id); };
+
+  function link(it) { return 'infuse://' + (it.kind === 'movie' ? 'movie/' : 'series/') + it.tmdb; }
+  function year(it) { return (it.date || '').slice(0, 4); }
+  function isOpen(it) { return it.status !== 'watched' && done.indexOf(it.key) < 0; }
+  function toast(m) { var t = $('toast'); t.textContent = m; t.hidden = false; clearTimeout(toast.t); toast.t = setTimeout(function () { t.hidden = true; }, 1800); }
+
+  function pool() {
+    if (state.shelf === 'Watch Next') return next.map(function (k) { return items.find(function (i) { return i.key === k; }); }).filter(Boolean);
+    return items.filter(function (i) { return i.group === state.shelf && isOpen(i); });
+  }
+  function renderTabs() {
+    var t = $('tabs'); t.innerHTML = '';
+    SHELVES.forEach(function (s) {
+      var b = document.createElement('button'); b.type = 'button'; b.setAttribute('role', 'tab');
+      b.setAttribute('aria-selected', s === state.shelf ? 'true' : 'false');
+      var n = s === 'Watch Next' ? next.length : items.filter(function (i) { return i.group === s && isOpen(i); }).length;
+      b.textContent = s === 'Watch Next' ? 'Next' : s; var c = document.createElement('span'); c.className = 'n'; c.textContent = n; b.appendChild(c);
+      b.onclick = function () { state.shelf = s; state.cat = 'All'; save(); render(); window.scrollTo(0, 0); };
+      t.appendChild(b);
+    });
+  }
+  function renderChips(list) {
+    var c = $('chips'); c.innerHTML = '';
+    if (state.shelf === 'Watch Next') { c.hidden = true; return; }
+    c.hidden = false;
+    var cats = {}; list.forEach(function (i) { cats[i.category] = (cats[i.category] || 0) + 1; });
+    var names = ['All'].concat(Object.keys(cats).sort());
+    if (names.indexOf(state.cat) < 0) state.cat = 'All';
+    names.forEach(function (n) {
+      var b = document.createElement('button'); b.type = 'button';
+      b.textContent = n === 'All' ? 'All ' + list.length : n + ' ' + cats[n];
+      b.setAttribute('aria-pressed', n === state.cat ? 'true' : 'false');
+      b.onclick = function () { state.cat = n; save(); render(); };
+      c.appendChild(b);
+    });
+  }
+  function card(it) {
+    var d = document.createElement('div'); d.className = 'card';
+    var a = document.createElement('a'); a.className = 'poster'; a.href = link(it); a.setAttribute('aria-label', 'Open ' + it.title + ' in Infuse');
+    if (it.poster) { var img = document.createElement('img'); img.loading = 'lazy'; img.alt = ''; img.src = 'https://image.tmdb.org/t/p/w342' + it.poster; a.appendChild(img); }
+    else { var ph = document.createElement('div'); ph.className = 'ph'; ph.textContent = it.title; a.appendChild(ph); }
+    if (it.status === 'progress' && it.progress) { var bd = document.createElement('span'); bd.className = 'badge'; bd.textContent = it.progress[0] + '/' + it.progress[1]; a.appendChild(bd); }
+    if (it.status === 'watched' || done.indexOf(it.key) >= 0) { var w = document.createElement('span'); w.className = 'badge'; w.textContent = 'Watched'; a.appendChild(w); }
+    d.appendChild(a);
+    var t = document.createElement('div'); t.className = 't'; t.textContent = it.title; d.appendChild(t);
+    var y = document.createElement('div'); y.className = 'y'; y.textContent = [year(it), it.category].filter(Boolean).join(' · '); d.appendChild(y);
+    var acts = document.createElement('div'); acts.className = 'acts';
+    var inNext = next.indexOf(it.key) >= 0;
+    var nb = document.createElement('button'); nb.type = 'button'; nb.textContent = inNext ? '− Next' : '+ Next'; if (inNext) nb.className = 'on';
+    nb.setAttribute('aria-label', (inNext ? 'Remove from' : 'Add to') + ' Watch Next');
+    nb.onclick = function () { if (inNext) next.splice(next.indexOf(it.key), 1); else next.push(it.key); lsSet('next', next); toast(inNext ? 'Removed from Watch Next' : 'Added to Watch Next'); render(); };
+    var db = document.createElement('button'); db.type = 'button'; db.textContent = '✓ Done'; db.setAttribute('aria-label', 'Mark ' + it.title + ' as watched');
+    db.onclick = function () { if (done.indexOf(it.key) < 0) done.push(it.key); var i = next.indexOf(it.key); if (i >= 0) next.splice(i, 1); lsSet('done', done); lsSet('next', next); toast('Marked as watched'); render(); };
+    acts.appendChild(nb); acts.appendChild(db); d.appendChild(acts);
+    return d;
+  }
+  function render() {
+    renderTabs();
+    var list = pool();
+    renderChips(list);
+    if (state.shelf !== 'Watch Next' && state.cat !== 'All') list = list.filter(function (i) { return i.category === state.cat; });
+    if (state.shelf !== 'Watch Next') list.sort(function (a, b) { return (b.date || '').localeCompare(a.date || ''); });
+    var g = $('grid'); g.innerHTML = '';
+    if (!list.length) {
+      var e = document.createElement('div'); e.className = 'empty';
+      e.textContent = state.shelf === 'Watch Next' ? 'Nothing queued yet. Tap “+ Next” on any poster to add it here.' : 'Nothing unwatched here.';
+      g.appendChild(e);
+    } else list.forEach(function (it) { g.appendChild(card(it)); });
+    renderFoot();
+  }
+  function renderFoot() {
+    var f = $('foot'); f.innerHTML = '';
+    if (unmatched.length) {
+      var d = document.createElement('details'); var s = document.createElement('summary');
+      s.textContent = 'Couldn’t match ' + unmatched.length + (unmatched.length === 1 ? ' title' : ' titles'); d.appendChild(s);
+      var ul = document.createElement('ul');
+      unmatched.forEach(function (u) { var li = document.createElement('li'); li.textContent = u.name + (u.year ? ' (' + u.year + ')' : '') + ' — ' + u.group + ' · ' + u.category; ul.appendChild(li); });
+      d.appendChild(ul); f.appendChild(d);
+    }
+    var p = document.createElement('div');
+    p.textContent = (updated ? 'Library updated ' + updated.replace('T', ' ').replace('Z', ' UTC') + '. ' : '') + 'Posters and titles from TMDB. This product uses the TMDB API but is not endorsed or certified by TMDB. Watched status from Trakt.';
+    f.appendChild(p);
+  }
+  function save() { lsSet('view', state); }
+
+  fetch('library.json', { cache: 'no-cache' }).then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); }).then(function (d) {
+    items = d.items || []; unmatched = d.unmatched || []; updated = d.updated || ''; render();
+  }).catch(function () {
+    $('grid').innerHTML = '<div class="empty">The library isn’t built yet. It appears here a few minutes after the GitHub job runs.</div>';
+  });
+})();
+</script>
 </body>
 </html>
