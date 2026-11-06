@@ -11098,13 +11098,7 @@
    "group": "Docs",
    "key": "doc|1- Business/(-) Singles/Friends - The One that Goes Behind the Scenes.mp4",
    "name": "Friends - The One that Goes Behind the Scenes",
-   "suggest": {
-    "date": "1994-09-22",
-    "kind": "tv",
-    "score": 1.0,
-    "title": "Friends",
-    "tmdb": 1668
-   },
+   "suggest": null,
    "video": false,
    "year": null
   },
@@ -11113,14 +11107,8 @@
    "group": "Docs",
    "key": "doc|1- Business/(-) Singles/God of War - Raising Kratos PS4.mp4",
    "name": "God of War - Raising Kratos PS4",
-   "suggest": {
-    "date": "2017-05-27",
-    "kind": "movie",
-    "score": 1.0,
-    "title": "God of War",
-    "tmdb": 455043
-   },
-   "video": false,
+   "suggest": null,
+   "video": true,
    "year": null
   },
   {
@@ -11155,13 +11143,7 @@
    "group": "Docs",
    "key": "doc|1- Business/(-) Singles/PBS American Experience - Henry Ford.mp4",
    "name": "PBS American Experience - Henry Ford",
-   "suggest": {
-    "date": "2013-01-29",
-    "kind": "movie",
-    "score": 1.0,
-    "title": "Henry Ford",
-    "tmdb": 321635
-   },
+   "suggest": null,
    "video": false,
    "year": null
   },
@@ -11206,13 +11188,7 @@
    "group": "Docs",
    "key": "doc|1- Business/Rhodes - The Life & Legend of Cecil Rhodes",
    "name": "Rhodes - The Life & Legend of Cecil Rhodes",
-   "suggest": {
-    "date": "1996-09-15",
-    "kind": "tv",
-    "score": 1.0,
-    "title": "Rhodes",
-    "tmdb": 26404
-   },
+   "suggest": null,
    "video": false,
    "year": null
   },
@@ -11254,14 +11230,8 @@
    "group": "Docs",
    "key": "doc|2- Sports/1- American Football/(-) Brady & Patriots/(-) Podcasts:Interviews/Logan Paul - Tom Brady on Being The GOAT, Shedeur Sanders Draft Fail, Belichick’s Relationship, Netflix Roast 455.mp4",
    "name": "Logan Paul - Tom Brady on Being The GOAT, Shedeur Sanders Draft Fail, Belichick’s Relationship, Netflix Roast 455",
-   "suggest": {
-    "date": "2018-08-25",
-    "kind": "movie",
-    "score": 0.71,
-    "title": "KSI vs. Logan Paul",
-    "tmdb": 650319
-   },
-   "video": false,
+   "suggest": null,
+   "video": true,
    "year": null
   },
   {
@@ -11287,14 +11257,8 @@
    "group": "Docs",
    "key": "doc|2- Sports/1- American Football/(-) Brady & Patriots/(-) Podcasts:Interviews/The Pivot - Tom Brady on football journey, life after the rings, lessons, being a dad & self growth.mp4",
    "name": "The Pivot - Tom Brady on football journey, life after the rings, lessons, being a dad & self growth",
-   "suggest": {
-    "date": "2026-09-08",
-    "kind": "tv",
-    "score": 0.69,
-    "title": "The Pivot Podcast",
-    "tmdb": 334704
-   },
-   "video": false,
+   "suggest": null,
+   "video": true,
    "year": null
   },
   {
@@ -11302,14 +11266,8 @@
    "group": "Docs",
    "key": "doc|2- Sports/1- American Football/(-) Brady & Patriots/(-) Podcasts:Interviews/UFC Champion Mindset - Tom Brady.mp4",
    "name": "UFC Champion Mindset - Tom Brady",
-   "suggest": {
-    "date": "2023-02-03",
-    "kind": "movie",
-    "score": 0.67,
-    "title": "80 for Brady",
-    "tmdb": 942922
-   },
-   "video": false,
+   "suggest": null,
+   "video": true,
    "year": null
   },
   {
@@ -11353,13 +11311,7 @@
    "group": "Docs",
    "key": "doc|2- Sports/1- American Football/(--) Singles/Nick Saban - The Greatest College Coach of All Time - A Football Life - NFL+.mp4",
    "name": "Nick Saban - The Greatest College Coach of All Time - A Football Life - NFL+",
-   "suggest": {
-    "date": "2010-08-27",
-    "kind": "movie",
-    "score": 0.61,
-    "title": "Nick Saban: Gamechanger",
-    "tmdb": 579111
-   },
+   "suggest": null,
    "video": false,
    "year": null
   },
@@ -11422,14 +11374,8 @@
    "group": "Docs",
    "key": "doc|2- Sports/2- Tennis/(--) Singles/Rafael Nadal - The King of Tennis (2026).mp4",
    "name": "Rafael Nadal - The King of Tennis",
-   "suggest": {
-    "date": "2026-05-29",
-    "kind": "tv",
-    "score": 0.65,
-    "title": "Rafa",
-    "tmdb": 279884
-   },
-   "video": false,
+   "suggest": null,
+   "video": true,
    "year": 2026
   },
   {
@@ -11446,14 +11392,8 @@
    "group": "Docs",
    "key": "doc|2- Sports/3- Football/(-) Real Madrid/Real Madrid - El mejor Club del mundo",
    "name": "Real Madrid - El mejor Club del mundo",
-   "suggest": {
-    "date": "2020-02-23",
-    "kind": "movie",
-    "score": 0.61,
-    "title": "Real Madrid. Rey de Copas",
-    "tmdb": 690956
-   },
-   "video": false,
+   "suggest": null,
+   "video": true,
    "year": null
   },
   {
@@ -11461,14 +11401,8 @@
    "group": "Docs",
    "key": "doc|2- Sports/3- Football/(-) Real Madrid/Real Madrid - Los Heroes de la Septima European Cup 1997-98.mkv",
    "name": "Real Madrid - Los Heroes de la Septima European Cup 1997-98",
-   "suggest": {
-    "date": "2020-02-23",
-    "kind": "movie",
-    "score": 0.61,
-    "title": "Real Madrid. Rey de Copas",
-    "tmdb": 690956
-   },
-   "video": false,
+   "suggest": null,
+   "video": true,
    "year": null
   },
   {
@@ -11494,14 +11428,8 @@
    "group": "Docs",
    "key": "doc|2- Sports/4- Basketball/(-) Michael Jordan/Air Jordan - Joseph Vincent Doc.mp4",
    "name": "Air Jordan - Joseph Vincent Doc",
-   "suggest": {
-    "date": "",
-    "kind": "tv",
-    "score": 0.61,
-    "title": "Joseph Vincent - East Coast Tour",
-    "tmdb": 45694
-   },
-   "video": false,
+   "suggest": null,
+   "video": true,
    "year": null
   },
   {
@@ -11509,13 +11437,7 @@
    "group": "Docs",
    "key": "doc|2- Sports/4- Basketball/(-) Michael Jordan/Come Fly With Me - Michael Jordan (NBA Hardwood Classics).mp4",
    "name": "Come Fly With Me - Michael Jordan (NBA Hardwood Classics)",
-   "suggest": {
-    "date": "2019-08-06",
-    "kind": "movie",
-    "score": 1.0,
-    "title": "Come Fly With Me",
-    "tmdb": 1704730
-   },
+   "suggest": null,
    "video": false,
    "year": null
   },
@@ -11524,14 +11446,8 @@
    "group": "Docs",
    "key": "doc|2- Sports/4- Basketball/(-) Michael Jordan/Give Me Five! - The Chicago Bulls Five NBA Championships.mp4",
    "name": "Give Me Five! - The Chicago Bulls Five NBA Championships",
-   "suggest": {
-    "date": "1984-06-08",
-    "kind": "movie",
-    "score": 1.0,
-    "title": "Give Me Five!",
-    "tmdb": 289948
-   },
-   "video": false,
+   "suggest": null,
+   "video": true,
    "year": null
   },
   {
@@ -11575,14 +11491,8 @@
    "group": "Docs",
    "key": "doc|2- Sports/4- Basketball/(--) Singles/Boston Celtics - The Celtic Dynasty.mp4",
    "name": "Boston Celtics - The Celtic Dynasty",
-   "suggest": {
-    "date": "",
-    "kind": "movie",
-    "score": 0.6,
-    "title": "Boston Celtics: Home of the Brave",
-    "tmdb": 1128422
-   },
-   "video": false,
+   "suggest": null,
+   "video": true,
    "year": null
   },
   {
@@ -11590,14 +11500,8 @@
    "group": "Docs",
    "key": "doc|2- Sports/4- Basketball/(--) Singles/Charles Barkley Documentary - NBA Hardwood Classics.mp4",
    "name": "Charles Barkley Documentary - NBA Hardwood Classics",
-   "suggest": {
-    "date": "2023-10-24",
-    "kind": "movie",
-    "score": 0.75,
-    "title": "Charles Barkley Comes Out",
-    "tmdb": 1195846
-   },
-   "video": false,
+   "suggest": null,
+   "video": true,
    "year": null
   },
   {
@@ -11605,14 +11509,8 @@
    "group": "Docs",
    "key": "doc|2- Sports/4- Basketball/(--) Singles/Miami Heat - NBA Finals Champions (2013).mp4",
    "name": "Miami Heat - NBA Finals Champions",
-   "suggest": {
-    "date": "2021-11-05",
-    "kind": "movie",
-    "score": 1.0,
-    "title": "Miami Heat",
-    "tmdb": 896054
-   },
-   "video": false,
+   "suggest": null,
+   "video": true,
    "year": 2013
   },
   {
@@ -11638,14 +11536,8 @@
    "group": "Docs",
    "key": "doc|2- Sports/4- Basketball/(--) Singles/NBA Journey - Kevin Garnett.mp4",
    "name": "NBA Journey - Kevin Garnett",
-   "suggest": {
-    "date": "2009-01-01",
-    "kind": "movie",
-    "score": 0.9,
-    "title": "Kevin Garnett KG",
-    "tmdb": 707432
-   },
-   "video": false,
+   "suggest": null,
+   "video": true,
    "year": null
   },
   {
@@ -11653,14 +11545,8 @@
    "group": "Docs",
    "key": "doc|2- Sports/4- Basketball/(--) Singles/Philadelphia 76ers - On The Way To The NBA Finals (2000-01).mp4",
    "name": "Philadelphia 76ers - On The Way To The NBA Finals (2000-01)",
-   "suggest": {
-    "date": "1996-07-19",
-    "kind": "movie",
-    "score": 0.75,
-    "title": "Philadelphia 76ers - A History",
-    "tmdb": 1755198
-   },
-   "video": false,
+   "suggest": null,
+   "video": true,
    "year": null
   },
   {
@@ -11668,14 +11554,8 @@
    "group": "Docs",
    "key": "doc|2- Sports/4- Basketball/(--) Singles/Sports Illustrated - Classic Confrontations.mp4",
    "name": "Sports Illustrated - Classic Confrontations",
-   "suggest": {
-    "date": "2004-02-10",
-    "kind": "movie",
-    "score": 0.71,
-    "title": "Sports Illustrated: Swimsuit 2004",
-    "tmdb": 402986
-   },
-   "video": false,
+   "suggest": null,
+   "video": true,
    "year": null
   },
   {
@@ -11683,14 +11563,8 @@
    "group": "Docs",
    "key": "doc|2- Sports/4- Basketball/(--) Singles/The Foundation - NBA Superstars On and Off the Court (Subtitulado en Español).mp4",
    "name": "The Foundation - NBA Superstars On and Off the Court (Subtitulado en Español)",
-   "suggest": {
-    "date": "2015-05-12",
-    "kind": "movie",
-    "score": 1.0,
-    "title": "The Foundation",
-    "tmdb": 397072
-   },
-   "video": false,
+   "suggest": null,
+   "video": true,
    "year": null
   },
   {
@@ -11749,14 +11623,8 @@
    "group": "Docs",
    "key": "doc|3- History/1- Rome & Caesar/K&G - Caesar",
    "name": "K&G - Caesar",
-   "suggest": {
-    "date": "2002-12-27",
-    "kind": "tv",
-    "score": 0.63,
-    "title": "Julius Caesar",
-    "tmdb": 48692
-   },
-   "video": false,
+   "suggest": null,
+   "video": true,
    "year": null
   },
   {
@@ -11812,14 +11680,8 @@
    "group": "Movies",
    "key": "movie|14- Making of/Alfred Hitchcock - Reputations Documentary - Unveiling the Genius Behind the Thrills.mp4",
    "name": "Alfred Hitchcock - Reputations Documentary - Unveiling the Genius Behind the Thrills",
-   "suggest": {
-    "date": "2021-05-02",
-    "kind": "movie",
-    "score": 0.86,
-    "title": "I Am Alfred Hitchcock",
-    "tmdb": 826263
-   },
-   "video": false,
+   "suggest": null,
+   "video": true,
    "year": null
   },
   {
@@ -11827,14 +11689,8 @@
    "group": "Movies",
    "key": "movie|14- Making of/Danger Zone - The Making of Part 1.mp4",
    "name": "Danger Zone - The Making of Part 1",
-   "suggest": {
-    "date": "2023-10-09",
-    "kind": "movie",
-    "score": 1.0,
-    "title": "Danger Zone",
-    "tmdb": 1186738
-   },
-   "video": false,
+   "suggest": null,
+   "video": true,
    "year": null
   },
   {
@@ -11842,14 +11698,8 @@
    "group": "Movies",
    "key": "movie|14- Making of/Danger Zone - The Making of Part 2.mp4",
    "name": "Danger Zone - The Making of Part 2",
-   "suggest": {
-    "date": "2023-10-09",
-    "kind": "movie",
-    "score": 1.0,
-    "title": "Danger Zone",
-    "tmdb": 1186738
-   },
-   "video": false,
+   "suggest": null,
+   "video": true,
    "year": null
   },
   {
@@ -11866,14 +11716,8 @@
    "group": "Movies",
    "key": "movie|14- Making of/Making of Fellowship of the Ring - Lords of the Ring.mp4",
    "name": "Making of Fellowship of the Ring - Lords of the Ring",
-   "suggest": {
-    "date": "1984-06-30",
-    "kind": "movie",
-    "score": 0.89,
-    "title": "NWA Lords of The Ring",
-    "tmdb": 777717
-   },
-   "video": false,
+   "suggest": null,
+   "video": true,
    "year": null
   },
   {
@@ -11925,5 +11769,5 @@
    "year": 1959
   }
  ],
- "updated": "2026-11-06T09:15Z"
+ "updated": "2026-11-06T09:16Z"
 }
