@@ -184,6 +184,13 @@ def main():
         items = group_items(f.readlines())
     cache, overrides = load("matches.json", {}), load("overrides.json", {})
     videos = set(load("videos.json", []))  # unmatched keys that are videos, not TMDB titles
+    # overrides only need {"kind": "movie"|"tv", "tmdb": id}; fill in title, poster etc. from TMDB
+    for key, ov in overrides.items():
+        if ov and "title" not in ov:
+            r = tmdb_get(f"/{ov['kind']}/{ov['tmdb']}", {}, token)
+            ov.update({"title": r.get("title") or r.get("name") or key,
+                       "date": r.get("release_date") or r.get("first_air_date") or "",
+                       "poster": r.get("poster_path"), "overview": (r.get("overview") or "")[:400]})
 
     looked_up = 0
     for key, it in items.items():
