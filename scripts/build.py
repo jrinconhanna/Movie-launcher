@@ -183,6 +183,7 @@ def main():
     with open(os.path.join(DATA, "library.txt"), encoding="utf-8") as f:
         items = group_items(f.readlines())
     cache, overrides = load("matches.json", {}), load("overrides.json", {})
+    videos = set(load("videos.json", []))  # unmatched keys that are videos, not TMDB titles
 
     looked_up = 0
     for key, it in items.items():
@@ -230,7 +231,7 @@ def main():
         m = overrides.get(key, cache.get(key))
         if not m:
             unmatched.append({"key": key, "group": it["group"], "category": it["category"],
-                              "name": it["name"], "year": it["year"]})
+                              "name": it["name"], "year": it["year"], "video": key in videos})
             continue
         status, prog = "unwatched", None
         if m["kind"] == "movie":

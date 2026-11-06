@@ -52,6 +52,8 @@ body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-a
 footer { margin-top: 28px; color: var(--muted); font-size: 12px; display: grid; gap: 10px; }
 details { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; }
 summary { cursor: pointer; color: var(--fg); font-weight: 600; font-size: 13px; }
+.gaphint { margin: 6px 0 0; font-size: 12px; color: var(--muted); }
+details + details { margin-top: 10px; }
 details ul { margin: 8px 0 0; padding-left: 18px; }
 details li { margin: 2px 0; }
 .toast { position: fixed; left: 50%; bottom: calc(18px + env(safe-area-inset-bottom)); transform: translateX(-50%); background: var(--fg); color: var(--bg); padding: 8px 14px; border-radius: 8px; font-size: 13px; z-index: 10; }
@@ -149,13 +151,17 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--accent); outlin
   }
   function renderFoot() {
     var f = $('foot'); f.innerHTML = '';
-    if (unmatched.length) {
+    function gapList(list, label, hint) {
+      if (!list.length) return;
       var d = document.createElement('details'); var s = document.createElement('summary');
-      s.textContent = 'Couldn’t match ' + unmatched.length + (unmatched.length === 1 ? ' title' : ' titles'); d.appendChild(s);
+      s.textContent = label + ' · ' + list.length; d.appendChild(s);
+      var h = document.createElement('p'); h.className = 'gaphint'; h.textContent = hint; d.appendChild(h);
       var ul = document.createElement('ul');
-      unmatched.forEach(function (u) { var li = document.createElement('li'); li.textContent = u.name + (u.year ? ' (' + u.year + ')' : '') + ' — ' + u.group + ' · ' + u.category; ul.appendChild(li); });
+      list.forEach(function (u) { var li = document.createElement('li'); li.textContent = u.name + (u.year ? ' (' + u.year + ')' : '') + ' — ' + u.group + ' · ' + u.category; ul.appendChild(li); });
       d.appendChild(ul); f.appendChild(d);
     }
+    gapList(unmatched.filter(function (u) { return !u.video; }), 'Movies and docs not matched yet', 'Should be on TMDB. Send these to Claude to fix the match.');
+    gapList(unmatched.filter(function (u) { return u.video; }), 'Videos (not on TMDB)', 'YouTube clips, interviews and compilations. They will get their own home later.');
     var p = document.createElement('div');
     p.textContent = (updated ? 'Library updated ' + updated.replace('T', ' ').replace('Z', ' UTC') + '. ' : '') + 'Posters and titles from TMDB. This product uses the TMDB API but is not endorsed or certified by TMDB. Watched status from Trakt.';
     f.appendChild(p);
