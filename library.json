@@ -572,6 +572,21 @@
   },
   {
    "category": "Business",
+   "date": "2002-05-01",
+   "files": 68,
+   "group": "Docs",
+   "key": "doc|1- Business/G4 Icons",
+   "kind": "tv",
+   "order": "001",
+   "overview": "Icons was a documentary TV show on G4 that originally focused on significant people, companies, products, history, and milestones in world of video games. It was relaunched in 2006 and focused entirely on pop culture. It was cancelled soon afterwards.\n\nOn May 10, 2006, it was announced that Icons was relaunching on June 3 with an episode focusing on J.J. Abrams. The show will feature a broader sco",
+   "poster": "/tfk5d5uhUtGNBJkzmC1zjeaPTlU.jpg",
+   "progress": null,
+   "status": "unwatched",
+   "title": "Icons",
+   "tmdb": 3208
+  },
+  {
+   "category": "Business",
    "date": "2020-06-26",
    "files": 6,
    "group": "Docs",
@@ -11145,14 +11160,6 @@
   {
    "category": "Business",
    "group": "Docs",
-   "key": "doc|1- Business/G4 Icons",
-   "name": "G4 Icons",
-   "video": true,
-   "year": null
-  },
-  {
-   "category": "Business",
-   "group": "Docs",
    "key": "doc|1- Business/Make Better Software",
    "name": "Make Better Software",
    "video": true,
@@ -11655,5 +11662,5 @@
    "year": 1959
   }
  ],
- "updated": "2026-11-06T09:03Z"
+ "updated": "2026-11-06T09:07Z"
 }
