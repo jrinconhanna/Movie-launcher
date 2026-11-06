@@ -157,10 +157,20 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--accent); outlin
       s.textContent = label + ' · ' + list.length; d.appendChild(s);
       var h = document.createElement('p'); h.className = 'gaphint'; h.textContent = hint; d.appendChild(h);
       var ul = document.createElement('ul');
-      list.forEach(function (u) { var li = document.createElement('li'); li.textContent = u.name + (u.year ? ' (' + u.year + ')' : '') + ' — ' + u.group + ' · ' + u.category; ul.appendChild(li); });
+      list.forEach(function (u) {
+        var li = document.createElement('li'); li.textContent = u.name + (u.year ? ' (' + u.year + ')' : '') + ' — ' + u.group + ' · ' + u.category;
+        if (u.suggest) {
+          var s = u.suggest, a = document.createElement('a');
+          a.href = 'https://www.themoviedb.org/' + s.kind + '/' + s.tmdb; a.target = '_blank'; a.rel = 'noopener';
+          a.textContent = s.title + (s.date ? ' (' + s.date.slice(0, 4) + ', ' : ' (') + (s.kind === 'tv' ? 'TV' : 'film') + ')';
+          var m = document.createElement('div'); m.className = 'gaphint'; m.appendChild(document.createTextNode('Maybe: ')); m.appendChild(a);
+          li.appendChild(m);
+        }
+        ul.appendChild(li);
+      });
       d.appendChild(ul); f.appendChild(d);
     }
-    gapList(unmatched.filter(function (u) { return !u.video; }), 'Movies and docs not matched yet', 'Should be on TMDB. Send these to Claude to fix the match.');
+    gapList(unmatched.filter(function (u) { return !u.video; }), 'Movies and docs to check', 'Probably on TMDB. Open the “Maybe” link; if it’s right, tell Claude and it becomes permanent.');
     gapList(unmatched.filter(function (u) { return u.video; }), 'Videos (not on TMDB)', 'YouTube clips, interviews and compilations. They will get their own home later.');
     var p = document.createElement('div');
     p.textContent = (updated ? 'Library updated ' + updated.replace('T', ' ').replace('Z', ' UTC') + '. ' : '') + 'Posters and titles from TMDB. This product uses the TMDB API but is not endorsed or certified by TMDB. Watched status from Trakt.';

@@ -158,6 +158,42 @@ def tmdb_match(it, token):
     return None
 
 
+PREFIX_RE = re.compile(r"^(G4|PBS|BBC|HM|K&G|NFL|NBA|ESPN|HBO|CNN|SI)\b[\s:-]*", re.I)
+NOISE_RE = re.compile(r"\[[^\]]*\]|\([^)]*\)|\b(all parts|full|\d+ hour|documentary|doc|vose|subtitulado.*|op-doc)\b|[^\w\s'&.,!-]", re.I)
+
+
+def clean_variants(name):
+    """Looser search strings for a title the exact search missed."""
+    base = re.sub(r"\s+", " ", NOISE_RE.sub(" ", name)).strip(" -")
+    out = [base, PREFIX_RE.sub("", base).strip()]
+    if " - " in base:
+        a, b = base.split(" - ", 1)
+        out += [a.strip(), b.strip()]
+    seen, res = set(), []
+    for v in out:
+        if len(v) >= 3 and v.lower() not in seen:
+            seen.add(v.lower()); res.append(v)
+    return res
+
+
+def suggest(it, token):
+    """Best loose TMDB candidate for an unmatched title, with a similarity score. Never applied automatically."""
+    from difflib import SequenceMatcher
+    best = None
+    for q in clean_variants(it["name"]):
+        for kind in ("movie", "tv"):
+            for r in (tmdb_get("/search/" + kind, {"query": q, "include_adult": "false"}, token).get("results") or [])[:3]:
+                title = r.get("title") or r.get("name") or ""
+                score = SequenceMatcher(None, q.lower(), title.lower()).ratio()
+                date = r.get("release_date") or r.get("first_air_date") or ""
+                if it["year"] and date[:4] == str(it["year"]):
+                    score += 0.15
+                if not best or score > best["score"]:
+                    best = {"kind": kind, "tmdb": r["id"], "title": title, "date": date, "score": round(min(score, 1), 2)}
+            time.sleep(0.05)
+    return best
+
+
 def trakt_get(path, client_id):
     """GET a Trakt list, following pagination (Trakt caps pages at 100 items)."""
     out, page = [], 1
@@ -234,11 +270,16 @@ def main():
             print("Trakt failed:", e)
 
     out, unmatched = [], []
+    sugg = load("suggestions.json", {})  # cached loose-search candidates, checked by hand before use
     for key, it in sorted(items.items()):
         m = overrides.get(key, cache.get(key))
         if not m:
+            if key not in sugg:
+                sugg[key] = suggest(it, token)
+            s = sugg[key] if sugg[key] and sugg[key]["score"] >= 0.6 else None
             unmatched.append({"key": key, "group": it["group"], "category": it["category"],
-                              "name": it["name"], "year": it["year"], "video": key in videos})
+                              "name": it["name"], "year": it["year"], "video": key in videos and not s,
+                              "suggest": s})
             continue
         status, prog = "unwatched", None
         if m["kind"] == "movie":
@@ -257,6 +298,7 @@ def main():
                     "date": m["date"], "poster": m["poster"], "overview": m["overview"],
                     "status": status, "progress": prog, "files": it["files"]})
 
+    save("suggestions.json", {k: v for k, v in sugg.items() if k in items})
     save("library.json", {"updated": time.strftime("%Y-%m-%dT%H:%MZ", time.gmtime()),
                           "items": out, "unmatched": unmatched}, root=True)
     print(f"{len(out)} matched, {len(unmatched)} unmatched")
