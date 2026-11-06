@@ -179,12 +179,13 @@ def clean_variants(name):
 def suggest(it, token):
     """Best loose TMDB candidate for an unmatched title, with a similarity score. Never applied automatically."""
     from difflib import SequenceMatcher
-    best = None
-    for q in clean_variants(it["name"]):
+    best, vs = None, clean_variants(it["name"])
+    ref = PREFIX_RE.sub("", vs[0]).strip().lower() if vs else it["name"].lower()
+    for q in vs:
         for kind in ("movie", "tv"):
             for r in (tmdb_get("/search/" + kind, {"query": q, "include_adult": "false"}, token).get("results") or [])[:3]:
                 title = r.get("title") or r.get("name") or ""
-                score = SequenceMatcher(None, q.lower(), title.lower()).ratio()
+                score = SequenceMatcher(None, ref, title.lower()).ratio()  # whole name, not the fragment searched
                 date = r.get("release_date") or r.get("first_air_date") or ""
                 if it["year"] and date[:4] == str(it["year"]):
                     score += 0.15
@@ -276,7 +277,7 @@ def main():
         if not m:
             if key not in sugg:
                 sugg[key] = suggest(it, token)
-            s = sugg[key] if sugg[key] and sugg[key]["score"] >= 0.6 else None
+            s = sugg[key] if sugg[key] and sugg[key]["score"] >= 0.75 else None
             unmatched.append({"key": key, "group": it["group"], "category": it["category"],
                               "name": it["name"], "year": it["year"], "video": key in videos and not s,
                               "suggest": s})
