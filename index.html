@@ -52,6 +52,14 @@ body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-a
 .badge { position: absolute; left: 6px; bottom: 6px; background: rgba(0,0,0,.72); color: #fff; font: 600 11px var(--font); padding: 2px 6px; border-radius: 4px; }
 .t { font-size: 12.5px; font-weight: 600; line-height: 1.25; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
 .y { font-size: 11.5px; color: var(--muted); }
+.card { position: relative; }
+/* Poster actions: small round icons in the poster's corner. Fade in on hover where there is hover (Mac); always shown, smaller, on touch (iPhone). */
+.ic { position: absolute; top: 6px; right: 6px; display: flex; gap: 5px; z-index: 2; transition: opacity .15s; }
+.ic button { width: 28px; height: 28px; border-radius: 50%; border: 0; padding: 0; display: grid; place-items: center; background: rgba(0,0,0,.6); color: #fff; font: 600 14px var(--font); cursor: pointer; }
+.ic button:hover { background: rgba(0,0,0,.85); }
+.ic button.on { background: #fff; color: #000; }
+@media (hover: hover) { .ic { opacity: 0; } .card:hover .ic, .ic:focus-within { opacity: 1; } }
+@media (hover: none) { .ic button { width: 26px; height: 26px; font-size: 12px; background: rgba(0,0,0,.45); } }
 .acts { display: flex; gap: 6px; }
 .acts button { flex: 1 1 auto; min-width: 0; white-space: nowrap; border: 1px solid var(--line); background: var(--surface); color: var(--muted); font: 600 11.5px var(--font); padding: 5px 3px; border-radius: 6px; cursor: pointer; }
 .acts button.on { color: var(--accent); border-color: var(--accent); }
@@ -135,17 +143,17 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--accent); outlin
     d.appendChild(a);
     var t = document.createElement('div'); t.className = 't'; t.textContent = it.title; d.appendChild(t);
     var y = document.createElement('div'); y.className = 'y'; y.textContent = [year(it), it.category].filter(Boolean).join(' · '); d.appendChild(y);
-    var acts = document.createElement('div'); acts.className = 'acts';
+    var acts = document.createElement('div'); acts.className = 'ic';
     var inNext = next.indexOf(it.key) >= 0;
-    var nb = document.createElement('button'); nb.type = 'button'; nb.textContent = inNext ? '− Next' : '+ Next'; if (inNext) nb.className = 'on';
+    var nb = document.createElement('button'); nb.type = 'button'; nb.textContent = '＋'; nb.title = inNext ? 'In Watch Next · tap to remove' : 'Add to Watch Next'; if (inNext) nb.className = 'on';
     nb.setAttribute('aria-label', (inNext ? 'Remove from' : 'Add to') + ' Watch Next');
     nb.onclick = function () { if (inNext) next.splice(next.indexOf(it.key), 1); else next.push(it.key); lsSet('next', next); toast(inNext ? 'Removed from Watch Next' : 'Added to Watch Next'); render(); };
     var db = document.createElement('button'); db.type = 'button';
     if (isWatched(it)) {
-      db.textContent = '↺ Unwatch'; db.setAttribute('aria-label', 'Mark ' + it.title + ' as not watched');
+      db.textContent = '↺'; db.title = 'Mark not watched'; db.setAttribute('aria-label', 'Mark ' + it.title + ' as not watched');
       db.onclick = function () { var i = done.indexOf(it.key); if (i >= 0) done.splice(i, 1); if (it.status === 'watched' && undone.indexOf(it.key) < 0) undone.push(it.key); lsSet('done', done); lsSet('undone', undone); toast('Back in Unwatched'); render(); };
     } else {
-      db.textContent = '✓ Watched'; db.setAttribute('aria-label', 'Mark ' + it.title + ' as watched');
+      db.textContent = '✓'; db.title = 'Mark watched'; db.setAttribute('aria-label', 'Mark ' + it.title + ' as watched');
       db.onclick = function () { if (done.indexOf(it.key) < 0) done.push(it.key); var u = undone.indexOf(it.key); if (u >= 0) undone.splice(u, 1); var i = next.indexOf(it.key); if (i >= 0) next.splice(i, 1); lsSet('done', done); lsSet('undone', undone); lsSet('next', next); toast(state.wf === 'unwatched' ? 'Marked as watched · see it in Watched' : 'Marked as watched'); render(); };
     }
     acts.appendChild(nb); acts.appendChild(db); d.appendChild(acts);
@@ -193,7 +201,7 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--accent); outlin
     f.appendChild(p);
   }
   function save() { lsSet('view', state); }
-  $('wf').onchange = function () { state.wf = this.value; state.cat = 'All'; save(); render(); window.scrollTo(0, 0); };
+  $('wf').onchange = function () { state.wf = this.value; save(); render(); window.scrollTo(0, 0); };
 
   fetch('library.json', { cache: 'no-cache' }).then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); }).then(function (d) {
     items = d.items || []; unmatched = d.unmatched || []; updated = d.updated || ''; render();
