@@ -31,7 +31,11 @@ body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-a
 .tabs button { flex: 1; white-space: nowrap; border: 0; background: none; color: var(--muted); font: 600 14px var(--font); padding: 8px 4px; border-radius: 8px; cursor: pointer; }
 .tabs button[aria-selected="true"] { background: var(--surface); color: var(--fg); box-shadow: 0 1px 2px rgba(0,0,0,.12); }
 .tabs .n { font-weight: 500; opacity: .7; margin-left: 3px; font-size: 12px; }
-.chips { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; margin: 0 calc(-1 * max(14px, env(safe-area-inset-left))); padding: 0 max(14px, env(safe-area-inset-left)); }
+.crow { display: flex; align-items: center; gap: 6px; min-width: 0; }
+.crow .chips { margin-left: 0; padding-left: 0; }
+.crow[hidden] { display: none; }
+.wf { flex: none; appearance: none; -webkit-appearance: none; border: 1px solid var(--fg); background: var(--fg) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' fill='none' stroke='%23999' stroke-width='1.6'/%3E%3C/svg%3E") no-repeat right 10px center; color: var(--bg); font: 600 13px var(--font); padding: 6px 26px 6px 12px; border-radius: 999px; cursor: pointer; }
+.chips { flex: 1; min-width: 0; display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; margin: 0 calc(-1 * max(14px, env(safe-area-inset-left))); padding: 0 max(14px, env(safe-area-inset-left)); }
 .chips::-webkit-scrollbar { display: none; }
 .chips button { flex: none; border: 1px solid var(--line); background: var(--surface); color: var(--fg); font: 500 13px var(--font); padding: 6px 12px; border-radius: 999px; cursor: pointer; white-space: nowrap; }
 .chips button[aria-pressed="true"] { background: var(--fg); color: var(--bg); border-color: var(--fg); }
@@ -46,7 +50,7 @@ body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-a
 .t { font-size: 12.5px; font-weight: 600; line-height: 1.25; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
 .y { font-size: 11.5px; color: var(--muted); }
 .acts { display: flex; gap: 6px; }
-.acts button { flex: 1; border: 1px solid var(--line); background: var(--surface); color: var(--muted); font: 600 12px var(--font); padding: 5px 0; border-radius: 6px; cursor: pointer; }
+.acts button { flex: 1 1 auto; min-width: 0; white-space: nowrap; border: 1px solid var(--line); background: var(--surface); color: var(--muted); font: 600 11.5px var(--font); padding: 5px 3px; border-radius: 6px; cursor: pointer; }
 .acts button.on { color: var(--accent); border-color: var(--accent); }
 .empty { color: var(--muted); padding: 40px 8px; text-align: center; }
 footer { margin-top: 28px; color: var(--muted); font-size: 12px; display: grid; gap: 10px; }
@@ -63,7 +67,7 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--accent); outlin
 <body>
 <header>
   <div class="tabs" role="tablist" id="tabs"></div>
-  <div class="chips" id="chips"></div>
+  <div class="crow" id="crow"><select class="wf" id="wf" aria-label="Show unwatched, watched or all"><option value="unwatched">Unwatched</option><option value="watched">Watched</option><option value="all">All</option></select><div class="chips" id="chips"></div></div>
 </header>
 <main id="grid" class="grid"><div class="empty">Loading your library…</div></main>
 <footer id="foot"></footer>
@@ -73,28 +77,31 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--accent); outlin
 (function () {
   var SHELVES = ['Watch Next', 'Movies', 'Series', 'Docs'];
   var items = [], unmatched = [], updated = '';
-  var state = { shelf: 'Movies', cat: 'All' };
-  var next = [], done = [];
+  var state = { shelf: 'Movies', cat: 'All', wf: 'unwatched' };
+  var next = [], done = [], undone = [];
   function ls(k, d) { try { var v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch (e) { return d; } }
   function lsSet(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
-  next = ls('next', []); done = ls('done', []); state = Object.assign(state, ls('view', {}));
+  next = ls('next', []); done = ls('done', []); undone = ls('undone', []); state = Object.assign(state, ls('view', {})); if (['unwatched', 'watched', 'all'].indexOf(state.wf) < 0) state.wf = 'unwatched';
   var $ = function (id) { return document.getElementById(id); };
 
   function link(it) { return 'infuse://' + (it.kind === 'movie' ? 'movie/' : 'series/') + it.tmdb; }
   function year(it) { return (it.date || '').slice(0, 4); }
-  function isOpen(it) { return it.status !== 'watched' && done.indexOf(it.key) < 0; }
+  // Watched = Trakt says so (unless you unwatched it here) or you marked it here.
+  function isWatched(it) { return (it.status === 'watched' && undone.indexOf(it.key) < 0) || done.indexOf(it.key) >= 0; }
+  function isOpen(it) { return !isWatched(it); }
+  function shows(it) { return state.wf === 'all' || (state.wf === 'watched' ? isWatched(it) : !isWatched(it)); }
   function toast(m) { var t = $('toast'); t.textContent = m; t.hidden = false; clearTimeout(toast.t); toast.t = setTimeout(function () { t.hidden = true; }, 1800); }
 
   function pool() {
     if (state.shelf === 'Watch Next') return next.map(function (k) { return items.find(function (i) { return i.key === k; }); }).filter(Boolean);
-    return items.filter(function (i) { return i.group === state.shelf && isOpen(i); });
+    return items.filter(function (i) { return i.group === state.shelf && shows(i); });
   }
   function renderTabs() {
     var t = $('tabs'); t.innerHTML = '';
     SHELVES.forEach(function (s) {
       var b = document.createElement('button'); b.type = 'button'; b.setAttribute('role', 'tab');
       b.setAttribute('aria-selected', s === state.shelf ? 'true' : 'false');
-      var n = s === 'Watch Next' ? next.length : items.filter(function (i) { return i.group === s && isOpen(i); }).length;
+      var n = s === 'Watch Next' ? next.length : items.filter(function (i) { return i.group === s && shows(i); }).length;
       b.textContent = s === 'Watch Next' ? 'Next' : s; var c = document.createElement('span'); c.className = 'n'; c.textContent = n; b.appendChild(c);
       b.onclick = function () { state.shelf = s; state.cat = 'All'; save(); render(); window.scrollTo(0, 0); };
       t.appendChild(b);
@@ -102,8 +109,8 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--accent); outlin
   }
   function renderChips(list) {
     var c = $('chips'); c.innerHTML = '';
-    if (state.shelf === 'Watch Next') { c.hidden = true; return; }
-    c.hidden = false;
+    if (state.shelf === 'Watch Next') { $('crow').hidden = true; return; }
+    $('crow').hidden = false; $('wf').value = state.wf;
     var cats = {}, ord = {}; list.forEach(function (i) { cats[i.category] = (cats[i.category] || 0) + 1; if (!(i.category in ord) || (i.order || '') < ord[i.category]) ord[i.category] = i.order || ''; });
     var names = ['All'].concat(Object.keys(cats).sort(function (a, b) { return (ord[a] || '').localeCompare(ord[b] || '') || a.localeCompare(b); }));
     if (names.indexOf(state.cat) < 0) state.cat = 'All';
@@ -121,7 +128,7 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--accent); outlin
     if (it.poster) { var img = document.createElement('img'); img.loading = 'lazy'; img.alt = ''; img.src = 'https://image.tmdb.org/t/p/w342' + it.poster; a.appendChild(img); }
     else { var ph = document.createElement('div'); ph.className = 'ph'; ph.textContent = it.title; a.appendChild(ph); }
     if (it.status === 'progress' && it.progress) { var bd = document.createElement('span'); bd.className = 'badge'; bd.textContent = it.progress[0] + '/' + it.progress[1]; a.appendChild(bd); }
-    if (it.status === 'watched' || done.indexOf(it.key) >= 0) { var w = document.createElement('span'); w.className = 'badge'; w.textContent = 'Watched'; a.appendChild(w); }
+    if (isWatched(it)) { var w = document.createElement('span'); w.className = 'badge'; w.textContent = 'Watched'; a.appendChild(w); }
     d.appendChild(a);
     var t = document.createElement('div'); t.className = 't'; t.textContent = it.title; d.appendChild(t);
     var y = document.createElement('div'); y.className = 'y'; y.textContent = [year(it), it.category].filter(Boolean).join(' · '); d.appendChild(y);
@@ -130,8 +137,14 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--accent); outlin
     var nb = document.createElement('button'); nb.type = 'button'; nb.textContent = inNext ? '− Next' : '+ Next'; if (inNext) nb.className = 'on';
     nb.setAttribute('aria-label', (inNext ? 'Remove from' : 'Add to') + ' Watch Next');
     nb.onclick = function () { if (inNext) next.splice(next.indexOf(it.key), 1); else next.push(it.key); lsSet('next', next); toast(inNext ? 'Removed from Watch Next' : 'Added to Watch Next'); render(); };
-    var db = document.createElement('button'); db.type = 'button'; db.textContent = '✓ Done'; db.setAttribute('aria-label', 'Mark ' + it.title + ' as watched');
-    db.onclick = function () { if (done.indexOf(it.key) < 0) done.push(it.key); var i = next.indexOf(it.key); if (i >= 0) next.splice(i, 1); lsSet('done', done); lsSet('next', next); toast('Marked as watched'); render(); };
+    var db = document.createElement('button'); db.type = 'button';
+    if (isWatched(it)) {
+      db.textContent = '↺ Unwatch'; db.setAttribute('aria-label', 'Mark ' + it.title + ' as not watched');
+      db.onclick = function () { var i = done.indexOf(it.key); if (i >= 0) done.splice(i, 1); if (it.status === 'watched' && undone.indexOf(it.key) < 0) undone.push(it.key); lsSet('done', done); lsSet('undone', undone); toast('Back in Unwatched'); render(); };
+    } else {
+      db.textContent = '✓ Watched'; db.setAttribute('aria-label', 'Mark ' + it.title + ' as watched');
+      db.onclick = function () { if (done.indexOf(it.key) < 0) done.push(it.key); var u = undone.indexOf(it.key); if (u >= 0) undone.splice(u, 1); var i = next.indexOf(it.key); if (i >= 0) next.splice(i, 1); lsSet('done', done); lsSet('undone', undone); lsSet('next', next); toast(state.wf === 'unwatched' ? 'Marked as watched · see it in Watched' : 'Marked as watched'); render(); };
+    }
     acts.appendChild(nb); acts.appendChild(db); d.appendChild(acts);
     return d;
   }
@@ -144,7 +157,7 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--accent); outlin
     var g = $('grid'); g.innerHTML = '';
     if (!list.length) {
       var e = document.createElement('div'); e.className = 'empty';
-      e.textContent = state.shelf === 'Watch Next' ? 'Nothing queued yet. Tap “+ Next” on any poster to add it here.' : 'Nothing unwatched here.';
+      e.textContent = state.shelf === 'Watch Next' ? 'Nothing queued yet. Tap “+ Next” on any poster to add it here.' : state.wf === 'watched' ? 'Nothing watched here yet.' : state.wf === 'all' ? 'Nothing here.' : 'Nothing unwatched here.';
       g.appendChild(e);
     } else list.forEach(function (it) { g.appendChild(card(it)); });
     renderFoot();
@@ -177,6 +190,7 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--accent); outlin
     f.appendChild(p);
   }
   function save() { lsSet('view', state); }
+  $('wf').onchange = function () { state.wf = this.value; state.cat = 'All'; save(); render(); window.scrollTo(0, 0); };
 
   fetch('library.json', { cache: 'no-cache' }).then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); }).then(function (d) {
     items = d.items || []; unmatched = d.unmatched || []; updated = d.updated || ''; render();
