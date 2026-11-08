@@ -86,6 +86,11 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--accent); outlin
 #toast .undo { margin-left: 12px; background: none; border: 0; color: inherit; font: 700 13px var(--font); text-decoration: underline; cursor: pointer; }
 .where { position: absolute; left: 6px; top: 6px; background: rgba(0,0,0,.72); color: #fff; font: 600 10.5px var(--font); padding: 2px 6px; border-radius: 4px; }
 .tabs .n.over { color: #e5484d; font-weight: 700; opacity: 1; }
+.poster { -webkit-touch-callout: none; -webkit-user-select: none; user-select: none; }
+.card.dragging { opacity: .85; transform: scale(1.04); z-index: 5; position: relative; }
+.card.dragging .poster { box-shadow: 0 10px 28px rgba(0,0,0,.35); outline: 2px solid var(--fg); }
+body.sorting { cursor: grabbing; }
+body.sorting .ic { opacity: 0 !important; }
 </style>
 </head>
 <body>
@@ -105,10 +110,10 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--accent); outlin
   var TOP = ['Watching', 'Next', 'Discover'], top = 'Watching';
   var items = [], unmatched = [], updated = '';
   var state = { shelf: 'Movies', cat: 'All', wf: 'unwatched' };
-  var next = [], watch = [], parked = [], removed = [], done = [], undone = [];
+  var next = [], worder = [], watch = [], parked = [], removed = [], done = [], undone = [];
   function ls(k, d) { try { var v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch (e) { return d; } }
   function lsSet(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
-  next = ls('next', []); watch = ls('watch', []); parked = ls('parked', []); removed = ls('removed', []); done = ls('done', []); undone = ls('undone', []); state = Object.assign(state, ls('view', {})); if (['unwatched', 'watched', 'all'].indexOf(state.wf) < 0) state.wf = 'unwatched'; if (AFTER && state.shelf === 'Watch Next') state.shelf = 'Movies';
+  next = ls('next', []); worder = ls('worder', []); watch = ls('watch', []); parked = ls('parked', []); removed = ls('removed', []); done = ls('done', []); undone = ls('undone', []); state = Object.assign(state, ls('view', {})); if (['unwatched', 'watched', 'all'].indexOf(state.wf) < 0) state.wf = 'unwatched'; if (AFTER && state.shelf === 'Watch Next') state.shelf = 'Movies';
   var $ = function (id) { return document.getElementById(id); };
 
   function link(it) { return 'infuse://' + (it.kind === 'movie' ? 'movie/' : 'series/') + it.tmdb; }
@@ -205,7 +210,7 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--accent); outlin
   var ACT = { watching: ['▶', 'Watching · start or continue'], park: ['⏸', 'Park · watch on and off'], backlog: ['＋', 'Backlog · later'], remove: ['✕', 'Remove'] };
   function where(it) { return inWatching(it) ? 'watching' : parked.indexOf(it.key) >= 0 ? 'park' : next.indexOf(it.key) >= 0 ? 'backlog' : 'discover'; }
   function mcard(it) {
-    var d = card(it), ic = d.querySelector('.ic'); ic.innerHTML = ''; ic.classList.add('wm');
+    var d = card(it), ic = d.querySelector('.ic'); ic.innerHTML = ''; ic.classList.add('wm'); d.dataset.key = it.key;
     var w = where(it), acts = { watching: ['park', 'backlog', 'remove'], park: ['watching', 'backlog', 'remove'], backlog: ['watching', 'park', 'remove'], discover: ['watching', 'park', 'backlog'] }[w];
     var more = document.createElement('button'); more.type = 'button'; more.className = 'more'; more.textContent = '⋯'; more.title = acts.map(function (a) { return ACT[a][1].split(' · ')[0]; }).join(', '); more.setAttribute('aria-label', 'Options for ' + it.title);
     var opts = document.createElement('span'); opts.className = 'opts';
@@ -218,21 +223,61 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--accent); outlin
     if (w !== 'discover' && top === 'Discover') { var tag = document.createElement('span'); tag.className = 'where'; tag.textContent = { watching: 'Watching', park: 'Parked', backlog: 'Backlog' }[w]; d.querySelector('.poster').appendChild(tag); }
     return d;
   }
+  function saveOrder(g, sec) {
+    var keys = Array.prototype.map.call(g.querySelectorAll('.card[data-sec="' + sec + '"]'), function (c) { return c.dataset.key; });
+    if (sec === 'worder') { worder = keys; lsSet('worder', worder); }
+    if (sec === 'parked') { parked = keys; lsSet('parked', parked); }
+    if (sec === 'next') { next = keys; lsSet('next', next); }
+  }
+  function sortable(g) {
+    g.querySelectorAll('.card[data-sec]').forEach(function (c) {
+      var a = c.querySelector('.poster'), sec = c.dataset.sec, timer = null, drag = false, sx = 0, sy = 0;
+      function moveTo(x, y) {
+        var el = document.elementFromPoint(x, y), over = el && el.closest('.card[data-sec]');
+        if (!over || over === c || over.dataset.sec !== sec) return;
+        var r = over.getBoundingClientRect(), after = x > r.left + r.width / 2;
+        g.insertBefore(c, after ? over.nextSibling : over);
+      }
+      function start() { drag = true; c.classList.add('dragging'); document.body.classList.add('sorting'); if (navigator.vibrate) navigator.vibrate(10); }
+      function end() { clearTimeout(timer); timer = null; if (!drag) return; drag = false; c.classList.remove('dragging'); document.body.classList.remove('sorting'); saveOrder(g, sec); a.dataset.noclick = '1'; setTimeout(function () { delete a.dataset.noclick; }, 80); toast('Order saved'); }
+      // touch: long-press then drag; a quick swipe still scrolls
+      a.addEventListener('touchstart', function (e) { var t = e.touches[0]; sx = t.clientX; sy = t.clientY; timer = setTimeout(start, 300); }, { passive: true });
+      a.addEventListener('touchmove', function (e) { var t = e.touches[0]; if (!drag) { if (timer && (Math.abs(t.clientX - sx) > 8 || Math.abs(t.clientY - sy) > 8)) { clearTimeout(timer); timer = null; } return; } e.preventDefault(); moveTo(t.clientX, t.clientY); }, { passive: false });
+      a.addEventListener('touchend', end); a.addEventListener('touchcancel', end);
+      // mouse: press and drag (starts after moving a little)
+      a.addEventListener('mousedown', function (e) {
+        if (e.button !== 0) return; sx = e.clientX; sy = e.clientY; e.preventDefault();
+        function mm(ev) { if (!drag && (Math.abs(ev.clientX - sx) > 6 || Math.abs(ev.clientY - sy) > 6)) start(); if (drag) moveTo(ev.clientX, ev.clientY); }
+        function mu() { document.removeEventListener('mousemove', mm); document.removeEventListener('mouseup', mu); end(); }
+        document.addEventListener('mousemove', mm); document.addEventListener('mouseup', mu);
+      });
+      a.addEventListener('click', function (e) { if (a.dataset.noclick) { e.preventDefault(); e.stopPropagation(); } }, true);
+      a.addEventListener('contextmenu', function (e) { if (drag || timer) e.preventDefault(); });
+      // keyboard: ⌥← / ⌥→ moves the focused poster
+      a.addEventListener('keydown', function (e) {
+        if (!e.altKey || (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight')) return; e.preventDefault();
+        var sib = e.key === 'ArrowLeft' ? c.previousElementSibling : c.nextElementSibling;
+        if (!sib || sib.dataset.sec !== sec) return;
+        g.insertBefore(c, e.key === 'ArrowLeft' ? sib : sib.nextSibling); saveOrder(g, sec); a.focus();
+      });
+    });
+  }
   function render() {
     renderTop(); renderTabs();
     var real = state.shelf; if (AFTER && top === 'Next') state.shelf = 'Watch Next';
     if (AFTER && top === 'Watching') { $('crow').hidden = true; var g0 = $('grid'); g0.innerHTML = '';
-      var wl = items.filter(inWatching);
+      var wl = items.filter(inWatching).sort(function (a, b) { var ia = worder.indexOf(a.key), ib = worder.indexOf(b.key); if (ia < 0) ia = 1e6; if (ib < 0) ib = 1e6; return ia - ib || a.title.localeCompare(b.title); });
       if (!wl.length) { var e0 = document.createElement('div'); e0.className = 'empty'; e0.textContent = 'Nothing in progress. Start a series in Infuse and it shows up here.'; g0.appendChild(e0); }
-      else wl.forEach(function (it) { g0.appendChild(mcard(it)); });
+      else { wl.forEach(function (it) { var c = mcard(it); c.dataset.sec = 'worder'; g0.appendChild(c); }); sortable(g0); }
       renderFoot(); return; }
     if (AFTER && top === 'Next') { $('crow').hidden = true; var gn = $('grid'); gn.innerHTML = '';
       [['Parked', parked], ['Backlog', next]].forEach(function (sec) {
         var hd = document.createElement('div'); hd.className = 'sech'; hd.textContent = sec[0] + ' · ' + sec[1].length + '/' + (sec[0] === 'Parked' ? LIM.park : LIM.backlog); if (sec[1].length >= (sec[0] === 'Parked' ? LIM.park : LIM.backlog)) hd.textContent += ' · full'; gn.appendChild(hd);
         var its = sec[1].map(function (k) { return items.filter(function (i) { return i.key === k; })[0]; }).filter(Boolean);
         if (!its.length) { var e1 = document.createElement('div'); e1.className = 'empty'; e1.textContent = sec[0] === 'Parked' ? 'Park a series with ⋯ › ⏸.' : 'Add with ⋯ › ＋ on any poster.'; gn.appendChild(e1); }
-        else its.forEach(function (it) { gn.appendChild(mcard(it)); });
+        else its.forEach(function (it) { var c = mcard(it); c.dataset.sec = sec[0] === 'Parked' ? 'parked' : 'next'; gn.appendChild(c); });
       });
+      sortable(gn);
       renderFoot(); state.shelf = real; return; }
     var list = pool();
     renderChips(list);
