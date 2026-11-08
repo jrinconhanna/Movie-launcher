@@ -119,7 +119,8 @@ body.sorting .ic { opacity: 0 !important; }
   var state = { shelf: 'Movies', cat: 'All', wf: 'unwatched' };
   var next = [], worder = [], watch = [], parked = [], removed = [], done = [], undone = [];
   function ls(k, d) { try { var v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch (e) { return d; } }
-  function lsSet(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
+  function lsSet(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} if (SYNC_KEYS.indexOf(k) >= 0 && window.__push) window.__push(); }
+  var SYNC_KEYS = ['worder', 'watch', 'parked', 'next', 'removed'];
   next = ls('next', []); worder = ls('worder', []); watch = ls('watch', []); parked = ls('parked', []); removed = ls('removed', []); done = ls('done', []); undone = ls('undone', []); state = Object.assign(state, ls('view', {})); if (['unwatched', 'watched', 'all'].indexOf(state.wf) < 0) state.wf = 'unwatched'; if (AFTER && state.shelf === 'Watch Next') state.shelf = 'Movies';
   var $ = function (id) { return document.getElementById(id); };
   // ---------- Trakt login (device code, no secret; once per device, renewed on open) ----------
@@ -143,7 +144,7 @@ body.sorting .ic { opacity: 0 !important; }
         if (Date.now() > until) { pending = null; render(); toast('Code expired · try Connect Trakt again'); return; }
         tpost('/oauth/device/token', { code: dc.device_code, client_id: TRAKT_ID }).then(function (t) {
           if (!pending) return;
-          if (t.status === 200) return t.json().then(function (x) { setTok(x); pending = null; render(); toast('Connected to Trakt'); });
+          if (t.status === 200) return t.json().then(function (x) { setTok(x); pending = null; render(); toast('Connected to Trakt'); pull(); });
           if (t.status === 400 || t.status === 429) { pending.t = setTimeout(poll, (dc.interval + (t.status === 429 ? 2 : 0)) * 1000); return; }
           pending = null; render(); toast('Trakt said no (' + t.status + ') · try again');
         }).catch(function () { if (pending) pending.t = setTimeout(poll, dc.interval * 1000); });
@@ -151,6 +152,71 @@ body.sorting .ic { opacity: 0 !important; }
       pending.t = setTimeout(poll, dc.interval * 1000); render();
     }).catch(function () { toast('Couldn’t reach Trakt · try again'); });
   }
+
+  // ---------- Saved to Trakt: one private list "Movie Launcher" ----------
+  // Its items = every title in Watching, Parked, Backlog and Removed (so you can see them in Trakt).
+  // Its description holds the sections and order, which is what each device reads on open.
+  var LIST_NAME = 'Movie Launcher', HEAD = 'Saved by Movie Launcher (sections and order). Edit in the launcher, not here.\n';
+  var listId = ls('trakt-list', null), synced = false, pushT = null, saving = false, saveState = '', lastPull = 0, lastIds = null;
+  function tapi(path, method, body) {
+    return fetch(TRAKT + path, { method: method || 'GET', headers: { 'Content-Type': 'application/json', 'trakt-api-version': '2', 'trakt-api-key': TRAKT_ID, Authorization: 'Bearer ' + tok.access_token }, body: body ? JSON.stringify(body) : undefined });
+  }
+  function sid(it) { return (it.kind === 'movie' ? 'm' : 't') + it.tmdb; }
+  function byKey(k) { for (var i = 0; i < items.length; i++) if (items[i].key === k) return items[i]; return null; }
+  function bySid(x) { for (var i = 0; i < items.length; i++) if (sid(items[i]) === x) return items[i]; return null; }
+  function enc(keys) { return keys.map(byKey).filter(function (it) { return it && it.tmdb; }).map(sid); }
+  function dec(ids) { return (ids || []).map(bySid).filter(Boolean).map(function (it) { return it.key; }); }
+  function snapshot() { return { v: 1, o: enc(worder), w: enc(watch), p: enc(parked), b: enc(next), r: enc(removed) }; }
+  function listItems(st) {
+    var all = {}; ['o', 'w', 'p', 'b', 'r'].forEach(function (k) { st[k].forEach(function (x) { all[x] = 1; }); });
+    var body = { movies: [], shows: [] };
+    Object.keys(all).forEach(function (x) { (x[0] === 'm' ? body.movies : body.shows).push({ ids: { tmdb: +x.slice(1) } }); });
+    return { ids: Object.keys(all), body: body };
+  }
+  function idsBody(ids) { var b = { movies: [], shows: [] }; ids.forEach(function (x) { (x[0] === 'm' ? b.movies : b.shows).push({ ids: { tmdb: +x.slice(1) } }); }); return b; }
+  function setSave(s) { saveState = s; var el = document.querySelector('.fconn .st'); if (el) el.textContent = s; else if (items.length) renderFoot(); }
+  function applyRemote(desc) {
+    var j = null; try { j = JSON.parse((desc || '').split('\n').slice(1).join('\n')); } catch (e) {}
+    if (!j || j.v !== 1) return false;
+    worder = dec(j.o); watch = dec(j.w); parked = dec(j.p); next = dec(j.b); removed = dec(j.r);
+    ['worder', 'watch', 'parked', 'next', 'removed'].forEach(function (k) { try { localStorage.setItem(k, JSON.stringify({ worder: worder, watch: watch, parked: parked, next: next, removed: removed }[k])); } catch (e) {} });
+    lastIds = listItems(j).ids; return true;
+  }
+  function pull() {
+    if (!tok || !items.length || saving || pushT) return;
+    lastPull = Date.now(); setSave('Loading from Trakt…');
+    tapi('/users/me/lists').then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); }).then(function (lists) {
+      var L = lists.filter(function (l) { return l.name === LIST_NAME; })[0];
+      if (L) { listId = L.ids.trakt; lsSet('trakt-list', listId); applyRemote(L.description); synced = true; setSave('Saved to Trakt'); render(); return; }
+      // first device: create the list from this device's lists
+      var st = snapshot();
+      return tapi('/users/me/lists', 'POST', { name: LIST_NAME, description: HEAD + JSON.stringify(st), privacy: 'private', display_numbers: false, allow_comments: false })
+        .then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); })
+        .then(function (l) { listId = l.ids.trakt; lsSet('trakt-list', listId); synced = true; lastIds = []; push(true); });
+    }).catch(function (e) { setSave('Couldn’t load from Trakt (' + e.message + ') · lists on this device'); });
+  }
+  function push(now) {
+    if (!tok || !synced) return;
+    clearTimeout(pushT); setSave('Saving…');
+    pushT = setTimeout(function () {
+      pushT = null; saving = true;
+      var st = snapshot(), li = listItems(st), old = lastIds || [];
+      var add = li.ids.filter(function (x) { return old.indexOf(x) < 0; }), rem = old.filter(function (x) { return li.ids.indexOf(x) < 0; });
+      tapi('/users/me/lists/' + listId, 'PUT', { name: LIST_NAME, description: HEAD + JSON.stringify(st), privacy: 'private' })
+        .then(function (r) {
+          if (r.status === 404) { listId = null; synced = false; throw new Error('list gone'); }
+          if (!r.ok) throw new Error(r.status);
+          var jobs = [];
+          if (add.length) jobs.push(tapi('/users/me/lists/' + listId + '/items', 'POST', idsBody(add)));
+          if (rem.length) jobs.push(tapi('/users/me/lists/' + listId + '/items/remove', 'POST', idsBody(rem)));
+          return Promise.all(jobs);
+        })
+        .then(function () { lastIds = li.ids; saving = false; setSave('Saved to Trakt'); })
+        .catch(function (e) { saving = false; setSave('Couldn’t save to Trakt (' + e.message + ') · saved on this device'); toast('Couldn’t save to Trakt · saved on this device'); });
+    }, now ? 0 : 1200);
+  }
+  window.__push = function () { push(false); };
+  document.addEventListener('visibilitychange', function () { if (document.visibilityState === 'visible' && Date.now() - lastPull > 30000) pull(); });
   function connRow() {
     var d = document.createElement('div'); d.className = 'conn';
     if (pending) {
@@ -375,14 +441,14 @@ body.sorting .ic { opacity: 0 !important; }
     var p = document.createElement('div');
     p.textContent = (updated ? 'Library updated ' + updated.replace('T', ' ').replace('Z', ' UTC') + '. ' : '') + 'Posters and titles from TMDB. This product uses the TMDB API but is not endorsed or certified by TMDB. Watched status from Trakt.';
     f.appendChild(p);
-    if (tok) { var fc = document.createElement('div'); fc.className = 'fconn'; fc.appendChild(document.createTextNode('Trakt connected on this device · ')); var dx = document.createElement('button'); dx.type = 'button'; dx.textContent = 'Disconnect'; dx.onclick = function () { setTok(null); render(); toast('Disconnected · saved on this device only'); }; fc.appendChild(dx); f.appendChild(fc); }
+    if (tok) { var fc = document.createElement('div'); fc.className = 'fconn'; fc.appendChild(document.createTextNode('Trakt connected on this device · ')); var stt = document.createElement('span'); stt.className = 'st'; stt.textContent = saveState; if (saveState) { fc.appendChild(stt); fc.appendChild(document.createTextNode(' · ')); } var dx = document.createElement('button'); dx.type = 'button'; dx.textContent = 'Disconnect'; dx.onclick = function () { setTok(null); synced = false; clearTimeout(pushT); pushT = null; render(); toast('Disconnected · saved on this device only'); }; fc.appendChild(dx); f.appendChild(fc); }
   }
   function save() { lsSet('view', state); }
   $('wf').onchange = function () { state.wf = this.value; save(); render(); window.scrollTo(0, 0); };
 
   renew();
   fetch('library.json', { cache: 'no-cache' }).then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); }).then(function (d) {
-    items = d.items || []; unmatched = d.unmatched || []; updated = d.updated || ''; render();
+    items = d.items || []; unmatched = d.unmatched || []; updated = d.updated || ''; render(); pull();
   }).catch(function () {
     $('grid').innerHTML = '<div class="empty">The library isn’t built yet. It appears here a few minutes after the GitHub job runs.</div>';
   });
