@@ -49,7 +49,9 @@ body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-a
 /* In All, watched titles step back so unwatched ones stand out */
 .card.seen .poster img, .card.seen .poster .ph { filter: grayscale(1); opacity: .25; }
 .card.seen .t, .card.seen .y { opacity: .4; }
-.badge { position: absolute; left: 6px; bottom: 6px; background: rgba(0,0,0,.72); color: #fff; font: 600 11px var(--font); padding: 2px 6px; border-radius: 4px; }
+.pbar { position: absolute; left: 0; right: 0; bottom: 0; height: 4px; background: rgba(255,255,255,.35); }
+.pbar i { display: block; height: 100%; background: #e5484d; }
+.badge { position: absolute; right: 6px; bottom: 10px; background: rgba(0,0,0,.72); color: #fff; font: 600 11px var(--font); padding: 2px 6px; border-radius: 4px; }
 .t { font-size: 12.5px; font-weight: 600; line-height: 1.25; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
 .y { font-size: 11.5px; color: var(--muted); }
 .card { position: relative; }
@@ -91,7 +93,7 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--accent); outlin
 
 <script>
 (function () {
-  var AFTER = true;
+  var AFTER = true, MOCK = true, BAR = true;
   var SHELVES = AFTER ? ['Movies', 'Series', 'Docs'] : ['Watch Next', 'Movies', 'Series', 'Docs'];
   var TOP = ['Watching', 'Next', 'Discover'], top = 'Watching';
   var items = [], unmatched = [], updated = '';
@@ -119,6 +121,7 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--accent); outlin
     TOP.forEach(function (s) {
       var b = document.createElement('button'); b.type = 'button'; b.setAttribute('role', 'tab');
       b.setAttribute('aria-selected', s === top ? 'true' : 'false'); b.textContent = s;
+      if (s === 'Watching' && MOCK) { var cw = document.createElement('span'); cw.className = 'n'; cw.textContent = items.filter(function (i) { return i.status === 'progress'; }).length; b.appendChild(cw); }
       if (s === 'Next') { var c = document.createElement('span'); c.className = 'n'; c.textContent = next.length; b.appendChild(c); }
       b.onclick = function () { top = s; render(); window.scrollTo(0, 0); };
       t.appendChild(b);
@@ -156,6 +159,7 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--accent); outlin
     if (it.poster) { var img = document.createElement('img'); img.loading = 'lazy'; img.alt = ''; img.src = 'https://image.tmdb.org/t/p/w342' + it.poster; a.appendChild(img); }
     else { var ph = document.createElement('div'); ph.className = 'ph'; ph.textContent = it.title; a.appendChild(ph); }
     if (it.status === 'progress' && it.progress) { var bd = document.createElement('span'); bd.className = 'badge'; bd.textContent = it.progress[0] + '/' + it.progress[1]; a.appendChild(bd); }
+    if (BAR && it.status === 'progress' && it.progress && it.progress[1]) { var pb = document.createElement('span'); pb.className = 'pbar'; var pf = document.createElement('i'); pf.style.width = Math.max(3, Math.round(100 * it.progress[0] / it.progress[1])) + '%'; pb.appendChild(pf); a.appendChild(pb); }
     d.appendChild(a);
     var t = document.createElement('div'); t.className = 't'; t.textContent = it.title; d.appendChild(t);
     var y = document.createElement('div'); y.className = 'y'; y.textContent = [year(it), it.category].filter(Boolean).join(' · '); d.appendChild(y);
@@ -178,7 +182,11 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--accent); outlin
   function render() {
     renderTop(); renderTabs();
     var real = state.shelf; if (AFTER && top === 'Next') state.shelf = 'Watch Next';
-    if (AFTER && top === 'Watching') { $('crow').hidden = true; var g0 = $('grid'); g0.innerHTML = ''; var e0 = document.createElement('div'); e0.className = 'empty'; e0.textContent = 'Series you’re in the middle of will show here (next card).'; g0.appendChild(e0); renderFoot(); return; }
+    if (AFTER && top === 'Watching') { $('crow').hidden = true; var g0 = $('grid'); g0.innerHTML = '';
+      var wl = MOCK ? items.filter(function (i) { return i.status === 'progress'; }) : [];
+      if (!wl.length) { var e0 = document.createElement('div'); e0.className = 'empty'; e0.textContent = 'Nothing in progress. Start a series in Infuse and it shows up here.'; g0.appendChild(e0); }
+      else wl.forEach(function (it) { g0.appendChild(card(it)); });
+      renderFoot(); return; }
     var list = pool();
     renderChips(list);
     if (state.shelf !== 'Watch Next' && state.cat !== 'All') list = list.filter(function (i) { return i.category === state.cat; });
@@ -228,5 +236,6 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--accent); outlin
   });
 })();
 </script>
+
 </body>
 </html>
