@@ -80,7 +80,8 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--accent); outlin
 .tabs.sub button { flex: 0 0 auto; padding: 5px 12px; font-size: 13px; border: 1px solid var(--chip); }
 .tabs.sub button[aria-selected="true"] { background: var(--chip); box-shadow: none; }
 .sech { grid-column: 1 / -1; font: 700 13px var(--font); color: var(--muted); margin: 6px 0 -4px; }
-.ic.wm .opts { display: none; gap: 5px; }
+.ic.wm { flex-direction: column-reverse; align-items: flex-end; }
+.ic.wm .opts { display: none; gap: 5px; flex-direction: column; }
 .ic.wm.open .opts { display: flex; }
 .ic.wm.open .more { background: #fff; color: #000; }
 #toast .undo { margin-left: 12px; background: none; border: 0; color: inherit; font: 700 13px var(--font); text-decoration: underline; cursor: pointer; }
