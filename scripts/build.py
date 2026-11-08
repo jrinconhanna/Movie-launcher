@@ -7,6 +7,7 @@ status from Trakt, and writes library.json at the repo root.
 
 Needs env vars TMDB_TOKEN (API Read Access Token) and TRAKT_CLIENT_ID.
 """
+import datetime
 import json, os, re, sys, time, urllib.parse, urllib.request
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -270,6 +271,20 @@ def main():
         except Exception as e:  # keep building without watched status
             print("Trakt failed:", e)
 
+    epc = load("epcounts.json", {})
+    def ep_total(tid):
+        c = epc.get(str(tid))
+        if c and c.get("at", "") > (datetime.datetime.utcnow() - datetime.timedelta(days=7)).isoformat():
+            return c["n"]
+        try:
+            r = tmdb_get(f"/tv/{tid}", {}, token)
+            n = sum(s.get("episode_count", 0) for s in r.get("seasons", []) if s.get("season_number", 0) > 0)
+            epc[str(tid)] = {"n": n, "at": datetime.datetime.utcnow().isoformat()}
+            return n
+        except Exception as e:
+            print("TMDB episode count failed:", tid, e)
+            return c["n"] if c else None
+
     out, unmatched = [], []
     sugg = load("suggestions.json", {})  # cached loose-search candidates, checked by hand before use
     for key, it in sorted(items.items()):
@@ -293,12 +308,20 @@ def main():
                 prog = [done, len(it["eps"])]
                 status = "watched" if done == len(it["eps"]) else ("progress" if done else "unwatched")
             elif m["tmdb"] in watched_shows:
-                status = "progress"
+                # no episode files listed: compare with TMDB's episode count (specials left out)
+                total = ep_total(m["tmdb"])
+                done = len({e for e in seen if e[0] > 0})
+                if total:
+                    prog = [min(done, total), total]
+                    status = "watched" if done >= total else "progress"
+                else:
+                    status = "progress"
         out.append({"key": key, "group": it["group"], "category": it["category"], "order": it["order"],
                     "kind": m["kind"], "tmdb": m["tmdb"], "title": m["title"],
                     "date": m["date"], "poster": m["poster"], "overview": m["overview"],
                     "status": status, "progress": prog, "files": it["files"]})
 
+    save("epcounts.json", epc)
     save("suggestions.json", {k: v for k, v in sugg.items() if k in items})
     save("library.json", {"updated": time.strftime("%Y-%m-%dT%H:%MZ", time.gmtime()),
                           "items": out, "unmatched": unmatched}, root=True)
