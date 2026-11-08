@@ -122,7 +122,7 @@ body.sorting .ic { opacity: 0 !important; }
   var next = [], worder = [], watch = [], parked = [], removed = [], done = [], undone = [];
   function ls(k, d) { try { var v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch (e) { return d; } }
   function lsSet(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} if (SYNC_KEYS.indexOf(k) >= 0 && window.__push) window.__push(); }
-  var SYNC_KEYS = ['worder', 'watch', 'parked', 'next', 'removed'];
+  var SYNC_KEYS = ['worder', 'watch', 'parked', 'next', 'removed', 'done', 'undone'];
   next = ls('next', []); worder = ls('worder', []); watch = ls('watch', []); parked = ls('parked', []); removed = ls('removed', []); done = ls('done', []); undone = ls('undone', []); state = Object.assign(state, ls('view', {})); if (['unwatched', 'watched', 'all'].indexOf(state.wf) < 0) state.wf = 'unwatched'; if (AFTER && state.shelf === 'Watch Next') state.shelf = 'Movies';
   var $ = function (id) { return document.getElementById(id); };
   // ---------- Trakt login (device code, no secret; once per device, renewed on open) ----------
@@ -168,7 +168,7 @@ body.sorting .ic { opacity: 0 !important; }
   function bySid(x) { for (var i = 0; i < items.length; i++) if (sid(items[i]) === x) return items[i]; return null; }
   function enc(keys) { return keys.map(byKey).filter(function (it) { return it && it.tmdb; }).map(sid); }
   function dec(ids) { return (ids || []).map(bySid).filter(Boolean).map(function (it) { return it.key; }); }
-  function snapshot() { return { v: 1, o: enc(worder), w: enc(watch), p: enc(parked), b: enc(next), r: enc(removed) }; }
+  function snapshot() { return { v: 1, o: enc(worder), w: enc(watch), p: enc(parked), b: enc(next), r: enc(removed), d: enc(done), u: enc(undone) }; }
   function listItems(st) {
     var all = {}; ['o', 'w', 'p', 'b', 'r'].forEach(function (k) { st[k].forEach(function (x) { all[x] = 1; }); });
     var body = { movies: [], shows: [] };
@@ -181,7 +181,8 @@ body.sorting .ic { opacity: 0 !important; }
     var j = null; try { j = JSON.parse((desc || '').split('\n').slice(1).join('\n')); } catch (e) {}
     if (!j || j.v !== 1) return false;
     worder = dec(j.o); watch = dec(j.w); parked = dec(j.p); next = dec(j.b); removed = dec(j.r);
-    ['worder', 'watch', 'parked', 'next', 'removed'].forEach(function (k) { try { localStorage.setItem(k, JSON.stringify({ worder: worder, watch: watch, parked: parked, next: next, removed: removed }[k])); } catch (e) {} });
+    if (j.d) { done = dec(j.d); undone = dec(j.u); } else if (done.length || undone.length) setTimeout(function () { push(true); }, 0);
+    ['worder', 'watch', 'parked', 'next', 'removed', 'done', 'undone'].forEach(function (k) { try { localStorage.setItem(k, JSON.stringify({ worder: worder, watch: watch, parked: parked, next: next, removed: removed, done: done, undone: undone }[k])); } catch (e) {} });
     lastIds = listItems(j).ids; return true;
   }
   function pull() {
@@ -337,20 +338,63 @@ body.sorting .ic { opacity: 0 !important; }
     var msg = { watching: wnow > LIM.watching ? 'In Watching · ' + wnow + '/' + LIM.watching + ', park one to stay focused' : 'In Watching', park: 'Parked · in Next', backlog: 'In Backlog · in Next', remove: top === 'Watching' ? 'Removed from Watching · still in Discover' : 'Removed · still in Discover' }[to];
     toast(msg, function () { var a = JSON.parse(snap); watch = a[0]; parked = a[1]; next = a[2]; removed = a[3]; lsSet('watch', watch); lsSet('parked', parked); lsSet('next', next); lsSet('removed', removed); render(); });
   }
+  // ✓ / ↺ write to Trakt history (when connected); Undo reverses exactly what was written.
+  function traktMark(it, on) {
+    var t = it.kind === 'movie' ? 'movie' : 'show', ids = { tmdb: it.tmdb };
+    function hist(path) { return tapi(path).then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); }); }
+    function post(path, body) { return tapi(path, 'POST', body).then(function (r) { if (!r.ok) throw new Error(r.status); return r; }); }
+    function traktId() { return hist('/search/tmdb/' + it.tmdb + '?type=' + t).then(function (a) { var x = a.filter(function (y) { return y.type === t; })[0]; if (!x) throw new Error('not on Trakt'); return x[t].ids.trakt; }); }
+    if (on) {
+      var wa = new Date(Math.floor(Date.now() / 1000) * 1000), body = {}; body[t + 's'] = [{ ids: ids, watched_at: wa.toISOString() }];
+      return post('/sync/history', body).then(function () {
+        return function () {
+          var end = new Date(wa.getTime() + 1000).toISOString();
+          return hist('/sync/history/' + (t === 'movie' ? 'movies' : 'episodes') + '?start_at=' + wa.toISOString() + '&end_at=' + end + '&limit=1000').then(function (a) {
+            var hid = a.filter(function (x) { return (x.movie || x.show).ids.tmdb === it.tmdb; }).map(function (x) { return x.id; });
+            if (hid.length) return post('/sync/history/remove', { ids: hid });
+          });
+        };
+      });
+    }
+    return traktId().then(function (tid) {
+      return hist('/sync/history/' + t + 's/' + tid + '?limit=1000').then(function (plays) {
+        if (!plays.length) return null;
+        return post('/sync/history/remove', { ids: plays.map(function (x) { return x.id; }) }).then(function () {
+          return function () {
+            var b = {};
+            if (t === 'movie') b.movies = plays.map(function (x) { return { ids: { trakt: tid }, watched_at: x.watched_at }; });
+            else b.episodes = plays.map(function (x) { return { ids: { trakt: x.episode.ids.trakt }, watched_at: x.watched_at }; });
+            return post('/sync/history', b);
+          };
+        });
+      });
+    });
+  }
   function markWatched(it, on) {
-    var snap = JSON.stringify([done, undone, next]);
-    if (on) { if (done.indexOf(it.key) < 0) done.push(it.key); var u = undone.indexOf(it.key); if (u >= 0) undone.splice(u, 1); }
+    var snap = JSON.stringify([done, undone, next, watch]);
+    if (on) { if (done.indexOf(it.key) < 0) done.push(it.key); var u = undone.indexOf(it.key); if (u >= 0) undone.splice(u, 1); var wi = watch.indexOf(it.key); if (wi >= 0) { watch.splice(wi, 1); lsSet('watch', watch); } }
     else { var i = done.indexOf(it.key); if (i >= 0) done.splice(i, 1); if (it.status === 'watched' && undone.indexOf(it.key) < 0) undone.push(it.key); }
     lsSet('done', done); lsSet('undone', undone); render();
-    toast(on ? 'Marked watched on this device' : 'Marked not watched on this device', function () { var a = JSON.parse(snap); done = a[0]; undone = a[1]; next = a[2]; lsSet('done', done); lsSet('undone', undone); lsSet('next', next); render(); });
+    var job = tok && it.tmdb ? traktMark(it, on) : null;
+    var word = on ? 'Marked watched' : 'Marked not watched';
+    function undo() {
+      var a = JSON.parse(snap); done = a[0]; undone = a[1]; next = a[2]; watch = a[3];
+      lsSet('done', done); lsSet('undone', undone); lsSet('next', next); lsSet('watch', watch); render();
+      if (job) job.then(function (rev) { return rev && rev(); }).then(function () { toast('Undone in Trakt too'); }).catch(function () { toast('Undone here · couldn’t undo in Trakt'); });
+    }
+    if (!job) { toast(word + ' on this device', undo); return; }
+    toast(word + ' · saving to Trakt…', undo);
+    job.then(function () { if (!$('toast').hidden) toast(word + ' · saved to Trakt', undo); })
+       .catch(function (e) { toast(word + ' on this device · couldn’t save to Trakt (' + e.message + ')', undo); });
   }
-  var ACT = { watched: ['✓', 'Mark watched (this device)'], unwatched: ['↺', 'Mark not watched (this device)'], watching: ['▶', 'Watching · start or continue'], park: ['⏸', 'Park · watch on and off'], backlog: ['＋', 'Backlog · later'], remove: ['✕', 'Remove'] };
+  var ACT = { watched: ['✓', 'Mark watched'], unwatched: ['↺', 'Mark not watched'], watching: ['▶', 'Watching · start or continue'], park: ['⏸', 'Park · watch on and off'], backlog: ['＋', 'Backlog · later'], remove: ['✕', 'Remove'] };
   function where(it) { return inWatching(it) ? 'watching' : parked.indexOf(it.key) >= 0 ? 'park' : next.indexOf(it.key) >= 0 ? 'backlog' : 'discover'; }
   function mcard(it) {
     var d = card(it), ic = d.querySelector('.ic'); ic.innerHTML = ''; ic.classList.add('wm'); d.dataset.key = it.key;
     var w = where(it), acts = { watching: ['park', 'backlog', 'remove'], park: ['watching', 'backlog', 'remove'], backlog: ['watching', 'park', 'remove'], discover: ['watching', 'park', 'backlog'] }[w];
     var more = document.createElement('button'); more.type = 'button'; more.className = 'more'; more.textContent = '⋯'; more.title = acts.map(function (a) { return ACT[a][1].split(' · ')[0]; }).join(', '); more.setAttribute('aria-label', 'Options for ' + it.title);
     var opts = document.createElement('span'); opts.className = 'opts';
+    if (top !== 'Discover' && w === 'watching' && it.kind === 'movie') acts = acts.concat(['watched']);
     if (top === 'Discover') { acts = acts.concat([isWatched(it) ? 'unwatched' : 'watched']); more.title = acts.map(function (a) { return ACT[a][1].split(' · ')[0].replace(' (this device)', ''); }).join(', '); }
     acts.forEach(function (o) {
       var b = document.createElement('button'); b.type = 'button'; b.textContent = ACT[o][0]; b.title = ACT[o][1]; b.setAttribute('aria-label', ACT[o][1]);
