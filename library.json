@@ -658,8 +658,11 @@
    "order": "001",
    "overview": "Peel back the curtain on the famously secretive Japanese company that would eventually take the global videogame industry by storm. Discover the humble beginnings of a gaming business that began many decades before the invention of television, and ride along the bumpy road of hits, misses, and wild ideas that turned Nintendo from a local playing card maker into a worldwide household name.",
    "poster": "/c8L73nBqUhOG7Wtgq6UUK2fpgRs.jpg",
-   "progress": null,
-   "status": "progress",
+   "progress": [
+    5,
+    5
+   ],
+   "status": "watched",
    "title": "Playing with Power: The Nintendo Story",
    "tmdb": 119902
   },
@@ -805,8 +808,11 @@
    "order": "002.001",
    "overview": "All or Nothing: The Michigan Wolverines goes behind-the-scenes of the winningest program in college football to chronicle Michigan's 2017 season. Head coach Jim Harbaugh leads his alma mater's young team as the series provides an intimate look at the lives, both on the field and off, of the student athletes charged with carrying on Michigan's legacy.",
    "poster": "/eQEBSaensI3WUszKPBSLrtQl2Wj.jpg",
-   "progress": null,
-   "status": "progress",
+   "progress": [
+    8,
+    8
+   ],
+   "status": "watched",
    "title": "All or Nothing: The Michigan Wolverines",
    "tmdb": 78594
   },
@@ -853,8 +859,11 @@
    "order": "002.001",
    "overview": "Follow college football's most elite players and coaches in this unfiltered documentary series that goes behind the scenes of a dramatic SEC season.",
    "poster": "/5ksKByoHmrqqNQaWf1uaxgfZLyA.jpg",
-   "progress": null,
-   "status": "progress",
+   "progress": [
+    7,
+    7
+   ],
+   "status": "watched",
    "title": "SEC Football: Any Given Saturday",
    "tmdb": 296069
   },
@@ -868,7 +877,10 @@
    "order": "002.001",
    "overview": "In 2024, the two-time defending champion Kansas City Chiefs aimed to make history by becoming the first NFL team to win three straight Super Bowls. \"The Kingdom\" – a new six-part ESPN Original Series – chronicles the Chiefs’ dramatic pursuit of a three-peat, the legacy of the franchise, and the unforgettable characters who built its modern-day football dynasty.",
    "poster": "/2TNOPyT73MLAkILou5QgRMTuA9k.jpg",
-   "progress": null,
+   "progress": [
+    5,
+    6
+   ],
    "status": "progress",
    "title": "The Kingdom",
    "tmdb": 287609
@@ -1774,8 +1786,11 @@
    "order": "002.004",
    "overview": "A 10-part documentary chronicling the untold story of Michael Jordan and the Chicago Bulls dynasty with rare, never-before-seen footage and sound from the 1997-98 championship season – plus over 100 interviews with famous figures and basketball’s biggest names.",
    "poster": "/oVf4xGGbDtwVHiKn8uTuSriY7PH.jpg",
-   "progress": null,
-   "status": "progress",
+   "progress": [
+    10,
+    10
+   ],
+   "status": "watched",
    "title": "The Last Dance",
    "tmdb": 79525
   },
@@ -11014,7 +11029,10 @@
    "order": "000",
    "overview": "Follow the misadventures of four irreverent grade-schoolers in the quiet, dysfunctional town of South Park, Colorado.",
    "poster": "/k7n2EVge7G77eMr3brztRGG1fFU.jpg",
-   "progress": null,
+   "progress": [
+    11,
+    337
+   ],
    "status": "progress",
    "title": "South Park",
    "tmdb": 2190
@@ -11769,5 +11787,5 @@
    "year": 1959
   }
  ],
- "updated": "2026-11-08T16:01Z"
+ "updated": "2026-11-08T17:42Z"
 }
