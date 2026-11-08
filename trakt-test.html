@@ -23,6 +23,7 @@
   <button id="paused" disabled>2 · Read paused movies</button>
   <button id="write" disabled>3 · Add + remove a test item</button>
   <button id="logout" disabled>4 · Log out</button>
+  <button id="renew" disabled>5 · Renew login (no secret)</button>
 </div>
 <div id="log"></div>
 <script>
@@ -33,7 +34,7 @@
   var $ = function (id) { return document.getElementById(id); };
   function log(msg, cls) { var d = document.createElement('div'); if (cls) d.className = cls; d.textContent = msg; $('log').appendChild(d); }
   function token() { try { return JSON.parse(localStorage.getItem('trakt-test-token') || 'null'); } catch (e) { return null; } }
-  function setUI() { var t = !!token(); $('paused').disabled = $('write').disabled = $('logout').disabled = !t; $('login').disabled = t; }
+  function setUI() { var t = !!token(); $('paused').disabled = $('write').disabled = $('logout').disabled = $('renew').disabled = !t; $('login').disabled = t; }
   function api(path, opts) {
     opts = opts || {};
     var h = { 'Content-Type': 'application/json', 'trakt-api-version': '2', 'trakt-api-key': CLIENT_ID };
@@ -80,10 +81,21 @@
     log(d.ok ? '✓ Removed it again. Writing works.' : '✗ Remove failed: ' + d.status + ' (remove it by hand in Trakt)', d.ok ? 'ok' : 'bad');
   };
 
+  function left(t) { var s = (t.created_at + t.expires_in) - Date.now() / 1000; return s < 0 ? 'expired' : s > 172800 ? Math.round(s / 86400) + ' days left' : Math.round(s / 3600) + ' h left'; }
+  $('renew').onclick = async function () {
+    var t = token(); log('Current login: ' + left(t) + ' (lasts ' + Math.round(t.expires_in / 3600) + ' h).');
+    try {
+      var r = await fetch(API + '/oauth/token', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ refresh_token: t.refresh_token, client_id: CLIENT_ID, redirect_uri: 'urn:ietf:wg:oauth:2.0:oob', grant_type: 'refresh_token' }) });
+      if (r.ok) { var n = await r.json(); localStorage.setItem('trakt-test-token', JSON.stringify(n)); log('✓ Renewed with no secret. New login: ' + left(n) + '. Stays logged in for good.', 'ok'); return; }
+      log('✗ Trakt said ' + r.status + ': ' + (await r.text()).slice(0, 200), 'bad');
+      log('→ Renewing needs the secret. Plan B: a tiny Cloudflare Worker renews the login (the secret stays there).');
+    } catch (e) { log('✗ The browser blocked the request (' + e.message + '). Plan B: Cloudflare Worker.', 'bad'); }
+  };
+
   $('logout').onclick = function () { localStorage.removeItem('trakt-test-token'); log('Logged out on this device.'); setUI(); };
 
   setUI();
-  if (token()) log('Already logged in on this device.');
+  if (token()) log('Already logged in on this device · ' + left(token()) + '.');
 })();
 </script>
 </body>
