@@ -73,11 +73,16 @@ details ul { margin: 8px 0 0; padding-left: 18px; }
 details li { margin: 2px 0; }
 .toast { position: fixed; left: 50%; bottom: calc(18px + env(safe-area-inset-bottom)); transform: translateX(-50%); background: var(--fg); color: var(--bg); padding: 8px 14px; border-radius: 8px; font-size: 13px; z-index: 10; }
 button:focus-visible, a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.tabs.top { margin-bottom: 8px; }
+.tabs.sub { background: none; padding: 0; gap: 6px; }
+.tabs.sub button { flex: 0 0 auto; padding: 5px 12px; font-size: 13px; border: 1px solid var(--chip); }
+.tabs.sub button[aria-selected="true"] { background: var(--chip); box-shadow: none; }
 </style>
 </head>
 <body>
 <header>
-  <div class="tabs" role="tablist" id="tabs"></div>
+  <div class="tabs top" role="tablist" id="top"></div>
+  <div class="tabs sub" role="tablist" id="tabs"></div>
   <div class="crow" id="crow"><select class="wf" id="wf" aria-label="Show unwatched, watched or all"><option value="unwatched">Unwatched</option><option value="watched">Watched</option><option value="all">All</option></select><div class="chips" id="chips"></div></div>
 </header>
 <main id="grid" class="grid"><div class="empty">Loading your library…</div></main>
@@ -86,13 +91,15 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--accent); outlin
 
 <script>
 (function () {
-  var SHELVES = ['Watch Next', 'Movies', 'Series', 'Docs'];
+  var AFTER = true;
+  var SHELVES = AFTER ? ['Movies', 'Series', 'Docs'] : ['Watch Next', 'Movies', 'Series', 'Docs'];
+  var TOP = ['Watching', 'Next', 'Discover'], top = 'Watching';
   var items = [], unmatched = [], updated = '';
   var state = { shelf: 'Movies', cat: 'All', wf: 'unwatched' };
   var next = [], done = [], undone = [];
   function ls(k, d) { try { var v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch (e) { return d; } }
   function lsSet(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
-  next = ls('next', []); done = ls('done', []); undone = ls('undone', []); state = Object.assign(state, ls('view', {})); if (['unwatched', 'watched', 'all'].indexOf(state.wf) < 0) state.wf = 'unwatched';
+  next = ls('next', []); done = ls('done', []); undone = ls('undone', []); state = Object.assign(state, ls('view', {})); if (['unwatched', 'watched', 'all'].indexOf(state.wf) < 0) state.wf = 'unwatched'; if (AFTER && state.shelf === 'Watch Next') state.shelf = 'Movies';
   var $ = function (id) { return document.getElementById(id); };
 
   function link(it) { return 'infuse://' + (it.kind === 'movie' ? 'movie/' : 'series/') + it.tmdb; }
@@ -107,8 +114,18 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--accent); outlin
     if (state.shelf === 'Watch Next') return next.map(function (k) { return items.find(function (i) { return i.key === k; }); }).filter(Boolean);
     return items.filter(function (i) { return i.group === state.shelf && shows(i); });
   }
+  function renderTop() {
+    var t = $('top'); t.innerHTML = ''; t.hidden = !AFTER; if (!AFTER) return;
+    TOP.forEach(function (s) {
+      var b = document.createElement('button'); b.type = 'button'; b.setAttribute('role', 'tab');
+      b.setAttribute('aria-selected', s === top ? 'true' : 'false'); b.textContent = s;
+      if (s === 'Next') { var c = document.createElement('span'); c.className = 'n'; c.textContent = next.length; b.appendChild(c); }
+      b.onclick = function () { top = s; render(); window.scrollTo(0, 0); };
+      t.appendChild(b);
+    });
+  }
   function renderTabs() {
-    var t = $('tabs'); t.innerHTML = '';
+    var t = $('tabs'); t.innerHTML = ''; t.hidden = AFTER && top !== 'Discover'; if (t.hidden) return;
     SHELVES.forEach(function (s) {
       var b = document.createElement('button'); b.type = 'button'; b.setAttribute('role', 'tab');
       b.setAttribute('aria-selected', s === state.shelf ? 'true' : 'false');
@@ -160,7 +177,9 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--accent); outlin
     return d;
   }
   function render() {
-    renderTabs();
+    renderTop(); renderTabs();
+    var real = state.shelf; if (AFTER && top === 'Next') state.shelf = 'Watch Next';
+    if (AFTER && top === 'Watching') { $('crow').hidden = true; var g0 = $('grid'); g0.innerHTML = ''; var e0 = document.createElement('div'); e0.className = 'empty'; e0.textContent = 'Series you’re in the middle of will show here (next card).'; g0.appendChild(e0); renderFoot(); return; }
     var list = pool();
     renderChips(list);
     if (state.shelf !== 'Watch Next' && state.cat !== 'All') list = list.filter(function (i) { return i.category === state.cat; });
@@ -168,10 +187,10 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--accent); outlin
     var g = $('grid'); g.innerHTML = '';
     if (!list.length) {
       var e = document.createElement('div'); e.className = 'empty';
-      e.textContent = state.shelf === 'Watch Next' ? 'Nothing queued yet. Tap “+ Next” on any poster to add it here.' : state.wf === 'watched' ? 'Nothing watched here yet.' : state.wf === 'all' ? 'Nothing here.' : 'Nothing unwatched here.';
+      e.textContent = state.shelf === 'Watch Next' ? 'Nothing in Next yet. Tap ＋ on any poster in Discover.' : state.wf === 'watched' ? 'Nothing watched here yet.' : state.wf === 'all' ? 'Nothing here.' : 'Nothing unwatched here.';
       g.appendChild(e);
     } else list.forEach(function (it) { g.appendChild(card(it)); });
-    renderFoot();
+    renderFoot(); state.shelf = real;
   }
   function renderFoot() {
     var f = $('foot'); f.innerHTML = '';
