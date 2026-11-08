@@ -207,16 +207,24 @@ body.sorting .ic { opacity: 0 !important; }
     var msg = { watching: wnow > LIM.watching ? 'In Watching · ' + wnow + '/' + LIM.watching + ', park one to stay focused' : 'In Watching', park: 'Parked · in Next', backlog: 'In Backlog · in Next', remove: top === 'Watching' ? 'Removed from Watching · still in Discover' : 'Removed · still in Discover' }[to];
     toast(msg, function () { var a = JSON.parse(snap); watch = a[0]; parked = a[1]; next = a[2]; removed = a[3]; lsSet('watch', watch); lsSet('parked', parked); lsSet('next', next); lsSet('removed', removed); render(); });
   }
-  var ACT = { watching: ['▶', 'Watching · start or continue'], park: ['⏸', 'Park · watch on and off'], backlog: ['＋', 'Backlog · later'], remove: ['✕', 'Remove'] };
+  function markWatched(it, on) {
+    var snap = JSON.stringify([done, undone, next]);
+    if (on) { if (done.indexOf(it.key) < 0) done.push(it.key); var u = undone.indexOf(it.key); if (u >= 0) undone.splice(u, 1); }
+    else { var i = done.indexOf(it.key); if (i >= 0) done.splice(i, 1); if (it.status === 'watched' && undone.indexOf(it.key) < 0) undone.push(it.key); }
+    lsSet('done', done); lsSet('undone', undone); render();
+    toast(on ? 'Marked watched on this device' : 'Marked not watched on this device', function () { var a = JSON.parse(snap); done = a[0]; undone = a[1]; next = a[2]; lsSet('done', done); lsSet('undone', undone); lsSet('next', next); render(); });
+  }
+  var ACT = { watched: ['✓', 'Mark watched (this device)'], unwatched: ['↺', 'Mark not watched (this device)'], watching: ['▶', 'Watching · start or continue'], park: ['⏸', 'Park · watch on and off'], backlog: ['＋', 'Backlog · later'], remove: ['✕', 'Remove'] };
   function where(it) { return inWatching(it) ? 'watching' : parked.indexOf(it.key) >= 0 ? 'park' : next.indexOf(it.key) >= 0 ? 'backlog' : 'discover'; }
   function mcard(it) {
     var d = card(it), ic = d.querySelector('.ic'); ic.innerHTML = ''; ic.classList.add('wm'); d.dataset.key = it.key;
     var w = where(it), acts = { watching: ['park', 'backlog', 'remove'], park: ['watching', 'backlog', 'remove'], backlog: ['watching', 'park', 'remove'], discover: ['watching', 'park', 'backlog'] }[w];
     var more = document.createElement('button'); more.type = 'button'; more.className = 'more'; more.textContent = '⋯'; more.title = acts.map(function (a) { return ACT[a][1].split(' · ')[0]; }).join(', '); more.setAttribute('aria-label', 'Options for ' + it.title);
     var opts = document.createElement('span'); opts.className = 'opts';
+    if (top === 'Discover') { acts = acts.concat([isWatched(it) ? 'unwatched' : 'watched']); more.title = acts.map(function (a) { return ACT[a][1].split(' · ')[0].replace(' (this device)', ''); }).join(', '); }
     acts.forEach(function (o) {
       var b = document.createElement('button'); b.type = 'button'; b.textContent = ACT[o][0]; b.title = ACT[o][1]; b.setAttribute('aria-label', ACT[o][1]);
-      b.onclick = function (e) { e.preventDefault(); place(it, o); }; opts.appendChild(b);
+      b.onclick = function (e) { e.preventDefault(); if (o === 'watched' || o === 'unwatched') markWatched(it, o === 'watched'); else place(it, o); }; opts.appendChild(b);
     });
     more.onclick = function (e) { e.preventDefault(); ic.classList.toggle('open'); };
     ic.appendChild(opts); ic.appendChild(more);
