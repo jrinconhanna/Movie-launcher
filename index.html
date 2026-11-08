@@ -305,7 +305,7 @@ body.sorting .ic { opacity: 0 !important; }
     if (BAR && it.status === 'progress' && it.progress && it.progress[1]) { var pb = document.createElement('span'); pb.className = 'pbar'; var pf = document.createElement('i'); pf.style.width = Math.max(3, Math.round(100 * it.progress[0] / it.progress[1])) + '%'; pb.appendChild(pf); a.appendChild(pb); }
     d.appendChild(a);
     var t = document.createElement('div'); t.className = 't'; t.textContent = it.title; d.appendChild(t);
-    var y = document.createElement('div'); y.className = 'y'; y.textContent = [year(it), it.category].filter(Boolean).join(' · '); d.appendChild(y);
+    var y = document.createElement('div'); y.className = 'y'; y.textContent = [year(it), state.cat !== 'All' && top === 'Discover' ? '' : it.category].filter(Boolean).join(' · '); d.appendChild(y);
     var acts = document.createElement('div'); acts.className = 'ic';
     var inNext = next.indexOf(it.key) >= 0;
     var nb = document.createElement('button'); nb.type = 'button'; nb.textContent = '＋'; nb.title = inNext ? 'In Watch Next · tap to remove' : 'Add to Watch Next'; if (inNext) nb.className = 'on';
