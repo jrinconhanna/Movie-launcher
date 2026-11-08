@@ -144,7 +144,7 @@ body.sorting .ic { opacity: 0 !important; }
         if (Date.now() > until) { pending = null; render(); toast('Code expired · try Connect Trakt again'); return; }
         tpost('/oauth/device/token', { code: dc.device_code, client_id: TRAKT_ID }).then(function (t) {
           if (!pending) return;
-          if (t.status === 200) return t.json().then(function (x) { setTok(x); pending = null; render(); toast('Connected to Trakt'); pull(); });
+          if (t.status === 200) return t.json().then(function (x) { setTok(x); pending = null; render(); toast('Connected to Trakt'); pull(); loadPaused(); });
           if (t.status === 400 || t.status === 429) { pending.t = setTimeout(poll, (dc.interval + (t.status === 429 ? 2 : 0)) * 1000); return; }
           pending = null; render(); toast('Trakt said no (' + t.status + ') · try again');
         }).catch(function () { if (pending) pending.t = setTimeout(poll, dc.interval * 1000); });
@@ -216,7 +216,18 @@ body.sorting .ic { opacity: 0 !important; }
     }, now ? 0 : 1200);
   }
   window.__push = function () { push(false); };
-  document.addEventListener('visibilitychange', function () { if (document.visibilityState === 'visible' && Date.now() - lastPull > 30000) pull(); });
+  document.addEventListener('visibilitychange', function () { if (document.visibilityState === 'visible' && Date.now() - lastPull > 30000) { pull(); loadPaused(); } });
+  // ---------- Movies started: paused movies from Trakt (needs the login) ----------
+  var paused = ls('paused', {});  // key -> % watched
+  function isStarted(it) { return it.kind === 'movie' && paused[it.key] != null && !isWatched(it); }
+  function loadPaused() {
+    if (!tok || !items.length) return;
+    tapi('/sync/playback/movies').then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); }).then(function (list) {
+      var m = {};
+      list.forEach(function (x) { var id = x.movie && x.movie.ids && x.movie.ids.tmdb; if (!id || x.progress < 2 || x.progress >= 95 || Date.now() - Date.parse(x.paused_at) > 90 * 864e5) return; var it = bySid('m' + id); if (it && (m[it.key] == null || x.progress > m[it.key])) m[it.key] = Math.round(x.progress); });
+      paused = m; try { localStorage.setItem('paused', JSON.stringify(m)); } catch (e) {} render();
+    }).catch(function () {});
+  }
   function connRow() {
     var d = document.createElement('div'); d.className = 'conn';
     if (pending) {
@@ -286,6 +297,7 @@ body.sorting .ic { opacity: 0 !important; }
     var a = document.createElement('a'); a.className = 'poster'; a.href = link(it); a.setAttribute('aria-label', 'Open ' + it.title + ' in Infuse');
     if (it.poster) { var img = document.createElement('img'); img.loading = 'lazy'; img.alt = ''; img.src = 'https://image.tmdb.org/t/p/w342' + it.poster; a.appendChild(img); }
     else { var ph = document.createElement('div'); ph.className = 'ph'; ph.textContent = it.title; a.appendChild(ph); }
+    if (isStarted(it)) { var mb = document.createElement('span'); mb.className = 'badge'; mb.textContent = paused[it.key] + '%'; a.appendChild(mb); if (BAR) { var mpb = document.createElement('span'); mpb.className = 'pbar'; var mpf = document.createElement('i'); mpf.style.width = Math.max(3, paused[it.key]) + '%'; mpb.appendChild(mpf); a.appendChild(mpb); } }
     if (it.status === 'progress' && it.progress) { var bd = document.createElement('span'); bd.className = 'badge'; bd.textContent = it.progress[0] + '/' + it.progress[1]; a.appendChild(bd); }
     if (BAR && it.status === 'progress' && it.progress && it.progress[1]) { var pb = document.createElement('span'); pb.className = 'pbar'; var pf = document.createElement('i'); pf.style.width = Math.max(3, Math.round(100 * it.progress[0] / it.progress[1])) + '%'; pb.appendChild(pf); a.appendChild(pb); }
     d.appendChild(a);
@@ -308,16 +320,16 @@ body.sorting .ic { opacity: 0 !important; }
     return d;
   }
   var LIM = { watching: 5, park: 10, backlog: 15 };
-  function inWatching(i) { return (i.status === 'progress' || watch.indexOf(i.key) >= 0) && parked.indexOf(i.key) < 0 && removed.indexOf(i.key) < 0 && next.indexOf(i.key) < 0; }
+  function inWatching(i) { return (i.status === 'progress' || isStarted(i) || watch.indexOf(i.key) >= 0) && parked.indexOf(i.key) < 0 && removed.indexOf(i.key) < 0 && next.indexOf(i.key) < 0; }
   function place(it, to) {
     if (to === 'park' && parked.indexOf(it.key) < 0 && parked.length >= LIM.park) { toast('Parked is full (' + LIM.park + ') · remove one first'); return; }
     if (to === 'backlog' && next.indexOf(it.key) < 0 && next.length >= LIM.backlog) { toast('Backlog is full (' + LIM.backlog + ') · remove one first'); return; }
     var snap = JSON.stringify([watch, parked, next, removed]);
     [watch, parked, next, removed].forEach(function (L) { var i = L.indexOf(it.key); if (i >= 0) L.splice(i, 1); });
-    if (to === 'watching' && it.status !== 'progress') watch.push(it.key);
+    if (to === 'watching' && it.status !== 'progress' && !isStarted(it)) watch.push(it.key);
     if (to === 'park') parked.push(it.key);
     if (to === 'backlog') next.push(it.key);
-    if (to === 'remove' && it.status === 'progress') removed.push(it.key);
+    if (to === 'remove' && (it.status === 'progress' || isStarted(it))) removed.push(it.key);
     lsSet('watch', watch); lsSet('parked', parked); lsSet('next', next); lsSet('removed', removed); render();
     var wnow = items.filter(inWatching).length;
     var msg = { watching: wnow > LIM.watching ? 'In Watching · ' + wnow + '/' + LIM.watching + ', park one to stay focused' : 'In Watching', park: 'Parked · in Next', backlog: 'In Backlog · in Next', remove: top === 'Watching' ? 'Removed from Watching · still in Discover' : 'Removed · still in Discover' }[to];
@@ -391,7 +403,7 @@ body.sorting .ic { opacity: 0 !important; }
     var real = state.shelf; if (AFTER && top === 'Next') state.shelf = 'Watch Next';
     if (AFTER && top === 'Watching') { $('crow').hidden = true; var g0 = $('grid'); g0.innerHTML = ''; if (!tok) g0.appendChild(connRow());
       var wl = items.filter(inWatching).sort(function (a, b) { var ia = worder.indexOf(a.key), ib = worder.indexOf(b.key); if (ia < 0) ia = 1e6; if (ib < 0) ib = 1e6; return ia - ib || a.title.localeCompare(b.title); });
-      if (!wl.length) { var e0 = document.createElement('div'); e0.className = 'empty'; e0.textContent = 'Nothing in progress. Start a series in Infuse and it shows up here.'; g0.appendChild(e0); }
+      if (!wl.length) { var e0 = document.createElement('div'); e0.className = 'empty'; e0.textContent = 'Nothing in progress. Start a series or movie in Infuse and it shows up here.'; g0.appendChild(e0); }
       else { wl.forEach(function (it) { var c = mcard(it); c.dataset.sec = 'worder'; g0.appendChild(c); }); sortable(g0); }
       renderFoot(); return; }
     if (AFTER && top === 'Next') { $('crow').hidden = true; var gn = $('grid'); gn.innerHTML = '';
@@ -441,14 +453,14 @@ body.sorting .ic { opacity: 0 !important; }
     var p = document.createElement('div');
     p.textContent = (updated ? 'Library updated ' + updated.replace('T', ' ').replace('Z', ' UTC') + '. ' : '') + 'Posters and titles from TMDB. This product uses the TMDB API but is not endorsed or certified by TMDB. Watched status from Trakt.';
     f.appendChild(p);
-    if (tok) { var fc = document.createElement('div'); fc.className = 'fconn'; fc.appendChild(document.createTextNode('Trakt connected on this device · ')); var stt = document.createElement('span'); stt.className = 'st'; stt.textContent = saveState; if (saveState) { fc.appendChild(stt); fc.appendChild(document.createTextNode(' · ')); } var dx = document.createElement('button'); dx.type = 'button'; dx.textContent = 'Disconnect'; dx.onclick = function () { setTok(null); synced = false; clearTimeout(pushT); pushT = null; render(); toast('Disconnected · saved on this device only'); }; fc.appendChild(dx); f.appendChild(fc); }
+    if (tok) { var fc = document.createElement('div'); fc.className = 'fconn'; fc.appendChild(document.createTextNode('Trakt connected on this device · ')); var stt = document.createElement('span'); stt.className = 'st'; stt.textContent = saveState; if (saveState) { fc.appendChild(stt); fc.appendChild(document.createTextNode(' · ')); } var dx = document.createElement('button'); dx.type = 'button'; dx.textContent = 'Disconnect'; dx.onclick = function () { setTok(null); synced = false; paused = {}; try { localStorage.removeItem('paused'); } catch (e) {} clearTimeout(pushT); pushT = null; render(); toast('Disconnected · saved on this device only'); }; fc.appendChild(dx); f.appendChild(fc); }
   }
   function save() { lsSet('view', state); }
   $('wf').onchange = function () { state.wf = this.value; save(); render(); window.scrollTo(0, 0); };
 
   renew();
   fetch('library.json', { cache: 'no-cache' }).then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); }).then(function (d) {
-    items = d.items || []; unmatched = d.unmatched || []; updated = d.updated || ''; render(); pull();
+    items = d.items || []; unmatched = d.unmatched || []; updated = d.updated || ''; render(); pull(); loadPaused();
   }).catch(function () {
     $('grid').innerHTML = '<div class="empty">The library isn’t built yet. It appears here a few minutes after the GitHub job runs.</div>';
   });
