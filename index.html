@@ -156,7 +156,6 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--accent); outlin
     if (it.poster) { var img = document.createElement('img'); img.loading = 'lazy'; img.alt = ''; img.src = 'https://image.tmdb.org/t/p/w342' + it.poster; a.appendChild(img); }
     else { var ph = document.createElement('div'); ph.className = 'ph'; ph.textContent = it.title; a.appendChild(ph); }
     if (it.status === 'progress' && it.progress) { var bd = document.createElement('span'); bd.className = 'badge'; bd.textContent = it.progress[0] + '/' + it.progress[1]; a.appendChild(bd); }
-    if (isWatched(it)) { var w = document.createElement('span'); w.className = 'badge'; w.textContent = 'Watched'; a.appendChild(w); }
     d.appendChild(a);
     var t = document.createElement('div'); t.className = 't'; t.textContent = it.title; d.appendChild(t);
     var y = document.createElement('div'); y.className = 'y'; y.textContent = [year(it), it.category].filter(Boolean).join(' · '); d.appendChild(y);
