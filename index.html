@@ -85,6 +85,7 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--accent); outlin
 .ic.wm.open .more { background: #fff; color: #000; }
 #toast .undo { margin-left: 12px; background: none; border: 0; color: inherit; font: 700 13px var(--font); text-decoration: underline; cursor: pointer; }
 .where { position: absolute; left: 6px; top: 6px; background: rgba(0,0,0,.72); color: #fff; font: 600 10.5px var(--font); padding: 2px 6px; border-radius: 4px; }
+.tabs .n.over { color: #e5484d; font-weight: 700; opacity: 1; }
 </style>
 </head>
 <body>
@@ -127,7 +128,7 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--accent); outlin
     TOP.forEach(function (s) {
       var b = document.createElement('button'); b.type = 'button'; b.setAttribute('role', 'tab');
       b.setAttribute('aria-selected', s === top ? 'true' : 'false'); b.textContent = s;
-      if (s === 'Watching' && MOCK) { var cw = document.createElement('span'); cw.className = 'n'; cw.textContent = items.filter(inWatching).length; b.appendChild(cw); }
+      if (s === 'Watching' && MOCK) { var cw = document.createElement('span'); cw.className = 'n'; var wn = items.filter(inWatching).length; cw.textContent = wn + '/' + LIM.watching; if (wn > LIM.watching) { cw.classList.add('over'); b.title = 'Over 5 · park or remove one to stay focused'; } b.appendChild(cw); }
       if (s === 'Next') { var c = document.createElement('span'); c.className = 'n'; c.textContent = next.length + parked.length; b.appendChild(c); }
       b.onclick = function () { top = s; render(); window.scrollTo(0, 0); };
       t.appendChild(b);
@@ -185,8 +186,11 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--accent); outlin
     acts.appendChild(nb); acts.appendChild(db); d.appendChild(acts);
     return d;
   }
+  var LIM = { watching: 5, park: 10, backlog: 15 };
   function inWatching(i) { return (i.status === 'progress' || watch.indexOf(i.key) >= 0) && parked.indexOf(i.key) < 0 && removed.indexOf(i.key) < 0 && next.indexOf(i.key) < 0; }
   function place(it, to) {
+    if (to === 'park' && parked.indexOf(it.key) < 0 && parked.length >= LIM.park) { toast('Parked is full (' + LIM.park + ') · remove one first'); return; }
+    if (to === 'backlog' && next.indexOf(it.key) < 0 && next.length >= LIM.backlog) { toast('Backlog is full (' + LIM.backlog + ') · remove one first'); return; }
     var snap = JSON.stringify([watch, parked, next, removed]);
     [watch, parked, next, removed].forEach(function (L) { var i = L.indexOf(it.key); if (i >= 0) L.splice(i, 1); });
     if (to === 'watching' && it.status !== 'progress') watch.push(it.key);
@@ -194,7 +198,8 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--accent); outlin
     if (to === 'backlog') next.push(it.key);
     if (to === 'remove' && it.status === 'progress') removed.push(it.key);
     lsSet('watch', watch); lsSet('parked', parked); lsSet('next', next); lsSet('removed', removed); render();
-    var msg = { watching: 'In Watching', park: 'Parked · in Next', backlog: 'In Backlog · in Next', remove: top === 'Watching' ? 'Removed from Watching · still in Discover' : 'Removed · still in Discover' }[to];
+    var wnow = items.filter(inWatching).length;
+    var msg = { watching: wnow > LIM.watching ? 'In Watching · ' + wnow + '/' + LIM.watching + ', park one to stay focused' : 'In Watching', park: 'Parked · in Next', backlog: 'In Backlog · in Next', remove: top === 'Watching' ? 'Removed from Watching · still in Discover' : 'Removed · still in Discover' }[to];
     toast(msg, function () { var a = JSON.parse(snap); watch = a[0]; parked = a[1]; next = a[2]; removed = a[3]; lsSet('watch', watch); lsSet('parked', parked); lsSet('next', next); lsSet('removed', removed); render(); });
   }
   var ACT = { watching: ['▶', 'Watching · start or continue'], park: ['⏸', 'Park · watch on and off'], backlog: ['＋', 'Backlog · later'], remove: ['✕', 'Remove'] };
@@ -223,7 +228,7 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--accent); outlin
       renderFoot(); return; }
     if (AFTER && top === 'Next') { $('crow').hidden = true; var gn = $('grid'); gn.innerHTML = '';
       [['Parked', parked], ['Backlog', next]].forEach(function (sec) {
-        var hd = document.createElement('div'); hd.className = 'sech'; hd.textContent = sec[0] + ' · ' + sec[1].length; gn.appendChild(hd);
+        var hd = document.createElement('div'); hd.className = 'sech'; hd.textContent = sec[0] + ' · ' + sec[1].length + '/' + (sec[0] === 'Parked' ? LIM.park : LIM.backlog); if (sec[1].length >= (sec[0] === 'Parked' ? LIM.park : LIM.backlog)) hd.textContent += ' · full'; gn.appendChild(hd);
         var its = sec[1].map(function (k) { return items.filter(function (i) { return i.key === k; })[0]; }).filter(Boolean);
         if (!its.length) { var e1 = document.createElement('div'); e1.className = 'empty'; e1.textContent = sec[0] === 'Parked' ? 'Park a series with ⋯ › ⏸.' : 'Add with ⋯ › ＋ on any poster.'; gn.appendChild(e1); }
         else its.forEach(function (it) { gn.appendChild(mcard(it)); });
