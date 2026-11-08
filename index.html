@@ -91,6 +91,13 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--accent); outlin
 .card.dragging .poster { box-shadow: 0 10px 28px rgba(0,0,0,.35); outline: 2px solid var(--fg); }
 body.sorting { cursor: grabbing; }
 body.sorting .ic { opacity: 0 !important; }
+.conn { grid-column: 1 / -1; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; font-size: 13px; color: var(--muted); }
+.conn button, .fconn button { border: 0; background: none; padding: 0; font: 600 13px var(--font); cursor: pointer; }
+.conn button { color: var(--accent); }
+.conn .code { width: 100%; font-size: 15px; color: var(--fg); }
+.conn .code b { font: 700 17px ui-monospace, Menlo, monospace; letter-spacing: 1px; }
+.conn a { color: var(--accent); }
+.fconn button { color: var(--muted); font: inherit; text-decoration: underline; }
 </style>
 </head>
 <body>
@@ -115,6 +122,49 @@ body.sorting .ic { opacity: 0 !important; }
   function lsSet(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
   next = ls('next', []); worder = ls('worder', []); watch = ls('watch', []); parked = ls('parked', []); removed = ls('removed', []); done = ls('done', []); undone = ls('undone', []); state = Object.assign(state, ls('view', {})); if (['unwatched', 'watched', 'all'].indexOf(state.wf) < 0) state.wf = 'unwatched'; if (AFTER && state.shelf === 'Watch Next') state.shelf = 'Movies';
   var $ = function (id) { return document.getElementById(id); };
+  // ---------- Trakt login (device code, no secret; once per device, renewed on open) ----------
+  var TRAKT_ID = '8JCox_SeBb82A1WgJW48P67jldMz2aiSZ-xOZ7qH67g', TRAKT = 'https://api.trakt.tv', pending = null;
+  var tok = ls('trakt-token', null) || ls('trakt-test-token', null); if (tok) lsSet('trakt-token', tok);
+  function tokLeft() { return tok ? tok.created_at + tok.expires_in - Date.now() / 1000 : -1; }
+  function setTok(t) { tok = t; if (t) lsSet('trakt-token', t); else try { localStorage.removeItem('trakt-token'); localStorage.removeItem('trakt-test-token'); } catch (e) {} }
+  function tpost(path, body) { return fetch(TRAKT + path, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) }); }
+  function renew() {
+    if (!tok || tokLeft() > 86400) return;
+    tpost('/oauth/token', { refresh_token: tok.refresh_token, client_id: TRAKT_ID, redirect_uri: 'urn:ietf:wg:oauth:2.0:oob', grant_type: 'refresh_token' })
+      .then(function (r) { if (r.ok) return r.json().then(function (t) { setTok(t); }); if (r.status === 400 || r.status === 401) { setTok(null); render(); toast('Trakt login ran out · connect again'); } })
+      .catch(function () {});
+  }
+  function connect() {
+    tpost('/oauth/device/code', { client_id: TRAKT_ID }).then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); }).then(function (dc) {
+      var until = Date.now() + dc.expires_in * 1000;
+      pending = { code: dc.user_code, url: dc.verification_url };
+      function poll() {
+        if (!pending) return;
+        if (Date.now() > until) { pending = null; render(); toast('Code expired · try Connect Trakt again'); return; }
+        tpost('/oauth/device/token', { code: dc.device_code, client_id: TRAKT_ID }).then(function (t) {
+          if (!pending) return;
+          if (t.status === 200) return t.json().then(function (x) { setTok(x); pending = null; render(); toast('Connected to Trakt'); });
+          if (t.status === 400 || t.status === 429) { pending.t = setTimeout(poll, (dc.interval + (t.status === 429 ? 2 : 0)) * 1000); return; }
+          pending = null; render(); toast('Trakt said no (' + t.status + ') · try again');
+        }).catch(function () { if (pending) pending.t = setTimeout(poll, dc.interval * 1000); });
+      }
+      pending.t = setTimeout(poll, dc.interval * 1000); render();
+    }).catch(function () { toast('Couldn’t reach Trakt · try again'); });
+  }
+  function connRow() {
+    var d = document.createElement('div'); d.className = 'conn';
+    if (pending) {
+      var c = document.createElement('div'); c.className = 'code';
+      c.innerHTML = 'Go to <a href="' + pending.url + '" target="_blank" rel="noopener">' + pending.url.replace('https://', '') + '</a> and type <b>' + pending.code + '</b>';
+      d.appendChild(c);
+      var w = document.createElement('span'); w.textContent = 'Waiting for you to approve…'; d.appendChild(w);
+      var x = document.createElement('button'); x.type = 'button'; x.textContent = 'Cancel'; x.onclick = function () { clearTimeout(pending.t); pending = null; render(); }; d.appendChild(x);
+      return d;
+    }
+    var s1 = document.createElement('span'); s1.textContent = 'Saved on this device only ·'; d.appendChild(s1);
+    var b = document.createElement('button'); b.type = 'button'; b.textContent = 'Connect Trakt'; b.onclick = connect; d.appendChild(b);
+    return d;
+  }
 
   function link(it) { return 'infuse://' + (it.kind === 'movie' ? 'movie/' : 'series/') + it.tmdb; }
   function year(it) { return (it.date || '').slice(0, 4); }
@@ -273,7 +323,7 @@ body.sorting .ic { opacity: 0 !important; }
   function render() {
     renderTop(); renderTabs();
     var real = state.shelf; if (AFTER && top === 'Next') state.shelf = 'Watch Next';
-    if (AFTER && top === 'Watching') { $('crow').hidden = true; var g0 = $('grid'); g0.innerHTML = '';
+    if (AFTER && top === 'Watching') { $('crow').hidden = true; var g0 = $('grid'); g0.innerHTML = ''; if (!tok) g0.appendChild(connRow());
       var wl = items.filter(inWatching).sort(function (a, b) { var ia = worder.indexOf(a.key), ib = worder.indexOf(b.key); if (ia < 0) ia = 1e6; if (ib < 0) ib = 1e6; return ia - ib || a.title.localeCompare(b.title); });
       if (!wl.length) { var e0 = document.createElement('div'); e0.className = 'empty'; e0.textContent = 'Nothing in progress. Start a series in Infuse and it shows up here.'; g0.appendChild(e0); }
       else { wl.forEach(function (it) { var c = mcard(it); c.dataset.sec = 'worder'; g0.appendChild(c); }); sortable(g0); }
@@ -325,10 +375,12 @@ body.sorting .ic { opacity: 0 !important; }
     var p = document.createElement('div');
     p.textContent = (updated ? 'Library updated ' + updated.replace('T', ' ').replace('Z', ' UTC') + '. ' : '') + 'Posters and titles from TMDB. This product uses the TMDB API but is not endorsed or certified by TMDB. Watched status from Trakt.';
     f.appendChild(p);
+    if (tok) { var fc = document.createElement('div'); fc.className = 'fconn'; fc.appendChild(document.createTextNode('Trakt connected on this device · ')); var dx = document.createElement('button'); dx.type = 'button'; dx.textContent = 'Disconnect'; dx.onclick = function () { setTok(null); render(); toast('Disconnected · saved on this device only'); }; fc.appendChild(dx); f.appendChild(fc); }
   }
   function save() { lsSet('view', state); }
   $('wf').onchange = function () { state.wf = this.value; save(); render(); window.scrollTo(0, 0); };
 
+  renew();
   fetch('library.json', { cache: 'no-cache' }).then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); }).then(function (d) {
     items = d.items || []; unmatched = d.unmatched || []; updated = d.updated || ''; render();
   }).catch(function () {
