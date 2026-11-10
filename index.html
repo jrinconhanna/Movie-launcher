@@ -106,6 +106,7 @@ body.sorting .ic { opacity: 0 !important; }
 @media (min-width: 700px) { .ltile .ln { font-size: 56px; } }
 .lcard .t { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
 .card.seen .ltile { filter: grayscale(1); opacity: .25; }
+.ltile.hascover { background: #000; } .ltile.hascover img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; }
 </style>
 </head>
 <body>
@@ -451,8 +452,9 @@ body.sorting .ic { opacity: 0 !important; }
   function lcard(v) { // V2.3 Learn tile: no TMDB poster, so number + course on a plain tile
     var d = document.createElement('div'); d.className = 'card lcard'; d.dataset.key = v.key;
     var a = document.createElement('a'); a.className = 'poster ltile'; a.href = '#'; a.setAttribute('aria-label', v.title);
-    var n = document.createElement('span'); n.className = 'ln'; n.textContent = v.n != null ? v.n : '·'; a.appendChild(n);
-    var c = document.createElement('span'); c.className = 'lc'; c.textContent = v.course; a.appendChild(c);
+    if (v.cover) { var im = document.createElement('img'); im.loading = 'lazy'; im.alt = ''; im.src = v.cover; a.appendChild(im); a.classList.add('hascover'); }
+    else { var n = document.createElement('span'); n.className = 'ln'; n.textContent = v.n != null ? v.n : '·'; a.appendChild(n);
+    var c = document.createElement('span'); c.className = 'lc'; c.textContent = v.course; a.appendChild(c); }
     a.onclick = function (e) { e.preventDefault(); playLearn(v); };
     var seen = learnDone.indexOf(lid(v)) >= 0; if (seen) d.classList.add('seen');
     var ic = document.createElement('div'); ic.className = 'ic wm';

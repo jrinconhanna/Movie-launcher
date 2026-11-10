@@ -11113,6 +11113,7 @@
  "learn": [
   {
    "course": "GSP Series",
+   "cover": "covers/learn/gsp-series/1.jpg",
    "file": "✅ 1. Operations - DBR and Buffer Management.mp4",
    "key": "learn|1- Tech/2- TOC/1- GSP Series/✅ 1. Operations - DBR and Buffer Management.mp4",
    "n": 1,
@@ -11120,6 +11121,7 @@
   },
   {
    "course": "GSP Series",
+   "cover": "covers/learn/gsp-series/2.jpg",
    "file": "✅ 2. Finance and Measurements - T, I & OE and Throughput Accounting.mp4",
    "key": "learn|1- Tech/2- TOC/1- GSP Series/✅ 2. Finance and Measurements - T, I & OE and Throughput Accounting.mp4",
    "n": 2,
@@ -11127,6 +11129,7 @@
   },
   {
    "course": "GSP Series",
+   "cover": "covers/learn/gsp-series/3.jpg",
    "file": "✅ 3. Project Management and Engineering - Critical Chain (CCPM) and Product Development.mp4",
    "key": "learn|1- Tech/2- TOC/1- GSP Series/✅ 3. Project Management and Engineering - Critical Chain (CCPM) and Product Development.mp4",
    "n": 3,
@@ -11134,6 +11137,7 @@
   },
   {
    "course": "GSP Series",
+   "cover": "covers/learn/gsp-series/4.jpg",
    "file": "✅ 4. Distribution and Supply Chain - Pull System and Replenishment.mp4",
    "key": "learn|1- Tech/2- TOC/1- GSP Series/✅ 4. Distribution and Supply Chain - Pull System and Replenishment.mp4",
    "n": 4,
@@ -11141,6 +11145,7 @@
   },
   {
    "course": "GSP Series",
+   "cover": "covers/learn/gsp-series/5.jpg",
    "file": "✅ 5. Marketing - Unrefusable Offers and Market Segmentation.mp4",
    "key": "learn|1- Tech/2- TOC/1- GSP Series/✅ 5. Marketing - Unrefusable Offers and Market Segmentation.mp4",
    "n": 5,
@@ -11148,6 +11153,7 @@
   },
   {
    "course": "GSP Series",
+   "cover": "covers/learn/gsp-series/6.jpg",
    "file": "✅ 6. Sales and Buy-in - Overcoming Resistance and Handling Reservations.mp4",
    "key": "learn|1- Tech/2- TOC/1- GSP Series/✅ 6. Sales and Buy-in - Overcoming Resistance and Handling Reservations.mp4",
    "n": 6,
@@ -11155,6 +11161,7 @@
   },
   {
    "course": "GSP Series",
+   "cover": "covers/learn/gsp-series/7.jpg",
    "file": "7. Managing People - Communication and Team Building.mp4",
    "key": "learn|1- Tech/2- TOC/1- GSP Series/7. Managing People - Communication and Team Building.mp4",
    "n": 7,
@@ -11162,6 +11169,7 @@
   },
   {
    "course": "GSP Series",
+   "cover": "covers/learn/gsp-series/8.jpg",
    "file": "8. Strategy and Tactics - Immunizing the Future of your Company.mp4",
    "key": "learn|1- Tech/2- TOC/1- GSP Series/8. Strategy and Tactics - Immunizing the Future of your Company.mp4",
    "n": 8,

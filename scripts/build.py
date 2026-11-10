@@ -139,7 +139,11 @@ def learn_items(lines):
                 m = LEARN_NUM_RE.match(base)
                 n = int(m.group(1)) if m else None
                 title = LEARN_NUM_RE.sub("", base).strip() if m else base
-                out.append({"key": "learn|" + path, "course": course, "n": n, "title": title, "file": fname})
+                item = {"key": "learn|" + path, "course": course, "n": n, "title": title, "file": fname}
+                cover = "covers/learn/%s/%s.jpg" % (re.sub(r"[^a-z0-9]+", "-", course.lower()).strip("-"), n)
+                if n is not None and os.path.exists(os.path.join(ROOT, cover)):
+                    item["cover"] = cover  # V2.3: added by hand; Better: synced from Whatbox
+                out.append(item)
     out.sort(key=lambda x: (x["course"], x["n"] is None, x["n"] or 0, x["title"].lower()))
     return out
 
