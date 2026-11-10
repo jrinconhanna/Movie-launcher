@@ -132,7 +132,7 @@ body.sorting .ic { opacity: 0 !important; }
   function ls(k, d) { try { var v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch (e) { return d; } }
   function lsSet(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} if (SYNC_KEYS.indexOf(k) >= 0 && window.__push) window.__push(); }
   var SYNC_KEYS = ['worder', 'watch', 'parked', 'next', 'removed', 'done', 'undone', 'learndone'];
-  next = ls('next', []); worder = ls('worder', []); watch = ls('watch', []); parked = ls('parked', []); removed = ls('removed', []); done = ls('done', []); undone = ls('undone', []); learnDone = ls('learndone', []); state = Object.assign(state, ls('view', {})); if (['unwatched', 'watched', 'all'].indexOf(state.wf) < 0) state.wf = 'unwatched'; if (AFTER && state.shelf === 'Watch Next') state.shelf = 'Movies';
+  next = ls('next', []); worder = ls('worder', []); watch = ls('watch', []); parked = ls('parked', []); removed = ls('removed', []); done = ls('done', []); undone = ls('undone', []); learnDone = ls('learndone', []); state = Object.assign(state, ls('view', {})); if (['unwatched', 'watched', 'all'].indexOf(state.wf) < 0) state.wf = 'unwatched'; if (AFTER && state.shelf === 'Watch Next') state.shelf = 'Movies'; if (!LEARN && state.shelf === 'Tech') state.shelf = 'Movies';
   var $ = function (id) { return document.getElementById(id); };
   // ---------- Trakt login (device code, no secret; once per device, renewed on open) ----------
   var TRAKT_ID = '8JCox_SeBb82A1WgJW48P67jldMz2aiSZ-xOZ7qH67g', TRAKT = 'https://api.trakt.tv', pending = null;
@@ -293,7 +293,10 @@ body.sorting .ic { opacity: 0 !important; }
   function shows(it) { return state.wf === 'all' || (state.wf === 'watched' ? isWatched(it) : !isWatched(it)); }
   function toast(m, undo) { var t = $('toast'); t.textContent = m; if (undo) { var u = document.createElement('button'); u.type = 'button'; u.className = 'undo'; u.textContent = 'Undo'; u.onclick = function () { t.hidden = true; undo(); }; t.appendChild(u); } t.hidden = false; clearTimeout(toast.t); toast.t = setTimeout(function () { t.hidden = true; }, undo ? 4000 : 1800); }
 
+  function shelves() { return (LEARN && learn.length ? ['Tech'] : []).concat(SHELVES); } // V2.3: Learn videos get their own shelf, first
+  function showsL(v) { var w = learnDone.indexOf(lid(v)) >= 0; return state.wf === 'all' || (state.wf === 'watched' ? w : !w); }
   function pool() {
+    if (state.shelf === 'Tech') return learn.filter(showsL).map(function (v) { return Object.assign({}, v, { category: v.course, order: '' }); });
     if (state.shelf === 'Watch Next') return next.map(function (k) { return items.find(function (i) { return i.key === k; }); }).filter(Boolean);
     return items.filter(function (i) { return i.group === state.shelf && shows(i); });
   }
@@ -310,10 +313,10 @@ body.sorting .ic { opacity: 0 !important; }
   }
   function renderTabs() {
     var t = $('tabs'); t.innerHTML = ''; t.hidden = AFTER && top !== 'Discover'; if (t.hidden) return;
-    SHELVES.forEach(function (s) {
+    shelves().forEach(function (s) {
       var b = document.createElement('button'); b.type = 'button'; b.setAttribute('role', 'tab');
       b.setAttribute('aria-selected', s === state.shelf ? 'true' : 'false');
-      var n = s === 'Watch Next' ? next.length : items.filter(function (i) { return i.group === s && shows(i); }).length;
+      var n = s === 'Tech' ? learn.filter(showsL).length : s === 'Watch Next' ? next.length : items.filter(function (i) { return i.group === s && shows(i); }).length;
       b.textContent = s === 'Watch Next' ? 'Next' : s; var c = document.createElement('span'); c.className = 'n'; c.textContent = n; b.appendChild(c);
       b.onclick = function () { state.shelf = s; state.cat = 'All'; save(); render(); window.scrollTo(0, 0); };
       t.appendChild(b);
@@ -546,13 +549,13 @@ body.sorting .ic { opacity: 0 !important; }
     var list = pool();
     renderChips(list);
     if (state.shelf !== 'Watch Next' && state.cat !== 'All') list = list.filter(function (i) { return i.category === state.cat; });
-    if (state.shelf !== 'Watch Next') list.sort(function (a, b) { return (b.date || '').localeCompare(a.date || ''); });
+    if (state.shelf !== 'Watch Next' && state.shelf !== 'Tech') list.sort(function (a, b) { return (b.date || '').localeCompare(a.date || ''); });
     var g = $('grid'); g.innerHTML = '';
     if (!list.length) {
       var e = document.createElement('div'); e.className = 'empty';
       e.textContent = state.shelf === 'Watch Next' ? 'Nothing in Next yet. Tap ＋ on any poster in Discover.' : state.wf === 'watched' ? 'Nothing watched here yet.' : state.wf === 'all' ? 'Nothing here.' : 'Nothing unwatched here.';
       g.appendChild(e);
-    } else list.forEach(function (it) { g.appendChild(mcard(it)); });
+    } else list.forEach(function (it) { g.appendChild(state.shelf === 'Tech' ? lcard(it) : mcard(it)); });
     renderFoot(); state.shelf = real;
   }
   function renderFoot() {
