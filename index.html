@@ -547,7 +547,7 @@ body.sorting .ic { opacity: 0 !important; }
     var t = document.createElement('div'); t.className = 't'; t.textContent = v.title; d.appendChild(t);
     if (v.n != null) { var bd = document.createElement('span'); bd.className = 'badge'; bd.textContent = v.n + '/' + learn.filter(function (x) { return x.course === v.course; }).length; a.appendChild(bd); // same corner as a series' episode count
     } // no bar on a single video: a bar means that item's own progress (course progress sits on the folder)
-    var y = document.createElement('div'); y.className = 'y'; y.textContent = [v.year, v.course].filter(Boolean).join(' · '); d.appendChild(y);
+    var y = document.createElement('div'); y.className = 'y'; y.textContent = [v.year, V24 && top === 'Discover' ? '' : v.course].filter(Boolean).join(' · '); d.appendChild(y); // V2.4: inside a folder the folder name adds nothing; Watching keeps it
     return d;
   }
   function mcard(it) {

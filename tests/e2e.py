@@ -171,6 +171,7 @@ with sync_playwright() as p:
         rec(f"J4 [{size}] era opens: 6 videos, dated titles cleaned, year in the year line", len(ts) == 6 and ts[1] == "Steve Jobs Interview" and ys[1] == "1981", (len(ts), ts[:3], ys[:3]))
         rec(f"J5 [{size}] every video shows its cover from Whatbox", pg.evaluate("[...document.querySelectorAll('#grid .lcard img')].filter(i=>i.complete&&i.naturalWidth>0).length") == 6, pg.evaluate("document.querySelectorAll('#grid .lcard img').length"))
         rec(f"J5b [{size}] years run in order", ys == sorted(ys), ys)
+        rec(f"J11 [{size}] inside a folder the line under a video is just the year", pg.evaluate("[...document.querySelectorAll('#grid .lcard .y')].map(x=>x.textContent)")[:2] == ["1980", "1981"])
         back = pg.evaluate("[...document.querySelectorAll('#chips button')].map(b=>b.textContent)")
         rec(f"J6 [{size}] back chip names the era", back[0].startswith("\u2039") and "Apple I & Mac" in back[0], back)
         title = pg.evaluate("document.querySelectorAll('#grid .lcard .t')[0].textContent")
