@@ -36,6 +36,7 @@
   <label>Video (path inside that folder)<br><input id="wbPath" style="width:100%" autocapitalize="off" autocorrect="off" spellcheck="false" value="1- Tech/2- TOC/1- GSP Series/2. Finance and Measurements - T, I &amp; OE and Throughput Accounting.mp4"></label><br>
   <button id="wbSave">Save on this device</button>
   <button id="wbPlay">8 · Play in Infuse</button>
+  <button id="wbOpen">Open the folder here</button>
   <button id="wbForget">Forget</button>
 
 </div>
@@ -159,6 +160,12 @@
     log('Opening in Infuse: ' + wbUrl(w, true));
     log('→ Did it start playing? Tell Claude yes or no (and any error Infuse shows).');
     setTimeout(function () { location.href = 'infuse://x-callback-url/play?url=' + encodeURIComponent(url) + '&filename=' + encodeURIComponent(name); }, 250);
+  };
+  $('wbOpen').onclick = function () {
+    var w = wbRead(); if (!/^https?:\/\//.test(w.base)) { log('✗ Fill in the share address first (https://…).', 'bad'); return; }
+    var dir = w.path.split('/').slice(0, -1).map(encodeURIComponent).join('/');
+    log('Opening the folder in a new tab. Log in if asked, then check the video is listed with exactly this name: ' + w.path.split('/').pop());
+    window.open(w.base + '/' + dir + '/', '_blank');
   };
   wbFill();
 
