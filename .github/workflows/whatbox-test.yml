@@ -1,0 +1,54 @@
+name: Whatbox login test (V2.4 risk 1)
+
+# Proves the GitHub job can log into Whatbox with its own SSH key
+# (secret WHATBOX_SSH_KEY) and read the Tech folder. Writes only a
+# summary (counts + folder names) to data/whatbox-test.txt.
+
+on:
+  workflow_dispatch:
+  push:
+    paths: [".github/workflows/whatbox-test.yml"]
+
+permissions:
+  contents: write
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up the key
+        env:
+          KEY: ${{ secrets.WHATBOX_SSH_KEY }}
+        run: |
+          test -n "$KEY" || { echo "Secret WHATBOX_SSH_KEY is missing"; exit 1; }
+          mkdir -p ~/.ssh && chmod 700 ~/.ssh
+          printf '%s\n' "$KEY" > ~/.ssh/whatbox && chmod 600 ~/.ssh/whatbox
+          ssh-keyscan -H kiwi.whatbox.ca >> ~/.ssh/known_hosts 2>/dev/null
+      - name: List the Tech folder
+        run: |
+          OUT=data/whatbox-test.txt
+          {
+            echo "Run: $(date -u '+%Y-%m-%d %H:%M UTC')"
+            ssh -i ~/.ssh/whatbox -o BatchMode=yes -o ConnectTimeout=20 javierrincon@kiwi.whatbox.ca '
+              cd "files/Javi/1- Tech" || exit 3
+              echo "Login: OK"
+              echo "Videos: $(find . -type f \( -iname "*.mp4" -o -iname "*.mkv" -o -iname "*.m4v" -o -iname "*.mov" -o -iname "*.avi" -o -iname "*.webm" \) | wc -l)"
+              echo "Images: $(find . -type f \( -iname "*.jpg" -o -iname "*.png" \) | wc -l)"
+              echo "--- folders (videos inside) ---"
+              find . -type d | sort | while read -r d; do
+                n=$(find "$d" -maxdepth 1 -type f \( -iname "*.mp4" -o -iname "*.mkv" -o -iname "*.m4v" -o -iname "*.mov" -o -iname "*.avi" -o -iname "*.webm" \) | wc -l)
+                echo "$n  $d"
+              done
+            ' && echo "Result: PASS" || echo "Result: FAIL (exit $?)"
+          } > "$OUT" 2>&1
+          cat "$OUT"
+          rm -f ~/.ssh/whatbox
+      - name: Commit the result
+        run: |
+          git config user.name "launcher-bot"
+          git config user.email "launcher-bot@users.noreply.github.com"
+          git add data/whatbox-test.txt
+          git commit -m "Whatbox login test result" || exit 0
+          git pull --rebase origin main
+          git push
