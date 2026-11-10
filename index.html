@@ -129,7 +129,7 @@ body.sorting .ic { opacity: 0 !important; }
   var TRAKT_ID = '8JCox_SeBb82A1WgJW48P67jldMz2aiSZ-xOZ7qH67g', TRAKT = 'https://api.trakt.tv', pending = null;
   var tok = ls('trakt-token', null) || ls('trakt-test-token', null); if (tok) lsSet('trakt-token', tok);
   function tokLeft() { return tok ? tok.created_at + tok.expires_in - Date.now() / 1000 : -1; }
-  function setTok(t) { tok = t; if (t) lsSet('trakt-token', t); else try { localStorage.removeItem('trakt-token'); localStorage.removeItem('trakt-test-token'); } catch (e) {} }
+  function setTok(t) { tok = t; if (t) lsSet('trakt-token', t); else { try { localStorage.removeItem('trakt-token'); localStorage.removeItem('trakt-test-token'); localStorage.removeItem('trakt-live'); } catch (e) {} live = null; ratings = {}; } }
   function tpost(path, body) { return fetch(TRAKT + path, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) }); }
   function renew() {
     if (!tok || tokLeft() > 86400) return;
@@ -146,7 +146,7 @@ body.sorting .ic { opacity: 0 !important; }
         if (Date.now() > until) { pending = null; render(); toast('Code expired · try Connect Trakt again'); return; }
         tpost('/oauth/device/token', { code: dc.device_code, client_id: TRAKT_ID }).then(function (t) {
           if (!pending) return;
-          if (t.status === 200) return t.json().then(function (x) { setTok(x); pending = null; render(); toast('Connected to Trakt'); pull(); loadPaused(); });
+          if (t.status === 200) return t.json().then(function (x) { setTok(x); pending = null; render(); toast('Connected to Trakt'); pull(); loadPaused(); loadLive(); });
           if (t.status === 400 || t.status === 429) { pending.t = setTimeout(poll, (dc.interval + (t.status === 429 ? 2 : 0)) * 1000); return; }
           pending = null; render(); toast('Trakt said no (' + t.status + ') · try again');
         }).catch(function () { if (pending) pending.t = setTimeout(poll, dc.interval * 1000); });
@@ -219,8 +219,37 @@ body.sorting .ic { opacity: 0 !important; }
     }, now ? 0 : 1200);
   }
   window.__push = function () { push(false); };
-  document.addEventListener('visibilitychange', function () { if (document.visibilityState === 'visible' && Date.now() - lastPull > 30000) { pull(); loadPaused(); } });
+  document.addEventListener('visibilitychange', function () { if (document.visibilityState === 'visible' && Date.now() - lastPull > 30000) { pull(); loadPaused(); loadLive(); } });
   // ---------- Movies started: paused movies from Trakt (needs the login) ----------
+  // ---------- V2.2: watched status and my ratings straight from Trakt, no waiting for the hourly job ----------
+  // On open, ask Trakt what changed (one small call). Only if something did, read watched movies, watched series and ratings.
+  // The last answer is kept on this device, so the next open shows it straight away.
+  var live = ls('trakt-live', null), ratings = (live && live.r) || {}, liveBusy = false;
+  function tall(path) { var out = []; function page(n) { return tapi(path + (path.indexOf('?') >= 0 ? '&' : '?') + 'page=' + n + '&limit=100').then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); }).then(function (d) { out = out.concat(d); return d.length >= 100 && n < 50 ? page(n + 1) : out; }); } return page(1); }
+  function applyLive() {
+    if (!live || !items.length) return;
+    var mv = {}; (live.m || []).forEach(function (id) { mv[id] = 1; });
+    items.forEach(function (it) {
+      if (!it.tmdb) return;
+      if (it.kind === 'movie') { if (live.m) it.status = mv[it.tmdb] ? 'watched' : 'unwatched'; return; }
+      var n = (live.s || {})[it.tmdb]; if (!n) return;
+      if (it.progress && it.progress[1]) { var dn = Math.max(it.progress[0], Math.min(n, it.progress[1])); it.progress = [dn, it.progress[1]]; it.status = dn >= it.progress[1] ? 'watched' : 'progress'; }
+      else if (it.status === 'unwatched') it.status = 'progress';
+    });
+    ratings = live.r || {};
+  }
+  function loadLive() {
+    if (!tok || !items.length || liveBusy) return; liveBusy = true;
+    tapi('/sync/last_activities').then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); }).then(function (a) {
+      var acts = { m: a.movies && a.movies.watched_at, e: a.episodes && a.episodes.watched_at, r: a.movies && a.movies.rated_at };
+      var old = (live && live.a) || {}, jobs = [], nl = Object.assign({}, live || {});
+      if (!live || acts.m !== old.m) jobs.push(tall('/sync/watched/movies').then(function (d) { nl.m = d.map(function (x) { return x.movie && x.movie.ids && x.movie.ids.tmdb; }).filter(Boolean); }));
+      if (!live || acts.e !== old.e) jobs.push(tall('/sync/watched/shows').then(function (d) { var m = {}; d.forEach(function (x) { var id = x.show && x.show.ids && x.show.ids.tmdb; if (!id) return; var n = 0; (x.seasons || []).forEach(function (se) { if (se.number > 0) n += (se.episodes || []).length; }); m[id] = n; }); nl.s = m; }));
+      if (!live || acts.r !== old.r) jobs.push(tall('/sync/ratings/movies').then(function (d) { var m = {}; d.forEach(function (x) { var id = x.movie && x.movie.ids && x.movie.ids.tmdb; if (id) m[id] = x.rating; }); nl.r = m; }));
+      if (!jobs.length) return;
+      return Promise.all(jobs).then(function () { nl.a = acts; live = nl; try { localStorage.setItem('trakt-live', JSON.stringify(live)); } catch (e) {} applyLive(); render(); });
+    }).catch(function () {}).then(function () { liveBusy = false; });
+  }
   var paused = ls('paused', {});  // key -> % watched
   function isStarted(it) { return it.kind === 'movie' && paused[it.key] != null && !isWatched(it); }
   function loadPaused() {
@@ -305,7 +334,7 @@ body.sorting .ic { opacity: 0 !important; }
     if (BAR && it.status === 'progress' && it.progress && it.progress[1]) { var pb = document.createElement('span'); pb.className = 'pbar'; var pf = document.createElement('i'); pf.style.width = Math.max(3, Math.round(100 * it.progress[0] / it.progress[1])) + '%'; pb.appendChild(pf); a.appendChild(pb); }
     d.appendChild(a);
     var t = document.createElement('div'); t.className = 't'; t.textContent = it.title; d.appendChild(t);
-    var y = document.createElement('div'); y.className = 'y'; y.textContent = [year(it), state.cat !== 'All' && top === 'Discover' ? '' : it.category].filter(Boolean).join(' · '); d.appendChild(y);
+    var y = document.createElement('div'); y.className = 'y'; y.textContent = [year(it), it.kind === 'movie' && ratings[it.tmdb] ? '\u2605 ' + ratings[it.tmdb] : '', state.cat !== 'All' && top === 'Discover' ? '' : it.category].filter(Boolean).join(' · '); d.appendChild(y);
     var acts = document.createElement('div'); acts.className = 'ic';
     var inNext = next.indexOf(it.key) >= 0;
     var nb = document.createElement('button'); nb.type = 'button'; nb.textContent = '＋'; nb.title = inNext ? 'In Watch Next · tap to remove' : 'Add to Watch Next'; if (inNext) nb.className = 'on';
@@ -506,7 +535,7 @@ body.sorting .ic { opacity: 0 !important; }
 
   renew();
   fetch('library.json', { cache: 'no-cache' }).then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); }).then(function (d) {
-    items = d.items || []; unmatched = d.unmatched || []; updated = d.updated || ''; render(); pull(); loadPaused();
+    items = d.items || []; unmatched = d.unmatched || []; updated = d.updated || ''; applyLive(); render(); pull(); loadPaused(); loadLive();
   }).catch(function () {
     $('grid').innerHTML = '<div class="empty">The library isn’t built yet. It appears here a few minutes after the GitHub job runs.</div>';
   });
