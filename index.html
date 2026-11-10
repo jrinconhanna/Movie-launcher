@@ -105,6 +105,7 @@ body.sorting .ic { opacity: 0 !important; }
 .ltile .lc { position: absolute; left: 8px; right: 8px; bottom: 8px; font: 600 11px var(--font); opacity: .75; text-align: center; }
 @media (min-width: 700px) { .ltile .ln { font-size: 56px; } }
 .lcard .t { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+.card.seen .ltile { filter: grayscale(1); opacity: .25; }
 </style>
 </head>
 <body>
@@ -360,7 +361,7 @@ body.sorting .ic { opacity: 0 !important; }
     return d;
   }
   var LIM = { watching: 5, park: 10, backlog: 15 };
-  function inWatching(i) { return (i.status === 'progress' || isStarted(i) || watch.indexOf(i.key) >= 0) && parked.indexOf(i.key) < 0 && removed.indexOf(i.key) < 0 && next.indexOf(i.key) < 0; }
+  function inWatching(i) { return (i.status === 'progress' || isStarted(i) || watch.indexOf(i.key) >= 0) && parked.indexOf(i.key) < 0 && removed.indexOf(i.key) < 0 && next.indexOf(i.key) < 0 && !(LEARN && i.kind === 'movie' && isWatched(i)); } // V2.3 fix: a movie leaves Watching once it's watched, wherever it was marked (Infuse or here)
   function place(it, to) {
     if (to === 'park' && parked.indexOf(it.key) < 0 && parked.length >= LIM.park) { toast('Parked is full (' + LIM.park + ') · remove one first'); return; }
     if (to === 'backlog' && next.indexOf(it.key) < 0 && next.length >= LIM.backlog) { toast('Backlog is full (' + LIM.backlog + ') · remove one first'); return; }

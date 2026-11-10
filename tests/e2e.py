@@ -51,12 +51,18 @@ with sync_playwright() as p:
         rec(f"T1 [{size}] tap copies the video title", clip == title, (clip, title))
         rec(f"T2 [{size}] tap then opens Infuse", pg.evaluate("window.__went") == ["infuse://"], pg.evaluate("window.__went"))
         rec(f"T3 [{size}] toast tells you to paste in Search", "paste" in pg.evaluate("document.getElementById('toast').textContent"))
+        # fix: a movie added to Watching by hand leaves once it's watched (marked in Infuse → Trakt)
+        km = pg.evaluate("(()=>{var r=null; return fetch('library.json').then(x=>x.json()).then(d=>d.items.find(i=>i.kind==='movie'&&i.status==='watched').key)})()")
+        pg.evaluate("k=>{localStorage.setItem('watch', JSON.stringify([k])); localStorage.removeItem('done'); localStorage.removeItem('undone');}", km); pg.reload(); pg.wait_for_timeout(1200)
+        rec(f"W1 [{size}] a watched movie doesn't stay in Watching", not pg.evaluate("k=>!!document.querySelector('#grid .card[data-key=\"'+CSS.escape(k)+'\"]')", km))
+        pg.evaluate("localStorage.removeItem('watch')"); pg.reload(); pg.wait_for_timeout(1200)
         # piece 4: ✓ / ↺ in the ⋯ menu, kept on reload, carried in the Trakt snapshot
         pg.evaluate("localStorage.removeItem('learndone')"); pg.reload(); pg.wait_for_timeout(1200)
         pg.evaluate("window.__went=[]")
         tile = "#grid .lcard >> nth=2"
         pg.hover(tile); pg.click(tile + " >> button.more"); pg.click(tile + " >> .opts button"); pg.wait_for_timeout(300)
         rec(f"M1 [{size}] ✓ marks the Learn video watched (greyed)", pg.evaluate("document.querySelectorAll('#grid .lcard')[2].classList.contains('seen')"))
+        rec(f"M1b [{size}] the whole tile greys out, not just the title", float(pg.evaluate("getComputedStyle(document.querySelectorAll('#grid .lcard')[2].querySelector('.ltile')).opacity")) < 0.5)
         rec(f"M2 [{size}] marking doesn't open Infuse", pg.evaluate("window.__went") == [], pg.evaluate("window.__went"))
         rec(f"M3 [{size}] mark saved on the device", pg.evaluate("JSON.parse(localStorage.getItem('learndone'))") == ["GSP Series:3"], pg.evaluate("localStorage.getItem('learndone')"))
         rec(f"M4 [{size}] mark goes into the Trakt snapshot", pg.evaluate("window.__snapshot().L") == ["GSP Series:3"])
