@@ -107,6 +107,7 @@ body.sorting .ic { opacity: 0 !important; }
 .lcard .t { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
 .card.seen .ltile { filter: grayscale(1); opacity: .25; }
 .ltile.hascover { background: #000; } .ltile.hascover img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; }
+.chips:has(.back) { order: -1; } .chips .back { font-weight: 600; }
 </style>
 </head>
 <body>
@@ -297,7 +298,10 @@ body.sorting .ic { opacity: 0 !important; }
   function shelves() { return (LEARN && learn.length ? ['Tech'] : []).concat(SHELVES); } // V2.3: Learn videos get their own shelf, first
   function showsL(v) { var w = learnDone.indexOf(lid(v)) >= 0; return state.wf === 'all' || (state.wf === 'watched' ? w : !w); }
   function pool() {
-    if (state.shelf === 'Tech') return learn.filter(showsL).map(function (v) { return Object.assign({}, v, { category: v.course, order: '' }); });
+    if (state.shelf === 'Tech') { // V2.3: courses as folders; open one to see its videos
+      if (!state.course || !learn.some(function (v) { return v.course === state.course; })) { state.course = ''; var cs = {}; learn.forEach(function (v) { if (!cs[v.course]) cs[v.course] = { isCourse: true, course: v.course, folder: v.folder, videos: [] }; cs[v.course].videos.push(v); }); return Object.keys(cs).map(function (k) { return cs[k]; }); }
+      return learn.filter(function (v) { return v.course === state.course && showsL(v); });
+    }
     if (state.shelf === 'Watch Next') return next.map(function (k) { return items.find(function (i) { return i.key === k; }); }).filter(Boolean);
     return items.filter(function (i) { return i.group === state.shelf && shows(i); });
   }
@@ -319,7 +323,7 @@ body.sorting .ic { opacity: 0 !important; }
       b.setAttribute('aria-selected', s === state.shelf ? 'true' : 'false');
       var n = s === 'Tech' ? learn.filter(showsL).length : s === 'Watch Next' ? next.length : items.filter(function (i) { return i.group === s && shows(i); }).length;
       b.textContent = s === 'Watch Next' ? 'Next' : s; var c = document.createElement('span'); c.className = 'n'; c.textContent = n; b.appendChild(c);
-      b.onclick = function () { state.shelf = s; state.cat = 'All'; save(); render(); window.scrollTo(0, 0); };
+      b.onclick = function () { state.shelf = s; state.cat = 'All'; state.course = ''; save(); render(); window.scrollTo(0, 0); };
       t.appendChild(b);
     });
   }
@@ -327,6 +331,8 @@ body.sorting .ic { opacity: 0 !important; }
     var c = $('chips'); c.innerHTML = '';
     if (state.shelf === 'Watch Next') { $('crow').hidden = true; return; }
     $('crow').hidden = false; $('wf').value = state.wf;
+    if (state.shelf === 'Tech') { $('wf').hidden = !state.course; if (state.course) { var bk = document.createElement('button'); bk.type = 'button'; bk.className = 'back'; bk.textContent = '‹ ' + state.course; bk.setAttribute('aria-pressed', 'true'); bk.title = 'Back to all courses'; bk.onclick = function () { state.course = ''; save(); render(); }; c.appendChild(bk); } return; }
+    $('wf').hidden = false;
     var cats = {}, ord = {}; list.forEach(function (i) { cats[i.category] = (cats[i.category] || 0) + 1; if (!(i.category in ord) || (i.order || '') < ord[i.category]) ord[i.category] = i.order || ''; });
     var names = ['All'].concat(Object.keys(cats).sort(function (a, b) { return (ord[a] || '').localeCompare(ord[b] || '') || a.localeCompare(b); }));
     if (names.indexOf(state.cat) < 0) state.cat = 'All';
@@ -460,6 +466,18 @@ body.sorting .ic { opacity: 0 !important; }
     toast(on ? 'In Watching · under Learn' : (top === 'Watching' ? 'Removed from Watching · still in Discover › Tech' : 'Removed from Watching'), function () { learnWatch = before; lsSet('learnwatch', learnWatch); render(); });
   }
   window.__snapshot = function () { return snapshot(); }; window.__applyRemote = function (d) { var ok = applyRemote(d); render(); return ok; };
+  function ccard(c) { // a course folder in Discover › Tech
+    var d = document.createElement('div'); d.className = 'card lcard ccard';
+    var a = document.createElement('a'); a.className = 'poster ltile'; a.href = '#'; a.setAttribute('aria-label', 'Open ' + c.course);
+    if (c.folder) { var im = document.createElement('img'); im.loading = 'lazy'; im.alt = ''; im.src = c.folder; a.appendChild(im); a.classList.add('hascover'); }
+    else { var n = document.createElement('span'); n.className = 'ln'; n.textContent = c.videos.length; a.appendChild(n); }
+    a.onclick = function (e) { e.preventDefault(); state.course = c.course; save(); render(); window.scrollTo(0, 0); };
+    d.appendChild(a);
+    var t = document.createElement('div'); t.className = 't'; t.textContent = c.course; d.appendChild(t);
+    var left = c.videos.filter(function (v) { return learnDone.indexOf(lid(v)) < 0; }).length;
+    var y = document.createElement('div'); y.className = 'y'; y.textContent = c.videos.length + ' videos' + (left < c.videos.length ? ' · ' + left + ' left' : ''); d.appendChild(y);
+    return d;
+  }
   function lcard(v) { // V2.3 Learn tile: no TMDB poster, so number + course on a plain tile
     var d = document.createElement('div'); d.className = 'card lcard'; d.dataset.key = v.key;
     var a = document.createElement('a'); a.className = 'poster ltile'; a.href = '#'; a.setAttribute('aria-label', v.title);
@@ -563,14 +581,14 @@ body.sorting .ic { opacity: 0 !important; }
       renderFoot(); state.shelf = real; return; }
     var list = pool();
     renderChips(list);
-    if (state.shelf !== 'Watch Next' && state.cat !== 'All') list = list.filter(function (i) { return i.category === state.cat; });
+    if (state.shelf !== 'Watch Next' && state.shelf !== 'Tech' && state.cat !== 'All') list = list.filter(function (i) { return i.category === state.cat; });
     if (state.shelf !== 'Watch Next' && state.shelf !== 'Tech') list.sort(function (a, b) { return (b.date || '').localeCompare(a.date || ''); });
     var g = $('grid'); g.innerHTML = '';
     if (!list.length) {
       var e = document.createElement('div'); e.className = 'empty';
       e.textContent = state.shelf === 'Watch Next' ? 'Nothing in Next yet. Tap ＋ on any poster in Discover.' : state.wf === 'watched' ? 'Nothing watched here yet.' : state.wf === 'all' ? 'Nothing here.' : 'Nothing unwatched here.';
       g.appendChild(e);
-    } else list.forEach(function (it) { g.appendChild(state.shelf === 'Tech' ? lcard(it) : mcard(it)); });
+    } else list.forEach(function (it) { g.appendChild(it.isCourse ? ccard(it) : state.shelf === 'Tech' ? lcard(it) : mcard(it)); });
     renderFoot(); state.shelf = real;
   }
   function renderFoot() {

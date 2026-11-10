@@ -143,6 +143,9 @@ def learn_items(lines):
                 cover = "covers/learn/%s/%s.jpg" % (re.sub(r"[^a-z0-9]+", "-", course.lower()).strip("-"), n)
                 if n is not None and os.path.exists(os.path.join(ROOT, cover)):
                     item["cover"] = cover  # V2.3: added by hand; Better: synced from Whatbox
+                folder_cover = os.path.dirname(cover) + "/folder.jpg"
+                if os.path.exists(os.path.join(ROOT, folder_cover)):
+                    item["folder"] = folder_cover
                 out.append(item)
     out.sort(key=lambda x: (x["course"], x["n"] is None, x["n"] or 0, x["title"].lower()))
     return out

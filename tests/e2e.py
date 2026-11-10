@@ -39,8 +39,9 @@ with sync_playwright() as p:
         # --- V2.3, preview on ---
         pg = page(b, vp, "?v23")
         def learn_y(): return pg.evaluate("[...document.querySelectorAll('#grid .lcard .y')].map(x=>x.textContent)")
-        def tech():
+        def tech(open_course=True):
             tab(pg, "Discover"); pg.evaluate("[...document.querySelectorAll('#tabs button')].find(b=>b.firstChild.textContent==='Tech').click()"); pg.wait_for_timeout(300)
+            if open_course: pg.click("#grid .ccard .poster"); pg.wait_for_timeout(300)
         def menu(i, sym):
             sel = f"#grid .lcard >> nth={i}"; pg.hover(sel); pg.click(sel + " >> button.more")
             pg.evaluate("([i,s])=>[...document.querySelectorAll('#grid .lcard')[i].querySelectorAll('.opts button')].find(b=>b.textContent===s).click()", [i, sym]); pg.wait_for_timeout(300)
@@ -49,11 +50,17 @@ with sync_playwright() as p:
         rec(f"L1 [{size}] nothing added: no Learn section, no hint, no headers", hs == [] and learn_y() == [] and not pg.evaluate("document.querySelector('#grid .empty')"), hs)
         rec(f"L3 [{size}] Watch cards still there", pg.evaluate("document.querySelectorAll('#grid .card:not(.lcard)').length") > 0)
         # Tech shelf (piece 6) + covers (piece 7)
-        tech()
+        tech(open_course=False)
         tabs = pg.evaluate("[...document.querySelectorAll('#tabs button')].map(b=>b.firstChild.textContent)")
         rec(f"D1 [{size}] Discover shelves start with Tech", tabs[:1] == ["Tech"], tabs)
-        rec(f"D2 [{size}] Tech shows the 8 GSP videos in course order", learn_y() == [f"{k} of 8" for k in range(1, 9)], learn_y())
-        rec(f"D3 [{size}] Tech chip shows the course", "GSP Series 8" in pg.evaluate("[...document.querySelectorAll('#chips button')].map(b=>b.textContent)"))
+        rec(f"F1 [{size}] Tech shows the course as one folder", pg.evaluate("[...document.querySelectorAll('#grid .ccard .t')].map(x=>x.textContent)") == ["GSP Series"] and pg.evaluate("document.querySelectorAll('#grid .lcard:not(.ccard)').length") == 0)
+        rec(f"F2 [{size}] the folder shows its cover and video count", pg.evaluate("(()=>{var i=document.querySelector('#grid .ccard img');return !!i&&i.complete&&i.naturalWidth>0})()") and pg.evaluate("document.querySelector('#grid .ccard .y').textContent") == "8 videos")
+        pg.click("#grid .ccard .poster"); pg.wait_for_timeout(300)
+        rec(f"D2 [{size}] opening it shows the 8 GSP videos in course order", learn_y() == [f"{k} of 8" for k in range(1, 9)], learn_y())
+        rec(f"D3 [{size}] a back chip shows the course name", pg.evaluate("document.querySelector('#chips .back')?.textContent") == "‹ GSP Series")
+        pg.click("#chips .back"); pg.wait_for_timeout(300)
+        rec(f"F3 [{size}] back chip returns to the folders", pg.evaluate("document.querySelectorAll('#grid .ccard').length") == 1)
+        pg.click("#grid .ccard .poster"); pg.wait_for_timeout(300)
         rec(f"C1 [{size}] every tile shows its real cover", pg.evaluate("[...document.querySelectorAll('#grid .lcard .ltile img')].filter(i=>i.complete&&i.naturalWidth>0).length") == 8)
         # piece 5: ⋯ ▶ adds to Watching
         rec(f"A1 [{size}] Tech ⋯ offers ▶ Watching and ✓", opts(1) == ["▶", "✓"], opts(1))
