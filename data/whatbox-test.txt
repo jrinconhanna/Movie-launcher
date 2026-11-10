@@ -1,0 +1,72 @@
+Run: 2026-11-10 23:28 UTC
+Login: OK
+Videos: 543
+Images: 149
+--- folders (videos inside) ---
+0  .
+0  ./1- Steve Jobs
+6  ./1- Steve Jobs/1) 1976-1984 (Apple I & Mac)
+13  ./1- Steve Jobs/2) 1985-1995 (Next & Pixar)
+20  ./1- Steve Jobs/3) 1996-1999 (Apple Comeback)
+27  ./1- Steve Jobs/4) 2000-2004 (iPod & Digital Hub)
+15  ./1- Steve Jobs/5) 2005-2007 (iPhone)
+17  ./1- Steve Jobs/6) 2008-2011 (iPad & Final)
+3  ./1- Steve Jobs/99- Other
+0  ./1- Steve Jobs/99- Other/Ads
+7  ./1- Steve Jobs/99- Other/Ads/1984 Apple Commercials
+2  ./1- Steve Jobs/99- Other/Ads/1985 Apple Commercials
+5  ./1- Steve Jobs/99- Other/Ads/1997 Apple Commercials
+14  ./1- Steve Jobs/99- Other/Ads/1998 Apple Commercials
+3  ./1- Steve Jobs/99- Other/Ads/1999 Apple Commercials
+3  ./1- Steve Jobs/99- Other/Ads/2000 Apple Commercials
+3  ./1- Steve Jobs/99- Other/Ads/2001 Apple Commercials
+19  ./1- Steve Jobs/99- Other/Ads/2002 Apple Commercials
+7  ./1- Steve Jobs/99- Other/Ads/2004 Apple Commercials
+9  ./1- Steve Jobs/99- Other/Ads/2007 Apple Commercials
+0  ./2- TOC
+8  ./2- TOC/1- GSP Series
+14  ./2- TOC/2- TOC Case Studies
+24  ./2- TOC/3- TOC Videos
+0  ./3- Lean
+0  ./3- Lean/1- Joseph Juran
+15  ./3- Lean/1- Joseph Juran/1- Juran on Quality Planning
+8  ./3- Lean/1- Joseph Juran/3- Juran on Quality Improvement
+5  ./3- Lean/2- 21st Century Jet - Building the Boeing 777
+16  ./3- Lean/3- Lean Videos
+14  ./3- Lean/3- Lean Videos/1- How Toyota Cars are made
+5  ./3- Lean/3- Lean Videos/2- The Toyota Production System as Taught by Toyota
+0  ./4- Reforge
+0  ./4- Reforge/1- AI Strategy
+8  ./4- Reforge/1- AI Strategy/Week 1 - The Strategic Landscape
+7  ./4- Reforge/1- AI Strategy/Week 2 - Market Strategy
+7  ./4- Reforge/1- AI Strategy/Week 3 - Product Strategy
+8  ./4- Reforge/1- AI Strategy/Week 4 - Execution Strategy
+0  ./4- Reforge/2- Retention & Engagement
+4  ./4- Reforge/2- Retention & Engagement/W0- How Retention Determines The Top 1%
+8  ./4- Reforge/2- Retention & Engagement/W1- Retention
+11  ./4- Reforge/2- Retention & Engagement/W2-Activation. Defining, Measuring, And Analyzing
+9  ./4- Reforge/2- Retention & Engagement/W3- Activation Strategies
+8  ./4- Reforge/2- Retention & Engagement/W4- Engagement. Defining, Measuring, And Analyzing
+8  ./4- Reforge/2- Retention & Engagement/W5- Engagement Strategies
+1  ./4- Reforge/2- Retention & Engagement/W6-Resurrection. Defining, Measuring, And Analyzing
+5  ./4- Reforge/2- Retention & Engagement/W6-Resurrection. Defining, Measuring, And Analyzing/Module 7
+4  ./4- Reforge/2- Retention & Engagement/W6-Resurrection. Defining, Measuring, And Analyzing/Module 8
+9  ./4- Reforge/2- Retention & Engagement/W6-Resurrection. Defining, Measuring, And Analyzing/Module 9 - ICED Theory
+0  ./5- Playlists
+0  ./5- Playlists/0- Rincon VCR Videos
+23  ./5- Playlists/1- Hamel Husein (Evals)
+1  ./5- Playlists/10 - Ryan Serhant
+8  ./5- Playlists/2- Tom Brady
+14  ./5- Playlists/3- Kanye West
+29  ./5- Playlists/4- Alan Mulally
+35  ./5- Playlists/5- Coaching
+17  ./5- Playlists/5- Peter Thiel
+23  ./5- Playlists/6- Radical Candor - Kim Scott
+11  ./5- Playlists/8- Exodus Jordan Peterson
+1  ./5- Playlists/9- Jim Rohn
+0  ./5- Playlists/z - Backlog
+0  ./5- Playlists/z - Backlog/Michael Sugrue
+1  ./5- Playlists/z - Backlog/z- Arnold
+1  ./5- Playlists/z - Backlog/z- Jeff Bezos
+0  ./5- Playlists/z - Backlog/z- Marc Andreessen
+Result: PASS
