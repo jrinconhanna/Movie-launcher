@@ -466,10 +466,12 @@ body.sorting .ic { opacity: 0 !important; }
     toast((on ? c.course + ' marked watched' : c.course + ' back to not watched'), function () { learnDone = before; learnWatch = beforeW; lsSet('learnwatch', learnWatch); lsSet('learndone', learnDone); render(); });
   }
   function watchLearn(v, on) { // V2.3: ⋯ ▶ adds a course video to Learn on the Watching tab, ✕ takes it off
-    var before = learnWatch.slice(), k = lid(v), i = learnWatch.indexOf(k);
+    var before = learnWatch.slice(), beforeD = learnDone.slice(), k = lid(v), i = learnWatch.indexOf(k), di = learnDone.indexOf(k);
     if (on && i < 0) learnWatch.push(k); if (!on && i >= 0) learnWatch.splice(i, 1);
+    if (on && di >= 0) { learnDone.splice(di, 1); lsSet('learndone', learnDone); } // watching it again makes it not watched
     lsSet('learnwatch', learnWatch); render();
-    toast(on ? 'In Watching · under Learn' : (top === 'Watching' ? 'Removed from Watching · still in Discover › Tech' : 'Removed from Watching'), function () { learnWatch = before; lsSet('learnwatch', learnWatch); render(); });
+    var undoW = function () { learnWatch = before; learnDone = beforeD; lsSet('learndone', learnDone); lsSet('learnwatch', learnWatch); render(); };
+    toast(on ? (di >= 0 ? 'In Watching again · marked not watched' : 'In Watching · under Learn') : (top === 'Watching' ? 'Removed from Watching · still in Discover › Tech' : 'Removed from Watching'), undoW);
   }
   window.__snapshot = function () { return snapshot(); }; window.__applyRemote = function (d) { var ok = applyRemote(d); render(); return ok; };
   function ccard(c) { // a course folder in Discover › Tech
@@ -505,9 +507,9 @@ body.sorting .ic { opacity: 0 !important; }
     var seen = learnDone.indexOf(lid(v)) >= 0; if (seen) d.classList.add('seen');
     var ic = document.createElement('div'); ic.className = 'ic wm';
     var opts = document.createElement('span'); opts.className = 'opts';
-    var inW = learnWatch.indexOf(lid(v)) >= 0, acts = seen ? ['unwatched'] : inW ? ['remove', 'watched'] : ['watching', 'watched'];
+    var inW = learnWatch.indexOf(lid(v)) >= 0, acts = seen ? ['watching', 'unwatched'] : inW ? ['remove', 'watched'] : ['watching', 'watched'];
     acts.forEach(function (o) {
-      var mk = document.createElement('button'); mk.type = 'button'; mk.textContent = ACT[o][0]; mk.title = ACT[o][1]; mk.setAttribute('aria-label', ACT[o][1]);
+      var mk = document.createElement('button'); mk.type = 'button'; var lab = { remove: 'Remove from Watching', watching: seen ? 'Watching · watch again (unmarks it)' : ACT.watching[1] }[o] || ACT[o][1]; mk.textContent = ACT[o][0]; mk.title = lab; mk.setAttribute('aria-label', lab);
       mk.onclick = function (e) { e.preventDefault(); if (o === 'watched' || o === 'unwatched') markLearn(v, o === 'watched'); else watchLearn(v, o === 'watching'); }; opts.appendChild(mk);
     });
     if (inW && top === 'Discover') { var tag = document.createElement('span'); tag.className = 'where'; tag.textContent = 'Watching'; a.appendChild(tag); }
