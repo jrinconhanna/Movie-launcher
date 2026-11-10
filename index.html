@@ -526,7 +526,7 @@ body.sorting .ic { opacity: 0 !important; }
     renderTop(); renderTabs();
     var real = state.shelf; if (AFTER && top === 'Next') state.shelf = 'Watch Next';
     if (AFTER && top === 'Watching') { $('crow').hidden = true; var g0 = $('grid'); g0.innerHTML = ''; if (!tok) g0.appendChild(connRow());
-      var lv = LEARN ? learn : [];
+      var lv = LEARN ? learn.filter(function (v) { return learnDone.indexOf(lid(v)) < 0; }) : []; // watched ones leave, like Watching
       if (lv.length) { var hl = document.createElement('div'); hl.className = 'sech'; hl.textContent = 'Learn'; g0.appendChild(hl); lv.forEach(function (v) { g0.appendChild(lcard(v)); }); var hw = document.createElement('div'); hw.className = 'sech'; hw.textContent = 'Watch'; g0.appendChild(hw); }
       var wl = items.filter(inWatching).sort(function (a, b) { var ia = worder.indexOf(a.key), ib = worder.indexOf(b.key); if (ia < 0) ia = 1e6; if (ib < 0) ib = 1e6; return ia - ib || a.title.localeCompare(b.title); });
       if (!wl.length) { var e0 = document.createElement('div'); e0.className = 'empty'; e0.textContent = 'Nothing in progress. Start a series or movie in Infuse and it shows up here.'; g0.appendChild(e0); }
