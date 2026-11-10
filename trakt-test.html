@@ -27,6 +27,18 @@
   <button id="v22">6 · V2.2 check: speed + my ratings</button>
   <button id="v23">7 · V2.3 check: copy a title + open Infuse</button>
 </div>
+<div id="wb" style="margin-top:14px;padding:10px;border:1px solid #ddd;border-radius:8px;max-width:640px">
+  <b>8 · V2.3 check: play straight away from Whatbox</b>
+  <p class="sub" style="margin:4px 0 8px">Saved only in this browser on this device. Never sent to GitHub or to Claude. Don't paste your password into the chat.</p>
+  <label>Share address, as in Infuse (folder that holds “1- Tech”)<br><input id="wbBase" style="width:100%" placeholder="https://yourserver.whatbox.ca/webdav/files" autocapitalize="off" autocorrect="off" spellcheck="false"></label><br>
+  <label>Username<br><input id="wbUser" style="width:100%" autocapitalize="off" autocorrect="off" spellcheck="false"></label><br>
+  <label>Password<br><input id="wbPass" type="password" style="width:100%"></label><br>
+  <label>Video (path inside that folder)<br><input id="wbPath" style="width:100%" autocapitalize="off" autocorrect="off" spellcheck="false" value="1- Tech/2- TOC/1- GSP Series/2. Finance and Measurements - T, I &amp; OE and Throughput Accounting.mp4"></label><br>
+  <button id="wbSave">Save on this device</button>
+  <button id="wbPlay">8 · Play in Infuse</button>
+  <button id="wbForget">Forget</button>
+
+</div>
 <div id="log"></div>
 <script>
 (function () {
@@ -127,6 +139,28 @@
       setTimeout(function () { location.href = 'infuse://'; }, 250);
     });
   };
+
+  // 8 · V2.3: play a video straight away: infuse://x-callback-url/play?url=<file on Whatbox>
+  var WB = 'whatbox-play';
+  function wbGet() { try { return JSON.parse(localStorage.getItem(WB) || 'null'); } catch (e) { return null; } }
+  function wbFill() { var w = wbGet(); if (!w) return; $('wbBase').value = w.base || ''; $('wbUser').value = w.user || ''; $('wbPass').value = w.pass ? '********' : ''; if (w.path) $('wbPath').value = w.path; }
+  function wbRead() { var w = wbGet() || {}, p = $('wbPass').value; return { base: $('wbBase').value.trim().replace(/\/+$/, ''), user: $('wbUser').value.trim(), pass: p === '********' ? w.pass : p, path: $('wbPath').value.trim().replace(/^\.?\/+/, '') }; }
+  function wbUrl(w, hide) {
+    var m = /^(https?:\/\/)([^\/]+)(.*)$/.exec(w.base); if (!m) return null;
+    var cred = w.user ? encodeURIComponent(w.user) + ':' + (hide ? '•••' : encodeURIComponent(w.pass || '')) + '@' : '';
+    return m[1] + cred + m[2] + m[3] + '/' + w.path.split('/').map(encodeURIComponent).join('/');
+  }
+  $('wbSave').onclick = function () { var w = wbRead(); if (!/^https?:\/\//.test(w.base)) { log('✗ The share address must start with https://', 'bad'); return; } localStorage.setItem(WB, JSON.stringify(w)); wbFill(); log('✓ Saved on this device only.', 'ok'); };
+  $('wbForget').onclick = function () { localStorage.removeItem(WB); $('wbBase').value = $('wbUser').value = $('wbPass').value = ''; log('Forgotten on this device.'); };
+  $('wbPlay').onclick = function () {
+    var w = wbRead(); if (!/^https?:\/\//.test(w.base)) { log('✗ Fill in the share address first (https://…).', 'bad'); return; }
+    if (!wbGet()) localStorage.setItem(WB, JSON.stringify(w));
+    var url = wbUrl(w), name = w.path.split('/').pop();
+    log('Opening in Infuse: ' + wbUrl(w, true));
+    log('→ Did it start playing? Tell Claude yes or no (and any error Infuse shows).');
+    setTimeout(function () { location.href = 'infuse://x-callback-url/play?url=' + encodeURIComponent(url) + '&filename=' + encodeURIComponent(name); }, 250);
+  };
+  wbFill();
 
   $('logout').onclick = function () { localStorage.removeItem('trakt-test-token'); log('Logged out on this device.'); setUI(); };
 
