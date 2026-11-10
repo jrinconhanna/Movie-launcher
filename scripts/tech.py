@@ -53,17 +53,23 @@ def strip_junk(t):
 def steve_jobs(rel, parts, base):
     """rel = '1- Steve Jobs/...'; parts = folders under the category; base = file name without extension."""
     title = strip_junk(base)
+    top = rel.split("/")[0]
     if parts[0].startswith("99"):
         if len(parts) >= 3 and parts[1] == "Ads":
             course, cord, sub = "Apple ads", "099", re.match(r"^(\d{4})", parts[2]).group(1) if re.match(r"^\d{4}", parts[2]) else parts[2]
+            cdir = "/".join([top] + parts[:2])
         else:
             course, cord, sub = "Other", "098", None
+            cdir = "/".join([top] + parts[:1])
     else:
         course, cord = clean(parts[0]); sub = None
+        cdir = "/".join([top] + parts[:1])
     y, mo, d, t = split_date(title)
     if course == "Apple ads":
         y = y or int(sub) if sub and sub.isdigit() else y
+    # one parent folder 'Steve Jobs' holding the eras, Other and Apple ads (11 Nov)
     return {"course": course, "cord": cord, "sub": sub, "title": t or title, "year": y,
+            "trail": ["Steve Jobs", course], "tdirs": [top, cdir],
             "sort": (y or 9999, mo or 0, d or 0, (t or title).lower())}
 
 
@@ -90,11 +96,13 @@ def tech_items(lines):
         for ext in IMG:
             if d + "/" + base + ext in have:
                 it["src_cover"] = d + "/" + base + ext; it["cover"] = "covers/t/%s.jpg" % h(it["src_cover"]); break
-        # course folder cover: the era's own folder.jpg (not deeper folders like Ads/1998)
-        cdir = "/".join(p[:2]) if not it["course"] in ("Apple ads", "Other") else None
-        for fn in ("folder.jpg", "folder.jpeg", "folder.png"):
-            if cdir and cdir + "/" + fn in have:
-                it["src_folder"] = cdir + "/" + fn; it["folder"] = "covers/t/%s.jpg" % h(it["src_folder"]); break
+        # a cover for each folder on the way down (folder.jpg in that folder on Whatbox)
+        it["src_fcov"], it["fcov"] = [], []
+        for dd in it.pop("tdirs"):
+            src = next((dd + "/" + fn for fn in ("folder.jpg", "folder.jpeg", "folder.png") if dd + "/" + fn in have), None)
+            it["src_fcov"].append(src); it["fcov"].append("covers/t/%s.jpg" % h(src) if src else None)
+        if it["fcov"][-1]:
+            it["src_folder"], it["folder"] = it["src_fcov"][-1], it["fcov"][-1]
         out.append(it)
     out.sort(key=lambda x: (x["corder"], x["cord"], x["sub"] or "", x["sort"]))
     n = {}

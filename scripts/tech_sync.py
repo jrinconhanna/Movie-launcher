@@ -25,7 +25,7 @@ def main():
         f.write("\n".join(lines) + "\n")
     need = {}
     for it in tech_items(lines):
-        for src, dst in ((it.get("src_cover"), it.get("cover")), (it.get("src_folder"), it.get("folder"))):
+        for src, dst in [(it.get("src_cover"), it.get("cover"))] + list(zip(it.get("src_fcov", []), it.get("fcov", []))):
             if src and not os.path.exists(os.path.join(ROOT, dst)):
                 need[src] = dst
     print("%d files listed, %d covers to copy" % (len(lines), len(need)))

@@ -299,6 +299,7 @@ body.sorting .ic { opacity: 0 !important; }
   function shelves() { return (LEARN && learn.length ? ['Tech'] : []).concat(SHELVES); } // V2.3: Learn videos get their own shelf, first
   function showsL(v) { var w = learnDone.indexOf(lid(v)) >= 0; return state.wf === 'all' || (state.wf === 'watched' ? w : !w); }
   function pool() {
+    if (state.shelf === 'Tech' && V24) return techLevel().list;
     if (state.shelf === 'Tech') { // V2.3: courses as folders; open one to see its videos
       if (!state.course || !learn.some(function (v) { return v.course === state.course; })) { state.course = ''; var cs = {}; learn.forEach(function (v) { if (!cs[v.course]) cs[v.course] = { isCourse: true, course: v.course, folder: v.folder, year: v.v24 ? '' : v.year, category: v.category || 'Other', order: v.corder || '', videos: [] }; cs[v.course].videos.push(v); }); return Object.keys(cs).map(function (k) { return cs[k]; }); }
       return learn.filter(function (v) { return v.course === state.course && showsL(v); });
@@ -306,6 +307,26 @@ body.sorting .ic { opacity: 0 !important; }
     if (state.shelf === 'Watch Next') return next.map(function (k) { return items.find(function (i) { return i.key === k; }); }).filter(Boolean);
     return items.filter(function (i) { return i.group === state.shelf && shows(i); });
   }
+  // V2.4: folders can hold folders (Steve Jobs › era › videos). state.course = the open folder path, joined by '/'.
+  function trail(v) { return v.trail || [v.course]; }
+  function techLevel() {
+    var P = state.course ? state.course.split('/') : [], implicit = false;
+    if (P.length && !learn.some(function (v) { return P.every(function (x, i) { return trail(v)[i] === x; }); })) { state.course = ''; P = []; }
+    if (!P.length && state.cat !== 'All') { // a chip whose category is one folder opens straight into it
+      var inCat = learn.filter(function (v) { return (v.category || 'Other') === state.cat; }), tops = {};
+      inCat.forEach(function (v) { tops[trail(v)[0]] = 1; });
+      if (Object.keys(tops).length === 1 && inCat.some(function (v) { return trail(v).length > 1; })) { P = [Object.keys(tops)[0]]; implicit = true; }
+    }
+    var fs = {}, order = [], vids = [];
+    learn.forEach(function (v) { var t = trail(v); if (!P.every(function (x, i) { return t[i] === x; })) return;
+      if (t.length === P.length) { if (showsL(v)) vids.push(v); return; }
+      var nm = t[P.length];
+      if (!fs[nm]) { fs[nm] = { isCourse: true, course: nm, path: P.concat([nm]).join('/'), folder: (v.fcov && v.fcov[P.length]) || (t.length === P.length + 1 ? v.folder : null), year: v.v24 ? '' : v.year, category: v.category || 'Other', order: v.corder || '', videos: [] }; order.push(nm); }
+      fs[nm].videos.push(v); });
+    return { P: P, implicit: implicit, list: order.map(function (k) { return fs[k]; }).concat(vids) };
+  }
+  function techRootFolders() { var keep = state.course, cat = state.cat; state.course = ''; state.cat = 'All'; var r = techLevel().list; state.course = keep; state.cat = cat; return r; }
+  function techUp() { var P = state.course.split('/'); P.pop(); state.course = P.join('/'); var L = techLevel(); if (L.implicit && L.P.join('/') === state.course) state.course = ''; save(); render(); }
   function renderTop() {
     var t = $('top'); t.innerHTML = ''; t.hidden = !AFTER; if (!AFTER) return;
     TOP.forEach(function (s) {
@@ -332,6 +353,10 @@ body.sorting .ic { opacity: 0 !important; }
     var c = $('chips'); c.innerHTML = '';
     if (state.shelf === 'Watch Next') { $('crow').hidden = true; return; }
     $('crow').hidden = false; $('wf').value = state.wf;
+    if (state.shelf === 'Tech' && V24) { // V2.4: back chip goes up one folder; the Unwatched filter shows where there are videos
+      $('wf').hidden = !list.some(function (i) { return !i.isCourse; });
+      if (state.course) { var P = state.course.split('/'), bk2 = document.createElement('button'); bk2.type = 'button'; bk2.className = 'back'; bk2.textContent = '\u2039 ' + P[P.length - 1]; bk2.setAttribute('aria-pressed', 'true'); bk2.title = 'Up one folder'; bk2.onclick = techUp; c.appendChild(bk2); return; }
+      list = techRootFolders(); }
     if (state.shelf === 'Tech') { $('wf').hidden = !state.course; if (!state.course) { $('wf').hidden = true; } else { var bk = document.createElement('button'); bk.type = 'button'; bk.className = 'back'; bk.textContent = '‹ ' + state.course; bk.setAttribute('aria-pressed', 'true'); bk.title = 'Back to all courses'; bk.onclick = function () { state.course = ''; save(); render(); }; c.appendChild(bk); return; } }
     if (state.shelf !== 'Tech') $('wf').hidden = false;
     var cats = {}, ord = {}; list.forEach(function (i) { cats[i.category] = (cats[i.category] || 0) + 1; if (!(i.category in ord) || (i.order || '') < ord[i.category]) ord[i.category] = i.order || ''; });
@@ -480,7 +505,7 @@ body.sorting .ic { opacity: 0 !important; }
     var a = document.createElement('a'); a.className = 'poster ltile'; a.href = '#'; a.setAttribute('aria-label', 'Open ' + c.course);
     if (c.folder) { var im = document.createElement('img'); im.loading = 'lazy'; im.alt = ''; im.src = c.folder; a.appendChild(im); a.classList.add('hascover'); }
     else { var n = document.createElement('span'); n.className = 'ln'; n.textContent = c.videos.length; a.appendChild(n); }
-    a.onclick = function (e) { e.preventDefault(); state.course = c.course; save(); render(); window.scrollTo(0, 0); };
+    a.onclick = function (e) { e.preventDefault(); state.course = V24 && c.path ? c.path : c.course; save(); render(); window.scrollTo(0, 0); };
     d.appendChild(a);
     var t = document.createElement('div'); t.className = 't'; t.textContent = c.course; d.appendChild(t);
     var dn = c.videos.filter(function (v) { return learnDone.indexOf(lid(v)) >= 0; }).length, tot = c.videos.length;

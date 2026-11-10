@@ -269,7 +269,8 @@ def main():
     if os.path.exists(tf):  # V2.4: real list from Whatbox (tech_sync.py); shown behind ?v24 for now
         from tech import tech_items
         for it in tech_items(open(tf, encoding="utf-8").readlines()):
-            it.pop("src_cover", None); it.pop("src_folder", None)
+            it.pop("src_cover", None); it.pop("src_folder", None); it.pop("src_fcov", None)
+            it["fcov"] = [c if c and os.path.exists(os.path.join(ROOT, c)) else None for c in it.get("fcov", [])]
             if it.get("cover") and not os.path.exists(os.path.join(ROOT, it["cover"])): it.pop("cover")
             if it.get("folder") and not os.path.exists(os.path.join(ROOT, it["folder"])): it.pop("folder")
             learn.append(it)
