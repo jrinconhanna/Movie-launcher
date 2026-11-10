@@ -152,6 +152,13 @@ def learn_items(lines):
                 if os.path.exists(os.path.join(ROOT, folder_cover)):
                     item["folder"] = folder_cover
                 out.append(item)
+    try:
+        meta = json.load(open(os.path.join(DATA, "courses.json"), encoding="utf-8"))
+    except (OSError, ValueError):
+        meta = {}
+    for item in out:
+        if meta.get(item["course"], {}).get("year"):
+            item["year"] = meta[item["course"]]["year"]  # course facts kept by hand in data/courses.json
     out.sort(key=lambda x: (x["course"], x["n"] is None, x["n"] or 0, x["title"].lower()))
     return out
 

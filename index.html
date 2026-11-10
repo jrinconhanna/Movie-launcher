@@ -299,7 +299,7 @@ body.sorting .ic { opacity: 0 !important; }
   function showsL(v) { var w = learnDone.indexOf(lid(v)) >= 0; return state.wf === 'all' || (state.wf === 'watched' ? w : !w); }
   function pool() {
     if (state.shelf === 'Tech') { // V2.3: courses as folders; open one to see its videos
-      if (!state.course || !learn.some(function (v) { return v.course === state.course; })) { state.course = ''; var cs = {}; learn.forEach(function (v) { if (!cs[v.course]) cs[v.course] = { isCourse: true, course: v.course, folder: v.folder, category: v.category || 'Other', order: v.corder || '', videos: [] }; cs[v.course].videos.push(v); }); return Object.keys(cs).map(function (k) { return cs[k]; }); }
+      if (!state.course || !learn.some(function (v) { return v.course === state.course; })) { state.course = ''; var cs = {}; learn.forEach(function (v) { if (!cs[v.course]) cs[v.course] = { isCourse: true, course: v.course, folder: v.folder, year: v.year, category: v.category || 'Other', order: v.corder || '', videos: [] }; cs[v.course].videos.push(v); }); return Object.keys(cs).map(function (k) { return cs[k]; }); }
       return learn.filter(function (v) { return v.course === state.course && showsL(v); });
     }
     if (state.shelf === 'Watch Next') return next.map(function (k) { return items.find(function (i) { return i.key === k; }); }).filter(Boolean);
@@ -485,7 +485,7 @@ body.sorting .ic { opacity: 0 !important; }
     var dn = c.videos.filter(function (v) { return learnDone.indexOf(lid(v)) >= 0; }).length, tot = c.videos.length;
     if (dn) { var bd = document.createElement('span'); bd.className = 'badge'; bd.textContent = dn + '/' + tot; a.appendChild(bd); // like a series in progress
       if (BAR) { var pb = document.createElement('span'); pb.className = 'pbar'; var pf = document.createElement('i'); pf.style.width = Math.max(3, Math.round(100 * dn / tot)) + '%'; pb.appendChild(pf); a.appendChild(pb); } }
-    var y = document.createElement('div'); y.className = 'y'; y.textContent = state.cat === 'All' && c.category && c.category !== 'Other' ? c.category : ''; d.appendChild(y); // like movies: category only when no chip is picked
+    var y = document.createElement('div'); y.className = 'y'; y.textContent = [c.year, state.cat === 'All' && c.category && c.category !== 'Other' ? c.category : ''].filter(Boolean).join(' · '); d.appendChild(y); // like movies: category only when no chip is picked
     var nxt = c.videos.filter(function (v) { return learnDone.indexOf(lid(v)) < 0 && learnWatch.indexOf(lid(v)) < 0; })[0];
     var acts = []; if (nxt) acts.push(['watching', 'Watching · add the next video (' + nxt.n + ')', function () { watchLearn(nxt, true); }]);
     if (dn < tot) acts.push(['watched', 'Mark the whole course watched', function () { markCourse(c, true); }]);
@@ -520,7 +520,7 @@ body.sorting .ic { opacity: 0 !important; }
     var t = document.createElement('div'); t.className = 't'; t.textContent = v.title; d.appendChild(t);
     if (v.n != null) { var bd = document.createElement('span'); bd.className = 'badge'; bd.textContent = v.n + '/' + learn.filter(function (x) { return x.course === v.course; }).length; a.appendChild(bd); // same corner as a series' episode count
     } // no bar on a single video: a bar means that item's own progress (course progress sits on the folder)
-    var y = document.createElement('div'); y.className = 'y'; y.textContent = v.course; d.appendChild(y);
+    var y = document.createElement('div'); y.className = 'y'; y.textContent = [v.year, v.course].filter(Boolean).join(' · '); d.appendChild(y);
     return d;
   }
   function mcard(it) {
