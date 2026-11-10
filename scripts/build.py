@@ -265,6 +265,15 @@ def main():
         lines = f.readlines()
     items = group_items(lines)
     learn = learn_items(lines)
+    tf = os.path.join(DATA, "tech-files.txt")
+    if os.path.exists(tf):  # V2.4: real list from Whatbox (tech_sync.py); shown behind ?v24 for now
+        from tech import tech_items
+        for it in tech_items(open(tf, encoding="utf-8").readlines()):
+            it.pop("src_cover", None); it.pop("src_folder", None)
+            if it.get("cover") and not os.path.exists(os.path.join(ROOT, it["cover"])): it.pop("cover")
+            if it.get("folder") and not os.path.exists(os.path.join(ROOT, it["folder"])): it.pop("folder")
+            learn.append(it)
+        learn.sort(key=lambda x: (x.get("corder", ""), x.get("cord", "")))  # stable: keeps each course's own order
     cache, overrides = load("matches.json", {}), load("overrides.json", {})
     videos = set(load("videos.json", []))  # unmatched keys that are videos, not TMDB titles
     # overrides only need {"kind": "movie"|"tv", "tmdb": id}; fill in title, poster etc. from TMDB

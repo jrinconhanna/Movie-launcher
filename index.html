@@ -124,6 +124,7 @@ body.sorting .ic { opacity: 0 !important; }
 (function () {
   var AFTER = true, MOCK = true, BAR = true;
   var LEARN = true; // V2.3 live 10 Nov (was the ?v23 preview)
+  var V24 = /[?&]v24\b/.test(location.search); // V2.4 preview: all Tech videos from the real Whatbox list
   var learn = [], learnDone = [], learnWatch = [];
   var SHELVES = AFTER ? ['Movies', 'Series', 'Docs'] : ['Watch Next', 'Movies', 'Series', 'Docs'];
   var TOP = ['Watching', 'Next', 'Discover'], top = 'Watching';
@@ -299,7 +300,7 @@ body.sorting .ic { opacity: 0 !important; }
   function showsL(v) { var w = learnDone.indexOf(lid(v)) >= 0; return state.wf === 'all' || (state.wf === 'watched' ? w : !w); }
   function pool() {
     if (state.shelf === 'Tech') { // V2.3: courses as folders; open one to see its videos
-      if (!state.course || !learn.some(function (v) { return v.course === state.course; })) { state.course = ''; var cs = {}; learn.forEach(function (v) { if (!cs[v.course]) cs[v.course] = { isCourse: true, course: v.course, folder: v.folder, year: v.year, category: v.category || 'Other', order: v.corder || '', videos: [] }; cs[v.course].videos.push(v); }); return Object.keys(cs).map(function (k) { return cs[k]; }); }
+      if (!state.course || !learn.some(function (v) { return v.course === state.course; })) { state.course = ''; var cs = {}; learn.forEach(function (v) { if (!cs[v.course]) cs[v.course] = { isCourse: true, course: v.course, folder: v.folder, year: v.v24 ? '' : v.year, category: v.category || 'Other', order: v.corder || '', videos: [] }; cs[v.course].videos.push(v); }); return Object.keys(cs).map(function (k) { return cs[k]; }); }
       return learn.filter(function (v) { return v.course === state.course && showsL(v); });
     }
     if (state.shelf === 'Watch Next') return next.map(function (k) { return items.find(function (i) { return i.key === k; }); }).filter(Boolean);
@@ -451,7 +452,7 @@ body.sorting .ic { opacity: 0 !important; }
       setTimeout(function () { go('infuse://'); }, ok ? 900 : 2500);
     });
   }
-  function lid(v) { return v.course + ':' + (v.n != null ? v.n : v.title); }
+  function lid(v) { return v.id || v.course + ':' + (v.n != null ? v.n : v.title); } // V2.4 videos carry a stable id (survives new files)
   function markLearn(v, on) {
     var before = learnDone.slice(), beforeW = learnWatch.slice(), k = lid(v), i = learnDone.indexOf(k);
     if (on && i < 0) learnDone.push(k); if (!on && i >= 0) learnDone.splice(i, 1);
@@ -645,7 +646,7 @@ body.sorting .ic { opacity: 0 !important; }
 
   renew();
   fetch('library.json', { cache: 'no-cache' }).then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); }).then(function (d) {
-    items = d.items || []; learn = d.learn || []; unmatched = d.unmatched || []; updated = d.updated || ''; applyLive(); render(); pull(); loadPaused(); loadLive();
+    items = d.items || []; learn = (d.learn || []).filter(function (v) { return V24 || !v.v24; }); unmatched = d.unmatched || []; updated = d.updated || ''; applyLive(); render(); pull(); loadPaused(); loadLive();
   }).catch(function () {
     $('grid').innerHTML = '<div class="empty">The library isn’t built yet. It appears here a few minutes after the GitHub job runs.</div>';
   });
