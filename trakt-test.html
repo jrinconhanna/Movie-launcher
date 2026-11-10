@@ -25,6 +25,7 @@
   <button id="logout" disabled>4 · Log out</button>
   <button id="renew" disabled>5 · Renew login (no secret)</button>
   <button id="v22">6 · V2.2 check: speed + my ratings</button>
+  <button id="v23">7 · V2.3 check: copy a title + open Infuse</button>
 </div>
 <div id="log"></div>
 <script>
@@ -109,6 +110,22 @@
       else if (!rt.json.length) { log('✗ No movie ratings on Trakt yet. Rate one movie in Infuse, wait a minute, then press 6 again.', 'bad'); }
       else { var last = rt.json.slice().sort(function (x, y) { return y.rated_at < x.rated_at ? -1 : 1; }).slice(0, 3); log('✓ ' + rt.json.length + ' movie rating(s) on Trakt. Latest: ' + last.map(function (x) { return x.movie.title + ' ★' + x.rating + ' (' + x.rated_at.slice(0, 10) + ')'; }).join(', '), 'ok'); log('→ If the movie you just rated in Infuse is in that list, Infuse sends ratings to Trakt.'); }
     } catch (e) { log('✗ ' + e.message, 'bad'); }
+  };
+
+  // 7 · V2.3: Infuse links can't open its search, so: copy the title, open Infuse, paste in search.
+  var V23_TITLE = 'Finance and Measurements - T, I & OE and Throughput Accounting';
+  function copyText(t) {
+    if (navigator.clipboard && navigator.clipboard.writeText) return navigator.clipboard.writeText(t).then(function () { return 'clipboard'; }, function () { return fallbackCopy(t); });
+    return Promise.resolve(fallbackCopy(t));
+  }
+  function fallbackCopy(t) { var ta = document.createElement('textarea'); ta.value = t; ta.setAttribute('readonly', ''); ta.style.position = 'fixed'; ta.style.opacity = '0'; document.body.appendChild(ta); ta.select(); ta.setSelectionRange(0, t.length); var ok = false; try { ok = document.execCommand('copy'); } catch (e) {} ta.remove(); return ok ? 'fallback' : 'failed'; }
+  $('v23').onclick = function () {
+    copyText(V23_TITLE).then(function (how) {
+      if (how === 'failed') { log('✗ Could not copy the title on this device.', 'bad'); return; }
+      log('✓ Copied (' + how + '): ' + V23_TITLE, 'ok');
+      log('→ Infuse should open now. Tap Search, paste, and check the video shows up. Then come back and tell Claude.');
+      setTimeout(function () { location.href = 'infuse://'; }, 250);
+    });
   };
 
   $('logout').onclick = function () { localStorage.removeItem('trakt-test-token'); log('Logged out on this device.'); setUI(); };
