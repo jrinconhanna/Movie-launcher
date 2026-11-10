@@ -100,6 +100,11 @@ body.sorting .ic { opacity: 0 !important; }
 .conn .code b { font: 700 17px ui-monospace, Menlo, monospace; letter-spacing: 1px; }
 .conn a { color: var(--accent); }
 .fconn button { color: var(--muted); font: inherit; text-decoration: underline; }
+.ltile { display: grid; place-items: center; background: linear-gradient(160deg, #2f3b52, #151b26); color: #fff; text-decoration: none; }
+.ltile .ln { font: 700 44px/1 var(--font); letter-spacing: -1px; }
+.ltile .lc { position: absolute; left: 8px; right: 8px; bottom: 8px; font: 600 11px var(--font); opacity: .75; text-align: center; }
+@media (min-width: 700px) { .ltile .ln { font-size: 56px; } }
+.lcard .t { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
 </style>
 </head>
 <body>
@@ -115,6 +120,8 @@ body.sorting .ic { opacity: 0 !important; }
 <script>
 (function () {
   var AFTER = true, MOCK = true, BAR = true;
+  var LEARN = /[?&]v23\b/.test(location.search); // V2.3 preview: index.html?v23
+  var learn = [];
   var SHELVES = AFTER ? ['Movies', 'Series', 'Docs'] : ['Watch Next', 'Movies', 'Series', 'Docs'];
   var TOP = ['Watching', 'Next', 'Discover'], top = 'Watching';
   var items = [], unmatched = [], updated = '';
@@ -418,6 +425,17 @@ body.sorting .ic { opacity: 0 !important; }
   }
   var ACT = { watched: ['✓', 'Mark watched'], unwatched: ['↺', 'Mark not watched'], watching: ['▶', 'Watching · start or continue'], park: ['⏸', 'Park · watch on and off'], backlog: ['＋', 'Backlog · later'], remove: ['✕', 'Remove'] };
   function where(it) { return inWatching(it) ? 'watching' : parked.indexOf(it.key) >= 0 ? 'park' : next.indexOf(it.key) >= 0 ? 'backlog' : 'discover'; }
+  function lcard(v) { // V2.3 Learn tile: no TMDB poster, so number + course on a plain tile
+    var d = document.createElement('div'); d.className = 'card lcard'; d.dataset.key = v.key;
+    var a = document.createElement('a'); a.className = 'poster ltile'; a.href = '#'; a.setAttribute('aria-label', v.title);
+    var n = document.createElement('span'); n.className = 'ln'; n.textContent = v.n != null ? v.n : '·'; a.appendChild(n);
+    var c = document.createElement('span'); c.className = 'lc'; c.textContent = v.course; a.appendChild(c);
+    a.onclick = function (e) { e.preventDefault(); toast('Playing comes in the next piece'); };
+    d.appendChild(a);
+    var t = document.createElement('div'); t.className = 't'; t.textContent = v.title; d.appendChild(t);
+    var y = document.createElement('div'); y.className = 'y'; y.textContent = v.n != null ? v.n + ' of ' + learn.filter(function (x) { return x.course === v.course; }).length : v.course; d.appendChild(y);
+    return d;
+  }
   function mcard(it) {
     var d = card(it), ic = d.querySelector('.ic'); ic.innerHTML = ''; ic.classList.add('wm'); d.dataset.key = it.key;
     var w = where(it), acts = { watching: ['park', 'backlog', 'remove'], park: ['watching', 'backlog', 'remove'], backlog: ['watching', 'park', 'remove'], discover: ['watching', 'park', 'backlog'] }[w];
@@ -477,6 +495,8 @@ body.sorting .ic { opacity: 0 !important; }
     renderTop(); renderTabs();
     var real = state.shelf; if (AFTER && top === 'Next') state.shelf = 'Watch Next';
     if (AFTER && top === 'Watching') { $('crow').hidden = true; var g0 = $('grid'); g0.innerHTML = ''; if (!tok) g0.appendChild(connRow());
+      var lv = LEARN ? learn : [];
+      if (lv.length) { var hl = document.createElement('div'); hl.className = 'sech'; hl.textContent = 'Learn'; g0.appendChild(hl); lv.forEach(function (v) { g0.appendChild(lcard(v)); }); var hw = document.createElement('div'); hw.className = 'sech'; hw.textContent = 'Watch'; g0.appendChild(hw); }
       var wl = items.filter(inWatching).sort(function (a, b) { var ia = worder.indexOf(a.key), ib = worder.indexOf(b.key); if (ia < 0) ia = 1e6; if (ib < 0) ib = 1e6; return ia - ib || a.title.localeCompare(b.title); });
       if (!wl.length) { var e0 = document.createElement('div'); e0.className = 'empty'; e0.textContent = 'Nothing in progress. Start a series or movie in Infuse and it shows up here.'; g0.appendChild(e0); }
       else { wl.forEach(function (it) { var c = mcard(it); c.dataset.sec = 'worder'; g0.appendChild(c); }); sortable(g0); }
@@ -535,7 +555,7 @@ body.sorting .ic { opacity: 0 !important; }
 
   renew();
   fetch('library.json', { cache: 'no-cache' }).then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); }).then(function (d) {
-    items = d.items || []; unmatched = d.unmatched || []; updated = d.updated || ''; applyLive(); render(); pull(); loadPaused(); loadLive();
+    items = d.items || []; learn = d.learn || []; unmatched = d.unmatched || []; updated = d.updated || ''; applyLive(); render(); pull(); loadPaused(); loadLive();
   }).catch(function () {
     $('grid').innerHTML = '<div class="empty">The library isn’t built yet. It appears here a few minutes after the GitHub job runs.</div>';
   });
