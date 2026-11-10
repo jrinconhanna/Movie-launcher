@@ -499,7 +499,8 @@ body.sorting .ic { opacity: 0 !important; }
     ic.appendChild(opts); ic.appendChild(more);
     d.appendChild(a); d.appendChild(ic);
     var t = document.createElement('div'); t.className = 't'; t.textContent = v.title; d.appendChild(t);
-    var y = document.createElement('div'); y.className = 'y'; y.textContent = v.n != null ? v.n + ' of ' + learn.filter(function (x) { return x.course === v.course; }).length : v.course; d.appendChild(y);
+    if (v.n != null) { var bd = document.createElement('span'); bd.className = 'badge'; bd.textContent = v.n + '/' + learn.filter(function (x) { return x.course === v.course; }).length; a.appendChild(bd); } // same corner as a series' episode count
+    var y = document.createElement('div'); y.className = 'y'; y.textContent = v.course; d.appendChild(y);
     return d;
   }
   function mcard(it) {

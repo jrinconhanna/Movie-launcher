@@ -38,7 +38,7 @@ with sync_playwright() as p:
         pg.context.close()
         # --- V2.3, preview on ---
         pg = page(b, vp, "?v23")
-        def learn_y(): return pg.evaluate("[...document.querySelectorAll('#grid .lcard .y')].map(x=>x.textContent)")
+        def learn_y(): return pg.evaluate("[...document.querySelectorAll('#grid .lcard:not(.ccard) .badge')].map(x=>x.textContent.replace('/', ' of '))")
         def tech(open_course=True):
             tab(pg, "Discover"); pg.evaluate("[...document.querySelectorAll('#tabs button')].find(b=>b.firstChild.textContent==='Tech').click()"); pg.wait_for_timeout(300)
             if open_course: pg.click("#grid .ccard .poster"); pg.wait_for_timeout(300)
@@ -61,6 +61,7 @@ with sync_playwright() as p:
         pg.evaluate("[...document.querySelectorAll('#chips button')].find(b=>b.textContent.startsWith('TOC')).click()"); pg.wait_for_timeout(300)
         rec(f"F6 [{size}] the TOC chip shows the GSP folder", pg.evaluate("[...document.querySelectorAll('#grid .ccard .t')].map(x=>x.textContent)") == ["GSP Series"])
         pg.click("#grid .ccard .poster"); pg.wait_for_timeout(300)
+        rec(f"B1 [{size}] counter sits in the poster corner like a series (badge '1/8'), course name below", pg.evaluate("document.querySelector('#grid .lcard:not(.ccard) .poster .badge')?.textContent") == "1/8" and pg.evaluate("document.querySelector('#grid .lcard:not(.ccard) .y').textContent") == "GSP Series")
         rec(f"D2 [{size}] opening it shows the 8 GSP videos in course order", learn_y() == [f"{k} of 8" for k in range(1, 9)], learn_y())
         rec(f"D3 [{size}] a back chip shows the course name", pg.evaluate("document.querySelector('#chips .back')?.textContent") == "‹ GSP Series")
         pg.click("#chips .back"); pg.wait_for_timeout(300)
