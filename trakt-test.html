@@ -24,6 +24,7 @@
   <button id="write" disabled>3 · Add + remove a test item</button>
   <button id="logout" disabled>4 · Log out</button>
   <button id="renew" disabled>5 · Renew login (no secret)</button>
+  <button id="v22">6 · V2.2 check: speed + my ratings</button>
 </div>
 <div id="log"></div>
 <script>
@@ -90,6 +91,24 @@
       log('✗ Trakt said ' + r.status + ': ' + (await r.text()).slice(0, 200), 'bad');
       log('→ Renewing needs the secret. Plan B: a tiny Cloudflare Worker renews the login (the secret stays there).');
     } catch (e) { log('✗ The browser blocked the request (' + e.message + '). Plan B: Cloudflare Worker.', 'bad'); }
+  };
+
+  // 6 · V2.2 risks: how long reading watched status takes on this device, and whether Infuse ratings reach Trakt
+  function anyToken() { var keys = ['trakt-token', 'trakt-test-token']; for (var i = 0; i < keys.length; i++) { try { var v = JSON.parse(localStorage.getItem(keys[i]) || 'null'); if (typeof v === 'string') v = JSON.parse(v); if (v && v.access_token) return v; } catch (e) {} } return null; }
+  async function timed(path, t) { var t0 = performance.now(); var r = await fetch(API + path, { headers: { 'Content-Type': 'application/json', 'trakt-api-version': '2', 'trakt-api-key': CLIENT_ID, Authorization: 'Bearer ' + t.access_token } }); var txt = await r.text(); return { ok: r.ok, status: r.status, ms: Math.round(performance.now() - t0), kb: Math.round(txt.length / 1024), json: r.ok ? JSON.parse(txt) : null }; }
+  $('v22').onclick = async function () {
+    var t = anyToken(); if (!t) { log('✗ Not logged in on this device. Connect Trakt in the launcher first (or step 1 here).', 'bad'); return; }
+    log('V2.2 check on this device…');
+    try {
+      var a = await timed('/sync/last_activities', t); log((a.ok ? '✓' : '✗') + ' What changed (last activities): ' + a.ms + ' ms, ' + a.kb + ' KB', a.ok ? 'ok' : 'bad');
+      var m = await timed('/sync/watched/movies', t); log((m.ok ? '✓' : '✗') + ' Watched movies: ' + (m.json ? m.json.length : '?') + ' in ' + m.ms + ' ms, ' + m.kb + ' KB', m.ok ? 'ok' : 'bad');
+      var sh = await timed('/sync/watched/shows', t); log((sh.ok ? '✓' : '✗') + ' Watched series (with episodes): ' + (sh.json ? sh.json.length : '?') + ' in ' + sh.ms + ' ms, ' + sh.kb + ' KB', sh.ok ? 'ok' : 'bad');
+      log('→ Total on open if something changed: ~' + (a.ms + m.ms + sh.ms) + ' ms. If nothing changed: ~' + a.ms + ' ms.');
+      var rt = await timed('/sync/ratings/movies', t);
+      if (!rt.ok) { log('✗ Ratings read failed: ' + rt.status, 'bad'); }
+      else if (!rt.json.length) { log('✗ No movie ratings on Trakt yet. Rate one movie in Infuse, wait a minute, then press 6 again.', 'bad'); }
+      else { var last = rt.json.slice().sort(function (x, y) { return y.rated_at < x.rated_at ? -1 : 1; }).slice(0, 3); log('✓ ' + rt.json.length + ' movie rating(s) on Trakt. Latest: ' + last.map(function (x) { return x.movie.title + ' ★' + x.rating + ' (' + x.rated_at.slice(0, 10) + ')'; }).join(', '), 'ok'); log('→ If the movie you just rated in Infuse is in that list, Infuse sends ratings to Trakt.'); }
+    } catch (e) { log('✗ ' + e.message, 'bad'); }
   };
 
   $('logout').onclick = function () { localStorage.removeItem('trakt-test-token'); log('Logged out on this device.'); setUI(); };
