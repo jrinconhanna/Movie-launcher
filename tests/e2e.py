@@ -33,6 +33,8 @@ with sync_playwright() as p:
         tab(pg, "Discover")
         rec(f"R8 [{size}] Tech shelf is live without ?v23", "Tech" in pg.evaluate("[...document.querySelectorAll('#tabs button')].map(b=>b.firstChild.textContent)"))
         rec(f"R4 [{size}] Discover shows posters", pg.evaluate("document.querySelectorAll('#grid .card .poster img').length") > 20)
+        gaps = pg.evaluate("[...document.querySelectorAll('#grid .card')].slice(0,30).map(c=>Math.round(c.querySelector('.t').getBoundingClientRect().top - c.querySelector('.poster').getBoundingClientRect().bottom))")
+        rec(f"R9 [{size}] titles sit the same distance under every poster (no drift when a neighbour wraps)", len(set(gaps)) == 1, sorted(set(gaps)))
         rec(f"R5 [{size}] Discover poster links open Infuse by TMDB id", pg.evaluate("[...document.querySelectorAll('#grid .card a.poster')].every(a=>/^infuse:\\/\\/(movie|series)\\/\\d+$/.test(a.getAttribute('href')))"))
         rec(f"R6 [{size}] no page errors (regression)", not pg.errs, pg.errs)
         pg.context.close()
