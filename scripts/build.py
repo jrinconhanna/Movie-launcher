@@ -120,6 +120,30 @@ def group_items(lines):
     return items
 
 
+LEARN_DIRS = [("1- Tech/2- TOC/1- GSP Series", "GSP Series")]  # V2.3: start with the TOC GSP course only
+LEARN_NUM_RE = re.compile(r"^(\d+)[.)\-]\s*")
+
+
+def learn_items(lines):
+    """Other videos for the Learn section: one entry per file, in course order (V2.3)."""
+    out = []
+    for raw in lines:
+        path = raw.strip().lstrip("./")
+        if not path.lower().endswith(VIDEO):
+            continue
+        for folder, course in LEARN_DIRS:
+            if path.startswith(folder + "/") and "/" not in path[len(folder) + 1:]:
+                fname = path.rsplit("/", 1)[1]
+                base = re.sub(r"\.[A-Za-z0-9]{2,4}$", "", fname)
+                base = re.sub(r"^[^\w(]+", "", base).strip()  # drops marks like the green tick
+                m = LEARN_NUM_RE.match(base)
+                n = int(m.group(1)) if m else None
+                title = LEARN_NUM_RE.sub("", base).strip() if m else base
+                out.append({"key": "learn|" + path, "course": course, "n": n, "title": title, "file": fname})
+    out.sort(key=lambda x: (x["course"], x["n"] is None, x["n"] or 0, x["title"].lower()))
+    return out
+
+
 def tmdb_get(path, params, token):
     url = "https://api.themoviedb.org/3" + path + "?" + urllib.parse.urlencode(params)
     req = urllib.request.Request(url, headers={"Authorization": "Bearer " + token,
@@ -219,7 +243,9 @@ def main():
     if not token:
         sys.exit("TMDB_TOKEN is not set")
     with open(os.path.join(DATA, "library.txt"), encoding="utf-8") as f:
-        items = group_items(f.readlines())
+        lines = f.readlines()
+    items = group_items(lines)
+    learn = learn_items(lines)
     cache, overrides = load("matches.json", {}), load("overrides.json", {})
     videos = set(load("videos.json", []))  # unmatched keys that are videos, not TMDB titles
     # overrides only need {"kind": "movie"|"tv", "tmdb": id}; fill in title, poster etc. from TMDB
@@ -324,8 +350,8 @@ def main():
     save("epcounts.json", epc)
     save("suggestions.json", {k: v for k, v in sugg.items() if k in items})
     save("library.json", {"updated": time.strftime("%Y-%m-%dT%H:%MZ", time.gmtime()),
-                          "items": out, "unmatched": unmatched}, root=True)
-    print(f"{len(out)} matched, {len(unmatched)} unmatched")
+                          "items": out, "unmatched": unmatched, "learn": learn}, root=True)
+    print(f"{len(out)} matched, {len(unmatched)} unmatched, {len(learn)} learn videos")
 
 
 if __name__ == "__main__":
