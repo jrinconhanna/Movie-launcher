@@ -152,6 +152,7 @@ with sync_playwright() as p:
         allf = pg.evaluate("[...document.querySelectorAll('#grid .ccard .t')].map(x=>x.textContent)")
         rec(f"K1 [{size}] Tech › All: Steve Jobs is one folder, next to GSP Series", allf == ["Steve Jobs", "GSP Series"], allf)
         rec(f"K2 [{size}] the Steve Jobs folder has its own cover", pg.evaluate("(()=>{var i=document.querySelector('#grid .ccard img');return !!i&&i.complete&&i.naturalWidth>0})()"))
+        rec(f"K8 [{size}] folder covers fill the tile (like Infuse)", pg.evaluate("getComputedStyle(document.querySelector('#grid .ccard img')).objectFit") == "cover")
         pg.click("#grid .ccard .poster >> nth=0"); pg.wait_for_timeout(300)
         rec(f"K3 [{size}] open Steve Jobs: its era folders", pg.evaluate("[...document.querySelectorAll('#grid .ccard .t')].map(x=>x.textContent)") == ["1976-1984 (Apple I & Mac)"])
         pg.click("#grid .ccard .poster >> nth=0"); pg.wait_for_timeout(300)

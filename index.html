@@ -107,6 +107,7 @@ body.sorting .ic { opacity: 0 !important; }
 .lcard .t { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
 .card.seen .ltile { filter: grayscale(1); opacity: .25; }
 .ltile.hascover { background: #000; } .ltile.hascover img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; }
+.v24 .ccard .ltile.hascover img { object-fit: cover; } /* V2.4: folder covers fill the tile, like Infuse */
 .chips:has(.back) { order: -1; } .chips .back { font-weight: 600; }
 </style>
 </head>
@@ -124,7 +125,7 @@ body.sorting .ic { opacity: 0 !important; }
 (function () {
   var AFTER = true, MOCK = true, BAR = true;
   var LEARN = true; // V2.3 live 10 Nov (was the ?v23 preview)
-  var V24 = /[?&]v24\b/.test(location.search); // V2.4 preview: all Tech videos from the real Whatbox list
+  var V24 = /[?&]v24\b/.test(location.search); if (V24) document.documentElement.classList.add('v24'); // V2.4 preview: all Tech videos from the real Whatbox list
   var learn = [], learnDone = [], learnWatch = [];
   var SHELVES = AFTER ? ['Movies', 'Series', 'Docs'] : ['Watch Next', 'Movies', 'Series', 'Docs'];
   var TOP = ['Watching', 'Next', 'Discover'], top = 'Watching';
@@ -326,7 +327,7 @@ body.sorting .ic { opacity: 0 !important; }
     return { P: P, implicit: implicit, list: order.map(function (k) { return fs[k]; }).concat(vids) };
   }
   function techRootFolders() { var keep = state.course, cat = state.cat; state.course = ''; state.cat = 'All'; var r = techLevel().list; state.course = keep; state.cat = cat; return r; }
-  function techUp() { var P = state.course.split('/'); P.pop(); state.course = P.join('/'); var L = techLevel(); if (L.implicit && L.P.join('/') === state.course) state.course = ''; save(); render(); }
+  function techUp() { var P = state.course.split('/'); P.pop(); var to = P.join('/'); state.course = ''; var L = techLevel(); state.course = L.implicit && L.P.join('/') === to ? '' : to; save(); render(); } // from a chip that opened straight into its folder, going up lands back on the chip
   function renderTop() {
     var t = $('top'); t.innerHTML = ''; t.hidden = !AFTER; if (!AFTER) return;
     TOP.forEach(function (s) {
