@@ -299,7 +299,7 @@ body.sorting .ic { opacity: 0 !important; }
   function showsL(v) { var w = learnDone.indexOf(lid(v)) >= 0; return state.wf === 'all' || (state.wf === 'watched' ? w : !w); }
   function pool() {
     if (state.shelf === 'Tech') { // V2.3: courses as folders; open one to see its videos
-      if (!state.course || !learn.some(function (v) { return v.course === state.course; })) { state.course = ''; var cs = {}; learn.forEach(function (v) { if (!cs[v.course]) cs[v.course] = { isCourse: true, course: v.course, folder: v.folder, videos: [] }; cs[v.course].videos.push(v); }); return Object.keys(cs).map(function (k) { return cs[k]; }); }
+      if (!state.course || !learn.some(function (v) { return v.course === state.course; })) { state.course = ''; var cs = {}; learn.forEach(function (v) { if (!cs[v.course]) cs[v.course] = { isCourse: true, course: v.course, folder: v.folder, category: v.category || 'Other', order: v.corder || '', videos: [] }; cs[v.course].videos.push(v); }); return Object.keys(cs).map(function (k) { return cs[k]; }); }
       return learn.filter(function (v) { return v.course === state.course && showsL(v); });
     }
     if (state.shelf === 'Watch Next') return next.map(function (k) { return items.find(function (i) { return i.key === k; }); }).filter(Boolean);
@@ -331,8 +331,8 @@ body.sorting .ic { opacity: 0 !important; }
     var c = $('chips'); c.innerHTML = '';
     if (state.shelf === 'Watch Next') { $('crow').hidden = true; return; }
     $('crow').hidden = false; $('wf').value = state.wf;
-    if (state.shelf === 'Tech') { $('wf').hidden = !state.course; if (state.course) { var bk = document.createElement('button'); bk.type = 'button'; bk.className = 'back'; bk.textContent = '‹ ' + state.course; bk.setAttribute('aria-pressed', 'true'); bk.title = 'Back to all courses'; bk.onclick = function () { state.course = ''; save(); render(); }; c.appendChild(bk); } return; }
-    $('wf').hidden = false;
+    if (state.shelf === 'Tech') { $('wf').hidden = !state.course; if (!state.course) { $('wf').hidden = true; } else { var bk = document.createElement('button'); bk.type = 'button'; bk.className = 'back'; bk.textContent = '‹ ' + state.course; bk.setAttribute('aria-pressed', 'true'); bk.title = 'Back to all courses'; bk.onclick = function () { state.course = ''; save(); render(); }; c.appendChild(bk); return; } }
+    if (state.shelf !== 'Tech') $('wf').hidden = false;
     var cats = {}, ord = {}; list.forEach(function (i) { cats[i.category] = (cats[i.category] || 0) + 1; if (!(i.category in ord) || (i.order || '') < ord[i.category]) ord[i.category] = i.order || ''; });
     var names = ['All'].concat(Object.keys(cats).sort(function (a, b) { return (ord[a] || '').localeCompare(ord[b] || '') || a.localeCompare(b); }));
     if (names.indexOf(state.cat) < 0) state.cat = 'All';
@@ -581,7 +581,7 @@ body.sorting .ic { opacity: 0 !important; }
       renderFoot(); state.shelf = real; return; }
     var list = pool();
     renderChips(list);
-    if (state.shelf !== 'Watch Next' && state.shelf !== 'Tech' && state.cat !== 'All') list = list.filter(function (i) { return i.category === state.cat; });
+    if (state.shelf !== 'Watch Next' && !(state.shelf === 'Tech' && state.course) && state.cat !== 'All') list = list.filter(function (i) { return i.category === state.cat; });
     if (state.shelf !== 'Watch Next' && state.shelf !== 'Tech') list.sort(function (a, b) { return (b.date || '').localeCompare(a.date || ''); });
     var g = $('grid'); g.innerHTML = '';
     if (!list.length) {

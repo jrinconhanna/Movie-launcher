@@ -140,6 +140,11 @@ def learn_items(lines):
                 n = int(m.group(1)) if m else None
                 title = LEARN_NUM_RE.sub("", base).strip() if m else base
                 item = {"key": "learn|" + path, "course": course, "n": n, "title": title, "file": fname}
+                parts = folder.split("/")
+                if len(parts) >= 2:  # e.g. "2- TOC" → category TOC, order 2
+                    cm = re.match(r"^(\d+)[-.)]\s*(.*)$", parts[-2])
+                    item["category"] = cm.group(2) if cm else parts[-2]
+                    item["corder"] = cm.group(1).zfill(3) if cm else ""
                 cover = "covers/learn/%s/%s.jpg" % (re.sub(r"[^a-z0-9]+", "-", course.lower()).strip("-"), n)
                 if n is not None and os.path.exists(os.path.join(ROOT, cover)):
                     item["cover"] = cover  # V2.3: added by hand; Better: synced from Whatbox
