@@ -123,7 +123,7 @@ body.sorting .ic { opacity: 0 !important; }
 (function () {
   var AFTER = true, MOCK = true, BAR = true;
   var LEARN = /[?&]v23\b/.test(location.search); // V2.3 preview: index.html?v23
-  var learn = [], learnDone = [];
+  var learn = [], learnDone = [], learnWatch = [];
   var SHELVES = AFTER ? ['Movies', 'Series', 'Docs'] : ['Watch Next', 'Movies', 'Series', 'Docs'];
   var TOP = ['Watching', 'Next', 'Discover'], top = 'Watching';
   var items = [], unmatched = [], updated = '';
@@ -131,8 +131,8 @@ body.sorting .ic { opacity: 0 !important; }
   var next = [], worder = [], watch = [], parked = [], removed = [], done = [], undone = [];
   function ls(k, d) { try { var v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch (e) { return d; } }
   function lsSet(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} if (SYNC_KEYS.indexOf(k) >= 0 && window.__push) window.__push(); }
-  var SYNC_KEYS = ['worder', 'watch', 'parked', 'next', 'removed', 'done', 'undone', 'learndone'];
-  next = ls('next', []); worder = ls('worder', []); watch = ls('watch', []); parked = ls('parked', []); removed = ls('removed', []); done = ls('done', []); undone = ls('undone', []); learnDone = ls('learndone', []); state = Object.assign(state, ls('view', {})); if (['unwatched', 'watched', 'all'].indexOf(state.wf) < 0) state.wf = 'unwatched'; if (AFTER && state.shelf === 'Watch Next') state.shelf = 'Movies'; if (!LEARN && state.shelf === 'Tech') state.shelf = 'Movies';
+  var SYNC_KEYS = ['worder', 'watch', 'parked', 'next', 'removed', 'done', 'undone', 'learndone', 'learnwatch'];
+  next = ls('next', []); worder = ls('worder', []); watch = ls('watch', []); parked = ls('parked', []); removed = ls('removed', []); done = ls('done', []); undone = ls('undone', []); learnDone = ls('learndone', []); learnWatch = ls('learnwatch', []); state = Object.assign(state, ls('view', {})); if (['unwatched', 'watched', 'all'].indexOf(state.wf) < 0) state.wf = 'unwatched'; if (AFTER && state.shelf === 'Watch Next') state.shelf = 'Movies'; if (!LEARN && state.shelf === 'Tech') state.shelf = 'Movies';
   var $ = function (id) { return document.getElementById(id); };
   // ---------- Trakt login (device code, no secret; once per device, renewed on open) ----------
   var TRAKT_ID = '8JCox_SeBb82A1WgJW48P67jldMz2aiSZ-xOZ7qH67g', TRAKT = 'https://api.trakt.tv', pending = null;
@@ -177,7 +177,7 @@ body.sorting .ic { opacity: 0 !important; }
   function bySid(x) { for (var i = 0; i < items.length; i++) if (sid(items[i]) === x) return items[i]; return null; }
   function enc(keys) { return keys.map(byKey).filter(function (it) { return it && it.tmdb; }).map(sid); }
   function dec(ids) { return (ids || []).map(bySid).filter(Boolean).map(function (it) { return it.key; }); }
-  function snapshot() { return { v: 1, o: enc(worder), w: enc(watch), p: enc(parked), b: enc(next), r: enc(removed), d: enc(done), u: enc(undone), L: learnDone.slice() }; }
+  function snapshot() { return { v: 1, o: enc(worder), w: enc(watch), p: enc(parked), b: enc(next), r: enc(removed), d: enc(done), u: enc(undone), L: learnDone.slice(), LW: learnWatch.slice() }; }
   function listItems(st) {
     var all = {}; ['o', 'w', 'p', 'b', 'r'].forEach(function (k) { st[k].forEach(function (x) { all[x] = 1; }); });
     var body = { movies: [], shows: [] };
@@ -192,6 +192,7 @@ body.sorting .ic { opacity: 0 !important; }
     worder = dec(j.o); watch = dec(j.w); parked = dec(j.p); next = dec(j.b); removed = dec(j.r);
     if (j.d) { done = dec(j.d); undone = dec(j.u); } else if (done.length || undone.length) setTimeout(function () { push(true); }, 0);
     ['worder', 'watch', 'parked', 'next', 'removed', 'done', 'undone'].forEach(function (k) { try { localStorage.setItem(k, JSON.stringify({ worder: worder, watch: watch, parked: parked, next: next, removed: removed, done: done, undone: undone }[k])); } catch (e) {} });
+    if (j.LW) { learnWatch = j.LW.slice(); try { localStorage.setItem('learnwatch', JSON.stringify(learnWatch)); } catch (e) {} } else if (learnWatch.length) setTimeout(function () { push(true); }, 0);
     if (j.L) { learnDone = j.L.slice(); try { localStorage.setItem('learndone', JSON.stringify(learnDone)); } catch (e) {} } else if (learnDone.length) setTimeout(function () { push(true); }, 0);
     lastIds = listItems(j).ids; return true;
   }
@@ -446,10 +447,17 @@ body.sorting .ic { opacity: 0 !important; }
   }
   function lid(v) { return v.course + ':' + (v.n != null ? v.n : v.title); }
   function markLearn(v, on) {
-    var before = learnDone.slice(), k = lid(v), i = learnDone.indexOf(k);
+    var before = learnDone.slice(), beforeW = learnWatch.slice(), k = lid(v), i = learnDone.indexOf(k);
     if (on && i < 0) learnDone.push(k); if (!on && i >= 0) learnDone.splice(i, 1);
+    var wi = learnWatch.indexOf(k); if (on && wi >= 0) { learnWatch.splice(wi, 1); lsSet('learnwatch', learnWatch); }
     lsSet('learndone', learnDone); render();
-    toast((on ? 'Marked as watched' : 'Back to not watched') + (tok ? ' · saving to Trakt' : ' · on this device'), function () { learnDone = before; lsSet('learndone', learnDone); render(); });
+    toast((on ? 'Marked as watched' : 'Back to not watched') + (tok ? ' · saving to Trakt' : ' · on this device'), function () { learnDone = before; learnWatch = beforeW; lsSet('learnwatch', learnWatch); lsSet('learndone', learnDone); render(); });
+  }
+  function watchLearn(v, on) { // V2.3: ⋯ ▶ adds a course video to Learn on the Watching tab, ✕ takes it off
+    var before = learnWatch.slice(), k = lid(v), i = learnWatch.indexOf(k);
+    if (on && i < 0) learnWatch.push(k); if (!on && i >= 0) learnWatch.splice(i, 1);
+    lsSet('learnwatch', learnWatch); render();
+    toast(on ? 'In Watching · under Learn' : (top === 'Watching' ? 'Removed from Watching · still in Discover › Tech' : 'Removed from Watching'), function () { learnWatch = before; lsSet('learnwatch', learnWatch); render(); });
   }
   window.__snapshot = function () { return snapshot(); }; window.__applyRemote = function (d) { var ok = applyRemote(d); render(); return ok; };
   function lcard(v) { // V2.3 Learn tile: no TMDB poster, so number + course on a plain tile
@@ -462,9 +470,13 @@ body.sorting .ic { opacity: 0 !important; }
     var seen = learnDone.indexOf(lid(v)) >= 0; if (seen) d.classList.add('seen');
     var ic = document.createElement('div'); ic.className = 'ic wm';
     var opts = document.createElement('span'); opts.className = 'opts';
-    var mk = document.createElement('button'); mk.type = 'button'; var act = ACT[seen ? 'unwatched' : 'watched']; mk.textContent = act[0]; mk.title = act[1]; mk.setAttribute('aria-label', act[1]);
-    mk.onclick = function (e) { e.preventDefault(); markLearn(v, !seen); }; opts.appendChild(mk);
-    var more = document.createElement('button'); more.type = 'button'; more.className = 'more'; more.textContent = '⋯'; more.title = act[1]; more.setAttribute('aria-label', 'Options for ' + v.title);
+    var inW = learnWatch.indexOf(lid(v)) >= 0, acts = seen ? ['unwatched'] : inW ? ['remove', 'watched'] : ['watching', 'watched'];
+    acts.forEach(function (o) {
+      var mk = document.createElement('button'); mk.type = 'button'; mk.textContent = ACT[o][0]; mk.title = ACT[o][1]; mk.setAttribute('aria-label', ACT[o][1]);
+      mk.onclick = function (e) { e.preventDefault(); if (o === 'watched' || o === 'unwatched') markLearn(v, o === 'watched'); else watchLearn(v, o === 'watching'); }; opts.appendChild(mk);
+    });
+    if (inW && top === 'Discover') { var tag = document.createElement('span'); tag.className = 'where'; tag.textContent = 'Watching'; a.appendChild(tag); }
+    var more = document.createElement('button'); more.type = 'button'; more.className = 'more'; more.textContent = '⋯'; more.title = acts.map(function (o) { return ACT[o][1].split(' · ')[0]; }).join(', '); more.setAttribute('aria-label', 'Options for ' + v.title);
     more.onclick = function (e) { e.preventDefault(); ic.classList.toggle('open'); };
     ic.appendChild(opts); ic.appendChild(more);
     d.appendChild(a); d.appendChild(ic);
@@ -531,8 +543,12 @@ body.sorting .ic { opacity: 0 !important; }
     renderTop(); renderTabs();
     var real = state.shelf; if (AFTER && top === 'Next') state.shelf = 'Watch Next';
     if (AFTER && top === 'Watching') { $('crow').hidden = true; var g0 = $('grid'); g0.innerHTML = ''; if (!tok) g0.appendChild(connRow());
-      var lv = LEARN ? learn.filter(function (v) { return learnDone.indexOf(lid(v)) < 0; }) : []; // watched ones leave, like Watching
-      if (lv.length) { var hl = document.createElement('div'); hl.className = 'sech'; hl.textContent = 'Learn'; g0.appendChild(hl); lv.forEach(function (v) { g0.appendChild(lcard(v)); }); var hw = document.createElement('div'); hw.className = 'sech'; hw.textContent = 'Watch'; g0.appendChild(hw); }
+      if (LEARN && learn.length) { // V2.3: only course videos you added (⋯ ▶ in Discover › Tech); watched ones leave
+        var lv = learn.filter(function (v) { return learnWatch.indexOf(lid(v)) >= 0 && learnDone.indexOf(lid(v)) < 0; });
+        var hl = document.createElement('div'); hl.className = 'sech'; hl.textContent = 'Learn'; g0.appendChild(hl);
+        if (lv.length) lv.forEach(function (v) { g0.appendChild(lcard(v)); });
+        else { var el = document.createElement('div'); el.className = 'empty'; el.textContent = 'Add a course video from Discover › Tech with ⋯ › ▶.'; g0.appendChild(el); }
+        var hw = document.createElement('div'); hw.className = 'sech'; hw.textContent = 'Watch'; g0.appendChild(hw); }
       var wl = items.filter(inWatching).sort(function (a, b) { var ia = worder.indexOf(a.key), ib = worder.indexOf(b.key); if (ia < 0) ia = 1e6; if (ib < 0) ib = 1e6; return ia - ib || a.title.localeCompare(b.title); });
       if (!wl.length) { var e0 = document.createElement('div'); e0.className = 'empty'; e0.textContent = 'Nothing in progress. Start a series or movie in Infuse and it shows up here.'; g0.appendChild(e0); }
       else { wl.forEach(function (it) { var c = mcard(it); c.dataset.sec = 'worder'; g0.appendChild(c); }); sortable(g0); }
