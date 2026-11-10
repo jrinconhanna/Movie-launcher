@@ -121,7 +121,7 @@ body.sorting .ic { opacity: 0 !important; }
 (function () {
   var AFTER = true, MOCK = true, BAR = true;
   var LEARN = /[?&]v23\b/.test(location.search); // V2.3 preview: index.html?v23
-  var learn = [];
+  var learn = [], learnDone = [];
   var SHELVES = AFTER ? ['Movies', 'Series', 'Docs'] : ['Watch Next', 'Movies', 'Series', 'Docs'];
   var TOP = ['Watching', 'Next', 'Discover'], top = 'Watching';
   var items = [], unmatched = [], updated = '';
@@ -129,8 +129,8 @@ body.sorting .ic { opacity: 0 !important; }
   var next = [], worder = [], watch = [], parked = [], removed = [], done = [], undone = [];
   function ls(k, d) { try { var v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch (e) { return d; } }
   function lsSet(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} if (SYNC_KEYS.indexOf(k) >= 0 && window.__push) window.__push(); }
-  var SYNC_KEYS = ['worder', 'watch', 'parked', 'next', 'removed', 'done', 'undone'];
-  next = ls('next', []); worder = ls('worder', []); watch = ls('watch', []); parked = ls('parked', []); removed = ls('removed', []); done = ls('done', []); undone = ls('undone', []); state = Object.assign(state, ls('view', {})); if (['unwatched', 'watched', 'all'].indexOf(state.wf) < 0) state.wf = 'unwatched'; if (AFTER && state.shelf === 'Watch Next') state.shelf = 'Movies';
+  var SYNC_KEYS = ['worder', 'watch', 'parked', 'next', 'removed', 'done', 'undone', 'learndone'];
+  next = ls('next', []); worder = ls('worder', []); watch = ls('watch', []); parked = ls('parked', []); removed = ls('removed', []); done = ls('done', []); undone = ls('undone', []); learnDone = ls('learndone', []); state = Object.assign(state, ls('view', {})); if (['unwatched', 'watched', 'all'].indexOf(state.wf) < 0) state.wf = 'unwatched'; if (AFTER && state.shelf === 'Watch Next') state.shelf = 'Movies';
   var $ = function (id) { return document.getElementById(id); };
   // ---------- Trakt login (device code, no secret; once per device, renewed on open) ----------
   var TRAKT_ID = '8JCox_SeBb82A1WgJW48P67jldMz2aiSZ-xOZ7qH67g', TRAKT = 'https://api.trakt.tv', pending = null;
@@ -175,7 +175,7 @@ body.sorting .ic { opacity: 0 !important; }
   function bySid(x) { for (var i = 0; i < items.length; i++) if (sid(items[i]) === x) return items[i]; return null; }
   function enc(keys) { return keys.map(byKey).filter(function (it) { return it && it.tmdb; }).map(sid); }
   function dec(ids) { return (ids || []).map(bySid).filter(Boolean).map(function (it) { return it.key; }); }
-  function snapshot() { return { v: 1, o: enc(worder), w: enc(watch), p: enc(parked), b: enc(next), r: enc(removed), d: enc(done), u: enc(undone) }; }
+  function snapshot() { return { v: 1, o: enc(worder), w: enc(watch), p: enc(parked), b: enc(next), r: enc(removed), d: enc(done), u: enc(undone), L: learnDone.slice() }; }
   function listItems(st) {
     var all = {}; ['o', 'w', 'p', 'b', 'r'].forEach(function (k) { st[k].forEach(function (x) { all[x] = 1; }); });
     var body = { movies: [], shows: [] };
@@ -190,6 +190,7 @@ body.sorting .ic { opacity: 0 !important; }
     worder = dec(j.o); watch = dec(j.w); parked = dec(j.p); next = dec(j.b); removed = dec(j.r);
     if (j.d) { done = dec(j.d); undone = dec(j.u); } else if (done.length || undone.length) setTimeout(function () { push(true); }, 0);
     ['worder', 'watch', 'parked', 'next', 'removed', 'done', 'undone'].forEach(function (k) { try { localStorage.setItem(k, JSON.stringify({ worder: worder, watch: watch, parked: parked, next: next, removed: removed, done: done, undone: undone }[k])); } catch (e) {} });
+    if (j.L) { learnDone = j.L.slice(); try { localStorage.setItem('learndone', JSON.stringify(learnDone)); } catch (e) {} } else if (learnDone.length) setTimeout(function () { push(true); }, 0);
     lastIds = listItems(j).ids; return true;
   }
   function pull() {
@@ -438,13 +439,29 @@ body.sorting .ic { opacity: 0 !important; }
       setTimeout(function () { go('infuse://'); }, ok ? 900 : 2500);
     });
   }
+  function lid(v) { return v.course + ':' + (v.n != null ? v.n : v.title); }
+  function markLearn(v, on) {
+    var before = learnDone.slice(), k = lid(v), i = learnDone.indexOf(k);
+    if (on && i < 0) learnDone.push(k); if (!on && i >= 0) learnDone.splice(i, 1);
+    lsSet('learndone', learnDone); render();
+    toast((on ? 'Marked as watched' : 'Back to not watched') + (tok ? ' · saving to Trakt' : ' · on this device'), function () { learnDone = before; lsSet('learndone', learnDone); render(); });
+  }
+  window.__snapshot = function () { return snapshot(); }; window.__applyRemote = function (d) { var ok = applyRemote(d); render(); return ok; };
   function lcard(v) { // V2.3 Learn tile: no TMDB poster, so number + course on a plain tile
     var d = document.createElement('div'); d.className = 'card lcard'; d.dataset.key = v.key;
     var a = document.createElement('a'); a.className = 'poster ltile'; a.href = '#'; a.setAttribute('aria-label', v.title);
     var n = document.createElement('span'); n.className = 'ln'; n.textContent = v.n != null ? v.n : '·'; a.appendChild(n);
     var c = document.createElement('span'); c.className = 'lc'; c.textContent = v.course; a.appendChild(c);
     a.onclick = function (e) { e.preventDefault(); playLearn(v); };
-    d.appendChild(a);
+    var seen = learnDone.indexOf(lid(v)) >= 0; if (seen) d.classList.add('seen');
+    var ic = document.createElement('div'); ic.className = 'ic wm';
+    var opts = document.createElement('span'); opts.className = 'opts';
+    var mk = document.createElement('button'); mk.type = 'button'; var act = ACT[seen ? 'unwatched' : 'watched']; mk.textContent = act[0]; mk.title = act[1]; mk.setAttribute('aria-label', act[1]);
+    mk.onclick = function (e) { e.preventDefault(); markLearn(v, !seen); }; opts.appendChild(mk);
+    var more = document.createElement('button'); more.type = 'button'; more.className = 'more'; more.textContent = '⋯'; more.title = act[1]; more.setAttribute('aria-label', 'Options for ' + v.title);
+    more.onclick = function (e) { e.preventDefault(); ic.classList.toggle('open'); };
+    ic.appendChild(opts); ic.appendChild(more);
+    d.appendChild(a); d.appendChild(ic);
     var t = document.createElement('div'); t.className = 't'; t.textContent = v.title; d.appendChild(t);
     var y = document.createElement('div'); y.className = 'y'; y.textContent = v.n != null ? v.n + ' of ' + learn.filter(function (x) { return x.course === v.course; }).length : v.course; d.appendChild(y);
     return d;
