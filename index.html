@@ -425,12 +425,25 @@ body.sorting .ic { opacity: 0 !important; }
   }
   var ACT = { watched: ['✓', 'Mark watched'], unwatched: ['↺', 'Mark not watched'], watching: ['▶', 'Watching · start or continue'], park: ['⏸', 'Park · watch on and off'], backlog: ['＋', 'Backlog · later'], remove: ['✕', 'Remove'] };
   function where(it) { return inWatching(it) ? 'watching' : parked.indexOf(it.key) >= 0 ? 'park' : next.indexOf(it.key) >= 0 ? 'backlog' : 'discover'; }
+  // V2.3 tap: Infuse links can't search, so copy the title, open Infuse, paste in its Search (Better: play straight away)
+  function copyText(t) {
+    function fallback() { var ta = document.createElement('textarea'); ta.value = t; ta.setAttribute('readonly', ''); ta.style.position = 'fixed'; ta.style.opacity = '0'; document.body.appendChild(ta); ta.select(); ta.setSelectionRange(0, t.length); var ok = false; try { ok = document.execCommand('copy'); } catch (e) {} ta.remove(); return ok; }
+    if (navigator.clipboard && navigator.clipboard.writeText) return navigator.clipboard.writeText(t).then(function () { return true; }, fallback);
+    return Promise.resolve(fallback());
+  }
+  function go(u) { (window.__go || function (x) { location.href = x; })(u); }
+  function playLearn(v) {
+    copyText(v.title).then(function (ok) {
+      toast(ok ? 'Title copied · in Infuse, open Search and paste' : 'Couldn’t copy · search Infuse for: ' + v.title);
+      setTimeout(function () { go('infuse://'); }, ok ? 900 : 2500);
+    });
+  }
   function lcard(v) { // V2.3 Learn tile: no TMDB poster, so number + course on a plain tile
     var d = document.createElement('div'); d.className = 'card lcard'; d.dataset.key = v.key;
     var a = document.createElement('a'); a.className = 'poster ltile'; a.href = '#'; a.setAttribute('aria-label', v.title);
     var n = document.createElement('span'); n.className = 'ln'; n.textContent = v.n != null ? v.n : '·'; a.appendChild(n);
     var c = document.createElement('span'); c.className = 'lc'; c.textContent = v.course; a.appendChild(c);
-    a.onclick = function (e) { e.preventDefault(); toast('Playing comes in the next piece'); };
+    a.onclick = function (e) { e.preventDefault(); playLearn(v); };
     d.appendChild(a);
     var t = document.createElement('div'); t.className = 't'; t.textContent = v.title; d.appendChild(t);
     var y = document.createElement('div'); y.className = 'y'; y.textContent = v.n != null ? v.n + ' of ' + learn.filter(function (x) { return x.course === v.course; }).length : v.course; d.appendChild(y);
