@@ -46,8 +46,7 @@ with sync_playwright() as p:
             pg.evaluate("([i,s])=>[...document.querySelectorAll('#grid .lcard')[i].querySelectorAll('.opts button')].find(b=>b.textContent===s).click()", [i, sym]); pg.wait_for_timeout(300)
         def opts(i): return pg.evaluate("i=>[...document.querySelectorAll('#grid .lcard')[i].querySelectorAll('.opts button')].map(b=>b.textContent)", i)
         hs = pg.evaluate("[...document.querySelectorAll('#grid .sech')].map(x=>x.textContent)")
-        rec(f"L1 [{size}] Watching: Learn header, then Watch", hs[:2] == ["Learn", "Watch"], hs)
-        rec(f"L2 [{size}] Learn starts empty, with a hint to add from Tech", learn_y() == [] and "Tech" in pg.evaluate("document.querySelector('#grid .empty').textContent"))
+        rec(f"L1 [{size}] nothing added: no Learn section, no hint, no headers", hs == [] and learn_y() == [] and not pg.evaluate("document.querySelector('#grid .empty')"), hs)
         rec(f"L3 [{size}] Watch cards still there", pg.evaluate("document.querySelectorAll('#grid .card:not(.lcard)').length") > 0)
         # Tech shelf (piece 6) + covers (piece 7)
         tech()
@@ -64,6 +63,8 @@ with sync_playwright() as p:
         rec(f"A4 [{size}] added list goes into the Trakt snapshot", pg.evaluate("window.__snapshot().LW") == ["GSP Series:2", "GSP Series:4"], pg.evaluate("window.__snapshot().LW"))
         tab(pg, "Watching")
         rec(f"A5 [{size}] Learn on Watching shows only the added videos", learn_y() == ["2 of 8", "4 of 8"], learn_y())
+        hs = pg.evaluate("[...document.querySelectorAll('#grid .sech')].map(x=>x.textContent)")
+        rec(f"L2 [{size}] with videos added: Learn header, then Watch", hs[:2] == ["Learn", "Watch"], hs)
         order = pg.evaluate("[...document.querySelectorAll('#grid > *')].map(x=>x.classList.contains('lcard')?'L':x.classList.contains('card')?'W':'-').join('')")
         rec(f"A6 [{size}] Learn tiles before Watch cards", order.rfind("L") < order.find("W"), order)
         # piece 3: tap copies the title and opens Infuse
