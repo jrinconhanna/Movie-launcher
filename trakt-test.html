@@ -27,6 +27,11 @@
   <button id="v22">6 · V2.2 check: speed + my ratings</button>
   <button id="v23">7 · V2.3 check: copy a title + open Infuse</button>
 </div>
+<div id="srch" style="margin-top:14px;padding:10px;border:1px solid #ddd;border-radius:8px;max-width:640px">
+  <b>9 · Guess: does Infuse open Search with the title filled in?</b>
+  <p class="sub" style="margin:4px 0 8px">Unofficial links, so most will just open Infuse (or nothing). Tap each, then come back. Tell Claude which letter (if any) lands on Search with “Finance and Measurements…” typed in.</p>
+  <span id="srchBtns"></span>
+</div>
 <div id="wb" style="margin-top:14px;padding:10px;border:1px solid #ddd;border-radius:8px;max-width:640px">
   <b>8 · V2.3 check: play straight away from Whatbox</b>
   <p class="sub" style="margin:4px 0 8px">Saved only in this browser on this device. Never sent to GitHub or to Claude. Don't paste your password into the chat.</p>
@@ -168,6 +173,13 @@
     window.open(w.base + '/' + dir + '/', '_blank');
   };
   wbFill();
+
+  // 9 · unofficial Infuse search links (guesses)
+  (function () {
+    var q = encodeURIComponent('Finance and Measurements');
+    var G = [['A', 'infuse://search?query=' + q], ['B', 'infuse://search?q=' + q], ['C', 'infuse://x-callback-url/search?query=' + q], ['D', 'infuse://search/' + q], ['E', 'infuse://x-callback-url/search?q=' + q], ['F', 'infuse://search?term=' + q]];
+    G.forEach(function (g) { var b = document.createElement('button'); b.textContent = '9' + g[0]; b.title = g[1]; b.onclick = function () { log('9' + g[0] + ' → ' + g[1]); location.href = g[1]; }; $('srchBtns').appendChild(b); });
+  })();
 
   $('logout').onclick = function () { localStorage.removeItem('trakt-test-token'); log('Logged out on this device.'); setUI(); };
 
