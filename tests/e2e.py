@@ -120,7 +120,7 @@ with sync_playwright() as p:
         pg.click("#toast .undo"); pg.wait_for_timeout(300)
         rec(f"F11 [{size}] after Undo the folder is back to 1/8", pg.evaluate("document.querySelector('#grid .ccard .badge').textContent") == "1/8")
         pg.click("#grid .ccard .poster"); pg.wait_for_timeout(300)
-        rec(f"B2 [{size}] video tiles carry the course progress bar", pg.evaluate("document.querySelectorAll('#grid .lcard:not(.ccard) .pbar').length") > 0)
+        rec(f"B2 [{size}] no repeated course bar on each video (it's on the folder)", pg.evaluate("document.querySelectorAll('#grid .lcard:not(.ccard) .pbar').length") == 0)
         rec(f"D4 [{size}] Tech Unwatched hides watched videos", "5 of 8" not in learn_y() and len(learn_y()) == 7, learn_y())
         pg.select_option("#wf", "watched"); pg.wait_for_timeout(300)
         rec(f"D5 [{size}] Tech Watched lists them; ⋯ offers ▶ (watch again) and ↺", learn_y() == ["5 of 8"] and opts(0) == ["▶", "↺"], (learn_y(), opts(0)))
