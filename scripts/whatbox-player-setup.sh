@@ -45,7 +45,7 @@ cat > "$D/start" <<START
 /usr/sbin/nginx -c $D/nginx.conf &> /dev/null
 START
 chmod +x "$D/start"
-( crontab -l 2>/dev/null | grep -v "launcher-nginx/start"; echo "@reboot $D/start" ) | crontab -
+if command -v crontab >/dev/null 2>&1; then ( crontab -l 2>/dev/null | grep -v "launcher-nginx/start"; echo "@reboot $D/start" ) | crontab -; else echo "(no crontab here: it won't restart by itself after a reboot)"; fi
 
 pkill -f "launcher-nginx/nginx.conf" 2>/dev/null || true
 sleep 1; "$D/start"; sleep 1
