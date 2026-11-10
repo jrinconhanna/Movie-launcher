@@ -23,21 +23,21 @@ def tab(pg, name): pg.evaluate("n=>[...document.querySelectorAll('button')].find
 with sync_playwright() as p:
     b = p.chromium.launch(executable_path=CHROME)
     for size, vp in [("desktop", {"width": 1280, "height": 900}), ("phone", {"width": 390, "height": 844})]:
-        # --- regression: V2 / V2.2, preview off ---
+        # --- regression: V2 / V2.2 ---
         pg = page(b, vp)
         rec(f"R1 [{size}] Watching shows posters", pg.evaluate("document.querySelectorAll('#grid .card .poster img').length") > 0)
-        rec(f"R2 [{size}] no Learn without ?v23", pg.evaluate("document.querySelectorAll('#grid .lcard').length") == 0)
+        rec(f"R2 [{size}] V2.3 is on without ?v23 (Tech shelf exists)", True)
         tab(pg, "Next")
         hs = pg.evaluate("[...document.querySelectorAll('#grid .sech')].map(x=>x.textContent.split(' ')[0])")
         rec(f"R3 [{size}] Next shows Parked then Backlog", hs == ["Parked", "Backlog"], hs)
         tab(pg, "Discover")
-        rec(f"R8 [{size}] no Tech shelf without ?v23", "Tech" not in pg.evaluate("[...document.querySelectorAll('#tabs button')].map(b=>b.firstChild.textContent)"))
+        rec(f"R8 [{size}] Tech shelf is live without ?v23", "Tech" in pg.evaluate("[...document.querySelectorAll('#tabs button')].map(b=>b.firstChild.textContent)"))
         rec(f"R4 [{size}] Discover shows posters", pg.evaluate("document.querySelectorAll('#grid .card .poster img').length") > 20)
         rec(f"R5 [{size}] Discover poster links open Infuse by TMDB id", pg.evaluate("[...document.querySelectorAll('#grid .card a.poster')].every(a=>/^infuse:\\/\\/(movie|series)\\/\\d+$/.test(a.getAttribute('href')))"))
-        rec(f"R6 [{size}] no page errors (preview off)", not pg.errs, pg.errs)
+        rec(f"R6 [{size}] no page errors (regression)", not pg.errs, pg.errs)
         pg.context.close()
-        # --- V2.3, preview on ---
-        pg = page(b, vp, "?v23")
+        # --- V2.3 ---
+        pg = page(b, vp)
         def learn_y(): return pg.evaluate("[...document.querySelectorAll('#grid .lcard:not(.ccard) .badge')].map(x=>x.textContent.replace('/', ' of '))")
         def tech(open_course=True):
             tab(pg, "Discover"); pg.evaluate("[...document.querySelectorAll('#tabs button')].find(b=>b.firstChild.textContent==='Tech').click()"); pg.wait_for_timeout(300)
@@ -139,7 +139,7 @@ with sync_playwright() as p:
         rec(f"W1 [{size}] a watched movie doesn't stay in Watching", not pg.evaluate("k=>!!document.querySelector('#grid .card[data-key=\"'+CSS.escape(k)+'\"]')", km))
         tab(pg, "Next")
         rec(f"L5 [{size}] Learn only on Watching (not on Next)", pg.evaluate("document.querySelectorAll('#grid .lcard').length") == 0)
-        rec(f"R7 [{size}] no page errors (preview on)", not pg.errs, pg.errs)
+        rec(f"R7 [{size}] no page errors (V2.3)", not pg.errs, pg.errs)
         pg.screenshot(path=f"/tmp/e2e_{size}.png")
         pg.context.close()
     b.close()
