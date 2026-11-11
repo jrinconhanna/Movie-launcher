@@ -57,7 +57,7 @@ check("N8 every Lean folder level has a cover (Folder.jpg any case; Toyota top b
 check("N9 Lean is live (no ?next flag)", lean and not any(t.get("next") for t in lean))
 rf = [t for t in ALL if t["category"] == "Reforge"]
 rc = lambda c: [t["title"] for t in rf if t["course"] == c]
-check("R1 Reforge: 97 videos in 2 courses, behind ?next", len(rf) >= 97 and list(dict.fromkeys(t["trail"][1] for t in rf)) == ["AI Strategy", "Retention & Engagement"] and all(t.get("next") for t in rf), str(len(rf)))
+check("R1 Reforge: 97 videos in 2 courses, live", len(rf) >= 97 and list(dict.fromkeys(t["trail"][1] for t in rf)) == ["AI Strategy", "Retention & Engagement"] and not any(t.get("next") for t in rf), str(len(rf)))
 check("R2 weeks named 'W1 - …' in both courses, in order", list(dict.fromkeys(t["trail"][2] for t in rf if t["trail"][1] == "AI Strategy")) == ["W1 - The Strategic Landscape", "W2 - Market Strategy", "W3 - Product Strategy", "W4 - Execution Strategy"] and list(dict.fromkeys(t["trail"][2] for t in rf if t["trail"][1] != "AI Strategy"))[:3] == ["W0 - How Retention Determines The Top 1%", "W1 - Retention", "W2 - Activation. Defining, Measuring, And Analyzing"])
 w1 = rc("W1 - The Strategic Landscape")
 check("R3 AI Strategy: lessons by code (1a…2c), code dropped, live session last as 'W1 Live'", w1[0] == "AI Tech Shift - How AI Is Creating More Red Ocean vs Blue Ocean" and w1[-1] == "W1 Live" and len(w1) == 8, str(w1[:1] + w1[-1:]))

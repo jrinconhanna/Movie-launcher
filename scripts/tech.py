@@ -177,7 +177,7 @@ def reforge(rel, parts, base):
     elif t.upper().startswith("BONUS"):
         k1 = 60
     t = re.sub(r"\s{2,}", " ", t)
-    return {"course": names[-1], "cord": cord, "sub": None, "title": t, "year": None, "next": True,
+    return {"course": names[-1], "cord": cord, "sub": None, "title": t, "year": None,  # live 11 Nov (was behind ?next)
             "trail": ["Reforge"] + names, "tdirs": [rel.split("/")[0]] + [rel.split("/")[0] + "/" + "/".join(parts[:i + 1]) for i in range(len(parts))],
             "sort": (k1, k2, 0, t.lower())}
 

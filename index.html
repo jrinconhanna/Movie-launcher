@@ -321,10 +321,10 @@ body.sorting .ic { opacity: 0 !important; }
   }
   // V2.4: folders can hold folders (Steve Jobs › era › videos). state.course = the open folder path, joined by '/'.
   function trail(v) { return v.trail || [v.course]; }
-  // ?next (V2.4.1): a course made of week folders (Reforge 'W1 - …') opens straight on a week; week chips switch between them
+  // V2.4.1 (live 11 Nov): a course made of week folders (Reforge 'W1 - …') opens straight on a week; week chips switch between them
   function isWeek(n) { return /^W\d+ - /.test(n || ''); }
   function weekSibs(P) { var par = P.slice(0, -1), seen = {}, out = []; learn.forEach(function (v) { var t = trail(v); if (t.length < P.length || !par.every(function (x, i) { return t[i] === x; })) return; var nm = t[par.length]; if (t.length > par.length && !seen[nm]) { seen[nm] = 1; out.push(nm); } }); return out; }
-  function inWeek(P) { var sb = NEXT && P.length > 1 && isWeek(P[P.length - 1]) ? weekSibs(P) : []; return sb.length > 1 && sb.every(isWeek); }
+  function inWeek(P) { var sb = V24 && P.length > 1 && isWeek(P[P.length - 1]) ? weekSibs(P) : []; return sb.length > 1 && sb.every(isWeek); }
   function techLevel() {
     var P = state.course ? state.course.split('/') : [], implicit = false;
     if (P.length && !learn.some(function (v) { return P.every(function (x, i) { return trail(v)[i] === x; }); })) { state.course = ''; P = []; }
@@ -340,7 +340,7 @@ body.sorting .ic { opacity: 0 !important; }
       if (!fs[nm]) { fs[nm] = { isCourse: true, course: nm, path: P.concat([nm]).join('/'), folder: (v.fcov && v.fcov[P.length]) || (t.length === P.length + 1 ? v.folder : null), year: v.v24 ? '' : v.year, category: v.category || 'Other', order: v.corder || '', videos: [] }; order.push(nm); }
       fs[nm].videos.push(v); });
     var fo = V24 && forder[P.join('/')]; if (fo) order.sort(function (a, b) { var ia = fo.indexOf(a), ib = fo.indexOf(b); return (ia < 0 ? 1e6 : ia) - (ib < 0 ? 1e6 : ib); }); // your dragged order; new folders go last
-    if (NEXT && !vids.length && order.length > 1 && order.every(isWeek)) { // open on your week: the one you picked last, else the first with something unwatched
+    if (V24 && !vids.length && order.length > 1 && order.every(isWeek)) { // open on your week: the one you picked last, else the first with something unwatched
       var pk = (state.wk || {})[P.join('/')]; if (order.indexOf(pk) < 0) pk = order.filter(function (k) { return fs[k].videos.some(function (v) { return learnDone.indexOf(lid(v)) < 0; }); })[0] || order[0];
       state.course = P.concat([pk]).join('/'); return techLevel(); }
     return { P: P, implicit: implicit, list: order.map(function (k) { return fs[k]; }).concat(vids) };
@@ -556,7 +556,7 @@ body.sorting .ic { opacity: 0 !important; }
     var a = document.createElement('a'); a.className = 'poster ltile'; a.href = '#'; a.setAttribute('aria-label', v.title);
     if (v.cover) { var im = document.createElement('img'); im.className = 'fg'; im.loading = 'lazy'; im.alt = ''; im.src = v.cover; a.appendChild(im); a.classList.add('hascover'); }
     else { var n = document.createElement('span'); n.className = 'ln'; n.textContent = v.num != null ? v.num : v.n != null ? v.n : '·'; /* Lean: the session/episode number, not the position (Session 10 shows 10) */ a.appendChild(n);
-    if (!(NEXT && (isWeek(v.course) || (state.course && inWeek(state.course.split('/')))))) { var c = document.createElement('span'); c.className = 'lc'; c.textContent = v.course; a.appendChild(c); } } // ?next: the week heading already names it
+    if (!(V24 && (isWeek(v.course) || (state.course && inWeek(state.course.split('/')))))) { var c = document.createElement('span'); c.className = 'lc'; c.textContent = v.course; a.appendChild(c); } } // ?next: the week heading already names it
     a.onclick = function (e) { e.preventDefault(); playLearn(v); };
     var seen = learnDone.indexOf(lid(v)) >= 0; if (seen && !(V24 && top === 'Discover' && state.wf === 'watched')) d.classList.add('seen'); // V2.4: the Watched filter shows them in full colour, like movies
     var ic = document.createElement('div'); ic.className = 'ic wm';
