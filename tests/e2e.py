@@ -195,7 +195,7 @@ with sync_playwright() as p:
         rec(f"K9 [{size}] era folder shows 1/6 and a bar once a video is watched", b1 == [["1/6", True], [None, False], [None, False]], b1)
         pg.evaluate("[...document.querySelectorAll('#chips button')].find(b=>b.textContent.startsWith('All')).click()"); pg.wait_for_timeout(300)
         b2 = pg.evaluate("[...document.querySelectorAll('#grid .ccard')].map(c=>c.querySelector('.badge')&&c.querySelector('.badge').textContent)")
-        rec(f"K10 [{size}] Steve Jobs folder counts everything inside (1/19)", b2[0] == "1/19", b2)
+        rec(f"K10 [{size}] Steve Jobs folder counts everything inside (1/39)", b2[0] == "1/39", b2)
         pg.click("#grid .ccard .poster >> nth=0"); pg.wait_for_timeout(300)
         rec(f"K11 [{size}] inside Steve Jobs, the era doesn't repeat 'Steve Jobs' under it", pg.evaluate("[...document.querySelectorAll('#grid .ccard .y')].every(y=>y.textContent==='')"))
         pg.evaluate("k=>localStorage.setItem('learnwatch', JSON.stringify([k]))", L[0] if L else ""); pg.evaluate("localStorage.removeItem('learndone')"); pg.reload(); pg.wait_for_timeout(1200)
