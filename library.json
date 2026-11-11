@@ -18081,6 +18081,2564 @@
    ],
    "v24": true,
    "year": null
+  },
+  {
+   "category": "Reforge",
+   "cord": "001001",
+   "corder": "004",
+   "course": "W1 - The Strategic Landscape",
+   "fcov": [
+    "covers/t/9f57d689d050.jpg",
+    "covers/t/9f57d689d050.jpg",
+    "covers/t/35e26f1e5d30.jpg"
+   ],
+   "file": "1a - AI Tech Shift - How AI Is Creating More Red Ocean vs Blue Ocean.mp4",
+   "folder": "covers/t/35e26f1e5d30.jpg",
+   "id": "t:b35b53e85237",
+   "key": "learn|1- Tech/4- Reforge/1- AI Strategy/Week 1 - The Strategic Landscape/1a - AI Tech Shift - How AI Is Creating More Red Ocean vs Blue Ocean.mp4",
+   "n": 1,
+   "next": true,
+   "sub": null,
+   "title": "AI Tech Shift - How AI Is Creating More Red Ocean vs Blue Ocean",
+   "trail": [
+    "Reforge",
+    "AI Strategy",
+    "W1 - The Strategic Landscape"
+   ],
+   "v24": true,
+   "year": null
+  },
+  {
+   "category": "Reforge",
+   "cord": "001001",
+   "corder": "004",
+   "course": "W1 - The Strategic Landscape",
+   "fcov": [
+    "covers/t/9f57d689d050.jpg",
+    "covers/t/9f57d689d050.jpg",
+    "covers/t/35e26f1e5d30.jpg"
+   ],
+   "file": "1b - AI Tech Shift - How AI Is Shifting The Competitive Dynamics.mp4",
+   "folder": "covers/t/35e26f1e5d30.jpg",
+   "id": "t:b9b13366039b",
+   "key": "learn|1- Tech/4- Reforge/1- AI Strategy/Week 1 - The Strategic Landscape/1b - AI Tech Shift - How AI Is Shifting The Competitive Dynamics.mp4",
+   "n": 2,
+   "next": true,
+   "sub": null,
+   "title": "AI Tech Shift - How AI Is Shifting The Competitive Dynamics",
+   "trail": [
+    "Reforge",
+    "AI Strategy",
+    "W1 - The Strategic Landscape"
+   ],
+   "v24": true,
+   "year": null
+  },
+  {
+   "category": "Reforge",
+   "cord": "001001",
+   "corder": "004",
+   "course": "W1 - The Strategic Landscape",
+   "fcov": [
+    "covers/t/9f57d689d050.jpg",
+    "covers/t/9f57d689d050.jpg",
+    "covers/t/35e26f1e5d30.jpg"
+   ],
+   "file": "1c - AI Tech Shift - How AI Changes Customer Expectations.mp4",
+   "folder": "covers/t/35e26f1e5d30.jpg",
+   "id": "t:a1aea80ba244",
+   "key": "learn|1- Tech/4- Reforge/1- AI Strategy/Week 1 - The Strategic Landscape/1c - AI Tech Shift - How AI Changes Customer Expectations.mp4",
+   "n": 3,
+   "next": true,
+   "sub": null,
+   "title": "AI Tech Shift - How AI Changes Customer Expectations",
+   "trail": [
+    "Reforge",
+    "AI Strategy",
+    "W1 - The Strategic Landscape"
+   ],
+   "v24": true,
+   "year": null
+  },
+  {
+   "category": "Reforge",
+   "cord": "001001",
+   "corder": "004",
+   "course": "W1 - The Strategic Landscape",
+   "fcov": [
+    "covers/t/9f57d689d050.jpg",
+    "covers/t/9f57d689d050.jpg",
+    "covers/t/35e26f1e5d30.jpg"
+   ],
+   "file": "1d - AI Tech Shift - How AI Has Accelerated Strategic Cycles.mp4",
+   "folder": "covers/t/35e26f1e5d30.jpg",
+   "id": "t:c9f53a6bc1e9",
+   "key": "learn|1- Tech/4- Reforge/1- AI Strategy/Week 1 - The Strategic Landscape/1d - AI Tech Shift - How AI Has Accelerated Strategic Cycles.mp4",
+   "n": 4,
+   "next": true,
+   "sub": null,
+   "title": "AI Tech Shift - How AI Has Accelerated Strategic Cycles",
+   "trail": [
+    "Reforge",
+    "AI Strategy",
+    "W1 - The Strategic Landscape"
+   ],
+   "v24": true,
+   "year": null
+  },
+  {
+   "category": "Reforge",
+   "cord": "001001",
+   "corder": "004",
+   "course": "W1 - The Strategic Landscape",
+   "fcov": [
+    "covers/t/9f57d689d050.jpg",
+    "covers/t/9f57d689d050.jpg",
+    "covers/t/35e26f1e5d30.jpg"
+   ],
+   "file": "2a - AI Strategy Compass - The AI Strategy Compass Overview.mp4",
+   "folder": "covers/t/35e26f1e5d30.jpg",
+   "id": "t:e701399a5811",
+   "key": "learn|1- Tech/4- Reforge/1- AI Strategy/Week 1 - The Strategic Landscape/2a - AI Strategy Compass - The AI Strategy Compass Overview.mp4",
+   "n": 5,
+   "next": true,
+   "sub": null,
+   "title": "AI Strategy Compass - The AI Strategy Compass Overview",
+   "trail": [
+    "Reforge",
+    "AI Strategy",
+    "W1 - The Strategic Landscape"
+   ],
+   "v24": true,
+   "year": null
+  },
+  {
+   "category": "Reforge",
+   "cord": "001001",
+   "corder": "004",
+   "course": "W1 - The Strategic Landscape",
+   "fcov": [
+    "covers/t/9f57d689d050.jpg",
+    "covers/t/9f57d689d050.jpg",
+    "covers/t/35e26f1e5d30.jpg"
+   ],
+   "file": "2b - AI Strategy Compass - Product Market Fit Collapse.mp4",
+   "folder": "covers/t/35e26f1e5d30.jpg",
+   "id": "t:b8c7f0865475",
+   "key": "learn|1- Tech/4- Reforge/1- AI Strategy/Week 1 - The Strategic Landscape/2b - AI Strategy Compass - Product Market Fit Collapse.mp4",
+   "n": 6,
+   "next": true,
+   "sub": null,
+   "title": "AI Strategy Compass - Product Market Fit Collapse",
+   "trail": [
+    "Reforge",
+    "AI Strategy",
+    "W1 - The Strategic Landscape"
+   ],
+   "v24": true,
+   "year": null
+  },
+  {
+   "category": "Reforge",
+   "cord": "001001",
+   "corder": "004",
+   "course": "W1 - The Strategic Landscape",
+   "fcov": [
+    "covers/t/9f57d689d050.jpg",
+    "covers/t/9f57d689d050.jpg",
+    "covers/t/35e26f1e5d30.jpg"
+   ],
+   "file": "2c - AI Strategy Compass - Evaluating Your Current State.mp4",
+   "folder": "covers/t/35e26f1e5d30.jpg",
+   "id": "t:ce5001687098",
+   "key": "learn|1- Tech/4- Reforge/1- AI Strategy/Week 1 - The Strategic Landscape/2c - AI Strategy Compass - Evaluating Your Current State.mp4",
+   "n": 7,
+   "next": true,
+   "sub": null,
+   "title": "AI Strategy Compass - Evaluating Your Current State",
+   "trail": [
+    "Reforge",
+    "AI Strategy",
+    "W1 - The Strategic Landscape"
+   ],
+   "v24": true,
+   "year": null
+  },
+  {
+   "category": "Reforge",
+   "cord": "001001",
+   "corder": "004",
+   "course": "W1 - The Strategic Landscape",
+   "fcov": [
+    "covers/t/9f57d689d050.jpg",
+    "covers/t/9f57d689d050.jpg",
+    "covers/t/35e26f1e5d30.jpg"
+   ],
+   "file": "AI Strategy - Week 1 Live.mp4",
+   "folder": "covers/t/35e26f1e5d30.jpg",
+   "id": "t:c18885deba49",
+   "key": "learn|1- Tech/4- Reforge/1- AI Strategy/Week 1 - The Strategic Landscape/AI Strategy - Week 1 Live.mp4",
+   "n": 8,
+   "next": true,
+   "sub": null,
+   "title": "W1 Live",
+   "trail": [
+    "Reforge",
+    "AI Strategy",
+    "W1 - The Strategic Landscape"
+   ],
+   "v24": true,
+   "year": null
+  },
+  {
+   "category": "Reforge",
+   "cord": "001002",
+   "corder": "004",
+   "course": "W2 - Market Strategy",
+   "fcov": [
+    "covers/t/9f57d689d050.jpg",
+    "covers/t/9f57d689d050.jpg",
+    "covers/t/efa0e0fadfc1.jpg"
+   ],
+   "file": "1a - Choosing your Market - Three AI Market Strategy Mistakes.mp4",
+   "folder": "covers/t/efa0e0fadfc1.jpg",
+   "id": "t:8a0287b68302",
+   "key": "learn|1- Tech/4- Reforge/1- AI Strategy/Week 2 - Market Strategy/1a - Choosing your Market - Three AI Market Strategy Mistakes.mp4",
+   "n": 1,
+   "next": true,
+   "sub": null,
+   "title": "Choosing your Market - Three AI Market Strategy Mistakes",
+   "trail": [
+    "Reforge",
+    "AI Strategy",
+    "W2 - Market Strategy"
+   ],
+   "v24": true,
+   "year": null
+  },
+  {
+   "category": "Reforge",
+   "cord": "001002",
+   "corder": "004",
+   "course": "W2 - Market Strategy",
+   "fcov": [
+    "covers/t/9f57d689d050.jpg",
+    "covers/t/9f57d689d050.jpg",
+    "covers/t/efa0e0fadfc1.jpg"
+   ],
+   "file": "1b - Choosing your Market - AI-Native vs AI-Disrupted vs AI-Enhanced.mp4",
+   "folder": "covers/t/efa0e0fadfc1.jpg",
+   "id": "t:7157c0a5e927",
+   "key": "learn|1- Tech/4- Reforge/1- AI Strategy/Week 2 - Market Strategy/1b - Choosing your Market - AI-Native vs AI-Disrupted vs AI-Enhanced.mp4",
+   "n": 2,
+   "next": true,
+   "sub": null,
+   "title": "Choosing your Market - AI-Native vs AI-Disrupted vs AI-Enhanced",
+   "trail": [
+    "Reforge",
+    "AI Strategy",
+    "W2 - Market Strategy"
+   ],
+   "v24": true,
+   "year": null
+  },
+  {
+   "category": "Reforge",
+   "cord": "001002",
+   "corder": "004",
+   "course": "W2 - Market Strategy",
+   "fcov": [
+    "covers/t/9f57d689d050.jpg",
+    "covers/t/9f57d689d050.jpg",
+    "covers/t/efa0e0fadfc1.jpg"
+   ],
+   "file": "1c - Choosing your Market - The AI Market Map How to Navigate Your Market.mp4",
+   "folder": "covers/t/efa0e0fadfc1.jpg",
+   "id": "t:7d3a4a2a94a5",
+   "key": "learn|1- Tech/4- Reforge/1- AI Strategy/Week 2 - Market Strategy/1c - Choosing your Market - The AI Market Map How to Navigate Your Market.mp4",
+   "n": 3,
+   "next": true,
+   "sub": null,
+   "title": "Choosing your Market - The AI Market Map How to Navigate Your Market",
+   "trail": [
+    "Reforge",
+    "AI Strategy",
+    "W2 - Market Strategy"
+   ],
+   "v24": true,
+   "year": null
+  },
+  {
+   "category": "Reforge",
+   "cord": "001002",
+   "corder": "004",
+   "course": "W2 - Market Strategy",
+   "fcov": [
+    "covers/t/9f57d689d050.jpg",
+    "covers/t/9f57d689d050.jpg",
+    "covers/t/efa0e0fadfc1.jpg"
+   ],
+   "file": "2a - Market Strategy - Choosing Your User - Niche Down.mp4",
+   "folder": "covers/t/efa0e0fadfc1.jpg",
+   "id": "t:0cba44012380",
+   "key": "learn|1- Tech/4- Reforge/1- AI Strategy/Week 2 - Market Strategy/2a - Market Strategy - Choosing Your User - Niche Down.mp4",
+   "n": 4,
+   "next": true,
+   "sub": null,
+   "title": "Market Strategy - Choosing Your User - Niche Down",
+   "trail": [
+    "Reforge",
+    "AI Strategy",
+    "W2 - Market Strategy"
+   ],
+   "v24": true,
+   "year": null
+  },
+  {
+   "category": "Reforge",
+   "cord": "001002",
+   "corder": "004",
+   "course": "W2 - Market Strategy",
+   "fcov": [
+    "covers/t/9f57d689d050.jpg",
+    "covers/t/9f57d689d050.jpg",
+    "covers/t/efa0e0fadfc1.jpg"
+   ],
+   "file": "2b- Choosing your User - AI Maker Matrix.mp4",
+   "folder": "covers/t/efa0e0fadfc1.jpg",
+   "id": "t:32eb2c60d67c",
+   "key": "learn|1- Tech/4- Reforge/1- AI Strategy/Week 2 - Market Strategy/2b- Choosing your User - AI Maker Matrix.mp4",
+   "n": 5,
+   "next": true,
+   "sub": null,
+   "title": "Choosing your User - AI Maker Matrix",
+   "trail": [
+    "Reforge",
+    "AI Strategy",
+    "W2 - Market Strategy"
+   ],
+   "v24": true,
+   "year": null
+  },
+  {
+   "category": "Reforge",
+   "cord": "001002",
+   "corder": "004",
+   "course": "W2 - Market Strategy",
+   "fcov": [
+    "covers/t/9f57d689d050.jpg",
+    "covers/t/9f57d689d050.jpg",
+    "covers/t/efa0e0fadfc1.jpg"
+   ],
+   "file": "2c- Choosing your User - Distribution Strategy.mp4",
+   "folder": "covers/t/efa0e0fadfc1.jpg",
+   "id": "t:9141d9dc83fd",
+   "key": "learn|1- Tech/4- Reforge/1- AI Strategy/Week 2 - Market Strategy/2c- Choosing your User - Distribution Strategy.mp4",
+   "n": 6,
+   "next": true,
+   "sub": null,
+   "title": "Choosing your User - Distribution Strategy",
+   "trail": [
+    "Reforge",
+    "AI Strategy",
+    "W2 - Market Strategy"
+   ],
+   "v24": true,
+   "year": null
+  },
+  {
+   "category": "Reforge",
+   "cord": "001002",
+   "corder": "004",
+   "course": "W2 - Market Strategy",
+   "fcov": [
+    "covers/t/9f57d689d050.jpg",
+    "covers/t/9f57d689d050.jpg",
+    "covers/t/efa0e0fadfc1.jpg"
+   ],
+   "file": "AI Strategy - Week 2  Live.mp4",
+   "folder": "covers/t/efa0e0fadfc1.jpg",
+   "id": "t:988843c9e5ef",
+   "key": "learn|1- Tech/4- Reforge/1- AI Strategy/Week 2 - Market Strategy/AI Strategy - Week 2  Live.mp4",
+   "n": 7,
+   "next": true,
+   "sub": null,
+   "title": "W2 Live",
+   "trail": [
+    "Reforge",
+    "AI Strategy",
+    "W2 - Market Strategy"
+   ],
+   "v24": true,
+   "year": null
+  },
+  {
+   "category": "Reforge",
+   "cord": "001003",
+   "corder": "004",
+   "course": "W3 - Product Strategy",
+   "fcov": [
+    "covers/t/9f57d689d050.jpg",
+    "covers/t/9f57d689d050.jpg",
+    "covers/t/1890d95f7766.jpg"
+   ],
+   "file": "1a - AI Strategy Foundations - Four Critical AI Product Strategy Mistakes.mp4",
+   "folder": "covers/t/1890d95f7766.jpg",
+   "id": "t:00cc3de6e726",
+   "key": "learn|1- Tech/4- Reforge/1- AI Strategy/Week 3 - Product Strategy/1a - AI Strategy Foundations - Four Critical AI Product Strategy Mistakes.mp4",
+   "n": 1,
+   "next": true,
+   "sub": null,
+   "title": "AI Strategy Foundations - Four Critical AI Product Strategy Mistakes",
+   "trail": [
+    "Reforge",
+    "AI Strategy",
+    "W3 - Product Strategy"
+   ],
+   "v24": true,
+   "year": null
+  },
+  {
+   "category": "Reforge",
+   "cord": "001003",
+   "corder": "004",
+   "course": "W3 - Product Strategy",
+   "fcov": [
+    "covers/t/9f57d689d050.jpg",
+    "covers/t/9f57d689d050.jpg",
+    "covers/t/1890d95f7766.jpg"
+   ],
+   "file": "1b - AI Strategy Foundations - Learning vs Computational Problems.mp4",
+   "folder": "covers/t/1890d95f7766.jpg",
+   "id": "t:406c9e242637",
+   "key": "learn|1- Tech/4- Reforge/1- AI Strategy/Week 3 - Product Strategy/1b - AI Strategy Foundations - Learning vs Computational Problems.mp4",
+   "n": 2,
+   "next": true,
+   "sub": null,
+   "title": "AI Strategy Foundations - Learning vs Computational Problems",
+   "trail": [
+    "Reforge",
+    "AI Strategy",
+    "W3 - Product Strategy"
+   ],
+   "v24": true,
+   "year": null
+  },
+  {
+   "category": "Reforge",
+   "cord": "001003",
+   "corder": "004",
+   "course": "W3 - Product Strategy",
+   "fcov": [
+    "covers/t/9f57d689d050.jpg",
+    "covers/t/9f57d689d050.jpg",
+    "covers/t/1890d95f7766.jpg"
+   ],
+   "file": "1c - AI Strategy Foundations - The AI Feature Map.mp4",
+   "folder": "covers/t/1890d95f7766.jpg",
+   "id": "t:ded6669ca2f0",
+   "key": "learn|1- Tech/4- Reforge/1- AI Strategy/Week 3 - Product Strategy/1c - AI Strategy Foundations - The AI Feature Map.mp4",
+   "n": 3,
+   "next": true,
+   "sub": null,
+   "title": "AI Strategy Foundations - The AI Feature Map",
+   "trail": [
+    "Reforge",
+    "AI Strategy",
+    "W3 - Product Strategy"
+   ],
+   "v24": true,
+   "year": null
+  },
+  {
+   "category": "Reforge",
+   "cord": "001003",
+   "corder": "004",
+   "course": "W3 - Product Strategy",
+   "fcov": [
+    "covers/t/9f57d689d050.jpg",
+    "covers/t/9f57d689d050.jpg",
+    "covers/t/1890d95f7766.jpg"
+   ],
+   "file": "2a - AI Product Strategy Plays - Innovating On User Experience.mp4",
+   "folder": "covers/t/1890d95f7766.jpg",
+   "id": "t:5c5e4d822de1",
+   "key": "learn|1- Tech/4- Reforge/1- AI Strategy/Week 3 - Product Strategy/2a - AI Product Strategy Plays - Innovating On User Experience.mp4",
+   "n": 4,
+   "next": true,
+   "sub": null,
+   "title": "AI Product Strategy Plays - Innovating On User Experience",
+   "trail": [
+    "Reforge",
+    "AI Strategy",
+    "W3 - Product Strategy"
+   ],
+   "v24": true,
+   "year": null
+  },
+  {
+   "category": "Reforge",
+   "cord": "001003",
+   "corder": "004",
+   "course": "W3 - Product Strategy",
+   "fcov": [
+    "covers/t/9f57d689d050.jpg",
+    "covers/t/9f57d689d050.jpg",
+    "covers/t/1890d95f7766.jpg"
+   ],
+   "file": "2b - AI Product Strategy Plays - Building AI Features Competitors Cant Match.mp4",
+   "folder": "covers/t/1890d95f7766.jpg",
+   "id": "t:de01063016c8",
+   "key": "learn|1- Tech/4- Reforge/1- AI Strategy/Week 3 - Product Strategy/2b - AI Product Strategy Plays - Building AI Features Competitors Cant Match.mp4",
+   "n": 5,
+   "next": true,
+   "sub": null,
+   "title": "AI Product Strategy Plays - Building AI Features Competitors Cant Match",
+   "trail": [
+    "Reforge",
+    "AI Strategy",
+    "W3 - Product Strategy"
+   ],
+   "v24": true,
+   "year": null
+  },
+  {
+   "category": "Reforge",
+   "cord": "001003",
+   "corder": "004",
+   "course": "W3 - Product Strategy",
+   "fcov": [
+    "covers/t/9f57d689d050.jpg",
+    "covers/t/9f57d689d050.jpg",
+    "covers/t/1890d95f7766.jpg"
+   ],
+   "file": "2c - AI Product Strategy Plays - Establishing Your AI Moat with Your Data  Functionality.mp4",
+   "folder": "covers/t/1890d95f7766.jpg",
+   "id": "t:534ed84e8f35",
+   "key": "learn|1- Tech/4- Reforge/1- AI Strategy/Week 3 - Product Strategy/2c - AI Product Strategy Plays - Establishing Your AI Moat with Your Data  Functionality.mp4",
+   "n": 6,
+   "next": true,
+   "sub": null,
+   "title": "AI Product Strategy Plays - Establishing Your AI Moat with Your Data Functionality",
+   "trail": [
+    "Reforge",
+    "AI Strategy",
+    "W3 - Product Strategy"
+   ],
+   "v24": true,
+   "year": null
+  },
+  {
+   "category": "Reforge",
+   "cord": "001003",
+   "corder": "004",
+   "course": "W3 - Product Strategy",
+   "fcov": [
+    "covers/t/9f57d689d050.jpg",
+    "covers/t/9f57d689d050.jpg",
+    "covers/t/1890d95f7766.jpg"
+   ],
+   "file": "AI Strategy - Week 3 Live.mp4",
+   "folder": "covers/t/1890d95f7766.jpg",
+   "id": "t:d85c0eb529b3",
+   "key": "learn|1- Tech/4- Reforge/1- AI Strategy/Week 3 - Product Strategy/AI Strategy - Week 3 Live.mp4",
+   "n": 7,
+   "next": true,
+   "sub": null,
+   "title": "W3 Live",
+   "trail": [
+    "Reforge",
+    "AI Strategy",
+    "W3 - Product Strategy"
+   ],
+   "v24": true,
+   "year": null
+  },
+  {
+   "category": "Reforge",
+   "cord": "001004",
+   "corder": "004",
+   "course": "W4 - Execution Strategy",
+   "fcov": [
+    "covers/t/9f57d689d050.jpg",
+    "covers/t/9f57d689d050.jpg",
+    "covers/t/5f9179dc6260.jpg"
+   ],
+   "file": "1a - AI Technical Strategy - Why Technical Strategy Matters More With AI.mp4",
+   "folder": "covers/t/5f9179dc6260.jpg",
+   "id": "t:5ef75873ef98",
+   "key": "learn|1- Tech/4- Reforge/1- AI Strategy/Week 4 - Execution Strategy/1a - AI Technical Strategy - Why Technical Strategy Matters More With AI.mp4",
+   "n": 1,
+   "next": true,
+   "sub": null,
+   "title": "AI Technical Strategy - Why Technical Strategy Matters More With AI",
+   "trail": [
+    "Reforge",
+    "AI Strategy",
+    "W4 - Execution Strategy"
+   ],
+   "v24": true,
+   "year": null
+  },
+  {
+   "category": "Reforge",
+   "cord": "001004",
+   "corder": "004",
+   "course": "W4 - Execution Strategy",
+   "fcov": [
+    "covers/t/9f57d689d050.jpg",
+    "covers/t/9f57d689d050.jpg",
+    "covers/t/5f9179dc6260.jpg"
+   ],
+   "file": "1b- AI Technical Strategy - The Cost Capability Speed Triangle.mp4",
+   "folder": "covers/t/5f9179dc6260.jpg",
+   "id": "t:fc07b9ec4635",
+   "key": "learn|1- Tech/4- Reforge/1- AI Strategy/Week 4 - Execution Strategy/1b- AI Technical Strategy - The Cost Capability Speed Triangle.mp4",
+   "n": 2,
+   "next": true,
+   "sub": null,
+   "title": "AI Technical Strategy - The Cost Capability Speed Triangle",
+   "trail": [
+    "Reforge",
+    "AI Strategy",
+    "W4 - Execution Strategy"
+   ],
+   "v24": true,
+   "year": null
+  },
+  {
+   "category": "Reforge",
+   "cord": "001004",
+   "corder": "004",
+   "course": "W4 - Execution Strategy",
+   "fcov": [
+    "covers/t/9f57d689d050.jpg",
+    "covers/t/9f57d689d050.jpg",
+    "covers/t/5f9179dc6260.jpg"
+   ],
+   "file": "1c - AI Technical Strategy - Operationalizing AI.mp4",
+   "folder": "covers/t/5f9179dc6260.jpg",
+   "id": "t:56b947386446",
+   "key": "learn|1- Tech/4- Reforge/1- AI Strategy/Week 4 - Execution Strategy/1c - AI Technical Strategy - Operationalizing AI.mp4",
+   "n": 3,
+   "next": true,
+   "sub": null,
+   "title": "AI Technical Strategy - Operationalizing AI",
+   "trail": [
+    "Reforge",
+    "AI Strategy",
+    "W4 - Execution Strategy"
+   ],
+   "v24": true,
+   "year": null
+  },
+  {
+   "category": "Reforge",
+   "cord": "001004",
+   "corder": "004",
+   "course": "W4 - Execution Strategy",
+   "fcov": [
+    "covers/t/9f57d689d050.jpg",
+    "covers/t/9f57d689d050.jpg",
+    "covers/t/5f9179dc6260.jpg"
+   ],
+   "file": "2a- Product Systems - Creating Product Systems To Succeed With AI.mp4",
+   "folder": "covers/t/5f9179dc6260.jpg",
+   "id": "t:7cf273da9f85",
+   "key": "learn|1- Tech/4- Reforge/1- AI Strategy/Week 4 - Execution Strategy/2a- Product Systems - Creating Product Systems To Succeed With AI.mp4",
+   "n": 4,
+   "next": true,
+   "sub": null,
+   "title": "Product Systems - Creating Product Systems To Succeed With AI",
+   "trail": [
+    "Reforge",
+    "AI Strategy",
+    "W4 - Execution Strategy"
+   ],
+   "v24": true,
+   "year": null
+  },
+  {
+   "category": "Reforge",
+   "cord": "001004",
+   "corder": "004",
+   "course": "W4 - Execution Strategy",
+   "fcov": [
+    "covers/t/9f57d689d050.jpg",
+    "covers/t/9f57d689d050.jpg",
+    "covers/t/5f9179dc6260.jpg"
+   ],
+   "file": "2b- Product Systems - Pre-Launch Systems.mp4",
+   "folder": "covers/t/5f9179dc6260.jpg",
+   "id": "t:4dbfad9a8b0a",
+   "key": "learn|1- Tech/4- Reforge/1- AI Strategy/Week 4 - Execution Strategy/2b- Product Systems - Pre-Launch Systems.mp4",
+   "n": 5,
+   "next": true,
+   "sub": null,
+   "title": "Product Systems - Pre-Launch Systems",
+   "trail": [
+    "Reforge",
+    "AI Strategy",
+    "W4 - Execution Strategy"
+   ],
+   "v24": true,
+   "year": null
+  },
+  {
+   "category": "Reforge",
+   "cord": "001004",
+   "corder": "004",
+   "course": "W4 - Execution Strategy",
+   "fcov": [
+    "covers/t/9f57d689d050.jpg",
+    "covers/t/9f57d689d050.jpg",
+    "covers/t/5f9179dc6260.jpg"
+   ],
+   "file": "2c- Product Systems - Post-Launch Systems.mp4",
+   "folder": "covers/t/5f9179dc6260.jpg",
+   "id": "t:bc6c6fca93d1",
+   "key": "learn|1- Tech/4- Reforge/1- AI Strategy/Week 4 - Execution Strategy/2c- Product Systems - Post-Launch Systems.mp4",
+   "n": 6,
+   "next": true,
+   "sub": null,
+   "title": "Product Systems - Post-Launch Systems",
+   "trail": [
+    "Reforge",
+    "AI Strategy",
+    "W4 - Execution Strategy"
+   ],
+   "v24": true,
+   "year": null
+  },
+  {
+   "category": "Reforge",
+   "cord": "001004",
+   "corder": "004",
+   "course": "W4 - Execution Strategy",
+   "fcov": [
+    "covers/t/9f57d689d050.jpg",
+    "covers/t/9f57d689d050.jpg",
+    "covers/t/5f9179dc6260.jpg"
+   ],
+   "file": "2d- Product Systems - Team Systems.mp4",
+   "folder": "covers/t/5f9179dc6260.jpg",
+   "id": "t:36a87b3be851",
+   "key": "learn|1- Tech/4- Reforge/1- AI Strategy/Week 4 - Execution Strategy/2d- Product Systems - Team Systems.mp4",
+   "n": 7,
+   "next": true,
+   "sub": null,
+   "title": "Product Systems - Team Systems",
+   "trail": [
+    "Reforge",
+    "AI Strategy",
+    "W4 - Execution Strategy"
+   ],
+   "v24": true,
+   "year": null
+  },
+  {
+   "category": "Reforge",
+   "cord": "001004",
+   "corder": "004",
+   "course": "W4 - Execution Strategy",
+   "fcov": [
+    "covers/t/9f57d689d050.jpg",
+    "covers/t/9f57d689d050.jpg",
+    "covers/t/5f9179dc6260.jpg"
+   ],
+   "file": "AI Strategy - Week 4 Live.mp4",
+   "folder": "covers/t/5f9179dc6260.jpg",
+   "id": "t:57a2e8a1b373",
+   "key": "learn|1- Tech/4- Reforge/1- AI Strategy/Week 4 - Execution Strategy/AI Strategy - Week 4 Live.mp4",
+   "n": 8,
+   "next": true,
+   "sub": null,
+   "title": "W4 Live",
+   "trail": [
+    "Reforge",
+    "AI Strategy",
+    "W4 - Execution Strategy"
+   ],
+   "v24": true,
+   "year": null
+  },
+  {
+   "category": "Reforge",
+   "cord": "002000",
+   "corder": "004",
+   "course": "W0 - How Retention Determines The Top 1%",
+   "fcov": [
+    "covers/t/df24e103a623.jpg",
+    "covers/t/df24e103a623.jpg",
+    "covers/t/df24e103a623.jpg"
+   ],
+   "file": "M0-L1-RetentionMakesCompanies.mp4",
+   "folder": "covers/t/df24e103a623.jpg",
+   "id": "t:1c3c8c7a8aab",
+   "key": "learn|1- Tech/4- Reforge/2- Retention & Engagement/W0- How Retention Determines The Top 1%/M0-L1-RetentionMakesCompanies.mp4",
+   "n": 1,
+   "next": true,
+   "sub": null,
+   "title": "Retention Makes Companies",
+   "trail": [
+    "Reforge",
+    "Retention & Engagement",
+    "W0 - How Retention Determines The Top 1%"
+   ],
+   "v24": true,
+   "year": null
+  },
+  {
+   "category": "Reforge",
+   "cord": "002000",
+   "corder": "004",
+   "course": "W0 - How Retention Determines The Top 1%",
+   "fcov": [
+    "covers/t/df24e103a623.jpg",
+    "covers/t/df24e103a623.jpg",
+    "covers/t/df24e103a623.jpg"
+   ],
+   "file": "M0-L2-RetentionBreaksCompanies.mp4",
+   "folder": "covers/t/df24e103a623.jpg",
+   "id": "t:0988da892142",
+   "key": "learn|1- Tech/4- Reforge/2- Retention & Engagement/W0- How Retention Determines The Top 1%/M0-L2-RetentionBreaksCompanies.mp4",
+   "n": 2,
+   "next": true,
+   "sub": null,
+   "title": "Retention Breaks Companies",
+   "trail": [
+    "Reforge",
+    "Retention & Engagement",
+    "W0 - How Retention Determines The Top 1%"
+   ],
+   "v24": true,
+   "year": null
+  },
+  {
+   "category": "Reforge",
+   "cord": "002000",
+   "corder": "004",
+   "course": "W0 - How Retention Determines The Top 1%",
+   "fcov": [
+    "covers/t/df24e103a623.jpg",
+    "covers/t/df24e103a623.jpg",
+    "covers/t/df24e103a623.jpg"
+   ],
+   "file": "M0-L3-RetentionIsGettingHarder.mp4",
+   "folder": "covers/t/df24e103a623.jpg",
+   "id": "t:5f58863ba791",
+   "key": "learn|1- Tech/4- Reforge/2- Retention & Engagement/W0- How Retention Determines The Top 1%/M0-L3-RetentionIsGettingHarder.mp4",
+   "n": 3,
+   "next": true,
+   "sub": null,
+   "title": "Retention Is Getting Harder",
+   "trail": [
+    "Reforge",
+    "Retention & Engagement",
+    "W0 - How Retention Determines The Top 1%"
+   ],
+   "v24": true,
+   "year": null
+  },
+  {
+   "category": "Reforge",
+   "cord": "002000",
+   "corder": "004",
+   "course": "W0 - How Retention Determines The Top 1%",
+   "fcov": [
+    "covers/t/df24e103a623.jpg",
+    "covers/t/df24e103a623.jpg",
+    "covers/t/df24e103a623.jpg"
+   ],
+   "file": "M0-L4-ProgramPreview.mp4",
+   "folder": "covers/t/df24e103a623.jpg",
+   "id": "t:17efd35cae05",
+   "key": "learn|1- Tech/4- Reforge/2- Retention & Engagement/W0- How Retention Determines The Top 1%/M0-L4-ProgramPreview.mp4",
+   "n": 4,
+   "next": true,
+   "sub": null,
+   "title": "Program Preview",
+   "trail": [
+    "Reforge",
+    "Retention & Engagement",
+    "W0 - How Retention Determines The Top 1%"
+   ],
+   "v24": true,
+   "year": null
+  },
+  {
+   "category": "Reforge",
+   "cord": "002001",
+   "corder": "004",
+   "course": "W1 - Retention",
+   "fcov": [
+    "covers/t/df24e103a623.jpg",
+    "covers/t/df24e103a623.jpg",
+    "covers/t/be83ee3d6bea.jpg"
+   ],
+   "file": "1-Introduction To Retention.mp4",
+   "folder": "covers/t/be83ee3d6bea.jpg",
+   "id": "t:4f46dd31f2a8",
+   "key": "learn|1- Tech/4- Reforge/2- Retention & Engagement/W1- Retention/1-Introduction To Retention.mp4",
+   "n": 1,
+   "next": true,
+   "sub": null,
+   "title": "Introduction To Retention",
+   "trail": [
+    "Reforge",
+    "Retention & Engagement",
+    "W1 - Retention"
+   ],
+   "v24": true,
+   "year": null
+  },
+  {
+   "category": "Reforge",
+   "cord": "002001",
+   "corder": "004",
+   "course": "W1 - Retention",
+   "fcov": [
+    "covers/t/df24e103a623.jpg",
+    "covers/t/df24e103a623.jpg",
+    "covers/t/be83ee3d6bea.jpg"
+   ],
+   "file": "2- Natural Behavior Use Cases.mp4",
+   "folder": "covers/t/be83ee3d6bea.jpg",
+   "id": "t:a8f85f75a2db",
+   "key": "learn|1- Tech/4- Reforge/2- Retention & Engagement/W1- Retention/2- Natural Behavior Use Cases.mp4",
+   "n": 2,
+   "next": true,
+   "sub": null,
+   "title": "Natural Behavior Use Cases",
+   "trail": [
+    "Reforge",
+    "Retention & Engagement",
+    "W1 - Retention"
+   ],
+   "v24": true,
+   "year": null
+  },
+  {
+   "category": "Reforge",
+   "cord": "002001",
+   "corder": "004",
+   "course": "W1 - Retention",
+   "fcov": [
+    "covers/t/df24e103a623.jpg",
+    "covers/t/df24e103a623.jpg",
+    "covers/t/be83ee3d6bea.jpg"
+   ],
+   "file": "3-Choosing A Retention Metric.mp4",
+   "folder": "covers/t/be83ee3d6bea.jpg",
+   "id": "t:38a9bb6ade24",
+   "key": "learn|1- Tech/4- Reforge/2- Retention & Engagement/W1- Retention/3-Choosing A Retention Metric.mp4",
+   "n": 3,
+   "next": true,
+   "sub": null,
+   "title": "Choosing A Retention Metric",
+   "trail": [
+    "Reforge",
+    "Retention & Engagement",
+    "W1 - Retention"
+   ],
+   "v24": true,
+   "year": null
+  },
+  {
+   "category": "Reforge",
+   "cord": "002001",
+   "corder": "004",
+   "course": "W1 - Retention",
+   "fcov": [
+    "covers/t/df24e103a623.jpg",
+    "covers/t/df24e103a623.jpg",
+    "covers/t/be83ee3d6bea.jpg"
+   ],
+   "file": "4-Visualizing Retention.mp4",
+   "folder": "covers/t/be83ee3d6bea.jpg",
+   "id": "t:b5898565af9c",
+   "key": "learn|1- Tech/4- Reforge/2- Retention & Engagement/W1- Retention/4-Visualizing Retention.mp4",
+   "n": 4,
+   "next": true,
+   "sub": null,
+   "title": "Visualizing Retention",
+   "trail": [
+    "Reforge",
+    "Retention & Engagement",
+    "W1 - Retention"
+   ],
+   "v24": true,
+   "year": null
+  },
+  {
+   "category": "Reforge",
+   "cord": "002001",
+   "corder": "004",
+   "course": "W1 - Retention",
+   "fcov": [
+    "covers/t/df24e103a623.jpg",
+    "covers/t/df24e103a623.jpg",
+    "covers/t/be83ee3d6bea.jpg"
+   ],
+   "file": "5-Analyzing Retention.mp4",
+   "folder": "covers/t/be83ee3d6bea.jpg",
+   "id": "t:65b1fd74f73d",
+   "key": "learn|1- Tech/4- Reforge/2- Retention & Engagement/W1- Retention/5-Analyzing Retention.mp4",
+   "n": 5,
+   "next": true,
+   "sub": null,
+   "title": "Analyzing Retention",
+   "trail": [
+    "Reforge",
+    "Retention & Engagement",
+    "W1 - Retention"
+   ],
+   "v24": true,
+   "year": null
+  },
+  {
+   "category": "Reforge",
+   "cord": "002001",
+   "corder": "004",
+   "course": "W1 - Retention",
+   "fcov": [
+    "covers/t/df24e103a623.jpg",
+    "covers/t/df24e103a623.jpg",
+    "covers/t/be83ee3d6bea.jpg"
+   ],
+   "file": "6-Improving Retention.mp4",
+   "folder": "covers/t/be83ee3d6bea.jpg",
+   "id": "t:67bbf95ad64b",
+   "key": "learn|1- Tech/4- Reforge/2- Retention & Engagement/W1- Retention/6-Improving Retention.mp4",
+   "n": 6,
+   "next": true,
+   "sub": null,
+   "title": "Improving Retention",
+   "trail": [
+    "Reforge",
+    "Retention & Engagement",
+    "W1 - Retention"
+   ],
+   "v24": true,
+   "year": null
+  },
+  {
+   "category": "Reforge",
+   "cord": "002001",
+   "corder": "004",
+   "course": "W1 - Retention",
+   "fcov": [
+    "covers/t/df24e103a623.jpg",
+    "covers/t/df24e103a623.jpg",
+    "covers/t/be83ee3d6bea.jpg"
+   ],
+   "file": "8-BONUS Module Recap.mp4",
+   "folder": "covers/t/be83ee3d6bea.jpg",
+   "id": "t:f33834ad074b",
+   "key": "learn|1- Tech/4- Reforge/2- Retention & Engagement/W1- Retention/8-BONUS Module Recap.mp4",
+   "n": 7,
+   "next": true,
+   "sub": null,
+   "title": "BONUS Module Recap",
+   "trail": [
+    "Reforge",
+    "Retention & Engagement",
+    "W1 - Retention"
+   ],
+   "v24": true,
+   "year": null
+  },
+  {
+   "category": "Reforge",
+   "cord": "002001",
+   "corder": "004",
+   "course": "W1 - Retention",
+   "fcov": [
+    "covers/t/df24e103a623.jpg",
+    "covers/t/df24e103a623.jpg",
+    "covers/t/be83ee3d6bea.jpg"
+   ],
+   "file": "W1 Event.mp4",
+   "folder": "covers/t/be83ee3d6bea.jpg",
+   "id": "t:fae69c84c0e8",
+   "key": "learn|1- Tech/4- Reforge/2- Retention & Engagement/W1- Retention/W1 Event.mp4",
+   "n": 8,
+   "next": true,
+   "sub": null,
+   "title": "W1 Event",
+   "trail": [
+    "Reforge",
+    "Retention & Engagement",
+    "W1 - Retention"
+   ],
+   "v24": true,
+   "year": null
+  },
+  {
+   "category": "Reforge",
+   "cord": "002002",
+   "corder": "004",
+   "course": "W2 - Activation. Defining, Measuring, And Analyzing",
+   "fcov": [
+    "covers/t/df24e103a623.jpg",
+    "covers/t/df24e103a623.jpg",
+    "covers/t/58e620b03f3b.jpg"
+   ],
+   "file": "1-Introduction To Activation.mp4",
+   "folder": "covers/t/58e620b03f3b.jpg",
+   "id": "t:4f8d4a605a80",
+   "key": "learn|1- Tech/4- Reforge/2- Retention & Engagement/W2-Activation. Defining, Measuring, And Analyzing/1-Introduction To Activation.mp4",
+   "n": 1,
+   "next": true,
+   "sub": null,
+   "title": "Introduction To Activation",
+   "trail": [
+    "Reforge",
+    "Retention & Engagement",
+    "W2 - Activation. Defining, Measuring, And Analyzing"
+   ],
+   "v24": true,
+   "year": null
+  },
+  {
+   "category": "Reforge",
+   "cord": "002002",
+   "corder": "004",
+   "course": "W2 - Activation. Defining, Measuring, And Analyzing",
+   "fcov": [
+    "covers/t/df24e103a623.jpg",
+    "covers/t/df24e103a623.jpg",
+    "covers/t/58e620b03f3b.jpg"
+   ],
+   "file": "2-Defining Your Habit Moment.mp4",
+   "folder": "covers/t/58e620b03f3b.jpg",
+   "id": "t:4e134d704744",
+   "key": "learn|1- Tech/4- Reforge/2- Retention & Engagement/W2-Activation. Defining, Measuring, And Analyzing/2-Defining Your Habit Moment.mp4",
+   "n": 2,
+   "next": true,
+   "sub": null,
+   "title": "Defining Your Habit Moment",
+   "trail": [
+    "Reforge",
+    "Retention & Engagement",
+    "W2 - Activation. Defining, Measuring, And Analyzing"
+   ],
+   "v24": true,
+   "year": null
+  },
+  {
+   "category": "Reforge",
+   "cord": "002002",
+   "corder": "004",
+   "course": "W2 - Activation. Defining, Measuring, And Analyzing",
+   "fcov": [
+    "covers/t/df24e103a623.jpg",
+    "covers/t/df24e103a623.jpg",
+    "covers/t/58e620b03f3b.jpg"
+   ],
+   "file": "3-Defining Your Aha Moment.mp4",
+   "folder": "covers/t/58e620b03f3b.jpg",
+   "id": "t:649da686a078",
+   "key": "learn|1- Tech/4- Reforge/2- Retention & Engagement/W2-Activation. Defining, Measuring, And Analyzing/3-Defining Your Aha Moment.mp4",
+   "n": 3,
+   "next": true,
+   "sub": null,
+   "title": "Defining Your Aha Moment",
+   "trail": [
+    "Reforge",
+    "Retention & Engagement",
+    "W2 - Activation. Defining, Measuring, And Analyzing"
+   ],
+   "v24": true,
+   "year": null
+  },
+  {
+   "category": "Reforge",
+   "cord": "002002",
+   "corder": "004",
+   "course": "W2 - Activation. Defining, Measuring, And Analyzing",
+   "fcov": [
+    "covers/t/df24e103a623.jpg",
+    "covers/t/df24e103a623.jpg",
+    "covers/t/58e620b03f3b.jpg"
+   ],
+   "file": "4-Defining Your Setup Moment.mp4",
+   "folder": "covers/t/58e620b03f3b.jpg",
+   "id": "t:3e5ebb342aaa",
+   "key": "learn|1- Tech/4- Reforge/2- Retention & Engagement/W2-Activation. Defining, Measuring, And Analyzing/4-Defining Your Setup Moment.mp4",
+   "n": 4,
+   "next": true,
+   "sub": null,
+   "title": "Defining Your Setup Moment",
+   "trail": [
+    "Reforge",
+    "Retention & Engagement",
+    "W2 - Activation. Defining, Measuring, And Analyzing"
+   ],
+   "v24": true,
+   "year": null
+  },
+  {
+   "category": "Reforge",
+   "cord": "002002",
+   "corder": "004",
+   "course": "W2 - Activation. Defining, Measuring, And Analyzing",
+   "fcov": [
+    "covers/t/df24e103a623.jpg",
+    "covers/t/df24e103a623.jpg",
+    "covers/t/58e620b03f3b.jpg"
+   ],
+   "file": "5-Analyzing Your Activation Flow.mp4",
+   "folder": "covers/t/58e620b03f3b.jpg",
+   "id": "t:a4b0e25080ca",
+   "key": "learn|1- Tech/4- Reforge/2- Retention & Engagement/W2-Activation. Defining, Measuring, And Analyzing/5-Analyzing Your Activation Flow.mp4",
+   "n": 5,
+   "next": true,
+   "sub": null,
+   "title": "Analyzing Your Activation Flow",
+   "trail": [
+    "Reforge",
+    "Retention & Engagement",
+    "W2 - Activation. Defining, Measuring, And Analyzing"
+   ],
+   "v24": true,
+   "year": null
+  },
+  {
+   "category": "Reforge",
+   "cord": "002002",
+   "corder": "004",
+   "course": "W2 - Activation. Defining, Measuring, And Analyzing",
+   "fcov": [
+    "covers/t/df24e103a623.jpg",
+    "covers/t/df24e103a623.jpg",
+    "covers/t/58e620b03f3b.jpg"
+   ],
+   "file": "BONUS. Correlation Analysis.mp4",
+   "folder": "covers/t/58e620b03f3b.jpg",
+   "id": "t:51d1026e86f4",
+   "key": "learn|1- Tech/4- Reforge/2- Retention & Engagement/W2-Activation. Defining, Measuring, And Analyzing/BONUS. Correlation Analysis.mp4",
+   "n": 6,
+   "next": true,
+   "sub": null,
+   "title": "BONUS. Correlation Analysis",
+   "trail": [
+    "Reforge",
+    "Retention & Engagement",
+    "W2 - Activation. Defining, Measuring, And Analyzing"
+   ],
+   "v24": true,
+   "year": null
+  },
+  {
+   "category": "Reforge",
+   "cord": "002002",
+   "corder": "004",
+   "course": "W2 - Activation. Defining, Measuring, And Analyzing",
+   "fcov": [
+    "covers/t/df24e103a623.jpg",
+    "covers/t/df24e103a623.jpg",
+    "covers/t/58e620b03f3b.jpg"
+   ],
+   "file": "BONUS. Introduction to Activation Metric Analysis.mp4",
+   "folder": "covers/t/58e620b03f3b.jpg",
+   "id": "t:8119a9f1360d",
+   "key": "learn|1- Tech/4- Reforge/2- Retention & Engagement/W2-Activation. Defining, Measuring, And Analyzing/BONUS. Introduction to Activation Metric Analysis.mp4",
+   "n": 7,
+   "next": true,
+   "sub": null,
+   "title": "BONUS. Introduction to Activation Metric Analysis",
+   "trail": [
+    "Reforge",
+    "Retention & Engagement",
+    "W2 - Activation. Defining, Measuring, And Analyzing"
+   ],
+   "v24": true,
+   "year": null
+  },
+  {
+   "category": "Reforge",
+   "cord": "002002",
+   "corder": "004",
+   "course": "W2 - Activation. Defining, Measuring, And Analyzing",
+   "fcov": [
+    "covers/t/df24e103a623.jpg",
+    "covers/t/df24e103a623.jpg",
+    "covers/t/58e620b03f3b.jpg"
+   ],
+   "file": "BONUS. Module Recap.mp4",
+   "folder": "covers/t/58e620b03f3b.jpg",
+   "id": "t:349aeb09efbd",
+   "key": "learn|1- Tech/4- Reforge/2- Retention & Engagement/W2-Activation. Defining, Measuring, And Analyzing/BONUS. Module Recap.mp4",
+   "n": 8,
+   "next": true,
+   "sub": null,
+   "title": "BONUS. Module Recap",
+   "trail": [
+    "Reforge",
+    "Retention & Engagement",
+    "W2 - Activation. Defining, Measuring, And Analyzing"
+   ],
+   "v24": true,
+   "year": null
+  },
+  {
+   "category": "Reforge",
+   "cord": "002002",
+   "corder": "004",
+   "course": "W2 - Activation. Defining, Measuring, And Analyzing",
+   "fcov": [
+    "covers/t/df24e103a623.jpg",
+    "covers/t/df24e103a623.jpg",
+    "covers/t/58e620b03f3b.jpg"
+   ],
+   "file": "BONUS. Setting Up Your Data for Activation Metric Analysis.mp4",
+   "folder": "covers/t/58e620b03f3b.jpg",
+   "id": "t:4d0cc4fcb7e6",
+   "key": "learn|1- Tech/4- Reforge/2- Retention & Engagement/W2-Activation. Defining, Measuring, And Analyzing/BONUS. Setting Up Your Data for Activation Metric Analysis.mp4",
+   "n": 9,
+   "next": true,
+   "sub": null,
+   "title": "BONUS. Setting Up Your Data for Activation Metric Analysis",
+   "trail": [
+    "Reforge",
+    "Retention & Engagement",
+    "W2 - Activation. Defining, Measuring, And Analyzing"
+   ],
+   "v24": true,
+   "year": null
+  },
+  {
+   "category": "Reforge",
+   "cord": "002002",
+   "corder": "004",
+   "course": "W2 - Activation. Defining, Measuring, And Analyzing",
+   "fcov": [
+    "covers/t/df24e103a623.jpg",
+    "covers/t/df24e103a623.jpg",
+    "covers/t/58e620b03f3b.jpg"
+   ],
+   "file": "BONU. Venn Diagram Analysis.mp4",
+   "folder": "covers/t/58e620b03f3b.jpg",
+   "id": "t:53dc0d70aa4e",
+   "key": "learn|1- Tech/4- Reforge/2- Retention & Engagement/W2-Activation. Defining, Measuring, And Analyzing/BONU. Venn Diagram Analysis.mp4",
+   "n": 10,
+   "next": true,
+   "sub": null,
+   "title": "BONUS. Venn Diagram Analysis",
+   "trail": [
+    "Reforge",
+    "Retention & Engagement",
+    "W2 - Activation. Defining, Measuring, And Analyzing"
+   ],
+   "v24": true,
+   "year": null
+  },
+  {
+   "category": "Reforge",
+   "cord": "002002",
+   "corder": "004",
+   "course": "W2 - Activation. Defining, Measuring, And Analyzing",
+   "fcov": [
+    "covers/t/df24e103a623.jpg",
+    "covers/t/df24e103a623.jpg",
+    "covers/t/58e620b03f3b.jpg"
+   ],
+   "file": "W2 Event.mp4",
+   "folder": "covers/t/58e620b03f3b.jpg",
+   "id": "t:22325de28821",
+   "key": "learn|1- Tech/4- Reforge/2- Retention & Engagement/W2-Activation. Defining, Measuring, And Analyzing/W2 Event.mp4",
+   "n": 11,
+   "next": true,
+   "sub": null,
+   "title": "W2 Event",
+   "trail": [
+    "Reforge",
+    "Retention & Engagement",
+    "W2 - Activation. Defining, Measuring, And Analyzing"
+   ],
+   "v24": true,
+   "year": null
+  },
+  {
+   "category": "Reforge",
+   "cord": "002003",
+   "corder": "004",
+   "course": "W3 - Activation Strategies",
+   "fcov": [
+    "covers/t/df24e103a623.jpg",
+    "covers/t/df24e103a623.jpg",
+    "covers/t/adea7b54fee9.jpg"
+   ],
+   "file": "1-Introduction To Activation Strategies.mp4",
+   "folder": "covers/t/adea7b54fee9.jpg",
+   "id": "t:98455ef6397f",
+   "key": "learn|1- Tech/4- Reforge/2- Retention & Engagement/W3- Activation Strategies/1-Introduction To Activation Strategies.mp4",
+   "n": 1,
+   "next": true,
+   "sub": null,
+   "title": "Introduction To Activation Strategies",
+   "trail": [
+    "Reforge",
+    "Retention & Engagement",
+    "W3 - Activation Strategies"
+   ],
+   "v24": true,
+   "year": null
+  },
+  {
+   "category": "Reforge",
+   "cord": "002003",
+   "corder": "004",
+   "course": "W3 - Activation Strategies",
+   "fcov": [
+    "covers/t/df24e103a623.jpg",
+    "covers/t/df24e103a623.jpg",
+    "covers/t/adea7b54fee9.jpg"
+   ],
+   "file": "2-The Four Activation Fits.mp4",
+   "folder": "covers/t/adea7b54fee9.jpg",
+   "id": "t:99a8374b4599",
+   "key": "learn|1- Tech/4- Reforge/2- Retention & Engagement/W3- Activation Strategies/2-The Four Activation Fits.mp4",
+   "n": 2,
+   "next": true,
+   "sub": null,
+   "title": "The Four Activation Fits",
+   "trail": [
+    "Reforge",
+    "Retention & Engagement",
+    "W3 - Activation Strategies"
+   ],
+   "v24": true,
+   "year": null
+  },
+  {
+   "category": "Reforge",
+   "cord": "002003",
+   "corder": "004",
+   "course": "W3 - Activation Strategies",
+   "fcov": [
+    "covers/t/df24e103a623.jpg",
+    "covers/t/df24e103a623.jpg",
+    "covers/t/adea7b54fee9.jpg"
+   ],
+   "file": "3-PNIP Pyramid.mp4",
+   "folder": "covers/t/adea7b54fee9.jpg",
+   "id": "t:8082b69ea5f5",
+   "key": "learn|1- Tech/4- Reforge/2- Retention & Engagement/W3- Activation Strategies/3-PNIP Pyramid.mp4",
+   "n": 3,
+   "next": true,
+   "sub": null,
+   "title": "PNIP Pyramid",
+   "trail": [
+    "Reforge",
+    "Retention & Engagement",
+    "W3 - Activation Strategies"
+   ],
+   "v24": true,
+   "year": null
+  },
+  {
+   "category": "Reforge",
+   "cord": "002003",
+   "corder": "004",
+   "course": "W3 - Activation Strategies",
+   "fcov": [
+    "covers/t/df24e103a623.jpg",
+    "covers/t/df24e103a623.jpg",
+    "covers/t/adea7b54fee9.jpg"
+   ],
+   "file": "4-Creating Your Habit Moment Experience.mp4",
+   "folder": "covers/t/adea7b54fee9.jpg",
+   "id": "t:5525ec0ba0cd",
+   "key": "learn|1- Tech/4- Reforge/2- Retention & Engagement/W3- Activation Strategies/4-Creating Your Habit Moment Experience.mp4",
+   "n": 4,
+   "next": true,
+   "sub": null,
+   "title": "Creating Your Habit Moment Experience",
+   "trail": [
+    "Reforge",
+    "Retention & Engagement",
+    "W3 - Activation Strategies"
+   ],
+   "v24": true,
+   "year": null
+  },
+  {
+   "category": "Reforge",
+   "cord": "002003",
+   "corder": "004",
+   "course": "W3 - Activation Strategies",
+   "fcov": [
+    "covers/t/df24e103a623.jpg",
+    "covers/t/df24e103a623.jpg",
+    "covers/t/adea7b54fee9.jpg"
+   ],
+   "file": "5-Creating Your Aha Moment Experience.mp4",
+   "folder": "covers/t/adea7b54fee9.jpg",
+   "id": "t:c4975529a3f3",
+   "key": "learn|1- Tech/4- Reforge/2- Retention & Engagement/W3- Activation Strategies/5-Creating Your Aha Moment Experience.mp4",
+   "n": 5,
+   "next": true,
+   "sub": null,
+   "title": "Creating Your Aha Moment Experience",
+   "trail": [
+    "Reforge",
+    "Retention & Engagement",
+    "W3 - Activation Strategies"
+   ],
+   "v24": true,
+   "year": null
+  },
+  {
+   "category": "Reforge",
+   "cord": "002003",
+   "corder": "004",
+   "course": "W3 - Activation Strategies",
+   "fcov": [
+    "covers/t/df24e103a623.jpg",
+    "covers/t/df24e103a623.jpg",
+    "covers/t/adea7b54fee9.jpg"
+   ],
+   "file": "6-Creating Your Setup Moment Experience.mp4",
+   "folder": "covers/t/adea7b54fee9.jpg",
+   "id": "t:d69aa722e9de",
+   "key": "learn|1- Tech/4- Reforge/2- Retention & Engagement/W3- Activation Strategies/6-Creating Your Setup Moment Experience.mp4",
+   "n": 6,
+   "next": true,
+   "sub": null,
+   "title": "Creating Your Setup Moment Experience",
+   "trail": [
+    "Reforge",
+    "Retention & Engagement",
+    "W3 - Activation Strategies"
+   ],
+   "v24": true,
+   "year": null
+  },
+  {
+   "category": "Reforge",
+   "cord": "002003",
+   "corder": "004",
+   "course": "W3 - Activation Strategies",
+   "fcov": [
+    "covers/t/df24e103a623.jpg",
+    "covers/t/df24e103a623.jpg",
+    "covers/t/adea7b54fee9.jpg"
+   ],
+   "file": "7-Evaluating Your Activation Experience End To End.mp4",
+   "folder": "covers/t/adea7b54fee9.jpg",
+   "id": "t:ad7dcdb0cdef",
+   "key": "learn|1- Tech/4- Reforge/2- Retention & Engagement/W3- Activation Strategies/7-Evaluating Your Activation Experience End To End.mp4",
+   "n": 7,
+   "next": true,
+   "sub": null,
+   "title": "Evaluating Your Activation Experience End To End",
+   "trail": [
+    "Reforge",
+    "Retention & Engagement",
+    "W3 - Activation Strategies"
+   ],
+   "v24": true,
+   "year": null
+  },
+  {
+   "category": "Reforge",
+   "cord": "002003",
+   "corder": "004",
+   "course": "W3 - Activation Strategies",
+   "fcov": [
+    "covers/t/df24e103a623.jpg",
+    "covers/t/df24e103a623.jpg",
+    "covers/t/adea7b54fee9.jpg"
+   ],
+   "file": "9-BONUS Module Recap.mp4",
+   "folder": "covers/t/adea7b54fee9.jpg",
+   "id": "t:1437bc75e0c4",
+   "key": "learn|1- Tech/4- Reforge/2- Retention & Engagement/W3- Activation Strategies/9-BONUS Module Recap.mp4",
+   "n": 8,
+   "next": true,
+   "sub": null,
+   "title": "BONUS Module Recap",
+   "trail": [
+    "Reforge",
+    "Retention & Engagement",
+    "W3 - Activation Strategies"
+   ],
+   "v24": true,
+   "year": null
+  },
+  {
+   "category": "Reforge",
+   "cord": "002003",
+   "corder": "004",
+   "course": "W3 - Activation Strategies",
+   "fcov": [
+    "covers/t/df24e103a623.jpg",
+    "covers/t/df24e103a623.jpg",
+    "covers/t/adea7b54fee9.jpg"
+   ],
+   "file": "W3 Event.mp4",
+   "folder": "covers/t/adea7b54fee9.jpg",
+   "id": "t:fe613798d739",
+   "key": "learn|1- Tech/4- Reforge/2- Retention & Engagement/W3- Activation Strategies/W3 Event.mp4",
+   "n": 9,
+   "next": true,
+   "sub": null,
+   "title": "W3 Event",
+   "trail": [
+    "Reforge",
+    "Retention & Engagement",
+    "W3 - Activation Strategies"
+   ],
+   "v24": true,
+   "year": null
+  },
+  {
+   "category": "Reforge",
+   "cord": "002004",
+   "corder": "004",
+   "course": "W4 - Engagement. Defining, Measuring, And Analyzing",
+   "fcov": [
+    "covers/t/df24e103a623.jpg",
+    "covers/t/df24e103a623.jpg",
+    "covers/t/03084955d653.jpg"
+   ],
+   "file": "1-Introduction to Engagement.mp4",
+   "folder": "covers/t/03084955d653.jpg",
+   "id": "t:9c4eb4f33808",
+   "key": "learn|1- Tech/4- Reforge/2- Retention & Engagement/W4- Engagement. Defining, Measuring, And Analyzing/1-Introduction to Engagement.mp4",
+   "n": 1,
+   "next": true,
+   "sub": null,
+   "title": "Introduction to Engagement",
+   "trail": [
+    "Reforge",
+    "Retention & Engagement",
+    "W4 - Engagement. Defining, Measuring, And Analyzing"
+   ],
+   "v24": true,
+   "year": null
+  },
+  {
+   "category": "Reforge",
+   "cord": "002004",
+   "corder": "004",
+   "course": "W4 - Engagement. Defining, Measuring, And Analyzing",
+   "fcov": [
+    "covers/t/df24e103a623.jpg",
+    "covers/t/df24e103a623.jpg",
+    "covers/t/03084955d653.jpg"
+   ],
+   "file": "2-The Four Strategies To Deepen Engagement.mp4",
+   "folder": "covers/t/03084955d653.jpg",
+   "id": "t:8a5022497da5",
+   "key": "learn|1- Tech/4- Reforge/2- Retention & Engagement/W4- Engagement. Defining, Measuring, And Analyzing/2-The Four Strategies To Deepen Engagement.mp4",
+   "n": 2,
+   "next": true,
+   "sub": null,
+   "title": "The Four Strategies To Deepen Engagement",
+   "trail": [
+    "Reforge",
+    "Retention & Engagement",
+    "W4 - Engagement. Defining, Measuring, And Analyzing"
+   ],
+   "v24": true,
+   "year": null
+  },
+  {
+   "category": "Reforge",
+   "cord": "002004",
+   "corder": "004",
+   "course": "W4 - Engagement. Defining, Measuring, And Analyzing",
+   "fcov": [
+    "covers/t/df24e103a623.jpg",
+    "covers/t/df24e103a623.jpg",
+    "covers/t/03084955d653.jpg"
+   ],
+   "file": "3-High Level Measurement Of Your Engagement Strategy.mp4",
+   "folder": "covers/t/03084955d653.jpg",
+   "id": "t:168bc4e1372a",
+   "key": "learn|1- Tech/4- Reforge/2- Retention & Engagement/W4- Engagement. Defining, Measuring, And Analyzing/3-High Level Measurement Of Your Engagement Strategy.mp4",
+   "n": 3,
+   "next": true,
+   "sub": null,
+   "title": "High Level Measurement Of Your Engagement Strategy",
+   "trail": [
+    "Reforge",
+    "Retention & Engagement",
+    "W4 - Engagement. Defining, Measuring, And Analyzing"
+   ],
+   "v24": true,
+   "year": null
+  },
+  {
+   "category": "Reforge",
+   "cord": "002004",
+   "corder": "004",
+   "course": "W4 - Engagement. Defining, Measuring, And Analyzing",
+   "fcov": [
+    "covers/t/df24e103a623.jpg",
+    "covers/t/df24e103a623.jpg",
+    "covers/t/03084955d653.jpg"
+   ],
+   "file": "4-How To Define Your Engagement States.mp4",
+   "folder": "covers/t/03084955d653.jpg",
+   "id": "t:1bed51858499",
+   "key": "learn|1- Tech/4- Reforge/2- Retention & Engagement/W4- Engagement. Defining, Measuring, And Analyzing/4-How To Define Your Engagement States.mp4",
+   "n": 4,
+   "next": true,
+   "sub": null,
+   "title": "How To Define Your Engagement States",
+   "trail": [
+    "Reforge",
+    "Retention & Engagement",
+    "W4 - Engagement. Defining, Measuring, And Analyzing"
+   ],
+   "v24": true,
+   "year": null
+  },
+  {
+   "category": "Reforge",
+   "cord": "002004",
+   "corder": "004",
+   "course": "W4 - Engagement. Defining, Measuring, And Analyzing",
+   "fcov": [
+    "covers/t/df24e103a623.jpg",
+    "covers/t/df24e103a623.jpg",
+    "covers/t/03084955d653.jpg"
+   ],
+   "file": "5-Analyzing Your Engagement States Part One.mp4",
+   "folder": "covers/t/03084955d653.jpg",
+   "id": "t:e50755c2aab9",
+   "key": "learn|1- Tech/4- Reforge/2- Retention & Engagement/W4- Engagement. Defining, Measuring, And Analyzing/5-Analyzing Your Engagement States Part One.mp4",
+   "n": 5,
+   "next": true,
+   "sub": null,
+   "title": "Analyzing Your Engagement States Part One",
+   "trail": [
+    "Reforge",
+    "Retention & Engagement",
+    "W4 - Engagement. Defining, Measuring, And Analyzing"
+   ],
+   "v24": true,
+   "year": null
+  },
+  {
+   "category": "Reforge",
+   "cord": "002004",
+   "corder": "004",
+   "course": "W4 - Engagement. Defining, Measuring, And Analyzing",
+   "fcov": [
+    "covers/t/df24e103a623.jpg",
+    "covers/t/df24e103a623.jpg",
+    "covers/t/03084955d653.jpg"
+   ],
+   "file": "6-Analyzing Your Engagement States Part Two.mp4",
+   "folder": "covers/t/03084955d653.jpg",
+   "id": "t:7a2ac9c77986",
+   "key": "learn|1- Tech/4- Reforge/2- Retention & Engagement/W4- Engagement. Defining, Measuring, And Analyzing/6-Analyzing Your Engagement States Part Two.mp4",
+   "n": 6,
+   "next": true,
+   "sub": null,
+   "title": "Analyzing Your Engagement States Part Two",
+   "trail": [
+    "Reforge",
+    "Retention & Engagement",
+    "W4 - Engagement. Defining, Measuring, And Analyzing"
+   ],
+   "v24": true,
+   "year": null
+  },
+  {
+   "category": "Reforge",
+   "cord": "002004",
+   "corder": "004",
+   "course": "W4 - Engagement. Defining, Measuring, And Analyzing",
+   "fcov": [
+    "covers/t/df24e103a623.jpg",
+    "covers/t/df24e103a623.jpg",
+    "covers/t/03084955d653.jpg"
+   ],
+   "file": "7-BONUS. Module Recap.mp4",
+   "folder": "covers/t/03084955d653.jpg",
+   "id": "t:c282e2ba5977",
+   "key": "learn|1- Tech/4- Reforge/2- Retention & Engagement/W4- Engagement. Defining, Measuring, And Analyzing/7-BONUS. Module Recap.mp4",
+   "n": 7,
+   "next": true,
+   "sub": null,
+   "title": "BONUS. Module Recap",
+   "trail": [
+    "Reforge",
+    "Retention & Engagement",
+    "W4 - Engagement. Defining, Measuring, And Analyzing"
+   ],
+   "v24": true,
+   "year": null
+  },
+  {
+   "category": "Reforge",
+   "cord": "002004",
+   "corder": "004",
+   "course": "W4 - Engagement. Defining, Measuring, And Analyzing",
+   "fcov": [
+    "covers/t/df24e103a623.jpg",
+    "covers/t/df24e103a623.jpg",
+    "covers/t/03084955d653.jpg"
+   ],
+   "file": "W4 Event.mp4",
+   "folder": "covers/t/03084955d653.jpg",
+   "id": "t:d1ba4713ec45",
+   "key": "learn|1- Tech/4- Reforge/2- Retention & Engagement/W4- Engagement. Defining, Measuring, And Analyzing/W4 Event.mp4",
+   "n": 8,
+   "next": true,
+   "sub": null,
+   "title": "W4 Event",
+   "trail": [
+    "Reforge",
+    "Retention & Engagement",
+    "W4 - Engagement. Defining, Measuring, And Analyzing"
+   ],
+   "v24": true,
+   "year": null
+  },
+  {
+   "category": "Reforge",
+   "cord": "002005",
+   "corder": "004",
+   "course": "W5 - Engagement Strategies",
+   "fcov": [
+    "covers/t/df24e103a623.jpg",
+    "covers/t/df24e103a623.jpg",
+    "covers/t/9a7276851c07.jpg"
+   ],
+   "file": "1-Introduction To Engagement Strategies.mp4",
+   "folder": "covers/t/9a7276851c07.jpg",
+   "id": "t:491f41bfe422",
+   "key": "learn|1- Tech/4- Reforge/2- Retention & Engagement/W5- Engagement Strategies/1-Introduction To Engagement Strategies.mp4",
+   "n": 1,
+   "next": true,
+   "sub": null,
+   "title": "Introduction To Engagement Strategies",
+   "trail": [
+    "Reforge",
+    "Retention & Engagement",
+    "W5 - Engagement Strategies"
+   ],
+   "v24": true,
+   "year": null
+  },
+  {
+   "category": "Reforge",
+   "cord": "002005",
+   "corder": "004",
+   "course": "W5 - Engagement Strategies",
+   "fcov": [
+    "covers/t/df24e103a623.jpg",
+    "covers/t/df24e103a623.jpg",
+    "covers/t/9a7276851c07.jpg"
+   ],
+   "file": "2-Identifying Engagement Opportunities.mp4",
+   "folder": "covers/t/9a7276851c07.jpg",
+   "id": "t:509843c98fac",
+   "key": "learn|1- Tech/4- Reforge/2- Retention & Engagement/W5- Engagement Strategies/2-Identifying Engagement Opportunities.mp4",
+   "n": 2,
+   "next": true,
+   "sub": null,
+   "title": "Identifying Engagement Opportunities",
+   "trail": [
+    "Reforge",
+    "Retention & Engagement",
+    "W5 - Engagement Strategies"
+   ],
+   "v24": true,
+   "year": null
+  },
+  {
+   "category": "Reforge",
+   "cord": "002005",
+   "corder": "004",
+   "course": "W5 - Engagement Strategies",
+   "fcov": [
+    "covers/t/df24e103a623.jpg",
+    "covers/t/df24e103a623.jpg",
+    "covers/t/9a7276851c07.jpg"
+   ],
+   "file": "3-Using Use Case and Feature Strategy.mp4",
+   "folder": "covers/t/9a7276851c07.jpg",
+   "id": "t:b9f07fd3b56c",
+   "key": "learn|1- Tech/4- Reforge/2- Retention & Engagement/W5- Engagement Strategies/3-Using Use Case and Feature Strategy.mp4",
+   "n": 3,
+   "next": true,
+   "sub": null,
+   "title": "Using Use Case and Feature Strategy",
+   "trail": [
+    "Reforge",
+    "Retention & Engagement",
+    "W5 - Engagement Strategies"
+   ],
+   "v24": true,
+   "year": null
+  },
+  {
+   "category": "Reforge",
+   "cord": "002005",
+   "corder": "004",
+   "course": "W5 - Engagement Strategies",
+   "fcov": [
+    "covers/t/df24e103a623.jpg",
+    "covers/t/df24e103a623.jpg",
+    "covers/t/9a7276851c07.jpg"
+   ],
+   "file": "4-Using Frequency Strategy.mp4",
+   "folder": "covers/t/9a7276851c07.jpg",
+   "id": "t:2fc0996bbc7f",
+   "key": "learn|1- Tech/4- Reforge/2- Retention & Engagement/W5- Engagement Strategies/4-Using Frequency Strategy.mp4",
+   "n": 4,
+   "next": true,
+   "sub": null,
+   "title": "Using Frequency Strategy",
+   "trail": [
+    "Reforge",
+    "Retention & Engagement",
+    "W5 - Engagement Strategies"
+   ],
+   "v24": true,
+   "year": null
+  },
+  {
+   "category": "Reforge",
+   "cord": "002005",
+   "corder": "004",
+   "course": "W5 - Engagement Strategies",
+   "fcov": [
+    "covers/t/df24e103a623.jpg",
+    "covers/t/df24e103a623.jpg",
+    "covers/t/9a7276851c07.jpg"
+   ],
+   "file": "5-Using Intensity Strategy.mp4",
+   "folder": "covers/t/9a7276851c07.jpg",
+   "id": "t:3d71efa8496a",
+   "key": "learn|1- Tech/4- Reforge/2- Retention & Engagement/W5- Engagement Strategies/5-Using Intensity Strategy.mp4",
+   "n": 5,
+   "next": true,
+   "sub": null,
+   "title": "Using Intensity Strategy",
+   "trail": [
+    "Reforge",
+    "Retention & Engagement",
+    "W5 - Engagement Strategies"
+   ],
+   "v24": true,
+   "year": null
+  },
+  {
+   "category": "Reforge",
+   "cord": "002005",
+   "corder": "004",
+   "course": "W5 - Engagement Strategies",
+   "fcov": [
+    "covers/t/df24e103a623.jpg",
+    "covers/t/df24e103a623.jpg",
+    "covers/t/9a7276851c07.jpg"
+   ],
+   "file": "6-Building An Engagement Machine.mp4",
+   "folder": "covers/t/9a7276851c07.jpg",
+   "id": "t:fc3e789c1b37",
+   "key": "learn|1- Tech/4- Reforge/2- Retention & Engagement/W5- Engagement Strategies/6-Building An Engagement Machine.mp4",
+   "n": 6,
+   "next": true,
+   "sub": null,
+   "title": "Building An Engagement Machine",
+   "trail": [
+    "Reforge",
+    "Retention & Engagement",
+    "W5 - Engagement Strategies"
+   ],
+   "v24": true,
+   "year": null
+  },
+  {
+   "category": "Reforge",
+   "cord": "002005",
+   "corder": "004",
+   "course": "W5 - Engagement Strategies",
+   "fcov": [
+    "covers/t/df24e103a623.jpg",
+    "covers/t/df24e103a623.jpg",
+    "covers/t/9a7276851c07.jpg"
+   ],
+   "file": "7-BONUS Module Recap.mp4",
+   "folder": "covers/t/9a7276851c07.jpg",
+   "id": "t:3e6a5017161e",
+   "key": "learn|1- Tech/4- Reforge/2- Retention & Engagement/W5- Engagement Strategies/7-BONUS Module Recap.mp4",
+   "n": 7,
+   "next": true,
+   "sub": null,
+   "title": "BONUS Module Recap",
+   "trail": [
+    "Reforge",
+    "Retention & Engagement",
+    "W5 - Engagement Strategies"
+   ],
+   "v24": true,
+   "year": null
+  },
+  {
+   "category": "Reforge",
+   "cord": "002005",
+   "corder": "004",
+   "course": "W5 - Engagement Strategies",
+   "fcov": [
+    "covers/t/df24e103a623.jpg",
+    "covers/t/df24e103a623.jpg",
+    "covers/t/9a7276851c07.jpg"
+   ],
+   "file": "W5 Event.mp4",
+   "folder": "covers/t/9a7276851c07.jpg",
+   "id": "t:5176aabfcc32",
+   "key": "learn|1- Tech/4- Reforge/2- Retention & Engagement/W5- Engagement Strategies/W5 Event.mp4",
+   "n": 8,
+   "next": true,
+   "sub": null,
+   "title": "W5 Event",
+   "trail": [
+    "Reforge",
+    "Retention & Engagement",
+    "W5 - Engagement Strategies"
+   ],
+   "v24": true,
+   "year": null
+  },
+  {
+   "category": "Reforge",
+   "cord": "002006",
+   "corder": "004",
+   "course": "W6 - Resurrection. Defining, Measuring, And Analyzing",
+   "fcov": [
+    "covers/t/df24e103a623.jpg",
+    "covers/t/df24e103a623.jpg",
+    "covers/t/368a78f8fa3f.jpg"
+   ],
+   "file": "W6 Event.mp4",
+   "folder": "covers/t/368a78f8fa3f.jpg",
+   "id": "t:c74864ee3193",
+   "key": "learn|1- Tech/4- Reforge/2- Retention & Engagement/W6-Resurrection. Defining, Measuring, And Analyzing/W6 Event.mp4",
+   "n": 1,
+   "next": true,
+   "sub": null,
+   "title": "W6 Event",
+   "trail": [
+    "Reforge",
+    "Retention & Engagement",
+    "W6 - Resurrection. Defining, Measuring, And Analyzing"
+   ],
+   "v24": true,
+   "year": null
+  },
+  {
+   "category": "Reforge",
+   "cord": "002006007",
+   "corder": "004",
+   "course": "Module 7",
+   "fcov": [
+    "covers/t/df24e103a623.jpg",
+    "covers/t/df24e103a623.jpg",
+    "covers/t/368a78f8fa3f.jpg",
+    "covers/t/368a78f8fa3f.jpg"
+   ],
+   "file": "1-Introduction To Resurrection.mp4",
+   "folder": "covers/t/368a78f8fa3f.jpg",
+   "id": "t:9549982e67d1",
+   "key": "learn|1- Tech/4- Reforge/2- Retention & Engagement/W6-Resurrection. Defining, Measuring, And Analyzing/Module 7/1-Introduction To Resurrection.mp4",
+   "n": 1,
+   "next": true,
+   "sub": null,
+   "title": "Introduction To Resurrection",
+   "trail": [
+    "Reforge",
+    "Retention & Engagement",
+    "W6 - Resurrection. Defining, Measuring, And Analyzing",
+    "Module 7"
+   ],
+   "v24": true,
+   "year": null
+  },
+  {
+   "category": "Reforge",
+   "cord": "002006007",
+   "corder": "004",
+   "course": "Module 7",
+   "fcov": [
+    "covers/t/df24e103a623.jpg",
+    "covers/t/df24e103a623.jpg",
+    "covers/t/368a78f8fa3f.jpg",
+    "covers/t/368a78f8fa3f.jpg"
+   ],
+   "file": "2-When You Should Focus On Resurrection.mp4",
+   "folder": "covers/t/368a78f8fa3f.jpg",
+   "id": "t:585518c7ba75",
+   "key": "learn|1- Tech/4- Reforge/2- Retention & Engagement/W6-Resurrection. Defining, Measuring, And Analyzing/Module 7/2-When You Should Focus On Resurrection.mp4",
+   "n": 2,
+   "next": true,
+   "sub": null,
+   "title": "When You Should Focus On Resurrection",
+   "trail": [
+    "Reforge",
+    "Retention & Engagement",
+    "W6 - Resurrection. Defining, Measuring, And Analyzing",
+    "Module 7"
+   ],
+   "v24": true,
+   "year": null
+  },
+  {
+   "category": "Reforge",
+   "cord": "002006007",
+   "corder": "004",
+   "course": "Module 7",
+   "fcov": [
+    "covers/t/df24e103a623.jpg",
+    "covers/t/df24e103a623.jpg",
+    "covers/t/368a78f8fa3f.jpg",
+    "covers/t/368a78f8fa3f.jpg"
+   ],
+   "file": "3-Defining At Risk Users For Churn Prediction.mp4",
+   "folder": "covers/t/368a78f8fa3f.jpg",
+   "id": "t:1eac6ba7df0e",
+   "key": "learn|1- Tech/4- Reforge/2- Retention & Engagement/W6-Resurrection. Defining, Measuring, And Analyzing/Module 7/3-Defining At Risk Users For Churn Prediction.mp4",
+   "n": 3,
+   "next": true,
+   "sub": null,
+   "title": "Defining At Risk Users For Churn Prediction",
+   "trail": [
+    "Reforge",
+    "Retention & Engagement",
+    "W6 - Resurrection. Defining, Measuring, And Analyzing",
+    "Module 7"
+   ],
+   "v24": true,
+   "year": null
+  },
+  {
+   "category": "Reforge",
+   "cord": "002006007",
+   "corder": "004",
+   "course": "Module 7",
+   "fcov": [
+    "covers/t/df24e103a623.jpg",
+    "covers/t/df24e103a623.jpg",
+    "covers/t/368a78f8fa3f.jpg",
+    "covers/t/368a78f8fa3f.jpg"
+   ],
+   "file": "4-Defining Dormant Engagement State.mp4",
+   "folder": "covers/t/368a78f8fa3f.jpg",
+   "id": "t:b60bbe415371",
+   "key": "learn|1- Tech/4- Reforge/2- Retention & Engagement/W6-Resurrection. Defining, Measuring, And Analyzing/Module 7/4-Defining Dormant Engagement State.mp4",
+   "n": 4,
+   "next": true,
+   "sub": null,
+   "title": "Defining Dormant Engagement State",
+   "trail": [
+    "Reforge",
+    "Retention & Engagement",
+    "W6 - Resurrection. Defining, Measuring, And Analyzing",
+    "Module 7"
+   ],
+   "v24": true,
+   "year": null
+  },
+  {
+   "category": "Reforge",
+   "cord": "002006007",
+   "corder": "004",
+   "course": "Module 7",
+   "fcov": [
+    "covers/t/df24e103a623.jpg",
+    "covers/t/df24e103a623.jpg",
+    "covers/t/368a78f8fa3f.jpg",
+    "covers/t/368a78f8fa3f.jpg"
+   ],
+   "file": "5-Defining Churned Engagement State.mp4",
+   "folder": "covers/t/368a78f8fa3f.jpg",
+   "id": "t:5fbef4bfd2db",
+   "key": "learn|1- Tech/4- Reforge/2- Retention & Engagement/W6-Resurrection. Defining, Measuring, And Analyzing/Module 7/5-Defining Churned Engagement State.mp4",
+   "n": 5,
+   "next": true,
+   "sub": null,
+   "title": "Defining Churned Engagement State",
+   "trail": [
+    "Reforge",
+    "Retention & Engagement",
+    "W6 - Resurrection. Defining, Measuring, And Analyzing",
+    "Module 7"
+   ],
+   "v24": true,
+   "year": null
+  },
+  {
+   "category": "Reforge",
+   "cord": "002006008",
+   "corder": "004",
+   "course": "Module 8",
+   "fcov": [
+    "covers/t/df24e103a623.jpg",
+    "covers/t/df24e103a623.jpg",
+    "covers/t/368a78f8fa3f.jpg",
+    "covers/t/368a78f8fa3f.jpg"
+   ],
+   "file": "R&amp;E-M7-L0-IntroductiontoResurrectionStrategies.mp4",
+   "folder": "covers/t/368a78f8fa3f.jpg",
+   "id": "t:8c44c85352e0",
+   "key": "learn|1- Tech/4- Reforge/2- Retention & Engagement/W6-Resurrection. Defining, Measuring, And Analyzing/Module 8/R&amp;E-M7-L0-IntroductiontoResurrectionStrategies.mp4",
+   "n": 1,
+   "next": true,
+   "sub": null,
+   "title": "R&E-M7-L0 - Introduction to Resurrection Strategies",
+   "trail": [
+    "Reforge",
+    "Retention & Engagement",
+    "W6 - Resurrection. Defining, Measuring, And Analyzing",
+    "Module 8"
+   ],
+   "v24": true,
+   "year": null
+  },
+  {
+   "category": "Reforge",
+   "cord": "002006008",
+   "corder": "004",
+   "course": "Module 8",
+   "fcov": [
+    "covers/t/df24e103a623.jpg",
+    "covers/t/df24e103a623.jpg",
+    "covers/t/368a78f8fa3f.jpg",
+    "covers/t/368a78f8fa3f.jpg"
+   ],
+   "file": "R&amp;E-M7-L1-StrategiesForAtRiskUsers.mp4",
+   "folder": "covers/t/368a78f8fa3f.jpg",
+   "id": "t:59bf576b6e6b",
+   "key": "learn|1- Tech/4- Reforge/2- Retention & Engagement/W6-Resurrection. Defining, Measuring, And Analyzing/Module 8/R&amp;E-M7-L1-StrategiesForAtRiskUsers.mp4",
+   "n": 2,
+   "next": true,
+   "sub": null,
+   "title": "R&E-M7-L1 - Strategies For At Risk Users",
+   "trail": [
+    "Reforge",
+    "Retention & Engagement",
+    "W6 - Resurrection. Defining, Measuring, And Analyzing",
+    "Module 8"
+   ],
+   "v24": true,
+   "year": null
+  },
+  {
+   "category": "Reforge",
+   "cord": "002006008",
+   "corder": "004",
+   "course": "Module 8",
+   "fcov": [
+    "covers/t/df24e103a623.jpg",
+    "covers/t/df24e103a623.jpg",
+    "covers/t/368a78f8fa3f.jpg",
+    "covers/t/368a78f8fa3f.jpg"
+   ],
+   "file": "R&amp;E-M7-L2-InvoluntaryDormantStrategies.mp4",
+   "folder": "covers/t/368a78f8fa3f.jpg",
+   "id": "t:beaa78ba2131",
+   "key": "learn|1- Tech/4- Reforge/2- Retention & Engagement/W6-Resurrection. Defining, Measuring, And Analyzing/Module 8/R&amp;E-M7-L2-InvoluntaryDormantStrategies.mp4",
+   "n": 3,
+   "next": true,
+   "sub": null,
+   "title": "R&E-M7-L2 - Involuntary Dormant Strategies",
+   "trail": [
+    "Reforge",
+    "Retention & Engagement",
+    "W6 - Resurrection. Defining, Measuring, And Analyzing",
+    "Module 8"
+   ],
+   "v24": true,
+   "year": null
+  },
+  {
+   "category": "Reforge",
+   "cord": "002006008",
+   "corder": "004",
+   "course": "Module 8",
+   "fcov": [
+    "covers/t/df24e103a623.jpg",
+    "covers/t/df24e103a623.jpg",
+    "covers/t/368a78f8fa3f.jpg",
+    "covers/t/368a78f8fa3f.jpg"
+   ],
+   "file": "R&amp;E-M7-L3-ResurrectingVoluntaryDormantUsers.mp4",
+   "folder": "covers/t/368a78f8fa3f.jpg",
+   "id": "t:0bb0b50e12b0",
+   "key": "learn|1- Tech/4- Reforge/2- Retention & Engagement/W6-Resurrection. Defining, Measuring, And Analyzing/Module 8/R&amp;E-M7-L3-ResurrectingVoluntaryDormantUsers.mp4",
+   "n": 4,
+   "next": true,
+   "sub": null,
+   "title": "R&E-M7-L3 - Resurrecting Voluntary Dormant Users",
+   "trail": [
+    "Reforge",
+    "Retention & Engagement",
+    "W6 - Resurrection. Defining, Measuring, And Analyzing",
+    "Module 8"
+   ],
+   "v24": true,
+   "year": null
+  },
+  {
+   "category": "Reforge",
+   "cord": "002006009",
+   "corder": "004",
+   "course": "Module 9 - ICED Theory",
+   "fcov": [
+    "covers/t/df24e103a623.jpg",
+    "covers/t/df24e103a623.jpg",
+    "covers/t/368a78f8fa3f.jpg",
+    "covers/t/368a78f8fa3f.jpg"
+   ],
+   "file": "ICEDTheoryS0L1-IntroductiontoManagingInfrequentProducts.mp4",
+   "folder": "covers/t/368a78f8fa3f.jpg",
+   "id": "t:3afbd671ce6f",
+   "key": "learn|1- Tech/4- Reforge/2- Retention & Engagement/W6-Resurrection. Defining, Measuring, And Analyzing/Module 9 - ICED Theory/ICEDTheoryS0L1-IntroductiontoManagingInfrequentProducts.mp4",
+   "n": 1,
+   "next": true,
+   "sub": null,
+   "title": "Introduction to Managing Infrequent Products",
+   "trail": [
+    "Reforge",
+    "Retention & Engagement",
+    "W6 - Resurrection. Defining, Measuring, And Analyzing",
+    "Module 9 - ICED Theory"
+   ],
+   "v24": true,
+   "year": null
+  },
+  {
+   "category": "Reforge",
+   "cord": "002006009",
+   "corder": "004",
+   "course": "Module 9 - ICED Theory",
+   "fcov": [
+    "covers/t/df24e103a623.jpg",
+    "covers/t/df24e103a623.jpg",
+    "covers/t/368a78f8fa3f.jpg",
+    "covers/t/368a78f8fa3f.jpg"
+   ],
+   "file": "ICEDTheoryS1L1-The4DimensionsofInfrequentProducts.mp4",
+   "folder": "covers/t/368a78f8fa3f.jpg",
+   "id": "t:0ca980e902a4",
+   "key": "learn|1- Tech/4- Reforge/2- Retention & Engagement/W6-Resurrection. Defining, Measuring, And Analyzing/Module 9 - ICED Theory/ICEDTheoryS1L1-The4DimensionsofInfrequentProducts.mp4",
+   "n": 2,
+   "next": true,
+   "sub": null,
+   "title": "The 4 Dimensions of Infrequent Products",
+   "trail": [
+    "Reforge",
+    "Retention & Engagement",
+    "W6 - Resurrection. Defining, Measuring, And Analyzing",
+    "Module 9 - ICED Theory"
+   ],
+   "v24": true,
+   "year": null
+  },
+  {
+   "category": "Reforge",
+   "cord": "002006009",
+   "corder": "004",
+   "course": "Module 9 - ICED Theory",
+   "fcov": [
+    "covers/t/df24e103a623.jpg",
+    "covers/t/df24e103a623.jpg",
+    "covers/t/368a78f8fa3f.jpg",
+    "covers/t/368a78f8fa3f.jpg"
+   ],
+   "file": "ICEDTheoryS1L2-ManagingInfrequency.mp4",
+   "folder": "covers/t/368a78f8fa3f.jpg",
+   "id": "t:2799724c95c6",
+   "key": "learn|1- Tech/4- Reforge/2- Retention & Engagement/W6-Resurrection. Defining, Measuring, And Analyzing/Module 9 - ICED Theory/ICEDTheoryS1L2-ManagingInfrequency.mp4",
+   "n": 3,
+   "next": true,
+   "sub": null,
+   "title": "Managing Infrequency",
+   "trail": [
+    "Reforge",
+    "Retention & Engagement",
+    "W6 - Resurrection. Defining, Measuring, And Analyzing",
+    "Module 9 - ICED Theory"
+   ],
+   "v24": true,
+   "year": null
+  },
+  {
+   "category": "Reforge",
+   "cord": "002006009",
+   "corder": "004",
+   "course": "Module 9 - ICED Theory",
+   "fcov": [
+    "covers/t/df24e103a623.jpg",
+    "covers/t/df24e103a623.jpg",
+    "covers/t/368a78f8fa3f.jpg",
+    "covers/t/368a78f8fa3f.jpg"
+   ],
+   "file": "ICEDTheoryS1L3-ControlOverExperience.mp4",
+   "folder": "covers/t/368a78f8fa3f.jpg",
+   "id": "t:5b12983957fd",
+   "key": "learn|1- Tech/4- Reforge/2- Retention & Engagement/W6-Resurrection. Defining, Measuring, And Analyzing/Module 9 - ICED Theory/ICEDTheoryS1L3-ControlOverExperience.mp4",
+   "n": 4,
+   "next": true,
+   "sub": null,
+   "title": "Control Over Experience",
+   "trail": [
+    "Reforge",
+    "Retention & Engagement",
+    "W6 - Resurrection. Defining, Measuring, And Analyzing",
+    "Module 9 - ICED Theory"
+   ],
+   "v24": true,
+   "year": null
+  },
+  {
+   "category": "Reforge",
+   "cord": "002006009",
+   "corder": "004",
+   "course": "Module 9 - ICED Theory",
+   "fcov": [
+    "covers/t/df24e103a623.jpg",
+    "covers/t/df24e103a623.jpg",
+    "covers/t/368a78f8fa3f.jpg",
+    "covers/t/368a78f8fa3f.jpg"
+   ],
+   "file": "ICEDTheoryS1L4-ManagingDegreeofEngagement.mp4",
+   "folder": "covers/t/368a78f8fa3f.jpg",
+   "id": "t:3796739038a2",
+   "key": "learn|1- Tech/4- Reforge/2- Retention & Engagement/W6-Resurrection. Defining, Measuring, And Analyzing/Module 9 - ICED Theory/ICEDTheoryS1L4-ManagingDegreeofEngagement.mp4",
+   "n": 5,
+   "next": true,
+   "sub": null,
+   "title": "Managing Degree of Engagement",
+   "trail": [
+    "Reforge",
+    "Retention & Engagement",
+    "W6 - Resurrection. Defining, Measuring, And Analyzing",
+    "Module 9 - ICED Theory"
+   ],
+   "v24": true,
+   "year": null
+  },
+  {
+   "category": "Reforge",
+   "cord": "002006009",
+   "corder": "004",
+   "course": "Module 9 - ICED Theory",
+   "fcov": [
+    "covers/t/df24e103a623.jpg",
+    "covers/t/df24e103a623.jpg",
+    "covers/t/368a78f8fa3f.jpg",
+    "covers/t/368a78f8fa3f.jpg"
+   ],
+   "file": "ICEDTheoryS1L5-ManagingComplexity.mp4",
+   "folder": "covers/t/368a78f8fa3f.jpg",
+   "id": "t:450d502781ac",
+   "key": "learn|1- Tech/4- Reforge/2- Retention & Engagement/W6-Resurrection. Defining, Measuring, And Analyzing/Module 9 - ICED Theory/ICEDTheoryS1L5-ManagingComplexity.mp4",
+   "n": 6,
+   "next": true,
+   "sub": null,
+   "title": "Managing Complexity",
+   "trail": [
+    "Reforge",
+    "Retention & Engagement",
+    "W6 - Resurrection. Defining, Measuring, And Analyzing",
+    "Module 9 - ICED Theory"
+   ],
+   "v24": true,
+   "year": null
+  },
+  {
+   "category": "Reforge",
+   "cord": "002006009",
+   "corder": "004",
+   "course": "Module 9 - ICED Theory",
+   "fcov": [
+    "covers/t/df24e103a623.jpg",
+    "covers/t/df24e103a623.jpg",
+    "covers/t/368a78f8fa3f.jpg",
+    "covers/t/368a78f8fa3f.jpg"
+   ],
+   "file": "ICEDTheoryS1L6-ExpandingTouchpoints.mp4",
+   "folder": "covers/t/368a78f8fa3f.jpg",
+   "id": "t:f39783c3c050",
+   "key": "learn|1- Tech/4- Reforge/2- Retention & Engagement/W6-Resurrection. Defining, Measuring, And Analyzing/Module 9 - ICED Theory/ICEDTheoryS1L6-ExpandingTouchpoints.mp4",
+   "n": 7,
+   "next": true,
+   "sub": null,
+   "title": "Expanding Touchpoints",
+   "trail": [
+    "Reforge",
+    "Retention & Engagement",
+    "W6 - Resurrection. Defining, Measuring, And Analyzing",
+    "Module 9 - ICED Theory"
+   ],
+   "v24": true,
+   "year": null
+  },
+  {
+   "category": "Reforge",
+   "cord": "002006009",
+   "corder": "004",
+   "course": "Module 9 - ICED Theory",
+   "fcov": [
+    "covers/t/df24e103a623.jpg",
+    "covers/t/df24e103a623.jpg",
+    "covers/t/368a78f8fa3f.jpg",
+    "covers/t/368a78f8fa3f.jpg"
+   ],
+   "file": "ICEDTheoryS1L7-DistinguishingInfrequentProducts.mp4",
+   "folder": "covers/t/368a78f8fa3f.jpg",
+   "id": "t:9187b4345cd3",
+   "key": "learn|1- Tech/4- Reforge/2- Retention & Engagement/W6-Resurrection. Defining, Measuring, And Analyzing/Module 9 - ICED Theory/ICEDTheoryS1L7-DistinguishingInfrequentProducts.mp4",
+   "n": 8,
+   "next": true,
+   "sub": null,
+   "title": "Distinguishing Infrequent Products",
+   "trail": [
+    "Reforge",
+    "Retention & Engagement",
+    "W6 - Resurrection. Defining, Measuring, And Analyzing",
+    "Module 9 - ICED Theory"
+   ],
+   "v24": true,
+   "year": null
+  },
+  {
+   "category": "Reforge",
+   "cord": "002006009",
+   "corder": "004",
+   "course": "Module 9 - ICED Theory",
+   "fcov": [
+    "covers/t/df24e103a623.jpg",
+    "covers/t/df24e103a623.jpg",
+    "covers/t/368a78f8fa3f.jpg",
+    "covers/t/368a78f8fa3f.jpg"
+   ],
+   "file": "ICEDTheoryS1L8-TheICEDTheoryCanvas.mp4",
+   "folder": "covers/t/368a78f8fa3f.jpg",
+   "id": "t:02915820503d",
+   "key": "learn|1- Tech/4- Reforge/2- Retention & Engagement/W6-Resurrection. Defining, Measuring, And Analyzing/Module 9 - ICED Theory/ICEDTheoryS1L8-TheICEDTheoryCanvas.mp4",
+   "n": 9,
+   "next": true,
+   "sub": null,
+   "title": "The ICED Theory Canvas",
+   "trail": [
+    "Reforge",
+    "Retention & Engagement",
+    "W6 - Resurrection. Defining, Measuring, And Analyzing",
+    "Module 9 - ICED Theory"
+   ],
+   "v24": true,
+   "year": null
   }
  ],
  "unmatched": [
@@ -18760,5 +21318,5 @@
    "year": 1959
   }
  ],
- "updated": "2026-11-11T11:55Z"
+ "updated": "2026-11-11T12:27Z"
 }
