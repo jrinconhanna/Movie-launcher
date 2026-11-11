@@ -66,4 +66,5 @@ check("R4 R&E: numbered lessons, then BONUS (BONU fixed), event last", r2[0] == 
 check("R5 joined-up names get spaces; R&E kept as asked", rc("W0 - How Retention Determines The Top 1%")[0] == "Retention Makes Companies" and rc("Module 9 - ICED Theory")[1] == "The 4 Dimensions of Infrequent Products" and rc("Module 8")[0] == "R&E-M7-L0 - Introduction to Resurrection Strategies")
 check("R6 W6 holds 3 module folders and its event", sorted({t["trail"][3] for t in rf if len(t["trail"]) == 4}) == ["Module 7", "Module 8", "Module 9 - ICED Theory"] and rc("W6 - Resurrection. Defining, Measuring, And Analyzing") == ["W6 Event"])
 check("R7 every Reforge folder level has a cover (W0 and modules use their parent's)", all(all(t["fcov"]) for t in rf))
+check("R8 the Reforge folder uses its own folder.jpg (not AI Strategy's)", all(t["src_fcov"][0] == "4- Reforge/folder.jpg" for t in rf) and rf[0]["src_fcov"][1] == "4- Reforge/1- AI Strategy/folder.jpg")
 print("%d failed" % fails); sys.exit(1 if fails else 0)
