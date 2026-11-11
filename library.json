@@ -13264,15 +13264,16 @@
    "cord": "006",
    "corder": "001",
    "course": "2008-2011 (iPad & Final)",
-   "cover": "covers/t/9df1c00c6955w.jpg",
+   "cover": "covers/t/c7886e040937w.jpg",
    "fcov": [
     "covers/t/2c7cbf53ee60.jpg",
     "covers/t/37b916f918f2.jpg"
    ],
-   "file": "2009 (-7) - Macworld.mp4",
+   "file": "2009-01 - Macworld.mp4",
    "folder": "covers/t/37b916f918f2.jpg",
-   "id": "t:05af6c489281",
-   "key": "learn|1- Tech/1- Steve Jobs/6) 2008-2011 (iPad & Final)/2009 (-7) - Macworld.mp4",
+   "id": "t:18b5c4611590",
+   "key": "learn|1- Tech/1- Steve Jobs/6) 2008-2011 (iPad & Final)/2009-01 - Macworld.mp4",
+   "mon": 1,
    "n": 6,
    "sub": null,
    "title": "Macworld",
@@ -14332,5 +14333,5 @@
    "year": 1959
   }
  ],
- "updated": "2026-11-11T09:45Z"
+ "updated": "2026-11-11T09:48Z"
 }
