@@ -9,7 +9,7 @@ def check(name, ok, detail=""):
     global fails
     print(("PASS " if ok else "FAIL ") + name + ("" if ok else "  " + detail)); fails += 0 if ok else 1
 FIRST = tech_items(open(os.path.join(ROOT, "data", "tech-files.txt"), encoding="utf-8").readlines())
-check("S0 eras added so far: 1-6 (6 + 13 + 20 + 27 + 15 + 17 videos)", len(FIRST) == 98 and {t["course"] for t in FIRST} == {"1976-1984 (Apple I & Mac)", "1985-1995 (Next & Pixar)", "1996-1999 (Apple Comeback)", "2000-2004 (iPod & Digital Hub)", "2005-2007 (iPhone)", "2008-2011 (iPad & Final)"}, str(len(FIRST)))
+check("S0 all of Steve Jobs: 6 eras (98) + Other (3) + Apple ads (72)", len(FIRST) == 173 and {t["course"] for t in FIRST} == {"1976-1984 (Apple I & Mac)", "1985-1995 (Next & Pixar)", "1996-1999 (Apple Comeback)", "2000-2004 (iPod & Digital Hub)", "2005-2007 (iPhone)", "2008-2011 (iPad & Final)", "Other", "Apple ads"}, str(len(FIRST)))
 lib_ids = {t["id"] for t in FIRST}
 tech.ONLY = []  # the rules below run on the whole Steve Jobs folder
 T = tech_items(open(os.path.join(ROOT, "data", "tech-files.txt"), encoding="utf-8").readlines())
@@ -32,4 +32,7 @@ check("S11 library.json carries them, flagged v24", {x["id"] for x in lib.get("l
 e4 = [t["title"] for t in T if t["course"] == "2000-2004 (iPod & Digital Hub)"]
 check("S12 year-only names ordered by event month (2002: Macworld SF Jan, Xserve May, WWDC, Macworld NY, Apple Expo Paris Sep)", e4[11:16] == ["Macworld SF", "Apple Special Event (Xserve)", "WWDC (Death of OS 9)", "Macworld NY", "Apple Expo Paris"], str(e4[11:16]))
 check("S13 original iPod event (Oct 2001) after Macworld NY (Jul 2001)", e4.index("Apple Special Event Town Hall (Original iPod)") > e4.index("Macworld NY"))
+ads = [t for t in FIRST if t["course"] == "Apple ads"]
+check("S14 Apple ads: one folder per year inside it (10 years, in order)", [t["trail"] for t in ads][0] == ["Steve Jobs", "Apple ads", "1984"] and sorted({t["trail"][2] for t in ads}) == ["1984", "1985", "1997", "1998", "1999", "2000", "2001", "2002", "2004", "2007"] and [t["trail"][2] for t in ads] == sorted(t["trail"][2] for t in ads), str({t["trail"][2] for t in ads}))
+check("S15 Other and Apple ads sit next to the eras, after them", [t["trail"][:2] for t in FIRST if t["course"] == "Other"] == [["Steve Jobs", "Other"]] * 3 and FIRST.index(next(t for t in FIRST if t["course"] == "Other")) > FIRST.index(next(t for t in FIRST if t["course"] == "2008-2011 (iPad & Final)")))
 print("%d failed" % fails); sys.exit(1 if fails else 0)

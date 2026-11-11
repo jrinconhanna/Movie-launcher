@@ -74,7 +74,7 @@ def steve_jobs(rel, parts, base):
     if parts[0].startswith("99"):
         if len(parts) >= 3 and parts[1] == "Ads":
             course, cord, sub = "Apple ads", "099", re.match(r"^(\d{4})", parts[2]).group(1) if re.match(r"^\d{4}", parts[2]) else parts[2]
-            cdir = "/".join([top] + parts[:2])
+            cdir = "/".join([top] + parts[:2]); ydir = "/".join([top] + parts[:3])  # one folder per year inside Apple ads
         else:
             course, cord, sub = "Other", "098", None
             cdir = "/".join([top] + parts[:1])
@@ -89,13 +89,14 @@ def steve_jobs(rel, parts, base):
         y = y or int(sub) if sub and sub.isdigit() else y
     # one parent folder 'Steve Jobs' holding the eras, Other and Apple ads (11 Nov)
     return {"course": course, "cord": cord, "sub": sub, "title": t or title, "year": y,
-            "trail": ["Steve Jobs", course], "tdirs": [top, cdir], "mon": shown_mo,
+            "trail": ["Steve Jobs", course] + ([sub] if course == "Apple ads" else []),
+            "tdirs": [top, cdir] + ([ydir] if course == "Apple ads" else []), "mon": shown_mo,
             "sort": (y or 9999, mo or 0, d or 0, (t or title).lower())}
 
 
 RULES = {"1- Steve Jobs": steve_jobs}
 # Piece 1 (11 Nov): first era only, to prove list → covers → tiles → tap → marks end to end. Empty = everything.
-ONLY = ["1- Steve Jobs/1) 1976-1984 (Apple I & Mac)/", "1- Steve Jobs/2) 1985-1995 (Next & Pixar)/", "1- Steve Jobs/3) 1996-1999 (Apple Comeback)/", "1- Steve Jobs/4) 2000-2004 (iPod & Digital Hub)/", "1- Steve Jobs/5) 2005-2007 (iPhone)/", "1- Steve Jobs/6) 2008-2011 (iPad & Final)/"]  # eras added one at a time (11 Nov)
+ONLY = ["1- Steve Jobs/1) 1976-1984 (Apple I & Mac)/", "1- Steve Jobs/2) 1985-1995 (Next & Pixar)/", "1- Steve Jobs/3) 1996-1999 (Apple Comeback)/", "1- Steve Jobs/4) 2000-2004 (iPod & Digital Hub)/", "1- Steve Jobs/5) 2005-2007 (iPhone)/", "1- Steve Jobs/6) 2008-2011 (iPad & Final)/", "1- Steve Jobs/99- Other/"]  # eras added one at a time (11 Nov)
 
 
 def tech_items(lines):
