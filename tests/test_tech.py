@@ -9,7 +9,7 @@ def check(name, ok, detail=""):
     global fails
     print(("PASS " if ok else "FAIL ") + name + ("" if ok else "  " + detail)); fails += 0 if ok else 1
 FIRST = tech_items(open(os.path.join(ROOT, "data", "tech-files.txt"), encoding="utf-8").readlines())
-check("S0 piece 1: only the first era (6 videos)", len(FIRST) == 6 and {t["course"] for t in FIRST} == {"1976-1984 (Apple I & Mac)"}, str(len(FIRST)))
+check("S0 eras added so far: 1 and 2 (6 + 13 videos)", len(FIRST) == 19 and {t["course"] for t in FIRST} == {"1976-1984 (Apple I & Mac)", "1985-1995 (Next & Pixar)"}, str(len(FIRST)))
 lib_ids = {t["id"] for t in FIRST}
 tech.ONLY = []  # the rules below run on the whole Steve Jobs folder
 T = tech_items(open(os.path.join(ROOT, "data", "tech-files.txt"), encoding="utf-8").readlines())
