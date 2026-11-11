@@ -29,4 +29,7 @@ check("S9 ids unique and stable (t: + hash of the path)", len({t["id"] for t in 
 check("S10 numbered 1..n inside each folder", all([t["n"] for t in by(c)] == list(range(1, len(by(c)) + 1)) for c in courses))
 lib = json.load(open(os.path.join(ROOT, "library.json"), encoding="utf-8"))
 check("S11 library.json carries them, flagged v24", {x["id"] for x in lib.get("learn", []) if x.get("v24")} == lib_ids)
+e4 = [t["title"] for t in T if t["course"] == "2000-2004 (iPod & Digital Hub)"]
+check("S12 year-only names ordered by event month (2002: Macworld SF Jan, Xserve May, WWDC, Macworld NY, Apple Expo Paris Sep)", e4[11:16] == ["Macworld SF", "Apple Special Event (Xserve)", "WWDC (Death of OS 9)", "Macworld NY", "Apple Expo Paris"], str(e4[11:16]))
+check("S13 original iPod event (Oct 2001) after Macworld NY (Jul 2001)", e4.index("Apple Special Event Town Hall (Original iPod)") > e4.index("Macworld NY"))
 print("%d failed" % fails); sys.exit(1 if fails else 0)

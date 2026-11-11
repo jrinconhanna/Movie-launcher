@@ -2,7 +2,7 @@ name: Build library
 
 on:
   push:
-    paths: ["data/library.txt", "data/overrides.json", "data/courses.json", "scripts/**", ".github/workflows/build.yml"]
+    paths: ["data/library.txt", "data/overrides.json", "data/courses.json", "data/tech-dates.json", "scripts/**", ".github/workflows/build.yml"]
   schedule:
     - cron: "17 * * * *"   # hourly: picks up new Trakt watches
   workflow_dispatch:

@@ -5,7 +5,7 @@ Each item: key, id (stable mark id), course, cord, category, corder, n, title,
 year, sub (year chip inside a folder), src_cover / src_folder (paths on Whatbox,
 relative to 1- Tech), cover / folder (paths in this repo once synced), v24.
 """
-import hashlib, os, re
+import hashlib, json, os, re
 
 VIDEO = (".mp4", ".mkv", ".m4v", ".mov", ".avi", ".webm")
 IMG = (".png", ".jpg", ".jpeg")
@@ -50,6 +50,23 @@ def strip_junk(t):
     return t.strip()
 
 
+EVENT_MONTH = [("macworld tokyo", 2), ("macworld ny", 7), ("macworld boston", 8), ("macworld", 1), ("wwdc", 6), ("apple expo", 9)]
+_DATES = None
+
+
+def month_for(fname, title):
+    global _DATES
+    if _DATES is None:
+        try:
+            _DATES = json.load(open(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data", "tech-dates.json"), encoding="utf-8"))
+        except Exception:
+            _DATES = {}
+    if fname in _DATES:
+        return int(_DATES[fname][5:7])
+    tl = title.lower()
+    return next((m for k, m in EVENT_MONTH if k in tl), None)
+
+
 def steve_jobs(rel, parts, base):
     """rel = '1- Steve Jobs/...'; parts = folders under the category; base = file name without extension."""
     title = strip_junk(base)
@@ -65,6 +82,8 @@ def steve_jobs(rel, parts, base):
         course, cord = clean(parts[0]); sub = None
         cdir = "/".join([top] + parts[:1])
     y, mo, d, t = split_date(title)
+    if y and not mo:  # only a year in the name: month from the event, or from data/tech-dates.json
+        mo = month_for(rel.split("/")[-1], t)
     if course == "Apple ads":
         y = y or int(sub) if sub and sub.isdigit() else y
     # one parent folder 'Steve Jobs' holding the eras, Other and Apple ads (11 Nov)
