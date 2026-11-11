@@ -104,7 +104,7 @@ def toc(rel, parts, base):
     num = int(m.group(1)) if m else None
     t = NUM.sub("", title).strip() if m else title
     it = {"course": course, "cord": cord, "sub": None, "title": t, "year": None,
-          "trail": [course], "tdirs": [rel.split("/")[0] + "/" + parts[0]],
+          "trail": ["TOC", course], "tdirs": [rel.split("/")[0], rel.split("/")[0] + "/" + parts[0]],  # one TOC folder in Tech › All, like Steve Jobs
           "sort": (num if num is not None else 9999, 0, 0, t.lower())}
     if course == "GSP Series" and num is not None:
         it["legacy_id"] = "GSP Series:%d" % num  # V2.3 marks used this id: keeps your watched GSP videos watched
