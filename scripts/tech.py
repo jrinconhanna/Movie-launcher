@@ -189,9 +189,11 @@ def playlists(rel, parts, base):
     """'5- Playlists/3- Kanye West/2003-08-15 - Kanye West - Interview …' : Playlists chip opens into its folders
     (your numbers; same number -> by name); 'z - Backlog' sub-folders shown as one Backlog folder; family tapes left out.
     Dated videos by date (year/month shown under the title), series by episode, the rest by title. Behind ?next (V2.4.1)."""
-    if "Rincon VCR" in parts[0]: return None                                  # family tapes: not Tech; their own place later (11 Nov)
     m = re.match(r"^(\d{4})-(\d{2})\s*-\s*(.+)$", parts[0])               # '2026-10 - Ryan Serhant': month added (11 Nov), newest first
-    if parts[0].lower().startswith("z"): name, cord = "Backlog", "9"
+    sub = None
+    if parts[0].lower().startswith("z"):                                      # Backlog keeps its person folders (11 Nov): Backlog › Arnold › videos
+        name, cord = "Backlog", "9"
+        if len(parts) > 1: sub = re.sub(r"^z\s*-\s*", "", parts[1]).strip(); cord += sub.lower()
     elif m: name, cord = m.group(3).strip(), "1%06d" % (999999 - int(m.group(1) + m.group(2))) + m.group(3).strip().lower()
     else:
         name, o = clean(parts[0]); cord = "5" + (o or "998") + name.lower()
@@ -207,8 +209,8 @@ def playlists(rel, parts, base):
         y, mo, d, tt = split_date(t) if re.match(r"^\d{4}", t) else (None, None, None, t)
         t = tt or t; key = (y or 9999, mo or 0, d or 0, t.lower())
     top = rel.split("/")[0]
-    it = {"course": name, "cord": cord, "sub": None, "title": t, "year": y, "next": True,
-          "trail": ["Playlists", name], "tdirs": [top, top + "/" + parts[0]], "sort": key}
+    it = {"course": sub or name, "cord": cord, "sub": None, "title": t, "year": y, "next": True,
+          "trail": ["Playlists", name] + ([sub] if sub else []), "tdirs": [top, top + "/" + parts[0]] + ([top + "/" + parts[0] + "/" + parts[1]] if sub else []), "sort": key}
     if mo: it["mon"] = mo
     return it
 

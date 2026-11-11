@@ -70,12 +70,12 @@ check("R8 the Reforge folder uses its own folder.jpg (not AI Strategy's)", all(t
 pl = [t for t in ALL if t["category"] == "Playlists"]
 pc = lambda c: [t["title"] for t in pl if t["course"] == c]
 order = list(dict.fromkeys(t["course"] for t in pl))
-check("P1 Playlists behind ?next; folders 'YYYY-MM - Name' newest first (same month by name), Backlog last", all(t.get("next") for t in pl) and order[:2] == ["Ryan Serhant", "Alan Mulally"] and order[2:8] == sorted(order[2:8], key=str.lower) and order[-2:] == ["Hamel Husein (Evals)", "Backlog"], str(order))
-check("P2 family tapes left out of Tech", not any("Rincon" in t["course"] for t in pl))
+check("P1 Playlists behind ?next; folders 'YYYY-MM - Name' newest first (same month by name), Backlog last", all(t.get("next") for t in pl) and order[:2] == ["Ryan Serhant", "Alan Mulally"] and order[2:8] == sorted(order[2:8], key=str.lower) and order[9:] == ["Hamel Husein (Evals)", "Arnold", "Jeff Bezos", "Jim Rohn"] and order.index("Rincon VCR Videos") == 8, str(order))
+check("P2 family tapes in Playlists at 2026-07, by year", len(pc("Rincon VCR Videos")) == 47 and sum(1 for t in pl if t["course"] == "Rincon VCR Videos" and t["year"]) >= 45)
 k = [t for t in pl if t["course"] == "Kanye West"]
 check("P3 Kanye by date, year under the title, month where known", [t["year"] for t in k] == sorted(t["year"] for t in k) and k[0]["title"] == "Kanye West Classic Before The Wire! Interview Before He Flipped His BMW! DJ Whoo Kid Exclusive! RadioPlanet tv Where Hip Hop Meets Hollywood" and any(t.get("mon") == 8 for t in k), str([t["title"] for t in k[:2]]))
 check("P4 Exodus by episode: 'Episode 1 - Faith as an Adventure' … 11", pc("Exodus Jordan Peterson")[0] == "Episode 1 - Faith as an Adventure" and len(pc("Exodus Jordan Peterson")) == 11)
 check("P5 odd characters cleaned, no ticks", not any(re.search("[\uff1a\uff5c\u29f8\uff1f\uff02\u2705]", t["title"]) for t in pl) and "AI Eng vs. PMs: Who Should Drive Evals?" in pc("Hamel Husein (Evals)"))
-check("P6 Backlog holds the z- sub-folders' videos (Jim Rohn moved in)", any("Jim Rohn" in x for x in pc("Backlog")) and "Jim Rohn" not in order)
+check("P6 Backlog shows its folders (names without 'z- '): Arnold, Jeff Bezos, Jim Rohn", sorted({t["trail"][2] for t in pl if t["trail"][1] == "Backlog"}) == ["Arnold", "Jeff Bezos", "Jim Rohn"] and all(len(t["trail"]) == 3 for t in pl if t["trail"][1] == "Backlog"))
 check("P7 every Playlists folder has a cover (Backlog borrows)", all(all(t["fcov"]) for t in pl))
 print("%d failed" % fails); sys.exit(1 if fails else 0)
