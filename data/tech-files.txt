@@ -571,6 +571,7 @@
 5- Playlists/1- Hamel Husein (Evals)/Context Rot： When Long Context Fails.mp4
 5- Playlists/1- Hamel Husein (Evals)/Error Analysis： The Highest ROI Technique In AI Engineering.mp4
 5- Playlists/1- Hamel Husein (Evals)/Evaluating Voice Agents  w⧸ Kwindla Kramer.mp4
+5- Playlists/1- Hamel Husein (Evals)/From Noob to Automated Evals In A Week (as a PM) w⧸Teresa Torres.mp4
 5- Playlists/1- Hamel Husein (Evals)/How Engineers and PMs should collaborate on Evals.mp4
 5- Playlists/1- Hamel Husein (Evals)/How OpenAI Customers Use Evals To Build Better AI Products.mp4
 5- Playlists/1- Hamel Husein (Evals)/Inspect - A LLM Eval Framework Used by Anthropic, DeepMind, Grok and More..mp4
@@ -586,9 +587,8 @@
 5- Playlists/1- Hamel Husein (Evals)/The Evals That Made GitHub Copilot.mp4
 5- Playlists/1- Hamel Husein (Evals)/The Unsexy LLM Debug Method That Actually Ships Better Products w⧸ @howiaipodcast.mp4
 5- Playlists/1- Hamel Husein (Evals)/folder.jpg
-5- Playlists/1- Hamel Husein (Evals)/✅ From Noob to Automated Evals In A Week (as a PM) w⧸Teresa Torres.mp4
-5- Playlists/10 - Ryan Serhant/Ryan Serhant - The Knowledge Project  - The Sales Habits That Closed $1 Billion in a Year.mp4
-5- Playlists/10 - Ryan Serhant/folder.png
+5- Playlists/10- Ryan Serhant/Ryan Serhant - The Knowledge Project  - The Sales Habits That Closed $1 Billion in a Year.mp4
+5- Playlists/10- Ryan Serhant/folder.png
 5- Playlists/2- Tom Brady/DeepCut with VicBlends - Ilia Topuria - Knocking Out Justin Gaethje, UFC White House, & Manifesting Success.mp4
 5- Playlists/2- Tom Brady/DeepCut with VicBlends - Tom Brady - Potential NFL Return, Retirement, Fatherhood .mp4
 5- Playlists/2- Tom Brady/Greg Olsen - Tom Brady and talk Youth Sports, Broadcasting, and Their Relationship.mp4
@@ -598,20 +598,20 @@
 5- Playlists/2- Tom Brady/The Pivot - Tom Brady on football journey, life after the rings, lessons, being a dad & self growth.mp4
 5- Playlists/2- Tom Brady/Valuetainment - Tom Brady Opens up - 7th Ring Motivation MJ or Belichick, Enemies, Style of Leadership.mp4
 5- Playlists/2- Tom Brady/folder.png
-5- Playlists/3- Kanye West/(2002) Kanye West Classic  Before The Wire! Interview Before He Flipped His BMW! DJ Whoo Kid Exclusive!   RadioPlanet tv   Where Hip Hop Meets Hollywood.mp4
-5- Playlists/3- Kanye West/(2003 Aug. 15) Kanye West - Interview & Freestyle Before He Was A Rap Star.mp4
-5- Playlists/3- Kanye West/(2003) In The Streets- Exclusive Kanye West Interview.mp4
-5- Playlists/3- Kanye West/(2004) - Diary Of Kanye West - On Tour in Europe .mp4
-5- Playlists/3- Kanye West/(2004) - Kanye West First 106 & Park Interview.mp4
-5- Playlists/3- Kanye West/(2004) Kanye West - first ever UK interview #TBT.mp4
-5- Playlists/3- Kanye West/(2004) Kanye West Interview - Right After College Dropout.mp4
-5- Playlists/3- Kanye West/(2005) - Kanye West in - Charlie Rose Interview.mp4
-5- Playlists/3- Kanye West/(2005) Kanye West At 28 Said That God Saved Him To Be A Vessel.mp4
-5- Playlists/3- Kanye West/(2006) Kayne West in .mp4
-5- Playlists/3- Kanye West/(2007) - Spike Jonze Spends Saturday with Kanye West.mp4
-5- Playlists/3- Kanye West/(2008 11⧸25) Kanye West on Late Night with Conan O'Brien.mp4
-5- Playlists/3- Kanye West/(2013) Kanye West. Zane Lowe. Full Interview.mp4
+5- Playlists/3- Kanye West/2002 - Kanye West Classic  Before The Wire! Interview Before He Flipped His BMW! DJ Whoo Kid Exclusive!   RadioPlanet tv   Where Hip Hop Meets Hollywood.mp4
 5- Playlists/3- Kanye West/2002 - Kanye West Interview.mp4
+5- Playlists/3- Kanye West/2003 - In The Streets- Exclusive Kanye West Interview.mp4
+5- Playlists/3- Kanye West/2003-08-15 - Kanye West - Interview & Freestyle Before He Was A Rap Star.mp4
+5- Playlists/3- Kanye West/2004 - Diary Of Kanye West - On Tour in Europe.mp4
+5- Playlists/3- Kanye West/2004 - Kanye West - first ever UK interview #TBT.mp4
+5- Playlists/3- Kanye West/2004 - Kanye West First 106 & Park Interview.mp4
+5- Playlists/3- Kanye West/2004 - Kanye West Interview - Right After College Dropout.mp4
+5- Playlists/3- Kanye West/2005 - Kanye West At 28 Said That God Saved Him To Be A Vessel.mp4
+5- Playlists/3- Kanye West/2005 - Kanye West in - Charlie Rose Interview.mp4
+5- Playlists/3- Kanye West/2006 - Kayne West in.mp4
+5- Playlists/3- Kanye West/2007 - Spike Jonze Spends Saturday with Kanye West.mp4
+5- Playlists/3- Kanye West/2008-11-25 - Kanye West on Late Night with Conan O'Brien.mp4
+5- Playlists/3- Kanye West/2013 - Kanye West. Zane Lowe. Full Interview.mp4
 5- Playlists/3- Kanye West/folder.png
 5- Playlists/4- Alan Mulally/2010 James R. Mellor Lecture - Alan Mulally - 09⧸17⧸10.mp4
 5- Playlists/4- Alan Mulally/8-11-16 - Willow Creek_MulallyAlan.mp4
@@ -680,24 +680,6 @@
 5- Playlists/5- Coaching/TEDxToledo - Matt Roth, MD-  Rethinking youth sports.mp4
 5- Playlists/5- Coaching/TEDxVernon - Mike Terson - Sucking the fun out of youth sports.mp4
 5- Playlists/5- Coaching/folder.png
-5- Playlists/5- Peter Thiel/Apocalypse Now? Part II - Peter Thiel on Ancient Prophecies and Modern Tech.mp4
-5- Playlists/5- Peter Thiel/Apocalypse Now? Peter Thiel on Ancient Prophecies and Modern Tech.mp4
-5- Playlists/5- Peter Thiel/Billionaire Peter Thiel On Starting a Business and Education 2020.mp4
-5- Playlists/5- Peter Thiel/Interesting Times with Ross Douthat - A.I., Mars and Immortality - Are We Dreaming Big Enough.mp4
-5- Playlists/5- Peter Thiel/Lecture 5 - Competition is for Losers (Peter Thiel).mp4
-5- Playlists/5- Peter Thiel/Peter Thiel - Cambridge Union.mp4
-5- Playlists/5- Peter Thiel/Peter Thiel - PayPal, politics & the importance of being individual.mp4
-5- Playlists/5- Peter Thiel/Peter Thiel - The Coming Collapse No One Is Prepared For.mp4
-5- Playlists/5- Peter Thiel/Peter Thiel - with Jordan Peterson - Why We Stopped Progressing.mp4
-5- Playlists/5- Peter Thiel/Peter Thiel and Marc Andreessen debate.mp4
-5- Playlists/5- Peter Thiel/Peter Thiel on René Girard.mp4
-5- Playlists/5- Peter Thiel/Peter Thiel on being a contrarian.mp4
-5- Playlists/5- Peter Thiel/Peter Thiel on markets, technology, and education.mp4
-5- Playlists/5- Peter Thiel/Peter Thiel's Skeptic Solutions - Tariffs, DOGE & Fixing America.mp4
-5- Playlists/5- Peter Thiel/Peter Thiel's Top 10 Rules For Succe.mp4
-5- Playlists/5- Peter Thiel/Peter Thiel, Leader of the Rebel Alliance.mp4
-5- Playlists/5- Peter Thiel/Why We Stopped Progressing - Peter Thiel - EP 541.mp4
-5- Playlists/5- Peter Thiel/folder.png
 5- Playlists/6- Radical Candor - Kim Scott/A Radical Candor Story ｜ Kim Scott.mp4
 5- Playlists/6- Radical Candor - Kim Scott/A Radical Candor Story ｜ Mike Pugh.mp4
 5- Playlists/6- Radical Candor - Kim Scott/A Radical Candor Story ｜ Stephanie Usry.mp4
@@ -722,6 +704,24 @@
 5- Playlists/6- Radical Candor - Kim Scott/Video Tip for Immediate Criticism.mp4
 5- Playlists/6- Radical Candor - Kim Scott/Why ＂Don't Take it Personally＂ Doesn't Work ｜ Kim Scott - Radical Candor.mp4
 5- Playlists/6- Radical Candor - Kim Scott/folder.png
+5- Playlists/7- Peter Thiel/Apocalypse Now? Part II - Peter Thiel on Ancient Prophecies and Modern Tech.mp4
+5- Playlists/7- Peter Thiel/Apocalypse Now? Peter Thiel on Ancient Prophecies and Modern Tech.mp4
+5- Playlists/7- Peter Thiel/Billionaire Peter Thiel On Starting a Business and Education 2020.mp4
+5- Playlists/7- Peter Thiel/Interesting Times with Ross Douthat - A.I., Mars and Immortality - Are We Dreaming Big Enough.mp4
+5- Playlists/7- Peter Thiel/Lecture 5 - Competition is for Losers (Peter Thiel).mp4
+5- Playlists/7- Peter Thiel/Peter Thiel - Cambridge Union.mp4
+5- Playlists/7- Peter Thiel/Peter Thiel - PayPal, politics & the importance of being individual.mp4
+5- Playlists/7- Peter Thiel/Peter Thiel - The Coming Collapse No One Is Prepared For.mp4
+5- Playlists/7- Peter Thiel/Peter Thiel - with Jordan Peterson - Why We Stopped Progressing.mp4
+5- Playlists/7- Peter Thiel/Peter Thiel and Marc Andreessen debate.mp4
+5- Playlists/7- Peter Thiel/Peter Thiel on René Girard.mp4
+5- Playlists/7- Peter Thiel/Peter Thiel on being a contrarian.mp4
+5- Playlists/7- Peter Thiel/Peter Thiel on markets, technology, and education.mp4
+5- Playlists/7- Peter Thiel/Peter Thiel's Skeptic Solutions - Tariffs, DOGE & Fixing America.mp4
+5- Playlists/7- Peter Thiel/Peter Thiel's Top 10 Rules For Succe.mp4
+5- Playlists/7- Peter Thiel/Peter Thiel, Leader of the Rebel Alliance.mp4
+5- Playlists/7- Peter Thiel/Why We Stopped Progressing - Peter Thiel - EP 541.mp4
+5- Playlists/7- Peter Thiel/folder.png
 5- Playlists/8- Exodus Jordan Peterson/Exodus (2022) - 01x01 - Faith as an Adventure.mp4
 5- Playlists/8- Exodus Jordan Peterson/Exodus (2022) - 01x02 - Man’s Relationship With the Divine.mp4
 5- Playlists/8- Exodus Jordan Peterson/Exodus (2022) - 01x03 - Chaos and Order.mp4
