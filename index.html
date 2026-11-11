@@ -106,6 +106,7 @@ body.sorting .ic { opacity: 0 !important; }
 @media (min-width: 700px) { .ltile .ln { font-size: 56px; } }
 .lcard .t { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
 .card.seen .ltile { filter: grayscale(1); opacity: .25; }
+.v24 .card.seen .ltile img { filter: none; opacity: 1; } /* V2.4 fix: the tile and its cover were both faded (.25 × .25), so watched videos nearly vanished; now faded once, like movies */
 .ltile.hascover { background: #000; } .ltile.hascover img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; }
 .v24 .ccard .ltile.hascover img { object-fit: cover; } /* V2.4: folder covers fill the tile, like Infuse */
 .chips:has(.back) { order: -1; } .chips .back { font-weight: 600; }
