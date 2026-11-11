@@ -1,0 +1,30 @@
+name: One-off - Reforge rename to 'CODE - Title' (Javi's go, 11 Nov)
+
+# Renames only (never overwrites): M0-L1-…, R&amp;E-M7-L0-…, ICEDTheoryS1L2-… in
+# Retention & Engagement become 'M0-L1 - …', 'M7-L0 - …', 'S1-L2 - …'.
+# 'limit' = how many files (trial first). Deleted after use.
+
+on:
+  workflow_dispatch:
+    inputs:
+      limit: { description: "files to rename", default: "1" }
+
+permissions:
+  contents: read
+
+jobs:
+  rename:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Rename on Whatbox
+        env:
+          KEY: ${{ secrets.WHATBOX_SSH_KEY }}
+          LIMIT: ${{ inputs.limit }}
+        run: |
+          mkdir -p ~/.ssh && chmod 700 ~/.ssh
+          printf '%s\n' "$KEY" > ~/.ssh/whatbox && chmod 600 ~/.ssh/whatbox
+          ssh-keyscan -H kiwi.whatbox.ca >> ~/.ssh/known_hosts 2>/dev/null
+          ssh -i ~/.ssh/whatbox -o BatchMode=yes -o ConnectTimeout=20 javierrincon@kiwi.whatbox.ca \
+            "python3 - 'files/Javi/1- Tech/4- Reforge/2- Retention & Engagement' $LIMIT" < scripts/oneoff_reforge_rename.py
+          rm -f ~/.ssh/whatbox

@@ -163,6 +163,8 @@ def reforge(rel, parts, base):
     live = re.search(r"\b(Live|Event)$", t)
     if m:
         k1, k2, t = int(m.group(1)), ord(m.group(2)) if m.group(2) else 0, m.group(3).strip()
+    elif re.match(r"^(M\d+-L\d+|S\d+-L\d+) - ", t):                       # renamed 11 Nov: 'M0-L1 - Retention Makes Companies', 'M7-L0 - …', 'S1-L2 - …' (code kept in the title)
+        x = re.match(r"^[MS](\d+)-L(\d+) - ", t); k1, k2 = (20 + int(x.group(2)), 0) if t.startswith("M7") else (int(x.group(1)), int(x.group(2)))
     elif re.match(r"^M\d+-L\d+-", t):                                    # 'M0-L1-RetentionMakesCompanies'
         x = re.match(r"^M\d+-L(\d+)-(.+)$", t); k1, t = int(x.group(1)), camel(x.group(2))
     elif re.match(r"^ICEDTheoryS\d+L\d+-", t):                           # 'ICEDTheoryS1L2-ManagingInfrequency'
