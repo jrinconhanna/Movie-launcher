@@ -1,13 +1,3 @@
 {
-  "_note": "Month for videos whose file name has only a year (sets the order inside an era; only the year is shown). File name -> YYYY-MM.",
-  "2001 - Apple Special Event (White iBook).mp4": "2001-05",
-  "2001 - Apple Special Event Town Hall (Original iPod).mp4": "2001-10",
-  "2002 - Apple Special Event (Xserve).mp4": "2002-05",
-  "2003 - Apple Special Event (iTunes Music Store).mp4": "2003-04",
-  "2003 - Apple Special Event (iTunes for Windows).mp4": "2003-10",
-  "2003- Steve Jobs at D1.mp4": "2003-05",
-  "2004 - Apple Special Music Event (iPod Photo, iPod U2 Edition).mp4": "2004-10",
-  "2004 - Steve jobs at D2.mp4": "2004-06",
-  "2001 - Macworld Tokyo (Psychedelic iMacs).mp4": "2001-02",
-  "2005 - Steve Jobs at D3.mp4": "2005-05"
+  "_note": "Month for videos whose file name has only a year (sets the order; the name wins). File name -> YYYY-MM. Empty since the 11 Nov rename put months in the names."
 }
