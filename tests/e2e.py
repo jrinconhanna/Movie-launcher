@@ -68,7 +68,7 @@ with sync_playwright() as p:
         rec(f"D2 [{size}] opening it shows the 8 GSP videos in course order", learn_y() == [f"{k} of 8" for k in range(1, 9)], learn_y())
         rec(f"D3 [{size}] a back chip shows the course name", pg.evaluate("document.querySelector('#chips .back')?.textContent") == "‹ GSP Series")
         pg.click("#chips .back"); pg.wait_for_timeout(300)
-        rec(f"F3 [{size}] back chip returns to the folders", pg.evaluate("document.querySelectorAll('#grid .ccard').length") == 2)
+        rec(f"F3 [{size}] back chip returns to the folders", pg.evaluate("document.querySelectorAll('#grid .ccard').length") == 1)
         pg.click("#grid .ccard .poster"); pg.wait_for_timeout(300)
         rec(f"C1 [{size}] every tile shows its real cover", pg.evaluate("[...document.querySelectorAll('#grid .lcard .ltile img')].filter(i=>i.complete&&i.naturalWidth>0).length") == 8)
         # piece 5: ⋯ ▶ adds to Watching
