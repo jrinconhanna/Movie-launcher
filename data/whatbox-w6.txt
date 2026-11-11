@@ -1,0 +1,75 @@
+--- after ---
+./W0- How Retention Determines The Top 1%/M0-L1-RetentionMakesCompanies.mp4
+./W0- How Retention Determines The Top 1%/M0-L2-RetentionBreaksCompanies.mp4
+./W0- How Retention Determines The Top 1%/M0-L3-RetentionIsGettingHarder.mp4
+./W0- How Retention Determines The Top 1%/M0-L4-ProgramPreview.mp4
+./W1- Retention/1-Introduction To Retention.mp4
+./W1- Retention/2- Natural Behavior Use Cases.mp4
+./W1- Retention/3-Choosing A Retention Metric.mp4
+./W1- Retention/4-Visualizing Retention.mp4
+./W1- Retention/5-Analyzing Retention.mp4
+./W1- Retention/6-Improving Retention.mp4
+./W1- Retention/8-BONUS Module Recap.mp4
+./W1- Retention/Folder.jpg
+./W1- Retention/W1 Event.mp4
+./W2-Activation. Defining, Measuring, And Analyzing/1-Introduction To Activation.mp4
+./W2-Activation. Defining, Measuring, And Analyzing/2-Defining Your Habit Moment.mp4
+./W2-Activation. Defining, Measuring, And Analyzing/3-Defining Your Aha Moment.mp4
+./W2-Activation. Defining, Measuring, And Analyzing/4-Defining Your Setup Moment.mp4
+./W2-Activation. Defining, Measuring, And Analyzing/5-Analyzing Your Activation Flow.mp4
+./W2-Activation. Defining, Measuring, And Analyzing/BONU. Venn Diagram Analysis.mp4
+./W2-Activation. Defining, Measuring, And Analyzing/BONUS. Correlation Analysis.mp4
+./W2-Activation. Defining, Measuring, And Analyzing/BONUS. Introduction to Activation Metric Analysis.mp4
+./W2-Activation. Defining, Measuring, And Analyzing/BONUS. Module Recap.mp4
+./W2-Activation. Defining, Measuring, And Analyzing/BONUS. Setting Up Your Data for Activation Metric Analysis.mp4
+./W2-Activation. Defining, Measuring, And Analyzing/Folder.jpg
+./W2-Activation. Defining, Measuring, And Analyzing/W2 Event.mp4
+./W3- Activation Strategies/1-Introduction To Activation Strategies.mp4
+./W3- Activation Strategies/2-The Four Activation Fits.mp4
+./W3- Activation Strategies/3-PNIP Pyramid.mp4
+./W3- Activation Strategies/4-Creating Your Habit Moment Experience.mp4
+./W3- Activation Strategies/5-Creating Your Aha Moment Experience.mp4
+./W3- Activation Strategies/6-Creating Your Setup Moment Experience.mp4
+./W3- Activation Strategies/7-Evaluating Your Activation Experience End To End.mp4
+./W3- Activation Strategies/9-BONUS Module Recap.mp4
+./W3- Activation Strategies/Folder.jpg
+./W3- Activation Strategies/W3 Event.mp4
+./W4- Engagement. Defining, Measuring, And Analyzing/1-Introduction to Engagement.mp4
+./W4- Engagement. Defining, Measuring, And Analyzing/2-The Four Strategies To Deepen Engagement.mp4
+./W4- Engagement. Defining, Measuring, And Analyzing/3-High Level Measurement Of Your Engagement Strategy.mp4
+./W4- Engagement. Defining, Measuring, And Analyzing/4-How To Define Your Engagement States.mp4
+./W4- Engagement. Defining, Measuring, And Analyzing/5-Analyzing Your Engagement States Part One.mp4
+./W4- Engagement. Defining, Measuring, And Analyzing/6-Analyzing Your Engagement States Part Two.mp4
+./W4- Engagement. Defining, Measuring, And Analyzing/7-BONUS. Module Recap.mp4
+./W4- Engagement. Defining, Measuring, And Analyzing/Folder.jpg
+./W4- Engagement. Defining, Measuring, And Analyzing/W4 Event.mp4
+./W5- Engagement Strategies/1-Introduction To Engagement Strategies.mp4
+./W5- Engagement Strategies/2-Identifying Engagement Opportunities.mp4
+./W5- Engagement Strategies/3-Using Use Case and Feature Strategy.mp4
+./W5- Engagement Strategies/4-Using Frequency Strategy.mp4
+./W5- Engagement Strategies/5-Using Intensity Strategy.mp4
+./W5- Engagement Strategies/6-Building An Engagement Machine.mp4
+./W5- Engagement Strategies/7-BONUS Module Recap.mp4
+./W5- Engagement Strategies/Folder.jpg
+./W5- Engagement Strategies/W5 Event.mp4
+./W6-Resurrection. Defining, Measuring, And Analyzing/1-Introduction To Resurrection.mp4
+./W6-Resurrection. Defining, Measuring, And Analyzing/2-When You Should Focus On Resurrection.mp4
+./W6-Resurrection. Defining, Measuring, And Analyzing/3-Defining At Risk Users For Churn Prediction.mp4
+./W6-Resurrection. Defining, Measuring, And Analyzing/4-Defining Dormant Engagement State.mp4
+./W6-Resurrection. Defining, Measuring, And Analyzing/5-Defining Churned Engagement State.mp4
+./W6-Resurrection. Defining, Measuring, And Analyzing/Folder.jpg
+./W6-Resurrection. Defining, Measuring, And Analyzing/R&amp;E-M7-L0-IntroductiontoResurrectionStrategies.mp4
+./W6-Resurrection. Defining, Measuring, And Analyzing/R&amp;E-M7-L1-StrategiesForAtRiskUsers.mp4
+./W6-Resurrection. Defining, Measuring, And Analyzing/R&amp;E-M7-L2-InvoluntaryDormantStrategies.mp4
+./W6-Resurrection. Defining, Measuring, And Analyzing/R&amp;E-M7-L3-ResurrectingVoluntaryDormantUsers.mp4
+./W6-Resurrection. Defining, Measuring, And Analyzing/W6 Event.mp4
+./W7- ICED Theory (Bonus)/ICEDTheoryS0L1-IntroductiontoManagingInfrequentProducts.mp4
+./W7- ICED Theory (Bonus)/ICEDTheoryS1L1-The4DimensionsofInfrequentProducts.mp4
+./W7- ICED Theory (Bonus)/ICEDTheoryS1L2-ManagingInfrequency.mp4
+./W7- ICED Theory (Bonus)/ICEDTheoryS1L3-ControlOverExperience.mp4
+./W7- ICED Theory (Bonus)/ICEDTheoryS1L4-ManagingDegreeofEngagement.mp4
+./W7- ICED Theory (Bonus)/ICEDTheoryS1L5-ManagingComplexity.mp4
+./W7- ICED Theory (Bonus)/ICEDTheoryS1L6-ExpandingTouchpoints.mp4
+./W7- ICED Theory (Bonus)/ICEDTheoryS1L7-DistinguishingInfrequentProducts.mp4
+./W7- ICED Theory (Bonus)/ICEDTheoryS1L8-TheICEDTheoryCanvas.mp4
+./folder.jpg
