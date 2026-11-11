@@ -325,7 +325,6 @@
 2- TOC/3- TOC Videos/Overcoming resistance to learning.mp4
 2- TOC/3- TOC Videos/Overcoming resistance.mp4
 2- TOC/3- TOC Videos/Putting the bar on a different level.mp4
-2- TOC/3- TOC Videos/Strategy Tactic Implementation Audit Process .mp4
 2- TOC/3- TOC Videos/Strategy Tactic Implementation Audit Process.mp4
 2- TOC/3- TOC Videos/The application of TOC to environments other than productionoper.mp4
 2- TOC/3- TOC Videos/Three legs of TOC implementations.mp4
@@ -367,27 +366,6 @@
 3- Lean/2- 21st Century Jet - Building the Boeing 777/21st Century Jet - 4 - Power to the Plane.mp4
 3- Lean/2- 21st Century Jet - Building the Boeing 777/21st Century Jet - 5 - Countdown to Delivery.mp4
 3- Lean/2- 21st Century Jet - Building the Boeing 777/folder.jpg
-3- Lean/3- Lean Videos/1- How Toyota Cars are made/How Toyota Cars Are Made - Toyota Virtual Plant Tour - Episode 01.mp4
-3- Lean/3- Lean Videos/1- How Toyota Cars are made/How Toyota Cars Are Made - Toyota Vitual Plant Tour - Episode 02.mp4
-3- Lean/3- Lean Videos/1- How Toyota Cars are made/How Toyota Cars Are Made - Toyota Vitual Plant Tour - Episode 03.mp4
-3- Lean/3- Lean Videos/1- How Toyota Cars are made/How Toyota Cars Are Made - Toyota Vitual Plant Tour - Episode 04.mp4
-3- Lean/3- Lean Videos/1- How Toyota Cars are made/How Toyota Cars Are Made - Toyota Vitual Plant Tour - Episode 05.mp4
-3- Lean/3- Lean Videos/1- How Toyota Cars are made/How Toyota Cars Are Made - Toyota Vitual Plant Tour - Episode 06.mp4
-3- Lean/3- Lean Videos/1- How Toyota Cars are made/How Toyota Cars Are Made - Toyota Vitual Plant Tour - Episode 07.mp4
-3- Lean/3- Lean Videos/1- How Toyota Cars are made/How Toyota Cars Are Made - Toyota Vitual Plant Tour - Episode 08.mp4
-3- Lean/3- Lean Videos/1- How Toyota Cars are made/How Toyota Cars Are Made - Toyota Vitual Plant Tour - Episode 09.mp4
-3- Lean/3- Lean Videos/1- How Toyota Cars are made/How Toyota Cars Are Made - Toyota Vitual Plant Tour - Episode 10.mp4
-3- Lean/3- Lean Videos/1- How Toyota Cars are made/How Toyota Cars Are Made - Toyota Vitual Plant Tour - Episode 11.mp4
-3- Lean/3- Lean Videos/1- How Toyota Cars are made/How Toyota Cars Are Made - Toyota Vitual Plant Tour - Episode 12.mp4
-3- Lean/3- Lean Videos/1- How Toyota Cars are made/How Toyota Cars Are Made - Toyota Vitual Plant Tour - Episode 13.mp4
-3- Lean/3- Lean Videos/1- How Toyota Cars are made/How Toyota Cars Are Made - Toyota Vitual Plant Tour - Episode 14.mp4
-3- Lean/3- Lean Videos/1- How Toyota Cars are made/folder.jpg
-3- Lean/3- Lean Videos/2- The Toyota Production System as Taught by Toyota/The Toyota Production System as Taught by Toyota - Episode 01.mp4
-3- Lean/3- Lean Videos/2- The Toyota Production System as Taught by Toyota/The Toyota Production System as Taught by Toyota - Episode 02.mp4
-3- Lean/3- Lean Videos/2- The Toyota Production System as Taught by Toyota/The Toyota Production System as Taught by Toyota - Episode 03.mp4
-3- Lean/3- Lean Videos/2- The Toyota Production System as Taught by Toyota/The Toyota Production System as Taught by Toyota - Episode 04.mp4
-3- Lean/3- Lean Videos/2- The Toyota Production System as Taught by Toyota/The Toyota Production System as Taught by Toyota - Episode 05.mp4
-3- Lean/3- Lean Videos/2- The Toyota Production System as Taught by Toyota/folder.jpg
 3- Lean/3- Lean Videos/An Introduction To The Toyota Production System.mp4
 3- Lean/3- Lean Videos/History of the Toyota Production System (TPS).mp4
 3- Lean/3- Lean Videos/Inside NUMMI The Culture Transformation.mp4
@@ -405,6 +383,27 @@
 3- Lean/3- Lean Videos/folder.jpg
 3- Lean/3- Lean Videos/✅ Celsior - A Lexus LS 400 Documentary.mp4
 3- Lean/3- Lean Videos/✅ How Japanese Cars Changed the World An Insider’s Look.mp4
+3- Lean/4- Toyota Virtual Plan/1- How Toyota Cars are made/How Toyota Cars Are Made - Toyota Virtual Plant Tour - Episode 01.mp4
+3- Lean/4- Toyota Virtual Plan/1- How Toyota Cars are made/How Toyota Cars Are Made - Toyota Vitual Plant Tour - Episode 02.mp4
+3- Lean/4- Toyota Virtual Plan/1- How Toyota Cars are made/How Toyota Cars Are Made - Toyota Vitual Plant Tour - Episode 03.mp4
+3- Lean/4- Toyota Virtual Plan/1- How Toyota Cars are made/How Toyota Cars Are Made - Toyota Vitual Plant Tour - Episode 04.mp4
+3- Lean/4- Toyota Virtual Plan/1- How Toyota Cars are made/How Toyota Cars Are Made - Toyota Vitual Plant Tour - Episode 05.mp4
+3- Lean/4- Toyota Virtual Plan/1- How Toyota Cars are made/How Toyota Cars Are Made - Toyota Vitual Plant Tour - Episode 06.mp4
+3- Lean/4- Toyota Virtual Plan/1- How Toyota Cars are made/How Toyota Cars Are Made - Toyota Vitual Plant Tour - Episode 07.mp4
+3- Lean/4- Toyota Virtual Plan/1- How Toyota Cars are made/How Toyota Cars Are Made - Toyota Vitual Plant Tour - Episode 08.mp4
+3- Lean/4- Toyota Virtual Plan/1- How Toyota Cars are made/How Toyota Cars Are Made - Toyota Vitual Plant Tour - Episode 09.mp4
+3- Lean/4- Toyota Virtual Plan/1- How Toyota Cars are made/How Toyota Cars Are Made - Toyota Vitual Plant Tour - Episode 10.mp4
+3- Lean/4- Toyota Virtual Plan/1- How Toyota Cars are made/How Toyota Cars Are Made - Toyota Vitual Plant Tour - Episode 11.mp4
+3- Lean/4- Toyota Virtual Plan/1- How Toyota Cars are made/How Toyota Cars Are Made - Toyota Vitual Plant Tour - Episode 12.mp4
+3- Lean/4- Toyota Virtual Plan/1- How Toyota Cars are made/How Toyota Cars Are Made - Toyota Vitual Plant Tour - Episode 13.mp4
+3- Lean/4- Toyota Virtual Plan/1- How Toyota Cars are made/How Toyota Cars Are Made - Toyota Vitual Plant Tour - Episode 14.mp4
+3- Lean/4- Toyota Virtual Plan/1- How Toyota Cars are made/folder.jpg
+3- Lean/4- Toyota Virtual Plan/2- The Toyota Production System as Taught by Toyota/The Toyota Production System as Taught by Toyota - Episode 01.mp4
+3- Lean/4- Toyota Virtual Plan/2- The Toyota Production System as Taught by Toyota/The Toyota Production System as Taught by Toyota - Episode 02.mp4
+3- Lean/4- Toyota Virtual Plan/2- The Toyota Production System as Taught by Toyota/The Toyota Production System as Taught by Toyota - Episode 03.mp4
+3- Lean/4- Toyota Virtual Plan/2- The Toyota Production System as Taught by Toyota/The Toyota Production System as Taught by Toyota - Episode 04.mp4
+3- Lean/4- Toyota Virtual Plan/2- The Toyota Production System as Taught by Toyota/The Toyota Production System as Taught by Toyota - Episode 05.mp4
+3- Lean/4- Toyota Virtual Plan/2- The Toyota Production System as Taught by Toyota/folder.jpg
 3- Lean/folder.jpg
 4- Reforge/1- AI Strategy/Week 1 - The Strategic Landscape/1a - AI Tech Shift - How AI Is Creating More Red Ocean vs Blue Ocean.mp4
 4- Reforge/1- AI Strategy/Week 1 - The Strategic Landscape/1b - AI Tech Shift - How AI Is Shifting The Competitive Dynamics.mp4
