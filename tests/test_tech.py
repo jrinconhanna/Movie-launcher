@@ -79,5 +79,5 @@ check("P5 odd characters cleaned, no ticks", not any(re.search("[\uff1a\uff5c\u2
 check("P6 Backlog shows its folders (names without 'z- '): Arnold, Jeff Bezos, Jim Rohn", sorted({t["trail"][2] for t in pl if t["trail"][1] == "Backlog"}) == ["Arnold", "Jeff Bezos", "Jim Rohn"] and all(len(t["trail"]) == 3 for t in pl if t["trail"][1] == "Backlog"))
 check("P7 every Playlists folder has a cover (Backlog borrows)", all(all(t["fcov"]) for t in pl))
 fr = [t for t in ALL if t.get("frame")]
-check("F1 frame covers: all of Reforge AI Strategy (30 videos, at 3 s); no frame where a .png exists", len(fr) == 30 and all(t["trail"][1] == "AI Strategy" and t["frame_at"] == 3 and not t.get("cover") for t in fr), str(len(fr)))
+check("F1 frame covers: all of Reforge (97 videos, at 3 s); no frame where a .png exists", len(fr) == 97 and all(t["category"] == "Reforge" and t["frame_at"] == 3 and not t.get("cover") for t in fr), str(len(fr)))
 print("%d failed" % fails); sys.exit(1 if fails else 0)
