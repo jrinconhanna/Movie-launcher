@@ -136,7 +136,7 @@ body.sorting .ic { opacity: 0 !important; }
   var LEARN = true; // V2.3 live 10 Nov (was the ?v23 preview)
   var V24 = !/[?&]v23\b/.test(location.search); if (V24) document.documentElement.classList.add('v24'); // V2.4 live 11 Nov (?v23 shows the old view for comparison)
   var NEXT = /[?&]next\b/.test(location.search); // V2.4.1 preview (Lean onward): items flagged next only show with ?next until Javier says go
-  var learn = [], learnDone = [], learnWatch = [], forder = {}; // forder: your folder order per Tech level ('' = Tech › All), synced via Trakt
+  var learn = [], learnDone = [], learnWatch = [], forder = {}, vorder = {}; // vorder: your video order per playlist (?next) // forder: your folder order per Tech level ('' = Tech › All), synced via Trakt
   var SHELVES = AFTER ? ['Movies', 'Series', 'Docs'] : ['Watch Next', 'Movies', 'Series', 'Docs'];
   var TOP = ['Watching', 'Next', 'Discover'], top = 'Watching';
   var items = [], unmatched = [], updated = '';
@@ -144,8 +144,8 @@ body.sorting .ic { opacity: 0 !important; }
   var next = [], worder = [], watch = [], parked = [], removed = [], done = [], undone = [];
   function ls(k, d) { try { var v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch (e) { return d; } }
   function lsSet(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} if (SYNC_KEYS.indexOf(k) >= 0 && window.__push) window.__push(); }
-  var SYNC_KEYS = ['worder', 'watch', 'parked', 'next', 'removed', 'done', 'undone', 'learndone', 'learnwatch', 'forder'];
-  next = ls('next', []); worder = ls('worder', []); watch = ls('watch', []); parked = ls('parked', []); removed = ls('removed', []); done = ls('done', []); undone = ls('undone', []); learnDone = ls('learndone', []); learnWatch = ls('learnwatch', []); forder = ls('forder', {}); state = Object.assign(state, ls('view', {})); if (['unwatched', 'watched', 'all'].indexOf(state.wf) < 0) state.wf = 'unwatched'; if (AFTER && state.shelf === 'Watch Next') state.shelf = 'Movies'; if (!LEARN && state.shelf === 'Tech') state.shelf = 'Movies';
+  var SYNC_KEYS = ['worder', 'watch', 'parked', 'next', 'removed', 'done', 'undone', 'learndone', 'learnwatch', 'forder', 'vorder'];
+  next = ls('next', []); worder = ls('worder', []); watch = ls('watch', []); parked = ls('parked', []); removed = ls('removed', []); done = ls('done', []); undone = ls('undone', []); learnDone = ls('learndone', []); learnWatch = ls('learnwatch', []); forder = ls('forder', {}); vorder = ls('vorder', {}); state = Object.assign(state, ls('view', {})); if (['unwatched', 'watched', 'all'].indexOf(state.wf) < 0) state.wf = 'unwatched'; if (AFTER && state.shelf === 'Watch Next') state.shelf = 'Movies'; if (!LEARN && state.shelf === 'Tech') state.shelf = 'Movies';
   var $ = function (id) { return document.getElementById(id); };
   // ---------- Trakt login (device code, no secret; once per device, renewed on open) ----------
   var TRAKT_ID = '8JCox_SeBb82A1WgJW48P67jldMz2aiSZ-xOZ7qH67g', TRAKT = 'https://api.trakt.tv', pending = null;
@@ -190,7 +190,7 @@ body.sorting .ic { opacity: 0 !important; }
   function bySid(x) { for (var i = 0; i < items.length; i++) if (sid(items[i]) === x) return items[i]; return null; }
   function enc(keys) { return keys.map(byKey).filter(function (it) { return it && it.tmdb; }).map(sid); }
   function dec(ids) { return (ids || []).map(bySid).filter(Boolean).map(function (it) { return it.key; }); }
-  function snapshot() { return { v: 1, o: enc(worder), w: enc(watch), p: enc(parked), b: enc(next), r: enc(removed), d: enc(done), u: enc(undone), L: learnDone.slice(), LW: learnWatch.slice(), F: forder }; }
+  function snapshot() { return { v: 1, o: enc(worder), w: enc(watch), p: enc(parked), b: enc(next), r: enc(removed), d: enc(done), u: enc(undone), L: learnDone.slice(), LW: learnWatch.slice(), F: forder, V: vorder }; }
   function listItems(st) {
     var all = {}; ['o', 'w', 'p', 'b', 'r'].forEach(function (k) { st[k].forEach(function (x) { all[x] = 1; }); });
     var body = { movies: [], shows: [] };
@@ -207,6 +207,7 @@ body.sorting .ic { opacity: 0 !important; }
     ['worder', 'watch', 'parked', 'next', 'removed', 'done', 'undone'].forEach(function (k) { try { localStorage.setItem(k, JSON.stringify({ worder: worder, watch: watch, parked: parked, next: next, removed: removed, done: done, undone: undone }[k])); } catch (e) {} });
     if (j.LW) { learnWatch = j.LW.slice(); try { localStorage.setItem('learnwatch', JSON.stringify(learnWatch)); } catch (e) {} } else if (learnWatch.length) setTimeout(function () { push(true); }, 0);
     if (j.L) { learnDone = j.L.slice(); try { localStorage.setItem('learndone', JSON.stringify(learnDone)); } catch (e) {} } else if (learnDone.length) setTimeout(function () { push(true); }, 0);
+    if (j.V) { vorder = j.V; try { localStorage.setItem('vorder', JSON.stringify(vorder)); } catch (e) {} } else if (Object.keys(vorder).length) setTimeout(function () { push(true); }, 0);
     if (j.F) { forder = j.F; try { localStorage.setItem('forder', JSON.stringify(forder)); } catch (e) {} } else if (Object.keys(forder).length) setTimeout(function () { push(true); }, 0);
     lastIds = listItems(j).ids; return true;
   }
@@ -322,6 +323,8 @@ body.sorting .ic { opacity: 0 !important; }
   // V2.4: folders can hold folders (Steve Jobs › era › videos). state.course = the open folder path, joined by '/'.
   function trail(v) { return v.trail || [v.course]; }
   // V2.4.1 (live 11 Nov): a course made of week folders (Reforge 'W1 - …') opens straight on a week; week chips switch between them
+  function vDrag(v) { return NEXT && v.category === 'Playlists'; } // ?next: drag videos inside a playlist (later: any folder, if wanted)
+  function vKey(v) { return trail(v).join('/') + (v.ychip ? '|' + yrOf(v) : ''); }
   function yrOf(v) { return v.year ? String(v.year) : '?'; }
   function yearMode(list) { return V24 && list.some(function (i) { return i.ychip; }) && !list.some(function (i) { return i.isCourse; }); } // family tapes, year chips (live 11 Nov)
   function isWeek(n) { return /^W\d+ - /.test(n || ''); }
@@ -342,6 +345,9 @@ body.sorting .ic { opacity: 0 !important; }
       if (!fs[nm]) { fs[nm] = { isCourse: true, course: nm, path: P.concat([nm]).join('/'), folder: (v.fcov && v.fcov[P.length]) || (t.length === P.length + 1 ? v.folder : null), year: v.v24 ? '' : v.year, category: v.category || 'Other', order: v.corder || '', videos: [] }; order.push(nm); }
       fs[nm].videos.push(v); });
     var fo = V24 && forder[P.join('/')]; if (fo) order.sort(function (a, b) { var ia = fo.indexOf(a), ib = fo.indexOf(b); return (ia < 0 ? 1e6 : ia) - (ib < 0 ? 1e6 : ib); }); // your dragged order; new folders go last
+    if (vids.length && vids.every(vDrag)) { var ix = {}; vids.forEach(function (v, i) { ix[v.key] = i; }); // your dragged order; new videos go last
+      vids.sort(function (a, b) { var ka = vKey(a), kb = vKey(b); if (ka !== kb) return ix[a.key] - ix[b.key]; var o = vorder[ka] || [], ia = o.indexOf(a.key), ib = o.indexOf(b.key); return (ia < 0 ? 1e6 + ix[a.key] : ia) - (ib < 0 ? 1e6 + ix[b.key] : ib); });
+      var pos = {}; vids.forEach(function (v) { var k = vKey(v); pos[k] = (pos[k] || 0) + 1; v._pos = pos[k]; }); }
     if (V24 && !vids.length && order.length > 1 && order.every(isWeek)) { // open on your week: the one you picked last, else the first with something unwatched
       var pk = (state.wk || {})[P.join('/')]; if (order.indexOf(pk) < 0) pk = order.filter(function (k) { return fs[k].videos.some(function (v) { return learnDone.indexOf(lid(v)) < 0; }); })[0] || order[0];
       state.course = P.concat([pk]).join('/'); return techLevel(); }
@@ -562,9 +568,9 @@ body.sorting .ic { opacity: 0 !important; }
     var d = document.createElement('div'); d.className = 'card lcard'; d.dataset.key = v.key;
     var a = document.createElement('a'); a.className = 'poster ltile'; a.href = '#'; a.setAttribute('aria-label', v.title);
     if (v.cover) { var im = document.createElement('img'); im.className = 'fg'; im.loading = 'lazy'; im.alt = ''; im.src = v.cover; a.appendChild(im); a.classList.add('hascover'); }
-    else { var n = document.createElement('span'); n.className = 'ln'; n.textContent = v.num != null ? v.num : v.n != null ? v.n : '·'; /* Lean: the session/episode number, not the position (Session 10 shows 10) */ a.appendChild(n);
+    else { var n = document.createElement('span'); n.className = 'ln'; n.textContent = v._pos != null && top === 'Discover' && vDrag(v) ? v._pos : v.num != null ? v.num : v.n != null ? v.n : '·'; /* Lean: the session/episode number, not the position (Session 10 shows 10) */ a.appendChild(n);
     if (!(V24 && (v.ychip || isWeek(v.course) || (state.course && inWeek(state.course.split('/')))))) { var c = document.createElement('span'); c.className = 'lc'; c.textContent = v.course; a.appendChild(c); } } // ?next: the week heading already names it
-    a.onclick = function (e) { e.preventDefault(); playLearn(v); };
+    a.onclick = function (e) { e.preventDefault(); if (a.dataset.noclick) return; playLearn(v); };
     var seen = learnDone.indexOf(lid(v)) >= 0; if (seen && !(V24 && top === 'Discover' && state.wf === 'watched')) d.classList.add('seen'); // V2.4: the Watched filter shows them in full colour, like movies
     var ic = document.createElement('div'); ic.className = 'ic wm';
     var opts = document.createElement('span'); opts.className = 'opts';
@@ -579,7 +585,7 @@ body.sorting .ic { opacity: 0 !important; }
     ic.appendChild(opts); ic.appendChild(more);
     d.appendChild(a); d.appendChild(ic);
     var t = document.createElement('div'); t.className = 't'; t.textContent = v.title; d.appendChild(t);
-    if (v.n != null) { var bd = document.createElement('span'); bd.className = 'badge'; bd.textContent = v.n + '/' + learn.filter(function (x) { return x.course === v.course; }).length; a.appendChild(bd); // same corner as a series' episode count
+    if (v.n != null) { var bd = document.createElement('span'); bd.className = 'badge'; bd.textContent = (v._pos != null && top === 'Discover' && vDrag(v) ? v._pos : v.n) + '/' + learn.filter(function (x) { return x.course === v.course; }).length; a.appendChild(bd); // same corner as a series' episode count
     } // no bar on a single video: a bar means that item's own progress (course progress sits on the folder)
     var y = document.createElement('div'); y.className = 'y'; y.textContent = [(v.mon ? 'Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec'.split(' ')[v.mon - 1] + ' ' : '') + (v.year || ''), V24 && top === 'Discover' ? '' : v.course].filter(Boolean).join(' · '); d.appendChild(y); /* V2.4: 'Jan 1997' when the file name has the month */ // V2.4: inside a folder the folder name adds nothing; Watching keeps it
     return d;
@@ -606,6 +612,7 @@ body.sorting .ic { opacity: 0 !important; }
     if (sec === 'parked') { parked = keys; lsSet('parked', parked); }
     if (sec === 'next') { next = keys; lsSet('next', next); }
     if (sec.indexOf('f:') === 0) { forder[sec.slice(2)] = keys; lsSet('forder', forder); }
+    if (sec.indexOf('v:') === 0) { vorder[sec.slice(2)] = keys; lsSet('vorder', vorder); setTimeout(render, 90); } // re-number the tiles in your order
   }
   function sortable(g) {
     g.querySelectorAll('.card[data-sec]').forEach(function (c) {
@@ -683,6 +690,8 @@ body.sorting .ic { opacity: 0 !important; }
       else list.forEach(function (it) { g.appendChild(it.isCourse ? ccard(it) : state.shelf === 'Tech' ? lcard(it) : mcard(it)); }); }
     if (V24 && state.shelf === 'Tech' && list.some(function (i) { return i.isCourse; })) { // live 11 Nov: drag folders into your order, like Watching (Tech › All, TOC, Lean…)
       var lvl = 'f:' + techLevel().P.join('/'); g.querySelectorAll('.ccard').forEach(function (c, i) { var f = list.filter(function (x) { return x.isCourse; })[i]; c.dataset.sec = lvl; c.dataset.key = f.course; }); sortable(g); }
+    else if (V24 && state.shelf === 'Tech' && list.length && list.every(function (i) { return !i.isCourse && vDrag(i); })) { // ?next: drag videos inside a playlist, like Watching
+      var byK = {}; list.forEach(function (v) { byK[v.key] = v; }); g.querySelectorAll('.lcard:not(.ccard)').forEach(function (c) { var v = byK[c.dataset.key]; if (v) c.dataset.sec = 'v:' + vKey(v); }); sortable(g); }
     renderFoot(); state.shelf = real;
   }
   function renderFoot() {
