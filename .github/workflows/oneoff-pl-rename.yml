@@ -1,0 +1,29 @@
+name: One-off - Playlists renames (Javi's go, 11 Nov)
+
+# Renames only (never overwrites): Kanye dates to YYYY(-MM-DD) - Title, the last ✅,
+# 5- Peter Thiel -> 7-, "10 - Ryan Serhant" -> "10-". 'limit' = how many (trial first). Deleted after use.
+
+on:
+  workflow_dispatch:
+    inputs:
+      limit: { description: "how many", default: "1" }
+
+permissions:
+  contents: read
+
+jobs:
+  rename:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Rename on Whatbox
+        env:
+          KEY: ${{ secrets.WHATBOX_SSH_KEY }}
+          LIMIT: ${{ inputs.limit }}
+        run: |
+          mkdir -p ~/.ssh && chmod 700 ~/.ssh
+          printf '%s\n' "$KEY" > ~/.ssh/whatbox && chmod 600 ~/.ssh/whatbox
+          ssh-keyscan -H kiwi.whatbox.ca >> ~/.ssh/known_hosts 2>/dev/null
+          ssh -i ~/.ssh/whatbox -o BatchMode=yes -o ConnectTimeout=20 javierrincon@kiwi.whatbox.ca \
+            "python3 - 'files/Javi/1- Tech/5- Playlists' $LIMIT" < scripts/oneoff_pl_rename.py
+          rm -f ~/.ssh/whatbox
