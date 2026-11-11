@@ -82,13 +82,14 @@ def steve_jobs(rel, parts, base):
         course, cord = clean(parts[0]); sub = None
         cdir = "/".join([top] + parts[:1])
     y, mo, d, t = split_date(title)
+    shown_mo = mo  # only a month written in the file name is shown; a guessed one only sorts
     if y and not mo:  # only a year in the name: month from the event, or from data/tech-dates.json
         mo = month_for(rel.split("/")[-1], t)
     if course == "Apple ads":
         y = y or int(sub) if sub and sub.isdigit() else y
     # one parent folder 'Steve Jobs' holding the eras, Other and Apple ads (11 Nov)
     return {"course": course, "cord": cord, "sub": sub, "title": t or title, "year": y,
-            "trail": ["Steve Jobs", course], "tdirs": [top, cdir],
+            "trail": ["Steve Jobs", course], "tdirs": [top, cdir], "mon": shown_mo,
             "sort": (y or 9999, mo or 0, d or 0, (t or title).lower())}
 
 
@@ -128,4 +129,5 @@ def tech_items(lines):
     for it in out:
         n[it["course"]] = n.get(it["course"], 0) + 1; it["n"] = n[it["course"]]
         del it["sort"]
+        if not it.get("mon"): it.pop("mon", None)
     return out
