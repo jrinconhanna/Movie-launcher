@@ -14,14 +14,14 @@ BASE = "files/Javi/1- Tech"
 SSH = ["ssh", "-i", os.path.expanduser("~/.ssh/whatbox"), "-o", "BatchMode=yes", "-o", "ConnectTimeout=20"]
 
 
-def wide(im):
+def wide(im, left=False):
     """Trim black borders baked into the image, then cut to 16:9 (keeps the upper part on tall images, where faces are)."""
     box = im.convert("L").point(lambda v: 255 if v > 28 else 0).getbbox()
     if box and (box[2] - box[0]) * (box[3] - box[1]) > 0.15 * im.width * im.height:
         im = im.crop(box)
     w, hh = im.size
     if w / hh > 16 / 9:
-        nw = int(hh * 16 / 9); x = (w - nw) // 2; im = im.crop((x, 0, x + nw, hh))
+        nw = int(hh * 16 / 9); x = 0 if left else (w - nw) // 2; im = im.crop((x, 0, x + nw, hh))
     else:
         nh = int(w * 9 / 16); y = int((hh - nh) * (0.25 if hh > w else 0.5)); im = im.crop((0, y, w, y + nh))
     return im.resize((640, 360))
@@ -93,7 +93,7 @@ def frames(items):
         else:
             p = os.path.join(tmp, base + ".jpg")
         if not p or not os.path.exists(p): continue
-        wide(Image.open(p).convert("RGB")).save(os.path.join(ROOT, it["frame"]), "JPEG", quality=72, optimize=True, progressive=True); n += 1
+        wide(Image.open(p).convert("RGB"), left=True).save(os.path.join(ROOT, it["frame"]), "JPEG", quality=72, optimize=True, progressive=True); n += 1
     print("frames saved: %d" % n)
 
 
