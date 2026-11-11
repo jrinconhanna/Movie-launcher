@@ -24,7 +24,7 @@ with sync_playwright() as p:
     b = p.chromium.launch(executable_path=CHROME)
     for size, vp in [("desktop", {"width": 1280, "height": 900}), ("phone", {"width": 390, "height": 844})]:
         # --- regression: V2 / V2.2 ---
-        pg = page(b, vp)
+        pg = page(b, vp, "?v23")
         rec(f"R1 [{size}] Watching shows posters", pg.evaluate("document.querySelectorAll('#grid .card .poster img').length") > 0)
         rec(f"R2 [{size}] V2.3 is on without ?v23 (Tech shelf exists)", True)
         tab(pg, "Next")
@@ -39,7 +39,7 @@ with sync_playwright() as p:
         rec(f"R6 [{size}] no page errors (regression)", not pg.errs, pg.errs)
         pg.context.close()
         # --- V2.3 ---
-        pg = page(b, vp)
+        pg = page(b, vp, "?v23")
         def learn_y(): return pg.evaluate("[...document.querySelectorAll('#grid .lcard:not(.ccard) .badge')].map(x=>x.textContent.replace('/', ' of '))")
         def tech(open_course=True):
             tab(pg, "Discover"); pg.evaluate("[...document.querySelectorAll('#tabs button')].find(b=>b.firstChild.textContent==='Tech').click()"); pg.wait_for_timeout(300)
@@ -145,7 +145,7 @@ with sync_playwright() as p:
         pg.screenshot(path=f"/tmp/e2e_{size}.png")
         pg.context.close()
         # --- V2.4 preview (?v24): Tech from the real Whatbox list ---
-        pg = page(b, vp, "?v24")
+        pg = page(b, vp)  # V2.4 is the default now
         tab(pg, "Discover"); pg.evaluate("[...document.querySelectorAll('#tabs button')].find(b=>b.firstChild.textContent==='Tech').click()"); pg.wait_for_timeout(300)
         chips = pg.evaluate("[...document.querySelectorAll('#chips button')].map(b=>b.textContent)")
         rec(f"J1 [{size}] ?v24: Steve Jobs chip first, then TOC", [c.split(' ')[0] for c in chips[1:3]] == ["Steve", "TOC"], chips)
@@ -218,9 +218,9 @@ with sync_playwright() as p:
         rec(f"J9 [{size}] no page errors (V2.4)", not pg.errs, pg.errs)
         pg.screenshot(path=f"/tmp/e2e24_{size}.png")
         pg.context.close()
-        pg = page(b, vp)
+        pg = page(b, vp, "?v23")
         tab(pg, "Discover"); pg.evaluate("[...document.querySelectorAll('#tabs button')].find(b=>b.firstChild.textContent==='Tech').click()"); pg.wait_for_timeout(300)
-        rec(f"J10 [{size}] without ?v24 Tech is unchanged (GSP only)", pg.evaluate("[...document.querySelectorAll('#grid .ccard .t')].map(x=>x.textContent)") == ["GSP Series"])
+        rec(f"J10 [{size}] ?v23 still shows the old Tech view (GSP only)", pg.evaluate("[...document.querySelectorAll('#grid .ccard .t')].map(x=>x.textContent)") == ["GSP Series"])
         pg.context.close()
     b.close()
 srv.shutdown()

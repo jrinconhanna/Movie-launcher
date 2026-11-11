@@ -133,7 +133,7 @@ body.sorting .ic { opacity: 0 !important; }
 (function () {
   var AFTER = true, MOCK = true, BAR = true;
   var LEARN = true; // V2.3 live 10 Nov (was the ?v23 preview)
-  var V24 = /[?&]v24\b/.test(location.search); if (V24) document.documentElement.classList.add('v24'); // V2.4 preview: all Tech videos from the real Whatbox list
+  var V24 = !/[?&]v23\b/.test(location.search); if (V24) document.documentElement.classList.add('v24'); // V2.4 live 11 Nov (?v23 shows the old view for comparison)
   var learn = [], learnDone = [], learnWatch = [];
   var SHELVES = AFTER ? ['Movies', 'Series', 'Docs'] : ['Watch Next', 'Movies', 'Series', 'Docs'];
   var TOP = ['Watching', 'Next', 'Discover'], top = 'Watching';
