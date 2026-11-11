@@ -221,6 +221,11 @@ RULES = {"1- Steve Jobs": steve_jobs, "2- TOC": toc, "3- Lean": lean, "4- Reforg
 ONLY = ["1- Steve Jobs/1) 1976-1984 (Apple I & Mac)/", "1- Steve Jobs/2) 1985-1995 (Next & Pixar)/", "1- Steve Jobs/3) 1996-1999 (Apple Comeback)/", "1- Steve Jobs/4) 2000-2004 (iPod & Digital Hub)/", "1- Steve Jobs/5) 2005-2007 (iPhone)/", "1- Steve Jobs/6) 2008-2011 (iPad & Final)/", "1- Steve Jobs/99- Other/", "2- TOC/", "3- Lean/", "4- Reforge/", "5- Playlists/"]  # eras added one at a time (11 Nov)
 
 
+# Covers from a frame of the video (V2.4.1), Reforge first, one week at a time, at 3 s (title card).
+# Frames live only in the launcher (covers/t/<id>f.jpg); nothing is written to Whatbox or the Mac. A .png always wins.
+FRAMES = {"4- Reforge/1- AI Strategy/Week 1 - The Strategic Landscape/": 3}
+
+
 def tech_items(lines):
     files = [l.strip().lstrip("./") for l in lines if l.strip()]
     have = set(files)
@@ -241,6 +246,9 @@ def tech_items(lines):
         for ext in IMG:
             if d + "/" + base + ext in have:
                 it["src_cover"] = d + "/" + base + ext; it["cover"] = "covers/t/%sw.jpg" % h(it["src_cover"]); break  # 'w' = wide 16:9 version
+        if not it.get("src_cover"):
+            at = next((s for pre, s in FRAMES.items() if rel.startswith(pre)), None)
+            if at is not None: it["src_frame"], it["frame_at"], it["frame"] = rel, at, "covers/t/%sf.jpg" % h(rel)
         # a cover for each folder on the way down (folder.jpg in that folder on Whatbox)
         it["src_fcov"], it["fcov"] = [], []
         for dd in it.pop("tdirs"):

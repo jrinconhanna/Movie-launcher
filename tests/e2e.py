@@ -346,6 +346,16 @@ with sync_playwright() as p:
         tab(pg, "Discover"); pg.evaluate("[...document.querySelectorAll('#tabs button')].find(b=>b.firstChild.textContent==='Tech').click()"); pg.wait_for_timeout(300)
         rec(f"P13 [{size}] Playlists shows without ?next (live)", "Playlists" in pg.evaluate("[...document.querySelectorAll('#grid .ccard .t')].map(x=>x.textContent)"))
         pg.context.close()
+        # --- ?next: Reforge W1 videos show a frame of the video as cover ---
+        for q, want in (("?next", True), ("", False)):
+            pg = page(b, vp, q)
+            tab(pg, "Discover"); pg.evaluate("[...document.querySelectorAll('#tabs button')].find(b=>b.firstChild.textContent==='Tech').click()"); pg.wait_for_timeout(300)
+            pg.evaluate("[...document.querySelectorAll('#chips button')].find(b=>b.textContent.startsWith('Reforge')).click()"); pg.wait_for_timeout(300)
+            pg.evaluate("[...document.querySelectorAll('#grid .ccard')].find(c=>c.querySelector('.t').textContent==='AI Strategy').querySelector('.poster').click()"); pg.wait_for_timeout(300)
+            pg.evaluate("(b=>b&&b.click())([...document.querySelectorAll('#wkrow button')].find(b=>b.textContent==='W1'))"); pg.wait_for_timeout(600)
+            n = pg.evaluate("[...document.querySelectorAll('#grid .lcard:not(.ccard) img.fg')].filter(i=>i.complete&&i.naturalWidth>0).length")
+            rec(f"F2 [{size}] Reforge W1 frame covers {'show with ?next' if want else 'stay hidden without ?next'}", (n == 8) if want else (n == 0), n)
+            pg.context.close()
         pg = page(b, vp, "?v23")
         tab(pg, "Discover"); pg.evaluate("[...document.querySelectorAll('#tabs button')].find(b=>b.firstChild.textContent==='Tech').click()"); pg.wait_for_timeout(300)
         rec(f"J10 [{size}] ?v23 still shows the old Tech view (GSP only)", pg.evaluate("[...document.querySelectorAll('#grid .ccard .t')].map(x=>x.textContent)") == ["GSP Series"])

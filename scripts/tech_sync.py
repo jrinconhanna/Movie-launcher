@@ -42,6 +42,7 @@ def main():
             if src and not os.path.exists(os.path.join(ROOT, dst)):
                 need[src] = dst
     print("%d files listed, %d covers to copy" % (len(lines), len(need)))
+    frames(tech_items(lines))
     if not need:
         return
     from PIL import Image
@@ -62,6 +63,30 @@ def main():
             im.thumbnail((320, 480))  # folder: portrait poster, as is
         im.save(os.path.join(ROOT, dst), "JPEG", quality=72, optimize=True, progressive=True)
     print("covers copied")
+
+
+def frames(items):
+    """Grab one frame per listed video (at its second) on Whatbox, copy it back and cut it to the 16:9 tile."""
+    need = [it for it in items if it.get("src_frame") and not os.path.exists(os.path.join(ROOT, it["frame"]))]
+    print("%d frames to grab" % len(need))
+    if not need:
+        return
+    from PIL import Image
+    import shlex
+    cmds = ["mkdir -p /tmp/lf && rm -f /tmp/lf/*"]
+    for it in need:
+        cmds.append("ffmpeg -v error -y -ss %d -i %s -frames:v 1 -q:v 3 /tmp/lf/%s.jpg || true" % (it["frame_at"], shlex.quote(BASE + "/" + it["src_frame"]), os.path.basename(it["frame"])[:-4]))
+    r = subprocess.run(SSH + [HOST, " ; ".join(cmds)], capture_output=True, text=True, timeout=900)
+    tmp = tempfile.mkdtemp()
+    subprocess.run(["scp", "-i", os.path.expanduser("~/.ssh/whatbox"), "-o", "BatchMode=yes", HOST + ":/tmp/lf/*.jpg", tmp + "/"], timeout=600)
+    subprocess.run(SSH + [HOST, "rm -rf /tmp/lf"], timeout=60)
+    os.makedirs(os.path.join(ROOT, "covers", "t"), exist_ok=True)
+    n = 0
+    for it in need:
+        p = os.path.join(tmp, os.path.basename(it["frame"]))
+        if not os.path.exists(p): continue
+        wide(Image.open(p).convert("RGB")).save(os.path.join(ROOT, it["frame"]), "JPEG", quality=72, optimize=True, progressive=True); n += 1
+    print("frames saved: %d" % n)
 
 
 if __name__ == "__main__":
