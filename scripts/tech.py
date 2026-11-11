@@ -95,7 +95,7 @@ def tech_items(lines):
         it.update({"key": "learn|1- Tech/" + rel, "id": "t:" + h(rel), "category": cat, "corder": corder, "file": p[-1], "v24": True})
         for ext in IMG:
             if d + "/" + base + ext in have:
-                it["src_cover"] = d + "/" + base + ext; it["cover"] = "covers/t/%s.jpg" % h(it["src_cover"]); break
+                it["src_cover"] = d + "/" + base + ext; it["cover"] = "covers/t/%sw.jpg" % h(it["src_cover"]); break  # 'w' = wide 16:9 version
         # a cover for each folder on the way down (folder.jpg in that folder on Whatbox)
         it["src_fcov"], it["fcov"] = [], []
         for dd in it.pop("tdirs"):

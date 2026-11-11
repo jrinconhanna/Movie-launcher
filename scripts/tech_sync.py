@@ -14,6 +14,19 @@ BASE = "files/Javi/1- Tech"
 SSH = ["ssh", "-i", os.path.expanduser("~/.ssh/whatbox"), "-o", "BatchMode=yes", "-o", "ConnectTimeout=20"]
 
 
+def wide(im):
+    """Trim black borders baked into the image, then cut to 16:9 (keeps the upper part on tall images, where faces are)."""
+    box = im.convert("L").point(lambda v: 255 if v > 28 else 0).getbbox()
+    if box and (box[2] - box[0]) * (box[3] - box[1]) > 0.15 * im.width * im.height:
+        im = im.crop(box)
+    w, hh = im.size
+    if w / hh > 16 / 9:
+        nw = int(hh * 16 / 9); x = (w - nw) // 2; im = im.crop((x, 0, x + nw, hh))
+    else:
+        nh = int(w * 9 / 16); y = int((hh - nh) * (0.25 if hh > w else 0.5)); im = im.crop((0, y, w, y + nh))
+    return im.resize((640, 360))
+
+
 def main():
     r = subprocess.run(SSH + [HOST, 'cd "%s" && find . -type f | sort' % BASE], capture_output=True, text=True, timeout=120)
     if r.returncode != 0:
@@ -43,7 +56,10 @@ def main():
         if not os.path.exists(p):
             continue
         im = Image.open(p).convert("RGB")
-        im.thumbnail((320, 480))
+        if dst.endswith("w.jpg"):
+            im = wide(im)  # video: same 16:9 tile for every cover
+        else:
+            im.thumbnail((320, 480))  # folder: portrait poster, as is
         im.save(os.path.join(ROOT, dst), "JPEG", quality=72, optimize=True, progressive=True)
     print("covers copied")
 
