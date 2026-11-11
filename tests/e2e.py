@@ -363,14 +363,18 @@ with sync_playwright() as p:
         for q in ("", "?proto"):
             pg = page(b, vp, q)
             tab(pg, "Discover"); pg.evaluate("[...document.querySelectorAll('#tabs button')].find(b=>b.firstChild.textContent==='Tech').click()"); pg.wait_for_timeout(300)
-            has = pg.evaluate("[...document.querySelectorAll('#grid .ccard')].some(c=>[...c.querySelectorAll('.opts button')].some(x=>x.title.startsWith('Subscribe')))")
+            sub = "[...document.querySelectorAll('#grid .ccard')].some(c=>[...c.querySelectorAll('.opts button')].some(x=>x.title.startsWith('Subscribe')))"
+            top_has = pg.evaluate(sub)
+            pg.evaluate("[...document.querySelectorAll('#grid .ccard')].find(c=>c.querySelector('.t').textContent==='TOC').querySelector('.poster').click()"); pg.wait_for_timeout(300)
+            has = pg.evaluate(sub)
+            if q: rec(f"X9 [{size}] ?proto: no Subscribe on folders of folders (TOC)", not top_has)
             if not q:
                 rec(f"X1 [{size}] no Subscribe without ?proto", not has); pg.context.close(); continue
             rec(f"X2 [{size}] ?proto: folders offer ☆ Subscribe", has)
-            pg.evaluate("[...document.querySelectorAll('#grid .ccard')].find(c=>c.querySelector('.t').textContent==='TOC').querySelector('.opts button[title^=Subscribe]').click()"); pg.wait_for_timeout(300)
+            pg.evaluate("[...document.querySelectorAll('#grid .ccard')].find(c=>c.querySelector('.t').textContent==='GSP Series').querySelector('.opts button[title^=Subscribe]').click()"); pg.wait_for_timeout(300)
             tab(pg, "Watching")
             ch = pg.evaluate("[...document.querySelectorAll('.pchip')].map(x=>x.textContent)")
-            rec(f"X3 [{size}] the subscribed folder is a channel on Watching (and the focus)", bool(ch) and ch[0] == "★ TOC", ch)
+            rec(f"X3 [{size}] the subscribed folder is a channel on Watching (and the focus)", bool(ch) and ch[0] == "★ GSP Series" and pg.evaluate("document.querySelector('.pfoc .y').textContent") == "TOC › GSP Series" and pg.evaluate("!!document.querySelector('.pfoc .poster .pbar')"), ch)
             t1 = pg.evaluate("document.querySelector('.pfoc .t').textContent")
             pg.evaluate("document.querySelector('.pfoc .ic .opts button[title^=\\'Mark watched\\']').click()"); pg.wait_for_timeout(300)
             t2 = pg.evaluate("document.querySelector('.pfoc .t').textContent")
