@@ -123,7 +123,7 @@ body.sorting .ic { opacity: 0 !important; }
 .pbar2{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:6px;align-items:center;font:600 12px var(--font);color:var(--muted);margin:2px 0 4px}.pbar2 button{font:600 12px var(--font);border:1px solid var(--line,#ddd);background:transparent;color:var(--fg);border-radius:999px;padding:4px 10px;cursor:pointer}.pbar2 button[aria-pressed=true]{background:var(--fg);color:var(--bg)}
 .pchip{position:absolute;left:6px;top:6px;z-index:2;max-width:calc(100% - 50px);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;background:rgba(255,255,255,.93);color:#111;font:700 11px var(--font);padding:3px 7px;border-radius:5px;border:0;cursor:pointer;text-align:left}.pchip:hover{background:#fff;text-decoration:underline}
 .pchip.f{background:#d63c3c;color:#fff}.pfoc .poster{outline:3px solid #d63c3c;outline-offset:-3px}
-.pline{display:flex;align-items:center;gap:8px;margin-top:3px;font:500 12px var(--font);color:var(--muted)}.pline .pb{flex:1;max-width:160px;height:4px;border-radius:2px;background:var(--chip);overflow:hidden}.pline .pb i{display:block;height:100%;background:#d63c3c}.pline b{color:var(--fg)}
+.pline{display:flex;align-items:center;gap:8px;margin-top:6px;font:500 12px var(--font);color:var(--muted)}.pline .pb{flex:1;max-width:none;height:4px;border-radius:2px;background:var(--chip);overflow:hidden}.pline .pb i{display:block;height:100%;background:#d63c3c}.pline b{color:var(--fg)}
 .pline .pck{margin-left:auto;border:1px solid var(--line,#ccc);background:transparent;color:var(--fg);border-radius:999px;font:600 12px var(--font);padding:3px 9px;cursor:pointer;white-space:nowrap}.pline .pck:hover{background:var(--chip)}
 .pwide .poster{aspect-ratio:16/9!important}.pwide .poster img{object-position:50% 18%}
 .pfocus{grid-column:1/-1;display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:20px;border:1px solid var(--line,#ddd);border-radius:14px;padding:14px;margin-bottom:6px}.pfocus .card{margin:0}
@@ -132,7 +132,7 @@ body.sorting .ic { opacity: 0 !important; }
 .pfocus .togo{font-size:14px}.pfocus .togo b{font-size:19px}.pfocus .nx{margin-top:12px;color:var(--muted);font-size:13px}.pfocus .nx b{display:block;color:var(--fg);font-size:15px;margin-top:2px}
 .pfocus .acts{margin-top:12px;display:flex;gap:6px;flex-wrap:wrap}.pfocus .acts button{border:1px solid var(--line,#ccc);background:transparent;color:var(--fg);border-radius:999px;font:500 12px var(--font);padding:4px 10px;cursor:pointer}
 .pempty{grid-column:1/-1;border:2px dashed var(--chip);border-radius:12px;padding:14px;color:var(--muted);font-size:13px}
-@media (max-width:640px){.pfocus{grid-template-columns:1fr;gap:10px;padding:10px}.pfocus h2{font-size:19px}.pline{flex-wrap:wrap;gap:5px}.pline .pb{display:none}.pline>span{white-space:nowrap}.pline .pck{margin-left:0;padding:3px 7px}.pline .pck:last-child{margin-left:auto}}
+@media (max-width:640px){.pfocus{grid-template-columns:1fr;gap:10px;padding:10px}.pfocus h2{font-size:19px}.pline{flex-wrap:wrap;gap:5px}.pline>span{white-space:nowrap}.pline .pck{margin-left:0;padding:3px 7px}.pline .pck:last-child{margin-left:auto}}
 .pfocus .acts button{flex:0 0 auto;width:auto}.pline>span{white-space:nowrap}
 </style>
 </head>
@@ -695,7 +695,13 @@ body.sorting .ic { opacity: 0 !important; }
     var bd = d.querySelector('.badge'); if (bd) bd.textContent = (ch.vids.indexOf(ch.next) + 1) + '/' + ch.total;
     var y = d.querySelector('.y'); if (y) y.remove();
     var pct = ch.total ? Math.round(100 * ch.done / ch.total) : 0;
-    d.appendChild(pline('<span class="pb"><i style="width:' + pct + '%"></i></span><span>' + ch.done + ' of ' + ch.total + ' · <b>' + (ch.total - ch.done) + ' to go</b></span>', function () { markLearn(ch.next, true); }));
+    d.appendChild(pline('<span class="pb"><i style="width:' + pct + '%"></i></span>')); // just the bar; the badge has the count
+    var opts = d.querySelector('.ic .opts'), more = d.querySelector('.ic .more'); opts.innerHTML = ''; // ⋯ on a channel: ✓ (next comes up) · ◎ focus · ✕ unsubscribe
+    var acts = [['watched', 'Mark watched · the next one comes up', function () { markLearn(ch.next, true); }]];
+    if (!foc) acts.push(['focus', ACT.focus[1], function () { protoFocus(ch.path); }]);
+    acts.push(['remove', 'Unsubscribe', function () { protoSub(ch.path, false); }]);
+    acts.forEach(function (x) { var b = document.createElement('button'); b.type = 'button'; b.textContent = ACT[x[0]][0]; b.title = x[1]; b.setAttribute('aria-label', x[1]); b.onclick = function (e) { e.preventDefault(); x[2](); }; opts.appendChild(b); });
+    more.title = acts.map(function (x) { return x[1].split(' · ')[0]; }).join(', ');
     return d; }
   function protoWatching(g0) {
     var bar = document.createElement('div'); bar.className = 'pbar2'; bar.appendChild(document.createTextNode('Prototype · '));
@@ -718,7 +724,7 @@ body.sorting .ic { opacity: 0 !important; }
     var hs = document.createElement('div'); hs.className = 'sech'; hs.textContent = 'Watching now'; g0.appendChild(hs);
     var lg = document.createElement('div'); lg.className = 'grid vids subgrid'; g0.appendChild(lg);
     if (foc && proto.lay === 'A1') lg.appendChild(chCard(foc, true));
-    rest.forEach(function (c) { var d = chCard(c, false); var mk = document.createElement('button'); mk.type = 'button'; mk.className = 'pck'; mk.textContent = '◎'; mk.title = 'Make it my focus'; mk.onclick = function (e) { e.preventDefault(); protoFocus(c.path); }; var pl = d.querySelector('.pline'); if (pl) pl.insertBefore(mk, pl.querySelector('.pck')); lg.appendChild(d); });
+    rest.forEach(function (c) { var d = chCard(c, false); lg.appendChild(d); });
     learn.filter(function (v) { return learnWatch.indexOf(lid(v)) >= 0 && learnDone.indexOf(lid(v)) < 0 && !proto.subs.some(function (p) { return trail(v).join('/').indexOf(p) === 0; }); }).forEach(function (v) { lg.appendChild(lcard(v)); }); // videos you added one by one stay
     var wl = items.filter(inWatching).sort(function (a, b) { var ia = worder.indexOf(a.key), ib = worder.indexOf(b.key); if (ia < 0) ia = 1e6; if (ib < 0) ib = 1e6; return ia - ib || a.title.localeCompare(b.title); });
     wl.forEach(function (it) { var d = mcard(it); d.classList.add('pwide'); var c = document.createElement('button'); c.type = 'button'; c.className = 'pchip'; c.textContent = it.title; c.onclick = function (e) { e.preventDefault(); e.stopPropagation(); go(link(it)); }; d.querySelector('.poster').appendChild(c);
