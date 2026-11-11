@@ -8,9 +8,10 @@ fails = 0
 def check(name, ok, detail=""):
     global fails
     print(("PASS " if ok else "FAIL ") + name + ("" if ok else "  " + detail)); fails += 0 if ok else 1
-FIRST = tech_items(open(os.path.join(ROOT, "data", "tech-files.txt"), encoding="utf-8").readlines())
+ALL = tech_items(open(os.path.join(ROOT, "data", "tech-files.txt"), encoding="utf-8").readlines())
+FIRST = [t for t in ALL if t["category"] == "Steve Jobs"]
 check("S0 all of Steve Jobs: 6 eras (98) + Other (3) + Apple ads (72)", len(FIRST) == 173 and {t["course"] for t in FIRST} == {"1976-1984 (Apple I & Mac)", "1985-1995 (Next & Pixar)", "1996-1999 (Apple Comeback)", "2000-2004 (iPod & Digital Hub)", "2005-2007 (iPhone)", "2008-2011 (iPad & Final)", "Other", "Apple ads"}, str(len(FIRST)))
-lib_ids = {t["id"] for t in FIRST}
+lib_ids = {t["id"] for t in ALL}
 tech.ONLY = []  # the rules below run on the whole Steve Jobs folder
 T = tech_items(open(os.path.join(ROOT, "data", "tech-files.txt"), encoding="utf-8").readlines())
 sj = [t for t in T if t["category"] == "Steve Jobs"]
@@ -25,7 +26,7 @@ ads = by("Apple ads")
 check("S6 Apple ads: 72, year chip on each, no (360p…) junk", len(ads) == 72 and all(a["sub"] and a["sub"].isdigit() for a in ads) and not any("fps" in a["title"] for a in ads))
 check("S7 every era video has its cover has its cover", sum(1 for t in sj if t["course"] not in ("Other", "Apple ads") and not t.get("cover")) == 0)
 check("S8 every era has its folder cover", all(by(c)[0].get("folder") for c in courses[:6]))
-check("S9 ids unique and stable (t: + hash of the path)", len({t["id"] for t in T}) == len(T) and all(t["id"].startswith("t:") for t in T))
+check("S9 ids unique and stable (t: + hash of the path)", len({t["id"] for t in T}) == len(T) and all(t["id"].startswith("t:") or (t["course"] == "GSP Series" and t["id"].startswith("GSP Series:")) for t in T))
 check("S10 numbered 1..n inside each folder", all([t["n"] for t in by(c)] == list(range(1, len(by(c)) + 1)) for c in courses))
 lib = json.load(open(os.path.join(ROOT, "library.json"), encoding="utf-8"))
 check("S11 library.json carries them, flagged v24", {x["id"] for x in lib.get("learn", []) if x.get("v24")} == lib_ids)
@@ -35,4 +36,9 @@ check("S13 original iPod event (Oct 2001) after Macworld NY (Jul 2001)", e4.inde
 ads = [t for t in FIRST if t["course"] == "Apple ads"]
 check("S14 Apple ads: one folder per year inside it (10 years, in order)", [t["trail"] for t in ads][0] == ["Steve Jobs", "Apple ads", "1984"] and sorted({t["trail"][2] for t in ads}) == ["1984", "1985", "1997", "1998", "1999", "2000", "2001", "2002", "2004", "2007"] and [t["trail"][2] for t in ads] == sorted(t["trail"][2] for t in ads), str({t["trail"][2] for t in ads}))
 check("S15 Other and Apple ads sit next to the eras, after them", [t["trail"][:2] for t in FIRST if t["course"] == "Other"] == [["Steve Jobs", "Other"]] * 3 and FIRST.index(next(t for t in FIRST if t["course"] == "Other")) > FIRST.index(next(t for t in FIRST if t["course"] == "2008-2011 (iPad & Final)")))
+toc = [t for t in ALL if t["category"] == "TOC"]
+check("T1 TOC: 3 course folders straight under the chip (GSP 8, Case Studies 14, Videos 23)", [t["trail"] for t in toc][0] == ["GSP Series"] and {(t["course"], sum(1 for x in toc if x["course"] == t["course"])) for t in toc} == {("GSP Series", 8), ("TOC Case Studies", 14), ("TOC Videos", 23)}, str({t["course"] for t in toc}))
+check("T2 GSP keeps its V2.3 ids, so watched marks stay", [t["id"] for t in toc if t["course"] == "GSP Series"] == ["GSP Series:%d" % i for i in range(1, 9)])
+check("T3 GSP in number order, number gone from the title; loose talks by title", [t["title"] for t in toc][0] == "Operations - DBR and Buffer Management" and [t["title"] for t in toc if t["course"] == "TOC Videos"] == sorted([t["title"] for t in toc if t["course"] == "TOC Videos"], key=str.lower))
+check("T4 the duplicate talk shows once", sum(1 for t in toc if t["title"] == "Strategy Tactic Implementation Audit Process") == 1)
 print("%d failed" % fails); sys.exit(1 if fails else 0)

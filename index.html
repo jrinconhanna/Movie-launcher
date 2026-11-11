@@ -683,7 +683,7 @@ body.sorting .ic { opacity: 0 !important; }
 
   renew();
   fetch('library.json', { cache: 'no-cache' }).then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); }).then(function (d) {
-    items = d.items || []; learn = (d.learn || []).filter(function (v) { return V24 || !v.v24; }); unmatched = d.unmatched || []; updated = d.updated || ''; applyLive(); render(); pull(); loadPaused(); loadLive();
+    items = d.items || []; learn = (d.learn || []).filter(function (v) { return V24 ? !v.old : !v.v24; }); unmatched = d.unmatched || []; updated = d.updated || ''; applyLive(); render(); pull(); loadPaused(); loadLive();
   }).catch(function () {
     $('grid').innerHTML = '<div class="empty">The library isn’t built yet. It appears here a few minutes after the GitHub job runs.</div>';
   });

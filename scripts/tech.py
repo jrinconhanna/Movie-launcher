@@ -94,9 +94,25 @@ def steve_jobs(rel, parts, base):
             "sort": (y or 9999, mo or 0, d or 0, (t or title).lower())}
 
 
-RULES = {"1- Steve Jobs": steve_jobs}
+
+def toc(rel, parts, base):
+    """'2- TOC/1- GSP Series/1. Operations ...' : one level of course folders under the TOC chip.
+    Numbered videos keep their number order; loose talks go by title."""
+    course, cord = clean(parts[0])
+    title = strip_junk(base).replace("\u2705", "").strip()
+    m = NUM.match(title)
+    num = int(m.group(1)) if m else None
+    t = NUM.sub("", title).strip() if m else title
+    it = {"course": course, "cord": cord, "sub": None, "title": t, "year": None,
+          "trail": [course], "tdirs": [rel.split("/")[0] + "/" + parts[0]],
+          "sort": (num if num is not None else 9999, 0, 0, t.lower())}
+    if course == "GSP Series" and num is not None:
+        it["legacy_id"] = "GSP Series:%d" % num  # V2.3 marks used this id: keeps your watched GSP videos watched
+    return it
+
+RULES = {"1- Steve Jobs": steve_jobs, "2- TOC": toc}
 # Piece 1 (11 Nov): first era only, to prove list → covers → tiles → tap → marks end to end. Empty = everything.
-ONLY = ["1- Steve Jobs/1) 1976-1984 (Apple I & Mac)/", "1- Steve Jobs/2) 1985-1995 (Next & Pixar)/", "1- Steve Jobs/3) 1996-1999 (Apple Comeback)/", "1- Steve Jobs/4) 2000-2004 (iPod & Digital Hub)/", "1- Steve Jobs/5) 2005-2007 (iPhone)/", "1- Steve Jobs/6) 2008-2011 (iPad & Final)/", "1- Steve Jobs/99- Other/"]  # eras added one at a time (11 Nov)
+ONLY = ["1- Steve Jobs/1) 1976-1984 (Apple I & Mac)/", "1- Steve Jobs/2) 1985-1995 (Next & Pixar)/", "1- Steve Jobs/3) 1996-1999 (Apple Comeback)/", "1- Steve Jobs/4) 2000-2004 (iPod & Digital Hub)/", "1- Steve Jobs/5) 2005-2007 (iPhone)/", "1- Steve Jobs/6) 2008-2011 (iPad & Final)/", "1- Steve Jobs/99- Other/", "2- TOC/"]  # eras added one at a time (11 Nov)
 
 
 def tech_items(lines):
@@ -122,10 +138,13 @@ def tech_items(lines):
         for dd in it.pop("tdirs"):
             src = next((dd + "/" + fn for fn in ("folder.jpg", "folder.jpeg", "folder.png") if dd + "/" + fn in have), None)
             it["src_fcov"].append(src); it["fcov"].append("covers/t/%s.jpg" % h(src) if src else None)
+        if it.get("legacy_id"): it["id"] = it.pop("legacy_id")
         if it["fcov"][-1]:
             it["src_folder"], it["folder"] = it["src_fcov"][-1], it["fcov"][-1]
         out.append(it)
     out.sort(key=lambda x: (x["corder"], x["cord"], x["sub"] or "", x["sort"]))
+    seen = set()  # TOC: the same talk twice in a folder shows once (e.g. a copy with a space at the end of its name)
+    out = [x for x in out if x["category"] != "TOC" or not ((x["course"], x["title"].lower()) in seen or seen.add((x["course"], x["title"].lower())))]
     n = {}
     for it in out:
         n[it["course"]] = n.get(it["course"], 0) + 1; it["n"] = n[it["course"]]

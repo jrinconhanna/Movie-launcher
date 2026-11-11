@@ -274,6 +274,9 @@ def main():
             if it.get("cover") and not os.path.exists(os.path.join(ROOT, it["cover"])): it.pop("cover")
             if it.get("folder") and not os.path.exists(os.path.join(ROOT, it["folder"])): it.pop("folder")
             learn.append(it)
+        newc = {x["course"] for x in learn if x.get("v24")}
+        for x in learn:  # V2.3 course now read from Whatbox (GSP Series): the old entry only shows in ?v23
+            if not x.get("v24") and x["course"] in newc: x["old"] = True
         learn.sort(key=lambda x: (x.get("corder", ""), x.get("cord", "")))  # stable: keeps each course's own order
     cache, overrides = load("matches.json", {}), load("overrides.json", {})
     videos = set(load("videos.json", []))  # unmatched keys that are videos, not TMDB titles
