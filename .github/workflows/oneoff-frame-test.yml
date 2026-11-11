@@ -1,0 +1,24 @@
+name: One-off - frame test (Retention & Engagement at 1 s, nothing changed on Whatbox)
+on:
+  push:
+    paths: [".github/workflows/oneoff-frame-test.yml"]
+permissions:
+  contents: write
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - env:
+          KEY: ${{ secrets.WHATBOX_SSH_KEY }}
+        run: |
+          mkdir -p ~/.ssh && chmod 700 ~/.ssh
+          printf '%s\n' "$KEY" > ~/.ssh/whatbox && chmod 600 ~/.ssh/whatbox
+          ssh-keyscan -H kiwi.whatbox.ca >> ~/.ssh/known_hosts 2>/dev/null
+          S="ssh -i $HOME/.ssh/whatbox -o BatchMode=yes -o ConnectTimeout=20 javierrincon@kiwi.whatbox.ca"
+          $S 'cd "files/Javi/1- Tech/4- Reforge/2- Retention & Engagement"; mkdir -p /tmp/ft1; rm -f /tmp/ft1/*
+            find . -type f -name "*.mp4" | sort | while read -r F; do n=$(printf %s "$F" | md5sum | cut -c1-12); ffmpeg -nostdin -v error -y -ss 1 -i "$F" -frames:v 1 -vf scale=480:-2 -q:v 4 /tmp/ft1/$n.jpg; echo "$n|$F"; done > /tmp/ft1/index.txt; ls /tmp/ft1 | wc -l'
+          mkdir -p data/ft1 && scp -i ~/.ssh/whatbox -o BatchMode=yes "javierrincon@kiwi.whatbox.ca:/tmp/ft1/*" data/ft1/
+          $S 'rm -rf /tmp/ft1'; rm -f ~/.ssh/whatbox
+          git config user.name "launcher-bot"; git config user.email "launcher-bot@users.noreply.github.com"
+          git add data/ft1 && git commit -m "Frame test: R&E at 1 s" && git pull --rebase origin main && git push
