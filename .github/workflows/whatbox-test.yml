@@ -45,21 +45,12 @@ jobs:
             ' && echo "Result: PASS" || echo "Result: FAIL (exit $?)"
           } > "$OUT" 2>&1
           cat "$OUT"
-      - name: Probe two videos (dates)
-        run: |
-          mkdir -p data/probe
-          B="files/Javi/1- Tech/1- Steve Jobs"
-          for f in "2) 1985-1995 (Next & Pixar)/1991 - Internal NeXT video (1991)" "6) 2008-2011 (iPad & Final)/2012 - Apple Special Event"; do
-            n=$(echo "$f" | sed 's#.*/##; s/[^A-Za-z0-9]/_/g')
-            scp -i ~/.ssh/whatbox -o BatchMode=yes "javierrincon@kiwi.whatbox.ca:$B/$f.png" "data/probe/$n.png" || true
-            ssh -i ~/.ssh/whatbox -o BatchMode=yes javierrincon@kiwi.whatbox.ca "cd \"$B\"; ls -l --time-style=long-iso \"$f.mp4\"; (ffprobe -hide_banner \"$f.mp4\" 2>&1 || mediainfo \"$f.mp4\" 2>&1) | head -60" > "data/probe/$n.txt" 2>&1 || true
-          done
           rm -f ~/.ssh/whatbox
       - name: Commit the result
         run: |
           git config user.name "launcher-bot"
           git config user.email "launcher-bot@users.noreply.github.com"
-          git add data/whatbox-test.txt data/probe
+          git add data/whatbox-test.txt
           git commit -m "Whatbox login test result (file list)" || exit 0
           git pull --rebase origin main
           git push
