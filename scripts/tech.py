@@ -168,7 +168,7 @@ def reforge(rel, parts, base):
     elif re.match(r"^ICEDTheoryS\d+L\d+-", t):                           # 'ICEDTheoryS1L2-ManagingInfrequency'
         x = re.match(r"^ICEDTheoryS(\d+)L(\d+)-(.+)$", t); k1, k2, t = int(x.group(1)), int(x.group(2)), camel(x.group(3))
     elif re.match(r"^R&E-M\d+-L\d+-", t):                                # Module 8: keep 'R&E-M7-L0' as asked
-        x = re.match(r"^(R&E-M\d+-L(\d+))-(.+)$", t); k1, t = int(x.group(2)), x.group(1) + " - " + camel(x.group(3))
+        x = re.match(r"^(R&E-M\d+-L(\d+))-(.+)$", t); k1, t = 20 + int(x.group(2)), x.group(1) + " - " + camel(x.group(3))  # after W6's own 1-5 (strategies follow defining)
     elif live:
         k1 = 99
         w = re.search(r"Week\s*(\d+)\s+Live", t); t = ("W%s Live" % w.group(1)) if w else t

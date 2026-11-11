@@ -1,0 +1,44 @@
+name: One-off - Reforge W6 split (Javi's go, 11 Nov)
+
+# Moves only (mv -n never overwrites): Module 7 + Module 8 lessons into W6,
+# Module 9 - ICED Theory becomes its own week W7. Removes the two empty module
+# folders. Writes the result to data/whatbox-w6.txt. Deleted after it runs.
+
+on:
+  push:
+    paths: [".github/workflows/whatbox-reforge-w6.yml"]
+
+permissions:
+  contents: write
+
+jobs:
+  move:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Key
+        env:
+          KEY: ${{ secrets.WHATBOX_SSH_KEY }}
+        run: |
+          mkdir -p ~/.ssh && chmod 700 ~/.ssh
+          printf '%s\n' "$KEY" > ~/.ssh/whatbox && chmod 600 ~/.ssh/whatbox
+          ssh-keyscan -H kiwi.whatbox.ca >> ~/.ssh/known_hosts 2>/dev/null
+      - name: Move
+        run: |
+          ssh -i ~/.ssh/whatbox -o BatchMode=yes -o ConnectTimeout=20 javierrincon@kiwi.whatbox.ca '
+            set -e
+            cd "files/Javi/1- Tech/4- Reforge/2- Retention & Engagement"
+            W6="W6-Resurrection. Defining, Measuring, And Analyzing"
+            test -d "$W6/Module 9 - ICED Theory" && mv -n "$W6/Module 9 - ICED Theory" "W7- ICED Theory (Bonus)"
+            test -d "$W6/Module 7" && mv -n "$W6/Module 7/"* "$W6/"
+            test -d "$W6/Module 8" && mv -n "$W6/Module 8/"* "$W6/"
+            rmdir "$W6/Module 7" "$W6/Module 8"
+            echo "--- after ---"; find . -type f | sort
+          ' > data/whatbox-w6.txt 2>&1 || { cat data/whatbox-w6.txt; exit 1; }
+          rm -f ~/.ssh/whatbox
+          cat data/whatbox-w6.txt
+      - name: Save result
+        run: |
+          git config user.name "launcher-bot"; git config user.email "launcher-bot@users.noreply.github.com"
+          git add data/whatbox-w6.txt; git commit -m "Reforge W6 split: result" || true
+          git pull --rebase origin main && git push
