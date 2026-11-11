@@ -106,7 +106,16 @@ body.sorting .ic { opacity: 0 !important; }
 @media (min-width: 700px) { .ltile .ln { font-size: 56px; } }
 .lcard .t { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
 .card.seen .ltile { filter: grayscale(1); opacity: .25; }
-.v24 .card.seen .ltile img { filter: none; opacity: 1; } /* V2.4 fix: the tile and its cover were both faded (.25 × .25), so watched videos nearly vanished; now faded once, like movies */
+.v24 .card.seen .ltile img { filter: none; opacity: 1; }
+.v24 .ltile img.bg { display: none; }
+/* V2.4 compare (?v24&cmp): how a 16:9 frame sits in a tile */
+.tile-blur .lcard:not(.ccard) .ltile img.bg { display: block; object-fit: cover; filter: blur(14px) brightness(.55); transform: scale(1.25); }
+.tile-zoom .lcard:not(.ccard) .ltile img.fg { transform: scale(1.45); }
+.tile-fill .lcard:not(.ccard) .ltile img.fg { object-fit: cover; }
+.tile-wide .lcard:not(.ccard) .poster { aspect-ratio: 16 / 10; } .tile-wide .lcard:not(.ccard) .ltile img.fg { object-fit: cover; }
+#tcmp { position: fixed; left: 12px; bottom: 12px; z-index: 60; display: flex; gap: 4px; padding: 4px; border-radius: 999px; background: #fff; border: 1px dashed #e8662a; font: 600 12px var(--font); }
+#tcmp button { border: 0; background: none; padding: 5px 11px; border-radius: 999px; cursor: pointer; color: #555; font: inherit; } #tcmp button[aria-pressed=true] { background: #e8662a; color: #fff; }
+ /* V2.4 fix: the tile and its cover were both faded (.25 × .25), so watched videos nearly vanished; now faded once, like movies */
 .ltile.hascover { background: #000; } .ltile.hascover img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; }
 .v24 .ccard .ltile.hascover img { object-fit: cover; } /* V2.4: folder covers fill the tile, like Infuse */
 .chips:has(.back) { order: -1; } .chips .back { font-weight: 600; }
@@ -126,7 +135,15 @@ body.sorting .ic { opacity: 0 !important; }
 (function () {
   var AFTER = true, MOCK = true, BAR = true;
   var LEARN = true; // V2.3 live 10 Nov (was the ?v23 preview)
-  var V24 = /[?&]v24\b/.test(location.search); if (V24) document.documentElement.classList.add('v24'); // V2.4 preview: all Tech videos from the real Whatbox list
+  var V24 = /[?&]v24\b/.test(location.search); if (V24) document.documentElement.classList.add('v24');
+  if (V24 && /[?&]cmp\b/.test(location.search)) document.addEventListener('DOMContentLoaded', function () { // compare tile styles (temporary)
+    var cur = 'now'; try { cur = localStorage.getItem('tilecmp') || 'now'; } catch (e) {}
+    var bar = document.createElement('div'); bar.id = 'tcmp';
+    [['now', 'Now (whole, bars)'], ['blur', 'Blurred bars'], ['zoom', 'Zoom halfway'], ['wide', 'Wider tile'], ['fill', 'Fill (cropped)']].forEach(function (o) {
+      var b = document.createElement('button'); b.type = 'button'; b.textContent = o[1]; b.dataset.k = o[0];
+      b.onclick = function () { cur = o[0]; try { localStorage.setItem('tilecmp', cur); } catch (e) {} set(); }; bar.appendChild(b); });
+    function set() { ['now', 'blur', 'zoom', 'wide', 'fill'].forEach(function (k) { document.documentElement.classList.toggle('tile-' + k, k === cur); }); [].forEach.call(bar.children, function (b) { b.setAttribute('aria-pressed', b.dataset.k === cur ? 'true' : 'false'); }); }
+    document.body.appendChild(bar); set(); }); // V2.4 preview: all Tech videos from the real Whatbox list
   var learn = [], learnDone = [], learnWatch = [];
   var SHELVES = AFTER ? ['Movies', 'Series', 'Docs'] : ['Watch Next', 'Movies', 'Series', 'Docs'];
   var TOP = ['Watching', 'Next', 'Discover'], top = 'Watching';
@@ -528,7 +545,7 @@ body.sorting .ic { opacity: 0 !important; }
   function lcard(v) { // V2.3 Learn tile: no TMDB poster, so number + course on a plain tile
     var d = document.createElement('div'); d.className = 'card lcard'; d.dataset.key = v.key;
     var a = document.createElement('a'); a.className = 'poster ltile'; a.href = '#'; a.setAttribute('aria-label', v.title);
-    if (v.cover) { var im = document.createElement('img'); im.loading = 'lazy'; im.alt = ''; im.src = v.cover; a.appendChild(im); a.classList.add('hascover'); }
+    if (v.cover) { if (V24) { var bgi = document.createElement('img'); bgi.className = 'bg'; bgi.loading = 'lazy'; bgi.alt = ''; bgi.src = v.cover; a.appendChild(bgi); } var im = document.createElement('img'); im.className = 'fg'; im.loading = 'lazy'; im.alt = ''; im.src = v.cover; a.appendChild(im); a.classList.add('hascover'); }
     else { var n = document.createElement('span'); n.className = 'ln'; n.textContent = v.n != null ? v.n : '·'; a.appendChild(n);
     var c = document.createElement('span'); c.className = 'lc'; c.textContent = v.course; a.appendChild(c); }
     a.onclick = function (e) { e.preventDefault(); playLearn(v); };
