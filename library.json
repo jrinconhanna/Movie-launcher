@@ -12510,6 +12510,30 @@
    "cord": "004",
    "corder": "001",
    "course": "2000-2004 (iPod & Digital Hub)",
+   "cover": "covers/t/1ba1dd181133w.jpg",
+   "fcov": [
+    "covers/t/2c7cbf53ee60.jpg",
+    "covers/t/6df91a0ba306.jpg"
+   ],
+   "file": "2003- Steve Jobs at D1.mp4",
+   "folder": "covers/t/6df91a0ba306.jpg",
+   "id": "t:3ee0723a2049",
+   "key": "learn|1- Tech/1- Steve Jobs/4) 2000-2004 (iPod & Digital Hub)/2003- Steve Jobs at D1.mp4",
+   "n": 19,
+   "sub": null,
+   "title": "Steve Jobs at D1",
+   "trail": [
+    "Steve Jobs",
+    "2000-2004 (iPod & Digital Hub)"
+   ],
+   "v24": true,
+   "year": 2003
+  },
+  {
+   "category": "Steve Jobs",
+   "cord": "004",
+   "corder": "001",
+   "course": "2000-2004 (iPod & Digital Hub)",
    "cover": "covers/t/bae54d8fcf42w.jpg",
    "fcov": [
     "covers/t/2c7cbf53ee60.jpg",
@@ -12519,7 +12543,7 @@
    "folder": "covers/t/6df91a0ba306.jpg",
    "id": "t:babba1adba3e",
    "key": "learn|1- Tech/1- Steve Jobs/4) 2000-2004 (iPod & Digital Hub)/2003 - WWDC (OS X, Panther Power Mac G5).mp4",
-   "n": 19,
+   "n": 20,
    "sub": null,
    "title": "WWDC (OS X, Panther Power Mac G5)",
    "trail": [
@@ -12543,7 +12567,7 @@
    "folder": "covers/t/6df91a0ba306.jpg",
    "id": "t:b8104a29dc28",
    "key": "learn|1- Tech/1- Steve Jobs/4) 2000-2004 (iPod & Digital Hub)/2003 - Apple Expo Paris.mp4",
-   "n": 20,
+   "n": 21,
    "sub": null,
    "title": "Apple Expo Paris",
    "trail": [
@@ -12567,33 +12591,9 @@
    "folder": "covers/t/6df91a0ba306.jpg",
    "id": "t:6069e1cfb9d9",
    "key": "learn|1- Tech/1- Steve Jobs/4) 2000-2004 (iPod & Digital Hub)/2003 - Apple Special Event (iTunes for Windows).mp4",
-   "n": 21,
-   "sub": null,
-   "title": "Apple Special Event (iTunes for Windows)",
-   "trail": [
-    "Steve Jobs",
-    "2000-2004 (iPod & Digital Hub)"
-   ],
-   "v24": true,
-   "year": 2003
-  },
-  {
-   "category": "Steve Jobs",
-   "cord": "004",
-   "corder": "001",
-   "course": "2000-2004 (iPod & Digital Hub)",
-   "cover": "covers/t/1ba1dd181133w.jpg",
-   "fcov": [
-    "covers/t/2c7cbf53ee60.jpg",
-    "covers/t/6df91a0ba306.jpg"
-   ],
-   "file": "2003- Steve Jobs at D1.mp4",
-   "folder": "covers/t/6df91a0ba306.jpg",
-   "id": "t:3ee0723a2049",
-   "key": "learn|1- Tech/1- Steve Jobs/4) 2000-2004 (iPod & Digital Hub)/2003- Steve Jobs at D1.mp4",
    "n": 22,
    "sub": null,
-   "title": "Steve Jobs at D1",
+   "title": "Apple Special Event (iTunes for Windows)",
    "trail": [
     "Steve Jobs",
     "2000-2004 (iPod & Digital Hub)"
@@ -13495,5 +13495,5 @@
    "year": 1959
   }
  ],
- "updated": "2026-11-11T08:17Z"
+ "updated": "2026-11-11T08:32Z"
 }
