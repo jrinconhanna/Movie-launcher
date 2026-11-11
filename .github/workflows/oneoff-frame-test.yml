@@ -1,0 +1,29 @@
+name: One-off - frame test (one video, nothing changed on Whatbox)
+on:
+  push:
+    paths: [".github/workflows/oneoff-frame-test.yml"]
+permissions:
+  contents: write
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - env:
+          KEY: ${{ secrets.WHATBOX_SSH_KEY }}
+        run: |
+          mkdir -p ~/.ssh && chmod 700 ~/.ssh
+          printf '%s\n' "$KEY" > ~/.ssh/whatbox && chmod 600 ~/.ssh/whatbox
+          ssh-keyscan -H kiwi.whatbox.ca >> ~/.ssh/known_hosts 2>/dev/null
+          S="ssh -i $HOME/.ssh/whatbox -o BatchMode=yes -o ConnectTimeout=20 javierrincon@kiwi.whatbox.ca"
+          $S 'set -e
+            F="files/Javi/1- Tech/5- Playlists/2026-08 - Peter Thiel/Peter Thiel - Cambridge Union.mp4"
+            echo "ffmpeg: $(command -v ffmpeg || echo none)  ffprobe: $(command -v ffprobe || echo none)"
+            D=$(ffprobe -v error -show_entries format=duration -of csv=p=0 "$F"); echo "duration: $D"
+            T=$(python3 -c "print(round(float(\"$D\")*0.10,1))"); echo "frame at: $T s"
+            ffmpeg -v error -y -ss "$T" -i "$F" -frames:v 1 -q:v 3 /tmp/frame-test.jpg && ls -la /tmp/frame-test.jpg'
+          scp -i ~/.ssh/whatbox -o BatchMode=yes javierrincon@kiwi.whatbox.ca:/tmp/frame-test.jpg data/frame-test.jpg
+          $S 'rm -f /tmp/frame-test.jpg'
+          rm -f ~/.ssh/whatbox
+          git config user.name "launcher-bot"; git config user.email "launcher-bot@users.noreply.github.com"
+          git add data/frame-test.jpg && git commit -m "Frame test result" && git pull --rebase origin main && git push
