@@ -23,7 +23,7 @@ check("S4 title without the date, year kept", split_date("1997-01-07 - Macworld 
 check("S5 odd dates read: 2002 (09-10), 2010 Oct, 1999-07-", [split_date(x)[:2] for x in ["2002 (09-10) - Apple Expo Paris", "2010 Oct - Apple Special Event", "1999-07- Steve Jobs Apple HQ"]] == [(2002, 9), (2010, 10), (1999, 7)])
 ads = by("Apple ads")
 check("S6 Apple ads: 72, year chip on each, no (360p…) junk", len(ads) == 72 and all(a["sub"] and a["sub"].isdigit() for a in ads) and not any("fps" in a["title"] for a in ads))
-check("S7 every era video has its cover except 3 with none on Whatbox", sum(1 for t in sj if t["course"] not in ("Other", "Apple ads") and not t.get("cover")) == 3)
+check("S7 every era video has its cover except 2 with none on Whatbox (Apple HQ 1999, App Store interview 2008)", sum(1 for t in sj if t["course"] not in ("Other", "Apple ads") and not t.get("cover")) == 2)
 check("S8 every era has its folder cover", all(by(c)[0].get("folder") for c in courses[:6]))
 check("S9 ids unique and stable (t: + hash of the path)", len({t["id"] for t in T}) == len(T) and all(t["id"].startswith("t:") for t in T))
 check("S10 numbered 1..n inside each folder", all([t["n"] for t in by(c)] == list(range(1, len(by(c)) + 1)) for c in courses))
