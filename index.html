@@ -117,7 +117,7 @@ body.sorting .ic { opacity: 0 !important; }
 .ltile.hascover { background: #000; } .ltile.hascover img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; }
 .v24 .ccard .ltile.hascover img { object-fit: cover; } /* V2.4: folder covers fill the tile, like Infuse */
 .chips:has(.back) { order: -1; } .chips .back { font-weight: 600; }
-.chips.wkrow { flex-wrap: wrap; overflow: visible; row-gap: 6px; margin-top: 8px; } .chips.wkrow[hidden] { display: none; } .chips .wk { padding: 6px 11px; } /* ?next: week chips wrap, never scroll sideways */
+.chips.wkrow { flex-wrap: wrap; overflow: visible; row-gap: 6px; margin-top: 8px; } .chips.wkrow[hidden] { display: none; } .sech.msub { margin-top: 14px; color: var(--fg); font-weight: 600; } .sech.wkh + .sech.msub { margin-top: 2px; } .chips .wk { padding: 6px 11px; } /* ?next: week chips wrap, never scroll sideways */
 </style>
 </head>
 <body>
@@ -556,7 +556,7 @@ body.sorting .ic { opacity: 0 !important; }
     var a = document.createElement('a'); a.className = 'poster ltile'; a.href = '#'; a.setAttribute('aria-label', v.title);
     if (v.cover) { var im = document.createElement('img'); im.className = 'fg'; im.loading = 'lazy'; im.alt = ''; im.src = v.cover; a.appendChild(im); a.classList.add('hascover'); }
     else { var n = document.createElement('span'); n.className = 'ln'; n.textContent = v.num != null ? v.num : v.n != null ? v.n : '·'; /* Lean: the session/episode number, not the position (Session 10 shows 10) */ a.appendChild(n);
-    if (!(NEXT && isWeek(v.course))) { var c = document.createElement('span'); c.className = 'lc'; c.textContent = v.course; a.appendChild(c); } } // ?next: the week heading already names it
+    if (!(NEXT && (isWeek(v.course) || (state.course && inWeek(state.course.split('/')))))) { var c = document.createElement('span'); c.className = 'lc'; c.textContent = v.course; a.appendChild(c); } } // ?next: the week heading already names it
     a.onclick = function (e) { e.preventDefault(); playLearn(v); };
     var seen = learnDone.indexOf(lid(v)) >= 0; if (seen && !(V24 && top === 'Discover' && state.wf === 'watched')) d.classList.add('seen'); // V2.4: the Watched filter shows them in full colour, like movies
     var ic = document.createElement('div'); ic.className = 'ic wm';
@@ -666,7 +666,11 @@ body.sorting .ic { opacity: 0 !important; }
       e.textContent = state.shelf === 'Watch Next' ? 'Nothing in Next yet. Tap ＋ on any poster in Discover.' : state.wf === 'watched' ? 'Nothing watched here yet.' : state.wf === 'all' ? 'Nothing here.' : 'Nothing unwatched here.';
       g.appendChild(e);
     } else { if (V24 && state.shelf === 'Tech' && state.course && inWeek(state.course.split('/'))) { var wn = state.course.split('/').pop(), hd0 = document.createElement('div'); hd0.className = 'sech wkh'; hd0.textContent = wn.replace(/^(W\d+) - /, '$1 \u00b7 '); g.appendChild(hd0); }
-      list.forEach(function (it) { g.appendChild(it.isCourse ? ccard(it) : state.shelf === 'Tech' ? lcard(it) : mcard(it)); }); }
+      if (V24 && state.shelf === 'Tech' && state.course && inWeek(state.course.split('/'))) { // a week with module folders (Reforge W6): each module as a heading with its videos, so every week looks the same
+        g.classList.add('vids'); list.filter(function (it) { return it.isCourse; }).forEach(function (f) { var vs = f.videos.filter(showsL); if (!vs.length) return; var h1 = document.createElement('div'); h1.className = 'sech msub'; h1.textContent = f.course; g.appendChild(h1); vs.forEach(function (v) { g.appendChild(lcard(v)); }); });
+        var lo = list.filter(function (it) { return !it.isCourse; }); if (lo.length && list.some(function (it) { return it.isCourse; })) { var h2 = document.createElement('div'); h2.className = 'sech msub'; h2.textContent = 'Also this week'; g.appendChild(h2); }
+        lo.forEach(function (it) { g.appendChild(lcard(it)); }); }
+      else list.forEach(function (it) { g.appendChild(it.isCourse ? ccard(it) : state.shelf === 'Tech' ? lcard(it) : mcard(it)); }); }
     if (V24 && state.shelf === 'Tech' && list.some(function (i) { return i.isCourse; })) { // live 11 Nov: drag folders into your order, like Watching (Tech › All, TOC, Lean…)
       var lvl = 'f:' + techLevel().P.join('/'); g.querySelectorAll('.ccard').forEach(function (c, i) { var f = list.filter(function (x) { return x.isCourse; })[i]; c.dataset.sec = lvl; c.dataset.key = f.course; }); sortable(g); }
     renderFoot(); state.shelf = real;
