@@ -512,7 +512,7 @@ body.sorting .ic { opacity: 0 !important; }
     var dn = c.videos.filter(function (v) { return learnDone.indexOf(lid(v)) >= 0; }).length, tot = c.videos.length;
     if (dn) { var bd = document.createElement('span'); bd.className = 'badge'; bd.textContent = dn + '/' + tot; a.appendChild(bd); // like a series in progress
       if (BAR) { var pb = document.createElement('span'); pb.className = 'pbar'; var pf = document.createElement('i'); pf.style.width = Math.max(3, Math.round(100 * dn / tot)) + '%'; pb.appendChild(pf); a.appendChild(pb); } }
-    var y = document.createElement('div'); y.className = 'y'; y.textContent = [c.year, state.cat === 'All' && c.category && c.category !== 'Other' && c.category !== c.course ? c.category : ''].filter(Boolean).join(' · '); d.appendChild(y); // like movies: category only when no chip is picked
+    var y = document.createElement('div'); y.className = 'y'; y.textContent = [c.year, state.cat === 'All' && !(V24 && state.course) && c.category && c.category !== 'Other' && c.category !== c.course ? c.category : ''].filter(Boolean).join(' · '); d.appendChild(y); // like movies: category only when no chip is picked
     var nxt = c.videos.filter(function (v) { return learnDone.indexOf(lid(v)) < 0 && learnWatch.indexOf(lid(v)) < 0; })[0];
     var acts = []; if (nxt) acts.push(['watching', 'Watching · add the next video (' + nxt.n + ')', function () { watchLearn(nxt, true); }]);
     if (dn < tot) acts.push(['watched', 'Mark the whole course watched', function () { markCourse(c, true); }]);
