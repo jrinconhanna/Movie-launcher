@@ -209,7 +209,7 @@ def playlists(rel, parts, base):
         y, mo, d, tt = split_date(t) if re.match(r"^\d{4}", t) else (None, None, None, t)
         t = tt or t; key = (y or 9999, mo or 0, d or 0, t.lower())
     top = rel.split("/")[0]
-    it = {"course": sub or name, "cord": cord, "sub": None, "title": t, "year": y, "next": True,
+    it = {"course": sub or name, "cord": cord, "sub": None, "title": t, "year": y,  # live 11 Nov (was behind ?next)
           "trail": ["Playlists", name] + ([sub] if sub else []), "tdirs": [top, top + "/" + parts[0]] + ([top + "/" + parts[0] + "/" + parts[1]] if sub else []), "sort": key}
     if mo: it["mon"] = mo
     if "Rincon VCR" in parts[0]: it["ychip"] = True                           # family tapes: year chips (All · 1989 … · ?) (11 Nov)

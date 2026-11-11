@@ -323,7 +323,7 @@ body.sorting .ic { opacity: 0 !important; }
   function trail(v) { return v.trail || [v.course]; }
   // V2.4.1 (live 11 Nov): a course made of week folders (Reforge 'W1 - …') opens straight on a week; week chips switch between them
   function yrOf(v) { return v.year ? String(v.year) : '?'; }
-  function yearMode(list) { return NEXT && list.some(function (i) { return i.ychip; }) && !list.some(function (i) { return i.isCourse; }); } // ?next: family tapes, year chips
+  function yearMode(list) { return V24 && list.some(function (i) { return i.ychip; }) && !list.some(function (i) { return i.isCourse; }); } // family tapes, year chips (live 11 Nov)
   function isWeek(n) { return /^W\d+ - /.test(n || ''); }
   function weekSibs(P) { var par = P.slice(0, -1), seen = {}, out = []; learn.forEach(function (v) { var t = trail(v); if (t.length < P.length || !par.every(function (x, i) { return t[i] === x; })) return; var nm = t[par.length]; if (t.length > par.length && !seen[nm]) { seen[nm] = 1; out.push(nm); } }); return out; }
   function inWeek(P) { var sb = V24 && P.length > 1 && isWeek(P[P.length - 1]) ? weekSibs(P) : []; return sb.length > 1 && sb.every(isWeek); }
