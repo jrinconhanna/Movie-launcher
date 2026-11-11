@@ -118,6 +118,22 @@ body.sorting .ic { opacity: 0 !important; }
 .v24 .ccard .ltile.hascover img { object-fit: cover; } /* V2.4: folder covers fill the tile, like Infuse */
 .chips:has(.back) { order: -1; } .chips .back { font-weight: 600; }
 .chips.wkrow { flex-wrap: wrap; overflow: visible; row-gap: 6px; margin-top: 8px; } .chips.wkrow[hidden] { display: none; } .sech.msub { margin-top: 14px; color: var(--fg); font-weight: 600; } .sech.wkh + .sech.msub { margin-top: 2px; } .chips .wk { padding: 6px 11px; } /* ?next: week chips wrap, never scroll sideways */
+
+/* ?proto: channels on Watching */
+.pbar2{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:6px;align-items:center;font:600 12px var(--font);color:var(--muted);margin:2px 0 4px}.pbar2 button{font:600 12px var(--font);border:1px solid var(--line,#ddd);background:transparent;color:var(--fg);border-radius:999px;padding:4px 10px;cursor:pointer}.pbar2 button[aria-pressed=true]{background:var(--fg);color:var(--bg)}
+.pchip{position:absolute;left:6px;top:6px;z-index:2;max-width:calc(100% - 50px);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;background:rgba(255,255,255,.93);color:#111;font:700 11px var(--font);padding:3px 7px;border-radius:5px;border:0;cursor:pointer;text-align:left}.pchip:hover{background:#fff;text-decoration:underline}
+.pchip.f{background:#d63c3c;color:#fff}.pfoc .poster{outline:3px solid #d63c3c;outline-offset:-3px}
+.pline{display:flex;align-items:center;gap:8px;margin-top:3px;font:500 12px var(--font);color:var(--muted)}.pline .pb{flex:1;max-width:160px;height:4px;border-radius:2px;background:var(--chip);overflow:hidden}.pline .pb i{display:block;height:100%;background:#d63c3c}.pline b{color:var(--fg)}
+.pline .pck{margin-left:auto;border:1px solid var(--line,#ccc);background:transparent;color:var(--fg);border-radius:999px;font:600 12px var(--font);padding:3px 9px;cursor:pointer;white-space:nowrap}.pline .pck:hover{background:var(--chip)}
+.pwide .poster{aspect-ratio:16/9!important}.pwide .poster img{object-position:50% 18%}
+.pfocus{grid-column:1/-1;display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:20px;border:1px solid var(--line,#ddd);border-radius:14px;padding:14px;margin-bottom:6px}.pfocus .card{margin:0}
+.pfocus .fk{font:700 11px var(--font);letter-spacing:.06em;color:#d63c3c;text-transform:uppercase}.pfocus h2{margin:4px 0 2px;font:700 22px/1.2 var(--font)}.pfocus .sub{color:var(--muted);font-size:13px}
+.pcells{display:flex;gap:3px;margin:12px 0 6px}.pcells i{flex:1;height:7px;border-radius:3px;background:var(--chip)}.pcells i.d{background:#2f9e5b}.pcells i.c{background:#d63c3c}
+.pfocus .togo{font-size:14px}.pfocus .togo b{font-size:19px}.pfocus .nx{margin-top:12px;color:var(--muted);font-size:13px}.pfocus .nx b{display:block;color:var(--fg);font-size:15px;margin-top:2px}
+.pfocus .acts{margin-top:12px;display:flex;gap:6px;flex-wrap:wrap}.pfocus .acts button{border:1px solid var(--line,#ccc);background:transparent;color:var(--fg);border-radius:999px;font:500 12px var(--font);padding:4px 10px;cursor:pointer}
+.pempty{grid-column:1/-1;border:2px dashed var(--chip);border-radius:12px;padding:14px;color:var(--muted);font-size:13px}
+@media (max-width:640px){.pfocus{grid-template-columns:1fr;gap:10px;padding:10px}.pfocus h2{font-size:19px}.pline{flex-wrap:wrap;gap:5px}.pline .pb{display:none}.pline>span{white-space:nowrap}.pline .pck{margin-left:0;padding:3px 7px}.pline .pck:last-child{margin-left:auto}}
+.pfocus .acts button{flex:0 0 auto;width:auto}.pline>span{white-space:nowrap}
 </style>
 </head>
 <body>
@@ -135,6 +151,7 @@ body.sorting .ic { opacity: 0 !important; }
   var AFTER = true, MOCK = true, BAR = true;
   var LEARN = true; // V2.3 live 10 Nov (was the ?v23 preview)
   var V24 = !/[?&]v23\b/.test(location.search); if (V24) document.documentElement.classList.add('v24'); // V2.4 live 11 Nov (?v23 shows the old view for comparison)
+  var PROTO = /[?&]proto\b/.test(location.search); // V2.4.2 prototype: subscribe to folders, one channel each on Watching (this device only)
   var NEXT = /[?&]next\b/.test(location.search); // V2.4.1 preview (Lean onward): items flagged next only show with ?next until Javier says go
   var learn = [], learnDone = [], learnWatch = [], forder = {}, vorder = {}; // vorder: your video order per playlist (?next) // forder: your folder order per Tech level ('' = Tech › All), synced via Trakt
   var SHELVES = AFTER ? ['Movies', 'Series', 'Docs'] : ['Watch Next', 'Movies', 'Series', 'Docs'];
@@ -501,7 +518,7 @@ body.sorting .ic { opacity: 0 !important; }
     job.then(function () { if (!$('toast').hidden) toast(word + ' · saved to Trakt', undo); })
        .catch(function (e) { toast(word + ' on this device · couldn’t save to Trakt (' + e.message + ')', undo); });
   }
-  var ACT = { watched: ['✓', 'Mark watched'], unwatched: ['↺', 'Mark not watched'], watching: ['▶', 'Watching · start or continue'], park: ['⏸', 'Park · watch on and off'], backlog: ['＋', 'Backlog · later'], remove: ['✕', 'Remove'] };
+  var ACT = { watched: ['✓', 'Mark watched'], unwatched: ['↺', 'Mark not watched'], watching: ['▶', 'Watching · start or continue'], park: ['⏸', 'Park · watch on and off'], backlog: ['＋', 'Backlog · later'], remove: ['✕', 'Remove'], sub: ['☆', 'Subscribe · a channel on Watching (prototype)'], unsub: ['★', 'Unsubscribe'], focus: ['◎', 'Make it my focus'] };
   function where(it) { return inWatching(it) ? 'watching' : parked.indexOf(it.key) >= 0 ? 'park' : next.indexOf(it.key) >= 0 ? 'backlog' : 'discover'; }
   // V2.3 tap: Infuse links can't search, so copy the title, open Infuse, paste in its Search (Better: play straight away)
   function copyText(t) {
@@ -555,6 +572,8 @@ body.sorting .ic { opacity: 0 !important; }
     var y = document.createElement('div'); y.className = 'y'; y.textContent = [c.year, state.cat === 'All' && !(V24 && state.course) && c.category && c.category !== 'Other' && c.category !== c.course ? c.category : ''].filter(Boolean).join(' · '); d.appendChild(y); // like movies: category only when no chip is picked
     var nxt = c.videos.filter(function (v) { return learnDone.indexOf(lid(v)) < 0 && learnWatch.indexOf(lid(v)) < 0; })[0];
     var acts = []; if (nxt) acts.push(['watching', 'Watching · add the next video (' + nxt.n + ')', function () { watchLearn(nxt, true); }]);
+    if (PROTO && V24 && c.path) { var isS = proto.subs.indexOf(c.path) >= 0; acts.unshift(isS ? ['unsub', 'Unsubscribe', function () { protoSub(c.path, false); }] : ['sub', ACT.sub[1], function () { protoSub(c.path, true); }]); if (isS && proto.focus !== c.path) acts.splice(1, 0, ['focus', ACT.focus[1], function () { protoFocus(c.path); }]);
+      if (isS) { var tg = document.createElement('span'); tg.className = 'where'; tg.textContent = proto.focus === c.path ? '★ Focus' : '★ Subscribed'; a.appendChild(tg); } }
     if (dn < tot) acts.push(['watched', 'Mark the whole course watched', function () { markCourse(c, true); }]);
     if (dn) acts.push(['unwatched', 'Mark the whole course not watched', function () { markCourse(c, false); }]);
     var ic = document.createElement('div'); ic.className = 'ic wm'; var opts = document.createElement('span'); opts.className = 'opts';
@@ -648,10 +667,72 @@ body.sorting .ic { opacity: 0 !important; }
       });
     });
   }
+
+  // ---- ?proto (V2.4.2 prototype): subscribe to a folder; Watching shows one channel per folder with its next video ----
+  var proto = ls('proto', { subs: [], focus: '', lay: 'A', shelf: true });
+  function protoSave() { try { localStorage.setItem('proto', JSON.stringify(proto)); } catch (e) {} }
+  function protoSub(path, on) { var i = proto.subs.indexOf(path); if (on && i < 0) { proto.subs.push(path); if (!proto.focus) proto.focus = path; } if (!on && i >= 0) { proto.subs.splice(i, 1); if (proto.focus === path) proto.focus = proto.subs[0] || ''; }
+    protoSave(); render(); toast(on ? 'Subscribed · ' + path.split('/').pop() + ' is a channel on Watching' + (proto.focus === path ? ' (your focus)' : '') : 'Unsubscribed'); }
+  function protoFocus(path) { proto.focus = path; protoSave(); render(); toast('Focus · ' + path.split('/').pop()); }
+  function folderVids(path) { // every video under a folder, in the order Discover shows them (sub-folders in your order, then playlists in your order)
+    var P = path.split('/'), out = [];
+    (function walk(P) { var fs = {}, order = [], vids = [];
+      learn.forEach(function (v) { var t = trail(v); if (!P.every(function (x, i) { return t[i] === x; })) return; if (t.length === P.length) vids.push(v); else { var nm = t[P.length]; if (!fs[nm]) { fs[nm] = 1; order.push(nm); } } });
+      if (vids.length && vids.every(vDrag)) { var ix = {}; vids.forEach(function (v, i) { ix[v.key] = i; }); vids.sort(function (a, b) { var ka = vKey(a), kb = vKey(b); if (ka !== kb) return ix[a.key] - ix[b.key]; var o = vorder[ka] || [], ia = o.indexOf(a.key), ib = o.indexOf(b.key); return (ia < 0 ? 1e6 + ix[a.key] : ia) - (ib < 0 ? 1e6 + ix[b.key] : ib); }); }
+      out = out.concat(vids);
+      var fo = forder[P.join('/')]; if (fo) order.sort(function (a, b) { var ia = fo.indexOf(a), ib = fo.indexOf(b); return (ia < 0 ? 1e6 : ia) - (ib < 0 ? 1e6 : ib); });
+      order.forEach(function (nm) { walk(P.concat([nm])); }); })(P);
+    return out; }
+  function chName(path) { var P = path.split('/'), l = P[P.length - 1]; return isWeek(l) && P.length > 1 ? P[P.length - 2].replace('Retention & Engagement', 'R&E') + ' · ' + l.split(' - ')[0] : l; }
+  function chInfo(path) { var vs = folderVids(path), dn = vs.filter(function (v) { return learnDone.indexOf(lid(v)) >= 0; }).length, nx = vs.filter(function (v) { return learnDone.indexOf(lid(v)) < 0; });
+    return { path: path, name: chName(path), vids: vs, done: dn, total: vs.length, next: nx[0] || null, after: nx[1] || null }; }
+  function openFolder(path) { top = 'Discover'; state.shelf = 'Tech'; state.cat = 'All'; state.course = path; save(); render(); window.scrollTo(0, 0); }
+  function pline(txt, ck) { var l = document.createElement('div'); l.className = 'pline'; l.innerHTML = txt; if (ck) { var b = document.createElement('button'); b.type = 'button'; b.className = 'pck'; b.textContent = '✓ Watched'; b.title = 'Mark watched · the next one comes up'; b.onclick = function (e) { e.preventDefault(); ck(); }; l.appendChild(b); } return l; }
+  function chCard(ch, foc) { // a channel: its next video, the folder name on top (tap = open the folder), progress + ✓ underneath
+    if (!ch.next) { var e = document.createElement('div'); e.className = 'card lcard'; e.innerHTML = '<div class="pempty">' + ch.name + ' · all ' + ch.total + ' watched 🎉</div>'; return e; }
+    var d = lcard(ch.next); if (foc) d.classList.add('pfoc');
+    var c = document.createElement('button'); c.type = 'button'; c.className = 'pchip' + (foc ? ' f' : ''); c.textContent = (foc ? '★ ' : '') + ch.name; c.title = 'Open ' + ch.path; c.onclick = function (e) { e.preventDefault(); e.stopPropagation(); openFolder(ch.path); }; d.querySelector('.poster').appendChild(c);
+    var bd = d.querySelector('.badge'); if (bd) bd.textContent = (ch.vids.indexOf(ch.next) + 1) + '/' + ch.total;
+    var y = d.querySelector('.y'); if (y) y.remove();
+    var pct = ch.total ? Math.round(100 * ch.done / ch.total) : 0;
+    d.appendChild(pline('<span class="pb"><i style="width:' + pct + '%"></i></span><span>' + ch.done + ' of ' + ch.total + ' · <b>' + (ch.total - ch.done) + ' to go</b></span>', function () { markLearn(ch.next, true); }));
+    return d; }
+  function protoWatching(g0) {
+    var bar = document.createElement('div'); bar.className = 'pbar2'; bar.appendChild(document.createTextNode('Prototype · '));
+    [['A', 'A · big focus'], ['A1', 'A1 · focus in the row']].forEach(function (x) { var b = document.createElement('button'); b.type = 'button'; b.textContent = x[1]; b.setAttribute('aria-pressed', proto.lay === x[0] ? 'true' : 'false'); b.onclick = function () { proto.lay = x[0]; protoSave(); render(); }; bar.appendChild(b); });
+    var sb = document.createElement('button'); sb.type = 'button'; sb.textContent = 'Subscribed shelf'; sb.setAttribute('aria-pressed', proto.shelf ? 'true' : 'false'); sb.onclick = function () { proto.shelf = !proto.shelf; protoSave(); render(); }; bar.appendChild(sb);
+    g0.appendChild(bar);
+    proto.subs = proto.subs.filter(function (p) { return learn.some(function (v) { return trail(v).join('/').indexOf(p) === 0; }); });
+    var chs = proto.subs.map(chInfo), foc = chs.filter(function (c) { return c.path === proto.focus; })[0], rest = chs.filter(function (c) { return c !== foc; });
+    if (!chs.length) { var e = document.createElement('div'); e.className = 'pempty'; e.textContent = 'No channels yet. In Discover › Tech, tap ⋯ on any folder (GSP, a Reforge week, a Steve Jobs era, a playlist) › ☆ Subscribe.'; g0.appendChild(e); }
+    if (foc && proto.lay === 'A') { // the big focus box
+      var fb = document.createElement('div'); fb.className = 'pfocus'; var L = document.createElement('div'), R = document.createElement('div');
+      var big = document.createElement('div'); big.className = 'grid vids'; big.style.gridTemplateColumns = '1fr'; big.appendChild(chCard(foc, true)); L.appendChild(big);
+      var w = foc.done, cells = ''; if (foc.total <= 40) { cells = '<div class="pcells">'; foc.vids.forEach(function (v) { var dd = learnDone.indexOf(lid(v)) >= 0; cells += '<i class="' + (dd ? 'd' : v === foc.next ? 'c' : '') + '"></i>'; }); cells += '</div>'; }
+      else cells = '<div class="pline" style="margin:12px 0 6px"><span class="pb" style="max-width:none"><i style="width:' + Math.round(100 * w / foc.total) + '%"></i></span></div>';
+      R.innerHTML = '<div class="fk">★ My focus</div><h2></h2><div class="sub"></div>' + cells + '<div class="togo">' + (foc.next ? '<b>' + (foc.total - w) + ' to go</b> · ' + w + ' of ' + foc.total + ' watched' : '<b>Done.</b> All ' + foc.total + ' watched') + '</div>'
+        + '<div class="nx">' + (foc.after ? 'Up next<b></b>' : foc.next ? 'Last one!' : 'Pick your next focus from your channels') + '</div><div class="acts"></div>';
+      R.querySelector('h2').textContent = foc.name; R.querySelector('.sub').textContent = foc.path.split('/').slice(0, -1).join(' › ') || 'Tech'; if (foc.after) R.querySelector('.nx b').textContent = foc.after.title;
+      var ac = R.querySelector('.acts'); [['Open folder', function () { openFolder(foc.path); }], ['Unsubscribe', function () { protoSub(foc.path, false); }]].forEach(function (x) { var b = document.createElement('button'); b.type = 'button'; b.textContent = x[0]; b.onclick = x[1]; ac.appendChild(b); });
+      fb.appendChild(L); fb.appendChild(R); g0.appendChild(fb); }
+    var hs = document.createElement('div'); hs.className = 'sech'; hs.textContent = 'Watching now'; g0.appendChild(hs);
+    var lg = document.createElement('div'); lg.className = 'grid vids subgrid'; g0.appendChild(lg);
+    if (foc && proto.lay === 'A1') lg.appendChild(chCard(foc, true));
+    rest.forEach(function (c) { var d = chCard(c, false); var mk = document.createElement('button'); mk.type = 'button'; mk.className = 'pck'; mk.textContent = '◎'; mk.title = 'Make it my focus'; mk.onclick = function (e) { e.preventDefault(); protoFocus(c.path); }; var pl = d.querySelector('.pline'); if (pl) pl.insertBefore(mk, pl.querySelector('.pck')); lg.appendChild(d); });
+    learn.filter(function (v) { return learnWatch.indexOf(lid(v)) >= 0 && learnDone.indexOf(lid(v)) < 0 && !proto.subs.some(function (p) { return trail(v).join('/').indexOf(p) === 0; }); }).forEach(function (v) { lg.appendChild(lcard(v)); }); // videos you added one by one stay
+    var wl = items.filter(inWatching).sort(function (a, b) { var ia = worder.indexOf(a.key), ib = worder.indexOf(b.key); if (ia < 0) ia = 1e6; if (ib < 0) ib = 1e6; return ia - ib || a.title.localeCompare(b.title); });
+    wl.forEach(function (it) { var d = mcard(it); d.classList.add('pwide'); var c = document.createElement('button'); c.type = 'button'; c.className = 'pchip'; c.textContent = it.title; c.onclick = function (e) { e.preventDefault(); e.stopPropagation(); go(link(it)); }; d.querySelector('.poster').appendChild(c);
+      var y = d.querySelector('.y'); if (it.kind === 'tv' && it.progress && y) y.textContent = 'Next episode · ' + Math.min(it.progress[0] + 1, it.progress[1]) + ' of ' + it.progress[1]; lg.appendChild(d); });
+    if (proto.shelf && chs.length) { var hh = document.createElement('div'); hh.className = 'sech'; hh.textContent = 'Subscribed · ' + chs.length; g0.appendChild(hh);
+      var sg = document.createElement('div'); sg.className = 'grid subgrid'; g0.appendChild(sg);
+      chs.forEach(function (ch) { var P = ch.path.split('/'), v0 = ch.vids[0] || {}, cov = (v0.fcov && v0.fcov[P.length - 1]) || (trail(v0).length === P.length ? v0.folder : null);
+        var d = ccard({ course: ch.name, path: ch.path, folder: cov, videos: ch.vids, category: '' }); d.querySelector('a').onclick = function (e) { e.preventDefault(); openFolder(ch.path); }; sg.appendChild(d); }); }
+  }
   function render() {
     renderTop(); renderTabs();
     var real = state.shelf; if (AFTER && top === 'Next') state.shelf = 'Watch Next';
     if (AFTER && top === 'Watching') { $('crow').hidden = true; $('wkrow').hidden = true; /* fix 11 Nov: week chips leaked from Discover */ var g0 = $('grid'); g0.innerHTML = ''; g0.classList.remove('vids', 'techin'); /* fix: Discover › Tech sizes leaked into Watching */ if (!tok) g0.appendChild(connRow());
+      if (PROTO && V24 && LEARN && learn.length) { protoWatching(g0); renderFoot(); return; }
       if (LEARN && learn.length) { // V2.3: only course videos you added (⋯ ▶ in Discover › Tech); watched ones leave
         var lv = learn.filter(function (v) { return learnWatch.indexOf(lid(v)) >= 0 && learnDone.indexOf(lid(v)) < 0; });
         if (lv.length) { var hl = document.createElement('div'); hl.className = 'sech'; hl.textContent = 'Learn'; g0.appendChild(hl);

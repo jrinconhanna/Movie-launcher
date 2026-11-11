@@ -359,6 +359,28 @@ with sync_playwright() as p:
                 tab(pg, t2); pg.wait_for_timeout(200)
                 rec(f"F3 [{size}] week chips hidden on {t2} after a Reforge week", pg.evaluate("document.getElementById('wkrow').hidden && !document.querySelectorAll('#wkrow button:not([hidden])').length || getComputedStyle(document.getElementById('wkrow')).display==='none'"))
             pg.context.close()
+        # --- ?proto (V2.4.2 prototype): subscribe to a folder, one channel per folder on Watching ---
+        for q in ("", "?proto"):
+            pg = page(b, vp, q)
+            tab(pg, "Discover"); pg.evaluate("[...document.querySelectorAll('#tabs button')].find(b=>b.firstChild.textContent==='Tech').click()"); pg.wait_for_timeout(300)
+            has = pg.evaluate("[...document.querySelectorAll('#grid .ccard')].some(c=>[...c.querySelectorAll('.opts button')].some(x=>x.title.startsWith('Subscribe')))")
+            if not q:
+                rec(f"X1 [{size}] no Subscribe without ?proto", not has); pg.context.close(); continue
+            rec(f"X2 [{size}] ?proto: folders offer ☆ Subscribe", has)
+            pg.evaluate("[...document.querySelectorAll('#grid .ccard')].find(c=>c.querySelector('.t').textContent==='TOC').querySelector('.opts button[title^=Subscribe]').click()"); pg.wait_for_timeout(300)
+            tab(pg, "Watching")
+            ch = pg.evaluate("[...document.querySelectorAll('.pchip')].map(x=>x.textContent)")
+            rec(f"X3 [{size}] the subscribed folder is a channel on Watching (and the focus)", bool(ch) and ch[0] == "★ TOC", ch)
+            t1 = pg.evaluate("document.querySelector('.pfoc .t').textContent")
+            pg.evaluate("document.querySelector('.pfoc .pline .pck:last-child').click()"); pg.wait_for_timeout(300)
+            t2 = pg.evaluate("document.querySelector('.pfoc .t').textContent")
+            rec(f"X4 [{size}] ✓ Watched brings the channel's next video", t1 != t2 and "1 of" in pg.evaluate("document.querySelector('.pfoc .pline').textContent"), (t1, t2))
+            pg.evaluate("[...document.querySelectorAll('.pbar2 button')][1].click()"); pg.wait_for_timeout(200)
+            rec(f"X5 [{size}] A1: no focus box, the focus is the first tile", pg.evaluate("!document.querySelector('.pfocus') && document.querySelector('.subgrid .card').classList.contains('pfoc')"))
+            pg.evaluate("document.querySelector('.pchip').click()"); pg.wait_for_timeout(300)
+            rec(f"X6 [{size}] tapping the channel name opens its folder in Discover", pg.evaluate("[...document.querySelectorAll('#top button')].find(b=>b.getAttribute('aria-selected')==='true').textContent.startsWith('Discover') && [...document.querySelectorAll('#chips .back')].length>0"))
+            rec(f"X7 [{size}] no page errors (?proto)", not pg.errs, pg.errs)
+            pg.context.close()
         pg = page(b, vp, "?v23")
         tab(pg, "Discover"); pg.evaluate("[...document.querySelectorAll('#tabs button')].find(b=>b.firstChild.textContent==='Tech').click()"); pg.wait_for_timeout(300)
         rec(f"J10 [{size}] ?v23 still shows the old Tech view (GSP only)", pg.evaluate("[...document.querySelectorAll('#grid .ccard .t')].map(x=>x.textContent)") == ["GSP Series"])
