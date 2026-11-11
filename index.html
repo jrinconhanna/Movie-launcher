@@ -567,7 +567,7 @@ body.sorting .ic { opacity: 0 !important; }
   function lcard(v) { // V2.3 Learn tile: no TMDB poster, so number + course on a plain tile
     var d = document.createElement('div'); d.className = 'card lcard'; d.dataset.key = v.key;
     var a = document.createElement('a'); a.className = 'poster ltile'; a.href = '#'; a.setAttribute('aria-label', v.title);
-    var cov = v.cover || (NEXT && v.frame); // ?next: a frame of the video when there's no cover (V2.4.1)
+    var cov = v.cover || (V24 && v.frame); // a frame of the video when there's no cover (V2.4.1, live 11 Nov)
     if (cov) { var im = document.createElement('img'); im.className = 'fg'; im.loading = 'lazy'; im.alt = ''; im.src = cov; a.appendChild(im); a.classList.add('hascover'); }
     else { var n = document.createElement('span'); n.className = 'ln'; n.textContent = v._pos != null && top === 'Discover' && vDrag(v) ? v._pos : v.num != null ? v.num : v.n != null ? v.n : '·'; /* Lean: the session/episode number, not the position (Session 10 shows 10) */ a.appendChild(n);
     if (!(V24 && (v.ychip || isWeek(v.course) || (state.course && inWeek(state.course.split('/')))))) { var c = document.createElement('span'); c.className = 'lc'; c.textContent = v.course; a.appendChild(c); } } // ?next: the week heading already names it
