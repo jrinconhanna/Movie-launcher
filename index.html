@@ -117,14 +117,14 @@ body.sorting .ic { opacity: 0 !important; }
 .ltile.hascover { background: #000; } .ltile.hascover img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; }
 .v24 .ccard .ltile.hascover img { object-fit: cover; } /* V2.4: folder covers fill the tile, like Infuse */
 .chips:has(.back) { order: -1; } .chips .back { font-weight: 600; }
-.chips.wkrow { flex-wrap: wrap; overflow: visible; row-gap: 6px; } .chips .wk { padding: 6px 11px; } /* ?next: week chips wrap, never scroll sideways */
+.chips.wkrow { flex-wrap: wrap; overflow: visible; row-gap: 6px; margin-top: 8px; } .chips.wkrow[hidden] { display: none; } .chips .wk { padding: 6px 11px; } /* ?next: week chips wrap, never scroll sideways */
 </style>
 </head>
 <body>
 <header>
   <div class="tabs top" role="tablist" id="top"></div>
   <div class="tabs sub" role="tablist" id="tabs"></div>
-  <div class="crow" id="crow"><select class="wf" id="wf" aria-label="Show unwatched, watched or all"><option value="unwatched">Unwatched</option><option value="watched">Watched</option><option value="all">All</option></select><div class="chips" id="chips"></div></div>
+  <div class="crow" id="crow"><select class="wf" id="wf" aria-label="Show unwatched, watched or all"><option value="unwatched">Unwatched</option><option value="watched">Watched</option><option value="all">All</option></select><div class="chips" id="chips"></div></div><div class="chips wkrow" id="wkrow" hidden></div>
 </header>
 <main id="grid" class="grid"><div class="empty">Loading your library…</div></main>
 <footer id="foot"></footer>
@@ -370,16 +370,16 @@ body.sorting .ic { opacity: 0 !important; }
     });
   }
   function renderChips(list) {
-    var c = $('chips'); c.innerHTML = ''; c.classList.remove('wkrow');
+    var c = $('chips'); c.innerHTML = ''; var wr = $('wkrow'); wr.innerHTML = ''; wr.hidden = true;
     if (state.shelf === 'Watch Next') { $('crow').hidden = true; return; }
     $('crow').hidden = false; $('wf').value = state.wf;
     if (state.shelf === 'Tech' && V24) { // V2.4: back chip goes up one folder; the Unwatched filter shows where there are videos
       $('wf').hidden = !list.some(function (i) { return !i.isCourse; });
-      if (state.course && inWeek(state.course.split('/'))) { var PW = state.course.split('/'), par = PW.slice(0, -1); c.classList.add('wkrow');
+      if (state.course && inWeek(state.course.split('/'))) { var PW = state.course.split('/'), par = PW.slice(0, -1); wr.hidden = false;
         var bw = document.createElement('button'); bw.type = 'button'; bw.className = 'back'; bw.textContent = '\u2039 ' + par[par.length - 1]; bw.setAttribute('aria-pressed', 'true'); bw.title = 'Up to ' + (par[par.length - 2] || 'Tech');
         bw.onclick = function () { var to = par.slice(0, -1).join('/'); state.course = ''; var L = techLevel(); state.course = L.implicit && L.P.join('/') === to ? '' : to; save(); render(); }; c.appendChild(bw);
         weekSibs(PW).forEach(function (w) { var b = document.createElement('button'); b.type = 'button'; b.className = 'wk'; b.textContent = w.split(' - ')[0]; b.title = w; b.setAttribute('aria-pressed', w === PW[PW.length - 1] ? 'true' : 'false');
-          b.onclick = function () { state.wk = state.wk || {}; state.wk[par.join('/')] = w; state.course = par.concat([w]).join('/'); save(); render(); }; c.appendChild(b); });
+          b.onclick = function () { state.wk = state.wk || {}; state.wk[par.join('/')] = w; state.course = par.concat([w]).join('/'); save(); render(); }; wr.appendChild(b); });
         return; }
       if (state.course) { var P = state.course.split('/'), bk2 = document.createElement('button'); bk2.type = 'button'; bk2.className = 'back'; bk2.textContent = '\u2039 ' + P[P.length - 1]; bk2.setAttribute('aria-pressed', 'true'); bk2.title = 'Up one folder'; bk2.onclick = techUp; c.appendChild(bk2); return; }
       list = techRootFolders(); }
@@ -556,7 +556,7 @@ body.sorting .ic { opacity: 0 !important; }
     var a = document.createElement('a'); a.className = 'poster ltile'; a.href = '#'; a.setAttribute('aria-label', v.title);
     if (v.cover) { var im = document.createElement('img'); im.className = 'fg'; im.loading = 'lazy'; im.alt = ''; im.src = v.cover; a.appendChild(im); a.classList.add('hascover'); }
     else { var n = document.createElement('span'); n.className = 'ln'; n.textContent = v.num != null ? v.num : v.n != null ? v.n : '·'; /* Lean: the session/episode number, not the position (Session 10 shows 10) */ a.appendChild(n);
-    var c = document.createElement('span'); c.className = 'lc'; c.textContent = v.course; a.appendChild(c); }
+    if (!(NEXT && isWeek(v.course))) { var c = document.createElement('span'); c.className = 'lc'; c.textContent = v.course; a.appendChild(c); } } // ?next: the week heading already names it
     a.onclick = function (e) { e.preventDefault(); playLearn(v); };
     var seen = learnDone.indexOf(lid(v)) >= 0; if (seen && !(V24 && top === 'Discover' && state.wf === 'watched')) d.classList.add('seen'); // V2.4: the Watched filter shows them in full colour, like movies
     var ic = document.createElement('div'); ic.className = 'ic wm';
