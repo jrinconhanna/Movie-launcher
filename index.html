@@ -135,7 +135,7 @@ body.sorting .ic { opacity: 0 !important; }
   var LEARN = true; // V2.3 live 10 Nov (was the ?v23 preview)
   var V24 = !/[?&]v23\b/.test(location.search); if (V24) document.documentElement.classList.add('v24'); // V2.4 live 11 Nov (?v23 shows the old view for comparison)
   var NEXT = /[?&]next\b/.test(location.search); // V2.4.1 preview (Lean onward): items flagged next only show with ?next until Javier says go
-  var learn = [], learnDone = [], learnWatch = [];
+  var learn = [], learnDone = [], learnWatch = [], forder = {}; // forder: your folder order per Tech level ('' = Tech › All), synced via Trakt (?next)
   var SHELVES = AFTER ? ['Movies', 'Series', 'Docs'] : ['Watch Next', 'Movies', 'Series', 'Docs'];
   var TOP = ['Watching', 'Next', 'Discover'], top = 'Watching';
   var items = [], unmatched = [], updated = '';
@@ -143,8 +143,8 @@ body.sorting .ic { opacity: 0 !important; }
   var next = [], worder = [], watch = [], parked = [], removed = [], done = [], undone = [];
   function ls(k, d) { try { var v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch (e) { return d; } }
   function lsSet(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} if (SYNC_KEYS.indexOf(k) >= 0 && window.__push) window.__push(); }
-  var SYNC_KEYS = ['worder', 'watch', 'parked', 'next', 'removed', 'done', 'undone', 'learndone', 'learnwatch'];
-  next = ls('next', []); worder = ls('worder', []); watch = ls('watch', []); parked = ls('parked', []); removed = ls('removed', []); done = ls('done', []); undone = ls('undone', []); learnDone = ls('learndone', []); learnWatch = ls('learnwatch', []); state = Object.assign(state, ls('view', {})); if (['unwatched', 'watched', 'all'].indexOf(state.wf) < 0) state.wf = 'unwatched'; if (AFTER && state.shelf === 'Watch Next') state.shelf = 'Movies'; if (!LEARN && state.shelf === 'Tech') state.shelf = 'Movies';
+  var SYNC_KEYS = ['worder', 'watch', 'parked', 'next', 'removed', 'done', 'undone', 'learndone', 'learnwatch', 'forder'];
+  next = ls('next', []); worder = ls('worder', []); watch = ls('watch', []); parked = ls('parked', []); removed = ls('removed', []); done = ls('done', []); undone = ls('undone', []); learnDone = ls('learndone', []); learnWatch = ls('learnwatch', []); forder = ls('forder', {}); state = Object.assign(state, ls('view', {})); if (['unwatched', 'watched', 'all'].indexOf(state.wf) < 0) state.wf = 'unwatched'; if (AFTER && state.shelf === 'Watch Next') state.shelf = 'Movies'; if (!LEARN && state.shelf === 'Tech') state.shelf = 'Movies';
   var $ = function (id) { return document.getElementById(id); };
   // ---------- Trakt login (device code, no secret; once per device, renewed on open) ----------
   var TRAKT_ID = '8JCox_SeBb82A1WgJW48P67jldMz2aiSZ-xOZ7qH67g', TRAKT = 'https://api.trakt.tv', pending = null;
@@ -189,7 +189,7 @@ body.sorting .ic { opacity: 0 !important; }
   function bySid(x) { for (var i = 0; i < items.length; i++) if (sid(items[i]) === x) return items[i]; return null; }
   function enc(keys) { return keys.map(byKey).filter(function (it) { return it && it.tmdb; }).map(sid); }
   function dec(ids) { return (ids || []).map(bySid).filter(Boolean).map(function (it) { return it.key; }); }
-  function snapshot() { return { v: 1, o: enc(worder), w: enc(watch), p: enc(parked), b: enc(next), r: enc(removed), d: enc(done), u: enc(undone), L: learnDone.slice(), LW: learnWatch.slice() }; }
+  function snapshot() { return { v: 1, o: enc(worder), w: enc(watch), p: enc(parked), b: enc(next), r: enc(removed), d: enc(done), u: enc(undone), L: learnDone.slice(), LW: learnWatch.slice(), F: forder }; }
   function listItems(st) {
     var all = {}; ['o', 'w', 'p', 'b', 'r'].forEach(function (k) { st[k].forEach(function (x) { all[x] = 1; }); });
     var body = { movies: [], shows: [] };
@@ -206,6 +206,7 @@ body.sorting .ic { opacity: 0 !important; }
     ['worder', 'watch', 'parked', 'next', 'removed', 'done', 'undone'].forEach(function (k) { try { localStorage.setItem(k, JSON.stringify({ worder: worder, watch: watch, parked: parked, next: next, removed: removed, done: done, undone: undone }[k])); } catch (e) {} });
     if (j.LW) { learnWatch = j.LW.slice(); try { localStorage.setItem('learnwatch', JSON.stringify(learnWatch)); } catch (e) {} } else if (learnWatch.length) setTimeout(function () { push(true); }, 0);
     if (j.L) { learnDone = j.L.slice(); try { localStorage.setItem('learndone', JSON.stringify(learnDone)); } catch (e) {} } else if (learnDone.length) setTimeout(function () { push(true); }, 0);
+    if (j.F) { forder = j.F; try { localStorage.setItem('forder', JSON.stringify(forder)); } catch (e) {} } else if (Object.keys(forder).length) setTimeout(function () { push(true); }, 0);
     lastIds = listItems(j).ids; return true;
   }
   function pull() {
@@ -333,6 +334,7 @@ body.sorting .ic { opacity: 0 !important; }
       var nm = t[P.length];
       if (!fs[nm]) { fs[nm] = { isCourse: true, course: nm, path: P.concat([nm]).join('/'), folder: (v.fcov && v.fcov[P.length]) || (t.length === P.length + 1 ? v.folder : null), year: v.v24 ? '' : v.year, category: v.category || 'Other', order: v.corder || '', videos: [] }; order.push(nm); }
       fs[nm].videos.push(v); });
+    var fo = NEXT && forder[P.join('/')]; if (fo) order.sort(function (a, b) { var ia = fo.indexOf(a), ib = fo.indexOf(b); return (ia < 0 ? 1e6 : ia) - (ib < 0 ? 1e6 : ib); }); // your dragged order; new folders go last
     return { P: P, implicit: implicit, list: order.map(function (k) { return fs[k]; }).concat(vids) };
   }
   function techRootFolders() { var keep = state.course, cat = state.cat; state.course = ''; state.cat = 'All'; var r = techLevel().list; state.course = keep; state.cat = cat; return r; }
@@ -517,7 +519,7 @@ body.sorting .ic { opacity: 0 !important; }
     var a = document.createElement('a'); a.className = 'poster ltile'; a.href = '#'; a.setAttribute('aria-label', 'Open ' + c.course);
     if (c.folder) { var im = document.createElement('img'); im.loading = 'lazy'; im.alt = ''; im.src = c.folder; a.appendChild(im); a.classList.add('hascover'); }
     else { var n = document.createElement('span'); n.className = 'ln'; n.textContent = c.videos.length; a.appendChild(n); }
-    a.onclick = function (e) { e.preventDefault(); state.course = V24 && c.path ? c.path : c.course; save(); render(); window.scrollTo(0, 0); };
+    a.onclick = function (e) { e.preventDefault(); if (a.dataset.noclick) return; state.course = V24 && c.path ? c.path : c.course; save(); render(); window.scrollTo(0, 0); };
     d.appendChild(a);
     var t = document.createElement('div'); t.className = 't'; t.textContent = c.course; d.appendChild(t);
     var dn = c.videos.filter(function (v) { return learnDone.indexOf(lid(v)) >= 0; }).length, tot = c.videos.length;
@@ -582,6 +584,7 @@ body.sorting .ic { opacity: 0 !important; }
     if (sec === 'worder') { worder = keys; lsSet('worder', worder); }
     if (sec === 'parked') { parked = keys; lsSet('parked', parked); }
     if (sec === 'next') { next = keys; lsSet('next', next); }
+    if (sec.indexOf('f:') === 0) { forder[sec.slice(2)] = keys; lsSet('forder', forder); }
   }
   function sortable(g) {
     g.querySelectorAll('.card[data-sec]').forEach(function (c) {
@@ -649,6 +652,8 @@ body.sorting .ic { opacity: 0 !important; }
       e.textContent = state.shelf === 'Watch Next' ? 'Nothing in Next yet. Tap ＋ on any poster in Discover.' : state.wf === 'watched' ? 'Nothing watched here yet.' : state.wf === 'all' ? 'Nothing here.' : 'Nothing unwatched here.';
       g.appendChild(e);
     } else list.forEach(function (it) { g.appendChild(it.isCourse ? ccard(it) : state.shelf === 'Tech' ? lcard(it) : mcard(it)); });
+    if (NEXT && V24 && state.shelf === 'Tech' && list.some(function (i) { return i.isCourse; })) { // ?next: drag folders into your order, like Watching (Tech › All, TOC, Lean…)
+      var lvl = 'f:' + techLevel().P.join('/'); g.querySelectorAll('.ccard').forEach(function (c, i) { var f = list.filter(function (x) { return x.isCourse; })[i]; c.dataset.sec = lvl; c.dataset.key = f.course; }); sortable(g); }
     renderFoot(); state.shelf = real;
   }
   function renderFoot() {
