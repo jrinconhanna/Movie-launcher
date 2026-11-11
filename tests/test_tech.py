@@ -54,5 +54,5 @@ lv = [t["title"] for t in lc("Lean Videos")]
 check("N6 Lean Videos: loose talks alphabetical, no ticks or .mp4", lv == sorted(lv, key=str.lower) and not any("\u2705" in x or x.lower().endswith(".mp4") for x in lv) and len(lv) >= 16, str(len(lv)))
 check("N7 Toyota series: 'Episode 1' .. in order (14 + 5)", [t["title"] for t in lc("How Toyota Cars are made")] == ["Episode %d" % i for i in range(1, 15)] and len(lc("The Toyota Production System as Taught by Toyota")) == 5)
 check("N8 every Lean folder level has a cover (Folder.jpg any case; Toyota top borrows its first series')", all(all(t["fcov"]) for t in lean))
-check("N9 Lean is behind ?next; Steve Jobs and TOC are not", all(t.get("next") for t in lean) and not any(t.get("next") for t in ALL if t["category"] != "Lean"))
+check("N9 Lean is live (no ?next flag)", lean and not any(t.get("next") for t in lean))
 print("%d failed" % fails); sys.exit(1 if fails else 0)

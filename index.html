@@ -135,7 +135,7 @@ body.sorting .ic { opacity: 0 !important; }
   var LEARN = true; // V2.3 live 10 Nov (was the ?v23 preview)
   var V24 = !/[?&]v23\b/.test(location.search); if (V24) document.documentElement.classList.add('v24'); // V2.4 live 11 Nov (?v23 shows the old view for comparison)
   var NEXT = /[?&]next\b/.test(location.search); // V2.4.1 preview (Lean onward): items flagged next only show with ?next until Javier says go
-  var learn = [], learnDone = [], learnWatch = [], forder = {}; // forder: your folder order per Tech level ('' = Tech › All), synced via Trakt (?next)
+  var learn = [], learnDone = [], learnWatch = [], forder = {}; // forder: your folder order per Tech level ('' = Tech › All), synced via Trakt
   var SHELVES = AFTER ? ['Movies', 'Series', 'Docs'] : ['Watch Next', 'Movies', 'Series', 'Docs'];
   var TOP = ['Watching', 'Next', 'Discover'], top = 'Watching';
   var items = [], unmatched = [], updated = '';
@@ -334,7 +334,7 @@ body.sorting .ic { opacity: 0 !important; }
       var nm = t[P.length];
       if (!fs[nm]) { fs[nm] = { isCourse: true, course: nm, path: P.concat([nm]).join('/'), folder: (v.fcov && v.fcov[P.length]) || (t.length === P.length + 1 ? v.folder : null), year: v.v24 ? '' : v.year, category: v.category || 'Other', order: v.corder || '', videos: [] }; order.push(nm); }
       fs[nm].videos.push(v); });
-    var fo = NEXT && forder[P.join('/')]; if (fo) order.sort(function (a, b) { var ia = fo.indexOf(a), ib = fo.indexOf(b); return (ia < 0 ? 1e6 : ia) - (ib < 0 ? 1e6 : ib); }); // your dragged order; new folders go last
+    var fo = V24 && forder[P.join('/')]; if (fo) order.sort(function (a, b) { var ia = fo.indexOf(a), ib = fo.indexOf(b); return (ia < 0 ? 1e6 : ia) - (ib < 0 ? 1e6 : ib); }); // your dragged order; new folders go last
     return { P: P, implicit: implicit, list: order.map(function (k) { return fs[k]; }).concat(vids) };
   }
   function techRootFolders() { var keep = state.course, cat = state.cat; state.course = ''; state.cat = 'All'; var r = techLevel().list; state.course = keep; state.cat = cat; return r; }
@@ -652,7 +652,7 @@ body.sorting .ic { opacity: 0 !important; }
       e.textContent = state.shelf === 'Watch Next' ? 'Nothing in Next yet. Tap ＋ on any poster in Discover.' : state.wf === 'watched' ? 'Nothing watched here yet.' : state.wf === 'all' ? 'Nothing here.' : 'Nothing unwatched here.';
       g.appendChild(e);
     } else list.forEach(function (it) { g.appendChild(it.isCourse ? ccard(it) : state.shelf === 'Tech' ? lcard(it) : mcard(it)); });
-    if (NEXT && V24 && state.shelf === 'Tech' && list.some(function (i) { return i.isCourse; })) { // ?next: drag folders into your order, like Watching (Tech › All, TOC, Lean…)
+    if (V24 && state.shelf === 'Tech' && list.some(function (i) { return i.isCourse; })) { // live 11 Nov: drag folders into your order, like Watching (Tech › All, TOC, Lean…)
       var lvl = 'f:' + techLevel().P.join('/'); g.querySelectorAll('.ccard').forEach(function (c, i) { var f = list.filter(function (x) { return x.isCourse; })[i]; c.dataset.sec = lvl; c.dataset.key = f.course; }); sortable(g); }
     renderFoot(); state.shelf = real;
   }

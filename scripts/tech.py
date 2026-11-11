@@ -116,7 +116,7 @@ FIX_NAME = {"Toyota Virtual Plan": "Toyota Virtual Plant"}  # folder name typo o
 def lean(rel, parts, base):
     """'3- Lean/1- Joseph Juran/1- Juran on Quality Planning/...' : Lean chip opens into its folders;
     Juran and Toyota open again into their courses/series. Sessions/episodes go by number,
-    series name dropped from the title; loose talks (Lean Videos) by title. V2.4.1, behind ?next."""
+    series name dropped from the title; loose talks (Lean Videos) by title. V2.4.1, live 11 Nov."""
     names, cord = [], ""
     for f in parts:
         n, o = clean(f); names.append(FIX_NAME.get(n, n)); cord += o or "999"
@@ -128,7 +128,7 @@ def lean(rel, parts, base):
         m = re.match(r"^.*?\s-\s0*(\d+)\s-\s(.+)$", title)  # '21st Century Jet - 1 - The Big Gamble'
         num, t = (int(m.group(1)), "Episode %s - %s" % (m.group(1).lstrip("0"), m.group(2).strip())) if m else (None, title)
     top = rel.split("/")[0]
-    it = {"course": names[-1], "cord": cord, "sub": None, "title": t, "year": None, "next": True,
+    it = {"course": names[-1], "cord": cord, "sub": None, "title": t, "year": None,  # live 11 Nov (was behind ?next)
             "trail": ["Lean"] + names, "tdirs": [top] + [top + "/" + "/".join(parts[:i + 1]) for i in range(len(parts))],
             "sort": (num if num is not None else 9999, 0, 0, t.lower())}
     if num is not None: it["num"] = num  # big number on a tile without a cover
@@ -164,7 +164,7 @@ def tech_items(lines):
         for dd in it.pop("tdirs"):
             src = next((low[(dd + "/" + fn).lower()] for fn in ("folder.jpg", "folder.jpeg", "folder.png") if (dd + "/" + fn).lower() in low), None)
             it["src_fcov"].append(src); it["fcov"].append("covers/t/%s.jpg" % h(src) if src else None)
-        if it.get("next"):  # Lean: a folder without its own cover borrows the first one below it (Toyota Virtual Plant)
+        if cat == "Lean":  # a folder without its own cover borrows the first one below it (Toyota Virtual Plant)
             for i in range(len(it["fcov"]) - 2, -1, -1):
                 if not it["fcov"][i]: it["src_fcov"][i], it["fcov"][i] = it["src_fcov"][i + 1], it["fcov"][i + 1]
         if it.get("legacy_id"): it["id"] = it.pop("legacy_id")
