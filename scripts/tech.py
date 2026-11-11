@@ -212,6 +212,7 @@ def playlists(rel, parts, base):
     it = {"course": sub or name, "cord": cord, "sub": None, "title": t, "year": y, "next": True,
           "trail": ["Playlists", name] + ([sub] if sub else []), "tdirs": [top, top + "/" + parts[0]] + ([top + "/" + parts[0] + "/" + parts[1]] if sub else []), "sort": key}
     if mo: it["mon"] = mo
+    if "Rincon VCR" in parts[0]: it["ychip"] = True                           # family tapes: year chips (All · 1989 … · ?) (11 Nov)
     return it
 
 

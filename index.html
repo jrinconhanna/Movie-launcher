@@ -322,6 +322,8 @@ body.sorting .ic { opacity: 0 !important; }
   // V2.4: folders can hold folders (Steve Jobs › era › videos). state.course = the open folder path, joined by '/'.
   function trail(v) { return v.trail || [v.course]; }
   // V2.4.1 (live 11 Nov): a course made of week folders (Reforge 'W1 - …') opens straight on a week; week chips switch between them
+  function yrOf(v) { return v.year ? String(v.year) : '?'; }
+  function yearMode(list) { return NEXT && list.some(function (i) { return i.ychip; }) && !list.some(function (i) { return i.isCourse; }); } // ?next: family tapes, year chips
   function isWeek(n) { return /^W\d+ - /.test(n || ''); }
   function weekSibs(P) { var par = P.slice(0, -1), seen = {}, out = []; learn.forEach(function (v) { var t = trail(v); if (t.length < P.length || !par.every(function (x, i) { return t[i] === x; })) return; var nm = t[par.length]; if (t.length > par.length && !seen[nm]) { seen[nm] = 1; out.push(nm); } }); return out; }
   function inWeek(P) { var sb = V24 && P.length > 1 && isWeek(P[P.length - 1]) ? weekSibs(P) : []; return sb.length > 1 && sb.every(isWeek); }
@@ -381,7 +383,12 @@ body.sorting .ic { opacity: 0 !important; }
         weekSibs(PW).forEach(function (w) { var b = document.createElement('button'); b.type = 'button'; b.className = 'wk'; b.textContent = w.split(' - ')[0]; b.title = w; b.setAttribute('aria-pressed', w === PW[PW.length - 1] ? 'true' : 'false');
           b.onclick = function () { state.wk = state.wk || {}; state.wk[par.join('/')] = w; state.course = par.concat([w]).join('/'); save(); render(); }; wr.appendChild(b); });
         return; }
-      if (state.course) { var P = state.course.split('/'), bk2 = document.createElement('button'); bk2.type = 'button'; bk2.className = 'back'; bk2.textContent = '\u2039 ' + P[P.length - 1]; bk2.setAttribute('aria-pressed', 'true'); bk2.title = 'Up one folder'; bk2.onclick = techUp; c.appendChild(bk2); return; }
+      if (state.course) { var P = state.course.split('/'), bk2 = document.createElement('button'); bk2.type = 'button'; bk2.className = 'back'; bk2.textContent = '\u2039 ' + P[P.length - 1]; bk2.setAttribute('aria-pressed', 'true'); bk2.title = 'Up one folder'; bk2.onclick = techUp; c.appendChild(bk2);
+        var vl = techLevel().list; if (yearMode(vl)) { wr.hidden = false; var yp = state.course, ys = ['All'], seen = {}; learn.forEach(function (v) { if (v.ychip && trail(v).join('/') === yp && !seen[yrOf(v)]) { seen[yrOf(v)] = 1; ys.push(yrOf(v)); } });
+          var cur = (state.yr || {})[yp] || 'All'; if (ys.indexOf(cur) < 0) cur = 'All';
+          ys.forEach(function (y) { var b = document.createElement('button'); b.type = 'button'; b.className = 'wk'; b.textContent = y; b.setAttribute('aria-pressed', y === cur ? 'true' : 'false');
+            b.onclick = function () { state.yr = state.yr || {}; state.yr[yp] = y; save(); render(); }; wr.appendChild(b); }); }
+        return; }
       list = techRootFolders(); }
     if (state.shelf === 'Tech') { $('wf').hidden = !state.course; if (!state.course) { $('wf').hidden = true; } else { var bk = document.createElement('button'); bk.type = 'button'; bk.className = 'back'; bk.textContent = '‹ ' + state.course; bk.setAttribute('aria-pressed', 'true'); bk.title = 'Back to all courses'; bk.onclick = function () { state.course = ''; save(); render(); }; c.appendChild(bk); return; } }
     if (state.shelf !== 'Tech') $('wf').hidden = false;
@@ -556,7 +563,7 @@ body.sorting .ic { opacity: 0 !important; }
     var a = document.createElement('a'); a.className = 'poster ltile'; a.href = '#'; a.setAttribute('aria-label', v.title);
     if (v.cover) { var im = document.createElement('img'); im.className = 'fg'; im.loading = 'lazy'; im.alt = ''; im.src = v.cover; a.appendChild(im); a.classList.add('hascover'); }
     else { var n = document.createElement('span'); n.className = 'ln'; n.textContent = v.num != null ? v.num : v.n != null ? v.n : '·'; /* Lean: the session/episode number, not the position (Session 10 shows 10) */ a.appendChild(n);
-    if (!(V24 && (isWeek(v.course) || (state.course && inWeek(state.course.split('/')))))) { var c = document.createElement('span'); c.className = 'lc'; c.textContent = v.course; a.appendChild(c); } } // ?next: the week heading already names it
+    if (!(V24 && (v.ychip || isWeek(v.course) || (state.course && inWeek(state.course.split('/')))))) { var c = document.createElement('span'); c.className = 'lc'; c.textContent = v.course; a.appendChild(c); } } // ?next: the week heading already names it
     a.onclick = function (e) { e.preventDefault(); playLearn(v); };
     var seen = learnDone.indexOf(lid(v)) >= 0; if (seen && !(V24 && top === 'Discover' && state.wf === 'watched')) d.classList.add('seen'); // V2.4: the Watched filter shows them in full colour, like movies
     var ic = document.createElement('div'); ic.className = 'ic wm';
@@ -670,6 +677,9 @@ body.sorting .ic { opacity: 0 !important; }
         g.classList.add('vids'); list.filter(function (it) { return it.isCourse; }).forEach(function (f) { var vs = f.videos.filter(showsL); if (!vs.length) return; var h1 = document.createElement('div'); h1.className = 'sech msub'; h1.textContent = f.course; g.appendChild(h1); vs.forEach(function (v) { g.appendChild(lcard(v)); }); });
         var lo = list.filter(function (it) { return !it.isCourse; }); if (lo.length && list.some(function (it) { return it.isCourse; })) { var h2 = document.createElement('div'); h2.className = 'sech msub'; h2.textContent = 'Also this week'; g.appendChild(h2); }
         lo.forEach(function (it) { g.appendChild(lcard(it)); }); }
+      else if (V24 && state.shelf === 'Tech' && state.course && yearMode(list)) { // year chips: one year, or All with year headings
+        var cy = (state.yr || {})[state.course] || 'All', last = null;
+        list.filter(function (v) { return cy === 'All' || yrOf(v) === cy; }).forEach(function (v) { if (cy === 'All' && yrOf(v) !== last) { last = yrOf(v); var hy = document.createElement('div'); hy.className = 'sech msub'; hy.textContent = last === '?' ? 'No year' : last; g.appendChild(hy); } g.appendChild(lcard(v)); }); }
       else list.forEach(function (it) { g.appendChild(it.isCourse ? ccard(it) : state.shelf === 'Tech' ? lcard(it) : mcard(it)); }); }
     if (V24 && state.shelf === 'Tech' && list.some(function (i) { return i.isCourse; })) { // live 11 Nov: drag folders into your order, like Watching (Tech › All, TOC, Lean…)
       var lvl = 'f:' + techLevel().P.join('/'); g.querySelectorAll('.ccard').forEach(function (c, i) { var f = list.filter(function (x) { return x.isCourse; })[i]; c.dataset.sec = lvl; c.dataset.key = f.course; }); sortable(g); }
