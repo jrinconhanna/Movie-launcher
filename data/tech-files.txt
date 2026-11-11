@@ -293,9 +293,11 @@
 2- TOC/1- GSP Series/8. Strategy and Tactics - Immunizing the Future of your Company.mp4
 2- TOC/1- GSP Series/8. Strategy and Tactics - Immunizing the Future of your Company.png
 2- TOC/1- GSP Series/folder.jpg
+2- TOC/2- TOC Case Studies/Azul K - Strategy for Enduring Success.mp4
 2- TOC/2- TOC Case Studies/Decisive Competitive Edge in Auto After Market.mp4
 2- TOC/2- TOC Case Studies/Evolution of a Viable Vision.mp4
 2- TOC/2- TOC Case Studies/First Solar case study.mp4
+2- TOC/2- TOC Case Studies/From Push to Pull Titan Watch Division.mp4
 2- TOC/2- TOC Case Studies/Holistic Implementation in NAT Steel Equipment.mp4
 2- TOC/2- TOC Case Studies/How people grow in TOC.mp4
 2- TOC/2- TOC Case Studies/Lessons Learned in Implementing Make-to-Availability and Distrib.mp4
@@ -306,9 +308,8 @@
 2- TOC/2- TOC Case Studies/Viable Vision - A reality at Fleetguard Filters.mp4
 2- TOC/2- TOC Case Studies/Viable Vision implementation experience in Neuland.mp4
 2- TOC/2- TOC Case Studies/folder.jpg
-2- TOC/2- TOC Case Studies/✅ From Push to Pull Titan Watch Division.mp4
-2- TOC/2- TOC Case Studies/✅Azul K - Strategy for Enduring Success.mp4
 2- TOC/3- TOC Videos/A Matter of Choice.mp4
+2- TOC/3- TOC Videos/A solution to address the market constraint rather than operations.mp4
 2- TOC/3- TOC Videos/Above and Beyond the Competition - Eli Goldratt.mp4
 2- TOC/3- TOC Videos/Building a blue market.mp4
 2- TOC/3- TOC Videos/Capacity Control in Make to Availability - Protecting and Expand.mp4
@@ -332,7 +333,6 @@
 2- TOC/3- TOC Videos/What is TOC .mp4
 2- TOC/3- TOC Videos/What was hidden behind the so called green and red curves - TOC.mp4
 2- TOC/3- TOC Videos/folder.jpg
-2- TOC/3- TOC Videos/✅ A solution to address the market constraint rather than operations.mp4
 2- TOC/folder.jpg
 2- TOC/folder3.jpg
 3- Lean/1- Joseph Juran/1- Juran on Quality Planning/Folder.jpg
