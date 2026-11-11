@@ -519,8 +519,8 @@ body.sorting .ic { opacity: 0 !important; }
     d.appendChild(a);
     var t = document.createElement('div'); t.className = 't'; t.textContent = c.course; d.appendChild(t);
     var dn = c.videos.filter(function (v) { return learnDone.indexOf(lid(v)) >= 0; }).length, tot = c.videos.length;
-    if (dn) { var bd = document.createElement('span'); bd.className = 'badge'; bd.textContent = dn + '/' + tot; a.appendChild(bd); // like a series in progress
-      if (BAR) { var pb = document.createElement('span'); pb.className = 'pbar'; var pf = document.createElement('i'); pf.style.width = Math.max(3, Math.round(100 * dn / tot)) + '%'; pb.appendChild(pf); a.appendChild(pb); } }
+    if (dn || V24) { var bd = document.createElement('span'); bd.className = 'badge'; bd.textContent = dn + '/' + tot; a.appendChild(bd); // like a series in progress; V2.4 always shows it (0/17 tells the size)
+      if (BAR) { var pb = document.createElement('span'); pb.className = 'pbar'; var pf = document.createElement('i'); pf.style.width = (dn ? Math.max(3, Math.round(100 * dn / tot)) : 0) + '%'; pb.appendChild(pf); a.appendChild(pb); } }
     var y = document.createElement('div'); y.className = 'y'; y.textContent = [c.year, state.cat === 'All' && !(V24 && state.course) && c.category && c.category !== 'Other' && c.category !== c.course ? c.category : ''].filter(Boolean).join(' · '); d.appendChild(y); // like movies: category only when no chip is picked
     var nxt = c.videos.filter(function (v) { return learnDone.indexOf(lid(v)) < 0 && learnWatch.indexOf(lid(v)) < 0; })[0];
     var acts = []; if (nxt) acts.push(['watching', 'Watching · add the next video (' + nxt.n + ')', function () { watchLearn(nxt, true); }]);
@@ -540,7 +540,7 @@ body.sorting .ic { opacity: 0 !important; }
     else { var n = document.createElement('span'); n.className = 'ln'; n.textContent = v.n != null ? v.n : '·'; a.appendChild(n);
     var c = document.createElement('span'); c.className = 'lc'; c.textContent = v.course; a.appendChild(c); }
     a.onclick = function (e) { e.preventDefault(); playLearn(v); };
-    var seen = learnDone.indexOf(lid(v)) >= 0; if (seen) d.classList.add('seen');
+    var seen = learnDone.indexOf(lid(v)) >= 0; if (seen && !(V24 && top === 'Discover' && state.wf === 'watched')) d.classList.add('seen'); // V2.4: the Watched filter shows them in full colour, like movies
     var ic = document.createElement('div'); ic.className = 'ic wm';
     var opts = document.createElement('span'); opts.className = 'opts';
     var inW = learnWatch.indexOf(lid(v)) >= 0, acts = seen ? ['watching', 'unwatched'] : inW ? ['remove', 'watched'] : ['watching', 'watched'];
