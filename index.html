@@ -108,7 +108,7 @@ body.sorting .ic { opacity: 0 !important; }
 .card.seen .ltile { filter: grayscale(1); opacity: .25; }
 .v24 .card.seen .ltile img { filter: none; opacity: 1; }
 /* V2.4: videos are landscape tiles showing the whole frame (a scene, like an episode); folders stay portrait like posters */
-.v24 #grid.techin .lcard:not(.ccard) .poster { aspect-ratio: 16 / 9; } .v24 #grid.techin .lcard:not(.ccard) .ltile.hascover img.fg { object-fit: cover; } /* only inside a folder in Discover; Watching keeps posters */
+.v24 .lcard:not(.ccard) .poster { aspect-ratio: 16 / 9; } .v24 .lcard:not(.ccard) .ltile.hascover img.fg { object-fit: cover; } /* videos are wide everywhere, Watching too (11 Nov: mixed row accepted while V2.5 brings wide episode tiles) */
  /* V2.4 fix: the tile and its cover were both faded (.25 × .25), so watched videos nearly vanished; now faded once, like movies */
 .ltile.hascover { background: #000; } .ltile.hascover img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; }
 .v24 .ccard .ltile.hascover img { object-fit: cover; } /* V2.4: folder covers fill the tile, like Infuse */
