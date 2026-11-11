@@ -18,8 +18,7 @@ jobs:
           S="ssh -i $HOME/.ssh/whatbox -o BatchMode=yes -o ConnectTimeout=20 javierrincon@kiwi.whatbox.ca"
           $S 'cd "files/Javi/1- Tech/4- Reforge/2- Retention & Engagement"; mkdir -p /tmp/ft1; rm -f /tmp/ft1/*
             find . -type f -name "*.mp4" | sort | while read -r F; do n=$(printf %s "$F" | md5sum | cut -c1-12)
-              ffmpeg -nostdin -v error -y -i "$F" -frames:v 1 -vf scale=480:-2 -q:v 4 /tmp/ft1/${n}_0.jpg
-              ffmpeg -nostdin -v error -y -t 6 -i "$F" -vf "blackframe=amount=95:threshold=32,metadata=select:key=lavfi.blackframe.pblack:value=95:function=less,scale=480:-2" -frames:v 1 -q:v 4 /tmp/ft1/${n}_nb.jpg
+              ffmpeg -nostdin -v error -y -t 3 -i "$F" -vf "fps=5,scale=320:-2" -q:v 5 /tmp/ft1/${n}_s%02d.jpg
               echo "$n|$F"; done > /tmp/ft1/index.txt; ls /tmp/ft1 | wc -l'
           mkdir -p data/ft1 && scp -i ~/.ssh/whatbox -o BatchMode=yes "javierrincon@kiwi.whatbox.ca:/tmp/ft1/*" data/ft1/
           $S 'rm -rf /tmp/ft1'; rm -f ~/.ssh/whatbox
