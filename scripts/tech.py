@@ -7,7 +7,7 @@ relative to 1- Tech), cover / folder (paths in this repo once synced), v24.
 """
 import hashlib, json, os, re
 
-VIDEO = (".mp4", ".mkv", ".m4v", ".mov", ".avi", ".webm")
+VIDEO = (".mp4", ".mkv", ".m4v", ".mov", ".avi", ".webm", ".mpeg", ".mpg")
 IMG = (".png", ".jpg", ".jpeg")
 MON = {m: i + 1 for i, m in enumerate("jan feb mar apr may jun jul aug sep oct nov dec".split())}
 NUM = re.compile(r"^(\d+)\s*[.)\-]\s*")
@@ -182,9 +182,39 @@ def reforge(rel, parts, base):
             "sort": (k1, k2, 0, t.lower())}
 
 
-RULES = {"1- Steve Jobs": steve_jobs, "2- TOC": toc, "3- Lean": lean, "4- Reforge": reforge}
+ODD = {"\uff1a": ":", "\uff5c": "|", "\u29f8": "/", "\uff1f": "?", "\uff02": '"', "\u2705": ""}
+
+
+def playlists(rel, parts, base):
+    """'5- Playlists/3- Kanye West/2003-08-15 - Kanye West - Interview …' : Playlists chip opens into its folders
+    (your numbers; same number -> by name); 'z - Backlog' sub-folders shown as one Backlog folder; family tapes left out.
+    Dated videos by date (year/month shown under the title), series by episode, the rest by title. Behind ?next (V2.4.1)."""
+    m = re.match(r"^(\d{4})-(\d{2})\s*-\s*(.+)$", parts[0])               # '2026-10 - Ryan Serhant': month added (11 Nov), newest first
+    if parts[0].lower().startswith("z"): name, cord = "Backlog", "9"
+    elif m: name, cord = m.group(3).strip(), "1%06d" % (999999 - int(m.group(1) + m.group(2))) + m.group(3).strip().lower()
+    else:
+        name, o = clean(parts[0]); cord = "5" + (o or "998") + name.lower()
+    t = strip_junk(base)
+    for k, v in ODD.items(): t = t.replace(k, v)
+    t = re.sub(r"\s{2,}", " ", t).strip()
+    m = re.search(r"\b(\d{2})x(\d{2})\s*-\s*(.+)$", t)                     # 'Exodus (2022) - 01x03 - Chaos and Order'
+    y = mo = d = None
+    if m: num, t = int(m.group(2)), "Episode %d - %s" % (int(m.group(2)), m.group(3).strip()); key = (num, 0, 0, "")
+    else:
+        x = re.match(r"^\((\d{4})\)\s*(.+)$", t)                          # family tapes: '(1989) N CINTA 2ª …'
+        if x: t = x.group(1) + " - " + x.group(2)
+        y, mo, d, tt = split_date(t) if re.match(r"^\d{4}", t) else (None, None, None, t)
+        t = tt or t; key = (y or 9999, mo or 0, d or 0, t.lower())
+    top = rel.split("/")[0]
+    it = {"course": name, "cord": cord, "sub": None, "title": t, "year": y, "next": True,
+          "trail": ["Playlists", name], "tdirs": [top, top + "/" + parts[0]], "sort": key}
+    if mo: it["mon"] = mo
+    return it
+
+
+RULES = {"1- Steve Jobs": steve_jobs, "2- TOC": toc, "3- Lean": lean, "4- Reforge": reforge, "5- Playlists": playlists}
 # Piece 1 (11 Nov): first era only, to prove list → covers → tiles → tap → marks end to end. Empty = everything.
-ONLY = ["1- Steve Jobs/1) 1976-1984 (Apple I & Mac)/", "1- Steve Jobs/2) 1985-1995 (Next & Pixar)/", "1- Steve Jobs/3) 1996-1999 (Apple Comeback)/", "1- Steve Jobs/4) 2000-2004 (iPod & Digital Hub)/", "1- Steve Jobs/5) 2005-2007 (iPhone)/", "1- Steve Jobs/6) 2008-2011 (iPad & Final)/", "1- Steve Jobs/99- Other/", "2- TOC/", "3- Lean/", "4- Reforge/"]  # eras added one at a time (11 Nov)
+ONLY = ["1- Steve Jobs/1) 1976-1984 (Apple I & Mac)/", "1- Steve Jobs/2) 1985-1995 (Next & Pixar)/", "1- Steve Jobs/3) 1996-1999 (Apple Comeback)/", "1- Steve Jobs/4) 2000-2004 (iPod & Digital Hub)/", "1- Steve Jobs/5) 2005-2007 (iPhone)/", "1- Steve Jobs/6) 2008-2011 (iPad & Final)/", "1- Steve Jobs/99- Other/", "2- TOC/", "3- Lean/", "4- Reforge/", "5- Playlists/"]  # eras added one at a time (11 Nov)
 
 
 def tech_items(lines):
@@ -201,6 +231,7 @@ def tech_items(lines):
         cat, corder = clean(p[0])
         base = re.sub(r"\.[A-Za-z0-9]{2,4}$", "", p[-1])
         it = RULES[p[0]](rel, p[1:-1], base)
+        if it is None: continue
         d = os.path.dirname(rel)
         it.update({"key": "learn|1- Tech/" + rel, "id": "t:" + h(rel), "category": cat, "corder": corder, "file": p[-1], "v24": True})
         for ext in IMG:
@@ -211,7 +242,7 @@ def tech_items(lines):
         for dd in it.pop("tdirs"):
             src = next((low[(dd + "/" + fn).lower()] for fn in ("folder.jpg", "folder.jpeg", "folder.png") if (dd + "/" + fn).lower() in low), None)
             it["src_fcov"].append(src); it["fcov"].append("covers/t/%s.jpg" % h(src) if src else None)
-        if cat in ("Lean", "Reforge"):  # a folder without its own cover borrows the first one below it (Toyota Virtual Plant)…
+        if cat in ("Lean", "Reforge", "Playlists"):  # a folder without its own cover borrows the first one below it (Toyota Virtual Plant)…
             for i in range(len(it["fcov"]) - 2, -1, -1):
                 if not it["fcov"][i]: it["src_fcov"][i], it["fcov"][i] = it["src_fcov"][i + 1], it["fcov"][i + 1]
             for i in range(1, len(it["fcov"])):  # …or, with none below, its parent's (Reforge W0, Week 6 modules)
