@@ -8426,7 +8426,7 @@
    "overview": "An aging thief hopes to retire and live off his ill-gotten wealth when a young kid convinces him into doing one last heist.",
    "poster": "/fsb4m9XW59mei8GKznvI3lLzcfp.jpg",
    "progress": null,
-   "status": "unwatched",
+   "status": "watched",
    "title": "The Score",
    "tmdb": 11371
   },
@@ -18302,6 +18302,7 @@
    ],
    "file": "1a - Choosing your Market - Three AI Market Strategy Mistakes.mp4",
    "folder": "covers/t/efa0e0fadfc1.jpg",
+   "frame": "covers/t/8a0287b68302f.jpg",
    "id": "t:8a0287b68302",
    "key": "learn|1- Tech/4- Reforge/1- AI Strategy/Week 2 - Market Strategy/1a - Choosing your Market - Three AI Market Strategy Mistakes.mp4",
    "n": 1,
@@ -18327,6 +18328,7 @@
    ],
    "file": "1b - Choosing your Market - AI-Native vs AI-Disrupted vs AI-Enhanced.mp4",
    "folder": "covers/t/efa0e0fadfc1.jpg",
+   "frame": "covers/t/7157c0a5e927f.jpg",
    "id": "t:7157c0a5e927",
    "key": "learn|1- Tech/4- Reforge/1- AI Strategy/Week 2 - Market Strategy/1b - Choosing your Market - AI-Native vs AI-Disrupted vs AI-Enhanced.mp4",
    "n": 2,
@@ -18352,6 +18354,7 @@
    ],
    "file": "1c - Choosing your Market - The AI Market Map How to Navigate Your Market.mp4",
    "folder": "covers/t/efa0e0fadfc1.jpg",
+   "frame": "covers/t/7d3a4a2a94a5f.jpg",
    "id": "t:7d3a4a2a94a5",
    "key": "learn|1- Tech/4- Reforge/1- AI Strategy/Week 2 - Market Strategy/1c - Choosing your Market - The AI Market Map How to Navigate Your Market.mp4",
    "n": 3,
@@ -18377,6 +18380,7 @@
    ],
    "file": "2a - Market Strategy - Choosing Your User - Niche Down.mp4",
    "folder": "covers/t/efa0e0fadfc1.jpg",
+   "frame": "covers/t/0cba44012380f.jpg",
    "id": "t:0cba44012380",
    "key": "learn|1- Tech/4- Reforge/1- AI Strategy/Week 2 - Market Strategy/2a - Market Strategy - Choosing Your User - Niche Down.mp4",
    "n": 4,
@@ -18402,6 +18406,7 @@
    ],
    "file": "2b- Choosing your User - AI Maker Matrix.mp4",
    "folder": "covers/t/efa0e0fadfc1.jpg",
+   "frame": "covers/t/32eb2c60d67cf.jpg",
    "id": "t:32eb2c60d67c",
    "key": "learn|1- Tech/4- Reforge/1- AI Strategy/Week 2 - Market Strategy/2b- Choosing your User - AI Maker Matrix.mp4",
    "n": 5,
@@ -18427,6 +18432,7 @@
    ],
    "file": "2c- Choosing your User - Distribution Strategy.mp4",
    "folder": "covers/t/efa0e0fadfc1.jpg",
+   "frame": "covers/t/9141d9dc83fdf.jpg",
    "id": "t:9141d9dc83fd",
    "key": "learn|1- Tech/4- Reforge/1- AI Strategy/Week 2 - Market Strategy/2c- Choosing your User - Distribution Strategy.mp4",
    "n": 6,
@@ -18452,6 +18458,7 @@
    ],
    "file": "AI Strategy - Week 2  Live.mp4",
    "folder": "covers/t/efa0e0fadfc1.jpg",
+   "frame": "covers/t/988843c9e5eff.jpg",
    "id": "t:988843c9e5ef",
    "key": "learn|1- Tech/4- Reforge/1- AI Strategy/Week 2 - Market Strategy/AI Strategy - Week 2  Live.mp4",
    "n": 7,
@@ -26101,5 +26108,5 @@
    "year": 1959
   }
  ],
- "updated": "2026-11-11T16:02Z"
+ "updated": "2026-11-11T16:08Z"
 }
