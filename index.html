@@ -134,6 +134,7 @@ body.sorting .ic { opacity: 0 !important; }
   var AFTER = true, MOCK = true, BAR = true;
   var LEARN = true; // V2.3 live 10 Nov (was the ?v23 preview)
   var V24 = !/[?&]v23\b/.test(location.search); if (V24) document.documentElement.classList.add('v24'); // V2.4 live 11 Nov (?v23 shows the old view for comparison)
+  var NEXT = /[?&]next\b/.test(location.search); // V2.4.1 preview (Lean onward): items flagged next only show with ?next until Javier says go
   var learn = [], learnDone = [], learnWatch = [];
   var SHELVES = AFTER ? ['Movies', 'Series', 'Docs'] : ['Watch Next', 'Movies', 'Series', 'Docs'];
   var TOP = ['Watching', 'Next', 'Discover'], top = 'Watching';
@@ -538,7 +539,7 @@ body.sorting .ic { opacity: 0 !important; }
     var d = document.createElement('div'); d.className = 'card lcard'; d.dataset.key = v.key;
     var a = document.createElement('a'); a.className = 'poster ltile'; a.href = '#'; a.setAttribute('aria-label', v.title);
     if (v.cover) { var im = document.createElement('img'); im.className = 'fg'; im.loading = 'lazy'; im.alt = ''; im.src = v.cover; a.appendChild(im); a.classList.add('hascover'); }
-    else { var n = document.createElement('span'); n.className = 'ln'; n.textContent = v.n != null ? v.n : '·'; a.appendChild(n);
+    else { var n = document.createElement('span'); n.className = 'ln'; n.textContent = v.num != null ? v.num : v.n != null ? v.n : '·'; /* Lean: the session/episode number, not the position (Session 10 shows 10) */ a.appendChild(n);
     var c = document.createElement('span'); c.className = 'lc'; c.textContent = v.course; a.appendChild(c); }
     a.onclick = function (e) { e.preventDefault(); playLearn(v); };
     var seen = learnDone.indexOf(lid(v)) >= 0; if (seen && !(V24 && top === 'Discover' && state.wf === 'watched')) d.classList.add('seen'); // V2.4: the Watched filter shows them in full colour, like movies
@@ -683,7 +684,7 @@ body.sorting .ic { opacity: 0 !important; }
 
   renew();
   fetch('library.json', { cache: 'no-cache' }).then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); }).then(function (d) {
-    items = d.items || []; learn = (d.learn || []).filter(function (v) { return V24 ? !v.old : !v.v24; }); unmatched = d.unmatched || []; updated = d.updated || ''; applyLive(); render(); pull(); loadPaused(); loadLive();
+    items = d.items || []; learn = (d.learn || []).filter(function (v) { return V24 ? !v.old && (!v.next || NEXT) : !v.v24; }); unmatched = d.unmatched || []; updated = d.updated || ''; applyLive(); render(); pull(); loadPaused(); loadLive();
   }).catch(function () {
     $('grid').innerHTML = '<div class="empty">The library isn’t built yet. It appears here a few minutes after the GitHub job runs.</div>';
   });

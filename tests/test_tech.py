@@ -41,4 +41,18 @@ check("T1 TOC: one TOC folder holding 3 courses (GSP 8, Case Studies 14, Videos 
 check("T2 GSP keeps its V2.3 ids, so watched marks stay", [t["id"] for t in toc if t["course"] == "GSP Series"] == ["GSP Series:%d" % i for i in range(1, 9)])
 check("T3 GSP in number order, number gone from the title; loose talks by title", [t["title"] for t in toc][0] == "Operations - DBR and Buffer Management" and [t["title"] for t in toc if t["course"] == "TOC Videos"] == sorted([t["title"] for t in toc if t["course"] == "TOC Videos"], key=str.lower))
 check("T4 the duplicate talk shows once", sum(1 for t in toc if t["title"] == "Strategy Tactic Implementation Audit Process") == 1)
+lean = [t for t in ALL if t["category"] == "Lean"]
+lc = lambda c: [t for t in lean if t["course"] == c]
+check("N1 Lean: one Lean folder holding 4 folders, in folder order", list(dict.fromkeys(t["trail"][1] for t in lean)) == ["Joseph Juran", "21st Century Jet - Building the Boeing 777", "Lean Videos", "Toyota Virtual Plant"], str({t["trail"][1] for t in lean}))
+check("N2 Juran and Toyota open into their courses/series", list(dict.fromkeys(tuple(t["trail"]) for t in lean if len(t["trail"]) == 3)) == [("Lean", "Joseph Juran", "Juran on Quality Planning"), ("Lean", "Joseph Juran", "Juran on Quality Improvement"), ("Lean", "Toyota Virtual Plant", "How Toyota Cars are made"), ("Lean", "Toyota Virtual Plant", "The Toyota Production System as Taught by Toyota")])
+qp, qi = lc("Juran on Quality Planning"), lc("Juran on Quality Improvement")
+check("N3 Quality Planning: 15 sessions in number order (not by name), series name dropped", len(qp) == 15 and [t["num"] for t in qp] == list(range(1, 16)) and qp[0]["title"] == "Session 1 - Introduction" and qp[9]["title"] == "Session 10 - Optimize Product Design: Methods", str([t["title"] for t in qp[:2]]))
+check("N4 Quality Improvement: sessions by number, missing ones slot in when added", len(qi) >= 8 and [t["num"] for t in qi] == sorted(t["num"] for t in qi) and qi[0]["title"] == "Session 1 - Proof of the Need" and not any(t["title"].endswith(" ") for t in qi))
+jet = lc("21st Century Jet - Building the Boeing 777")
+check("N5 21st Century Jet: 5 episodes, 'Episode 1 - The Big Gamble'", [t["title"] for t in jet][:1] == ["Episode 1 - The Big Gamble"] and len(jet) == 5)
+lv = [t["title"] for t in lc("Lean Videos")]
+check("N6 Lean Videos: loose talks alphabetical, no ticks or .mp4", lv == sorted(lv, key=str.lower) and not any("\u2705" in x or x.lower().endswith(".mp4") for x in lv) and len(lv) >= 16, str(len(lv)))
+check("N7 Toyota series: 'Episode 1' .. in order (14 + 5)", [t["title"] for t in lc("How Toyota Cars are made")] == ["Episode %d" % i for i in range(1, 15)] and len(lc("The Toyota Production System as Taught by Toyota")) == 5)
+check("N8 every Lean folder level has a cover (Folder.jpg any case; Toyota top borrows its first series')", all(all(t["fcov"]) for t in lean))
+check("N9 Lean is behind ?next; Steve Jobs and TOC are not", all(t.get("next") for t in lean) and not any(t.get("next") for t in ALL if t["category"] != "Lean"))
 print("%d failed" % fails); sys.exit(1 if fails else 0)

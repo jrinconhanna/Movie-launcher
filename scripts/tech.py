@@ -110,14 +110,40 @@ def toc(rel, parts, base):
         it["legacy_id"] = "GSP Series:%d" % num  # V2.3 marks used this id: keeps your watched GSP videos watched
     return it
 
-RULES = {"1- Steve Jobs": steve_jobs, "2- TOC": toc}
+FIX_NAME = {"Toyota Virtual Plan": "Toyota Virtual Plant"}  # folder name typo on Whatbox: shown right until it's renamed
+
+
+def lean(rel, parts, base):
+    """'3- Lean/1- Joseph Juran/1- Juran on Quality Planning/...' : Lean chip opens into its folders;
+    Juran and Toyota open again into their courses/series. Sessions/episodes go by number,
+    series name dropped from the title; loose talks (Lean Videos) by title. V2.4.1, behind ?next."""
+    names, cord = [], ""
+    for f in parts:
+        n, o = clean(f); names.append(FIX_NAME.get(n, n)); cord += o or "999"
+    title = re.sub(r"\.mp4$", "", strip_junk(base), flags=re.I).replace("\u2705", "").replace("\uff1a", ":").strip()
+    m = re.search(r"\b(Session|Episode)\s+0*(\d+)\b\s*(?:[-:]\s*)?(.*)$", title, re.I)
+    if m:
+        num, t = int(m.group(2)), m.group(1).capitalize() + " " + m.group(2).lstrip("0") + (" - " + m.group(3).strip() if m.group(3).strip() else "")
+    else:
+        m = re.match(r"^.*?\s-\s0*(\d+)\s-\s(.+)$", title)  # '21st Century Jet - 1 - The Big Gamble'
+        num, t = (int(m.group(1)), "Episode %s - %s" % (m.group(1).lstrip("0"), m.group(2).strip())) if m else (None, title)
+    top = rel.split("/")[0]
+    it = {"course": names[-1], "cord": cord, "sub": None, "title": t, "year": None, "next": True,
+            "trail": ["Lean"] + names, "tdirs": [top] + [top + "/" + "/".join(parts[:i + 1]) for i in range(len(parts))],
+            "sort": (num if num is not None else 9999, 0, 0, t.lower())}
+    if num is not None: it["num"] = num  # big number on a tile without a cover
+    return it
+
+
+RULES = {"1- Steve Jobs": steve_jobs, "2- TOC": toc, "3- Lean": lean}
 # Piece 1 (11 Nov): first era only, to prove list → covers → tiles → tap → marks end to end. Empty = everything.
-ONLY = ["1- Steve Jobs/1) 1976-1984 (Apple I & Mac)/", "1- Steve Jobs/2) 1985-1995 (Next & Pixar)/", "1- Steve Jobs/3) 1996-1999 (Apple Comeback)/", "1- Steve Jobs/4) 2000-2004 (iPod & Digital Hub)/", "1- Steve Jobs/5) 2005-2007 (iPhone)/", "1- Steve Jobs/6) 2008-2011 (iPad & Final)/", "1- Steve Jobs/99- Other/", "2- TOC/"]  # eras added one at a time (11 Nov)
+ONLY = ["1- Steve Jobs/1) 1976-1984 (Apple I & Mac)/", "1- Steve Jobs/2) 1985-1995 (Next & Pixar)/", "1- Steve Jobs/3) 1996-1999 (Apple Comeback)/", "1- Steve Jobs/4) 2000-2004 (iPod & Digital Hub)/", "1- Steve Jobs/5) 2005-2007 (iPhone)/", "1- Steve Jobs/6) 2008-2011 (iPad & Final)/", "1- Steve Jobs/99- Other/", "2- TOC/", "3- Lean/"]  # eras added one at a time (11 Nov)
 
 
 def tech_items(lines):
     files = [l.strip().lstrip("./") for l in lines if l.strip()]
     have = set(files)
+    low = {f.lower(): f for f in files}  # folder covers: folder.jpg or Folder.jpg
     out = []
     for rel in files:
         if not rel.lower().endswith(VIDEO):
@@ -136,8 +162,11 @@ def tech_items(lines):
         # a cover for each folder on the way down (folder.jpg in that folder on Whatbox)
         it["src_fcov"], it["fcov"] = [], []
         for dd in it.pop("tdirs"):
-            src = next((dd + "/" + fn for fn in ("folder.jpg", "folder.jpeg", "folder.png") if dd + "/" + fn in have), None)
+            src = next((low[(dd + "/" + fn).lower()] for fn in ("folder.jpg", "folder.jpeg", "folder.png") if (dd + "/" + fn).lower() in low), None)
             it["src_fcov"].append(src); it["fcov"].append("covers/t/%s.jpg" % h(src) if src else None)
+        if it.get("next"):  # Lean: a folder without its own cover borrows the first one below it (Toyota Virtual Plant)
+            for i in range(len(it["fcov"]) - 2, -1, -1):
+                if not it["fcov"][i]: it["src_fcov"][i], it["fcov"][i] = it["src_fcov"][i + 1], it["fcov"][i + 1]
         if it.get("legacy_id"): it["id"] = it.pop("legacy_id")
         if it["fcov"][-1]:
             it["src_folder"], it["folder"] = it["src_fcov"][-1], it["fcov"][-1]
