@@ -223,7 +223,8 @@ ONLY = ["1- Steve Jobs/1) 1976-1984 (Apple I & Mac)/", "1- Steve Jobs/2) 1985-19
 
 # Covers from a frame of the video (V2.4.1), Reforge first, one week at a time, at 3 s (title card).
 # Frames live only in the launcher (covers/t/<id>f.jpg); nothing is written to Whatbox or the Mac. A .png always wins.
-FRAMES = {"4- Reforge/1- AI Strategy/Week 1 - The Strategic Landscape/": 3}
+FRAMES = {"4- Reforge/1- AI Strategy/Week 1 - The Strategic Landscape/": 3,
+          "4- Reforge/1- AI Strategy/Week 2 - Market Strategy/": 3}
 
 
 def tech_items(lines):
