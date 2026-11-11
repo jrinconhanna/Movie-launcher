@@ -173,6 +173,8 @@ with sync_playwright() as p:
         rec(f"J5b [{size}] years run in order", ys == sorted(ys), ys)
         ar = pg.evaluate("(()=>{var r=document.querySelector('#grid .lcard .poster').getBoundingClientRect();return r.width/r.height})()")
         rec(f"J13 [{size}] video tiles are landscape (16:9), whole frame", abs(ar - 16/9) < 0.05, ar)
+        cols = pg.evaluate("getComputedStyle(document.getElementById('grid')).gridTemplateColumns.split(' ').length")
+        rec(f"J15 [{size}] videos inside a folder: 2 per row on a phone, bigger on a desktop", cols == (2 if size == "phone" else 5), cols)
         rec(f"J11 [{size}] inside a folder the line under a video is just the year", pg.evaluate("[...document.querySelectorAll('#grid .lcard .y')].map(x=>x.textContent)")[:2] == ["1980", "1981"])
         back = pg.evaluate("[...document.querySelectorAll('#chips button')].map(b=>b.textContent)")
         rec(f"J6 [{size}] back chip names the era", back[0].startswith("\u2039") and "Apple I & Mac" in back[0], back)
