@@ -2,7 +2,7 @@
 import os, sys
 K = "3- Kanye West/"
 OPS = [
- ("5- Coaching", "7- Coaching"),
+ ("7- Coaching", "5- Coaching"),
 ]
 root, lim = sys.argv[1], int(sys.argv[2]) if len(sys.argv) > 2 else 999
 n = 0
