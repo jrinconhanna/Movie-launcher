@@ -223,7 +223,7 @@ ONLY = ["1- Steve Jobs/1) 1976-1984 (Apple I & Mac)/", "1- Steve Jobs/2) 1985-19
 
 # Covers from a frame of the video (V2.4.1), Reforge first, one week at a time, at 3 s (title card).
 # Frames live only in the launcher (covers/t/<id>f.jpg); nothing is written to Whatbox or the Mac. A .png always wins.
-FRAMES = {"4- Reforge/1- AI Strategy/": 3, "4- Reforge/2- Retention & Engagement/": 3}  # all of Reforge (11 Nov)
+FRAMES = {"4- Reforge/1- AI Strategy/": 3, "4- Reforge/2- Retention & Engagement/": "nb"}  # AI Strategy at 3 s; R&E = first non-black frame (11 Nov; its 3 s copies are kept as <id>f.jpg)
 
 
 def tech_items(lines):
@@ -248,7 +248,7 @@ def tech_items(lines):
                 it["src_cover"] = d + "/" + base + ext; it["cover"] = "covers/t/%sw.jpg" % h(it["src_cover"]); break  # 'w' = wide 16:9 version
         if not it.get("src_cover"):
             at = next((s for pre, s in FRAMES.items() if rel.startswith(pre)), None)
-            if at is not None: it["src_frame"], it["frame_at"], it["frame"] = rel, at, "covers/t/%sf.jpg" % h(rel)
+            if at is not None: it["src_frame"], it["frame_at"], it["frame"] = rel, at, "covers/t/%s%s.jpg" % (h(rel), "n" if at == "nb" else "f")
         # a cover for each folder on the way down (folder.jpg in that folder on Whatbox)
         it["src_fcov"], it["fcov"] = [], []
         for dd in it.pop("tdirs"):

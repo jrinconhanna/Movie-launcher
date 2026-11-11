@@ -75,18 +75,35 @@ def frames(items):
     import shlex
     cmds = ["mkdir -p /tmp/lf && rm -f /tmp/lf/*"]
     for it in need:
-        cmds.append("ffmpeg -v error -y -ss %d -i %s -frames:v 1 -q:v 3 /tmp/lf/%s.jpg || true" % (it["frame_at"], shlex.quote(BASE + "/" + it["src_frame"]), os.path.basename(it["frame"])[:-4]))
-    r = subprocess.run(SSH + [HOST, " ; ".join(cmds)], capture_output=True, text=True, timeout=900)
+        src, out = shlex.quote(BASE + "/" + it["src_frame"]), os.path.basename(it["frame"])[:-4]
+        if it["frame_at"] == "nb":  # first non-black: 5 frames a second over the first 3 s, picked here
+            cmds.append("ffmpeg -nostdin -v error -y -t 3 -i %s -vf fps=5 -q:v 3 /tmp/lf/%s_s%%02d.jpg || true" % (src, out))
+        else:
+            cmds.append("ffmpeg -nostdin -v error -y -ss %d -i %s -frames:v 1 -q:v 3 /tmp/lf/%s.jpg || true" % (it["frame_at"], src, out))
+    r = subprocess.run(SSH + [HOST, " ; ".join(cmds)], capture_output=True, text=True, timeout=1800)
     tmp = tempfile.mkdtemp()
-    subprocess.run(["scp", "-i", os.path.expanduser("~/.ssh/whatbox"), "-o", "BatchMode=yes", HOST + ":/tmp/lf/*.jpg", tmp + "/"], timeout=600)
+    subprocess.run(["scp", "-i", os.path.expanduser("~/.ssh/whatbox"), "-o", "BatchMode=yes", HOST + ":/tmp/lf/*.jpg", tmp + "/"], timeout=1200)
     subprocess.run(SSH + [HOST, "rm -rf /tmp/lf"], timeout=60)
     os.makedirs(os.path.join(ROOT, "covers", "t"), exist_ok=True)
     n = 0
     for it in need:
-        p = os.path.join(tmp, os.path.basename(it["frame"]))
-        if not os.path.exists(p): continue
+        base = os.path.basename(it["frame"])[:-4]
+        if it["frame_at"] == "nb":
+            p = first_lit(sorted(os.path.join(tmp, f) for f in os.listdir(tmp) if f.startswith(base + "_s")), Image)
+        else:
+            p = os.path.join(tmp, base + ".jpg")
+        if not p or not os.path.exists(p): continue
         wide(Image.open(p).convert("RGB")).save(os.path.join(ROOT, it["frame"]), "JPEG", quality=72, optimize=True, progressive=True); n += 1
     print("frames saved: %d" % n)
+
+
+def first_lit(paths, Image):
+    """First frame that isn't black (bright enough and not flat); the last one if all are dark."""
+    from PIL import ImageStat
+    for p in paths:
+        st = ImageStat.Stat(Image.open(p).convert("L"))
+        if st.mean[0] > 25 and st.stddev[0] > 12: return p
+    return paths[-1] if paths else None
 
 
 if __name__ == "__main__":
