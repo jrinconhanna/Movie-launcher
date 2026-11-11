@@ -211,6 +211,8 @@ with sync_playwright() as p:
         tab(pg, "Watching")
         arw = pg.evaluate("(()=>{var p=document.querySelector('#grid .lcard .poster');if(!p)return 0;var r=p.getBoundingClientRect();return r.width/r.height})()")
         rec(f"J14 [{size}] on Watching a video is wide too (16:9)", abs(arw - 16/9) < 0.05, arw)
+        wv = pg.evaluate("(()=>{var v=document.querySelector('#grid .lcard .poster'),m=document.querySelector('#grid .card:not(.lcard) .poster');return [v?v.getBoundingClientRect().width:0, m?m.getBoundingClientRect().width:0]})()")
+        rec(f"J17 [{size}] on Watching a video is as big as in Discover (wider than a poster)", wv[0] > 1.3 * wv[1] if wv[1] else wv[0] > 0, wv)
         tab(pg, "Discover"); pg.wait_for_timeout(300); tab(pg, "Watching"); pg.wait_for_timeout(300)
         rec(f"J16 [{size}] Watching after Discover keeps its own sizes (no video-grid sizing left over)", not pg.evaluate("document.getElementById('grid').classList.contains('vids')"))
         rec(f"J9 [{size}] no page errors (V2.4)", not pg.errs, pg.errs)
