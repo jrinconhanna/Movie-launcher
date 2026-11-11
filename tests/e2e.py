@@ -319,8 +319,8 @@ with sync_playwright() as p:
         pg.evaluate("[...document.querySelectorAll('#grid .ccard')].find(c=>c.querySelector('.t').textContent==='Rincon VCR Videos').querySelector('.poster').click()"); pg.wait_for_timeout(300)
         rec(f"P19 [{size}] reopening remembers the year", Y()[2] == "1990*", Y())
         pg.context.close()
-        # --- ?next: drag videos inside a playlist ---
-        pg = page(b, vp, "?next")
+        # --- drag videos inside a playlist (live 11 Nov) ---
+        pg = page(b, vp)
         tab(pg, "Discover"); pg.evaluate("[...document.querySelectorAll('#tabs button')].find(b=>b.firstChild.textContent==='Tech').click()"); pg.wait_for_timeout(300)
         pg.evaluate("[...document.querySelectorAll('#chips button')].find(b=>b.textContent.startsWith('Playlists')).click()"); pg.wait_for_timeout(300)
         pg.evaluate("[...document.querySelectorAll('#grid .ccard')].find(c=>c.querySelector('.t').textContent==='Peter Thiel').querySelector('.poster').click()"); pg.wait_for_timeout(300)

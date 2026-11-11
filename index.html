@@ -323,7 +323,7 @@ body.sorting .ic { opacity: 0 !important; }
   // V2.4: folders can hold folders (Steve Jobs › era › videos). state.course = the open folder path, joined by '/'.
   function trail(v) { return v.trail || [v.course]; }
   // V2.4.1 (live 11 Nov): a course made of week folders (Reforge 'W1 - …') opens straight on a week; week chips switch between them
-  function vDrag(v) { return NEXT && v.category === 'Playlists'; } // ?next: drag videos inside a playlist (later: any folder, if wanted)
+  function vDrag(v) { return V24 && v.category === 'Playlists'; } // live 11 Nov: drag videos inside a playlist (later: any folder, if wanted)
   function vKey(v) { return trail(v).join('/') + (v.ychip ? '|' + yrOf(v) : ''); }
   function yrOf(v) { return v.year ? String(v.year) : '?'; }
   function yearMode(list) { return V24 && list.some(function (i) { return i.ychip; }) && !list.some(function (i) { return i.isCourse; }); } // family tapes, year chips (live 11 Nov)
@@ -690,7 +690,7 @@ body.sorting .ic { opacity: 0 !important; }
       else list.forEach(function (it) { g.appendChild(it.isCourse ? ccard(it) : state.shelf === 'Tech' ? lcard(it) : mcard(it)); }); }
     if (V24 && state.shelf === 'Tech' && list.some(function (i) { return i.isCourse; })) { // live 11 Nov: drag folders into your order, like Watching (Tech › All, TOC, Lean…)
       var lvl = 'f:' + techLevel().P.join('/'); g.querySelectorAll('.ccard').forEach(function (c, i) { var f = list.filter(function (x) { return x.isCourse; })[i]; c.dataset.sec = lvl; c.dataset.key = f.course; }); sortable(g); }
-    else if (V24 && state.shelf === 'Tech' && list.length && list.every(function (i) { return !i.isCourse && vDrag(i); })) { // ?next: drag videos inside a playlist, like Watching
+    else if (V24 && state.shelf === 'Tech' && list.length && list.every(function (i) { return !i.isCourse && vDrag(i); })) { // drag videos inside a playlist, like Watching (live 11 Nov)
       var byK = {}; list.forEach(function (v) { byK[v.key] = v; }); g.querySelectorAll('.lcard:not(.ccard)').forEach(function (c) { var v = byK[c.dataset.key]; if (v) c.dataset.sec = 'v:' + vKey(v); }); sortable(g); }
     renderFoot(); state.shelf = real;
   }
