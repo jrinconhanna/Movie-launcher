@@ -1,0 +1,28 @@
+name: One-off - Playlists folders to 'YYYY-MM - Name' (Javi's go, 11 Nov)
+
+# Folder renames only (never overwrites). 'limit' = how many (trial first). Deleted after use.
+
+on:
+  workflow_dispatch:
+    inputs:
+      limit: { description: "how many", default: "1" }
+
+permissions:
+  contents: read
+
+jobs:
+  rename:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Rename on Whatbox
+        env:
+          KEY: ${{ secrets.WHATBOX_SSH_KEY }}
+          LIMIT: ${{ inputs.limit }}
+        run: |
+          mkdir -p ~/.ssh && chmod 700 ~/.ssh
+          printf '%s\n' "$KEY" > ~/.ssh/whatbox && chmod 600 ~/.ssh/whatbox
+          ssh-keyscan -H kiwi.whatbox.ca >> ~/.ssh/known_hosts 2>/dev/null
+          ssh -i ~/.ssh/whatbox -o BatchMode=yes -o ConnectTimeout=20 javierrincon@kiwi.whatbox.ca \
+            "python3 - 'files/Javi/1- Tech/5- Playlists' $LIMIT" < scripts/oneoff_pl_dates.py
+          rm -f ~/.ssh/whatbox
