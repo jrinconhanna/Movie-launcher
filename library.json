@@ -20120,11 +20120,245 @@
     "covers/t/df24e103a623.jpg",
     "covers/t/368a78f8fa3f.jpg"
    ],
+   "file": "1-Introduction To Resurrection.mp4",
+   "folder": "covers/t/368a78f8fa3f.jpg",
+   "id": "t:5dc0c47ef7d1",
+   "key": "learn|1- Tech/4- Reforge/2- Retention & Engagement/W6-Resurrection. Defining, Measuring, And Analyzing/1-Introduction To Resurrection.mp4",
+   "n": 1,
+   "next": true,
+   "sub": null,
+   "title": "Introduction To Resurrection",
+   "trail": [
+    "Reforge",
+    "Retention & Engagement",
+    "W6 - Resurrection. Defining, Measuring, And Analyzing"
+   ],
+   "v24": true,
+   "year": null
+  },
+  {
+   "category": "Reforge",
+   "cord": "002006",
+   "corder": "004",
+   "course": "W6 - Resurrection. Defining, Measuring, And Analyzing",
+   "fcov": [
+    "covers/t/60f0a2b0db59.jpg",
+    "covers/t/df24e103a623.jpg",
+    "covers/t/368a78f8fa3f.jpg"
+   ],
+   "file": "2-When You Should Focus On Resurrection.mp4",
+   "folder": "covers/t/368a78f8fa3f.jpg",
+   "id": "t:edc2617c324b",
+   "key": "learn|1- Tech/4- Reforge/2- Retention & Engagement/W6-Resurrection. Defining, Measuring, And Analyzing/2-When You Should Focus On Resurrection.mp4",
+   "n": 2,
+   "next": true,
+   "sub": null,
+   "title": "When You Should Focus On Resurrection",
+   "trail": [
+    "Reforge",
+    "Retention & Engagement",
+    "W6 - Resurrection. Defining, Measuring, And Analyzing"
+   ],
+   "v24": true,
+   "year": null
+  },
+  {
+   "category": "Reforge",
+   "cord": "002006",
+   "corder": "004",
+   "course": "W6 - Resurrection. Defining, Measuring, And Analyzing",
+   "fcov": [
+    "covers/t/60f0a2b0db59.jpg",
+    "covers/t/df24e103a623.jpg",
+    "covers/t/368a78f8fa3f.jpg"
+   ],
+   "file": "3-Defining At Risk Users For Churn Prediction.mp4",
+   "folder": "covers/t/368a78f8fa3f.jpg",
+   "id": "t:42ca9faa17c3",
+   "key": "learn|1- Tech/4- Reforge/2- Retention & Engagement/W6-Resurrection. Defining, Measuring, And Analyzing/3-Defining At Risk Users For Churn Prediction.mp4",
+   "n": 3,
+   "next": true,
+   "sub": null,
+   "title": "Defining At Risk Users For Churn Prediction",
+   "trail": [
+    "Reforge",
+    "Retention & Engagement",
+    "W6 - Resurrection. Defining, Measuring, And Analyzing"
+   ],
+   "v24": true,
+   "year": null
+  },
+  {
+   "category": "Reforge",
+   "cord": "002006",
+   "corder": "004",
+   "course": "W6 - Resurrection. Defining, Measuring, And Analyzing",
+   "fcov": [
+    "covers/t/60f0a2b0db59.jpg",
+    "covers/t/df24e103a623.jpg",
+    "covers/t/368a78f8fa3f.jpg"
+   ],
+   "file": "4-Defining Dormant Engagement State.mp4",
+   "folder": "covers/t/368a78f8fa3f.jpg",
+   "id": "t:c40e6dd5550f",
+   "key": "learn|1- Tech/4- Reforge/2- Retention & Engagement/W6-Resurrection. Defining, Measuring, And Analyzing/4-Defining Dormant Engagement State.mp4",
+   "n": 4,
+   "next": true,
+   "sub": null,
+   "title": "Defining Dormant Engagement State",
+   "trail": [
+    "Reforge",
+    "Retention & Engagement",
+    "W6 - Resurrection. Defining, Measuring, And Analyzing"
+   ],
+   "v24": true,
+   "year": null
+  },
+  {
+   "category": "Reforge",
+   "cord": "002006",
+   "corder": "004",
+   "course": "W6 - Resurrection. Defining, Measuring, And Analyzing",
+   "fcov": [
+    "covers/t/60f0a2b0db59.jpg",
+    "covers/t/df24e103a623.jpg",
+    "covers/t/368a78f8fa3f.jpg"
+   ],
+   "file": "5-Defining Churned Engagement State.mp4",
+   "folder": "covers/t/368a78f8fa3f.jpg",
+   "id": "t:6d2dfc973cf9",
+   "key": "learn|1- Tech/4- Reforge/2- Retention & Engagement/W6-Resurrection. Defining, Measuring, And Analyzing/5-Defining Churned Engagement State.mp4",
+   "n": 5,
+   "next": true,
+   "sub": null,
+   "title": "Defining Churned Engagement State",
+   "trail": [
+    "Reforge",
+    "Retention & Engagement",
+    "W6 - Resurrection. Defining, Measuring, And Analyzing"
+   ],
+   "v24": true,
+   "year": null
+  },
+  {
+   "category": "Reforge",
+   "cord": "002006",
+   "corder": "004",
+   "course": "W6 - Resurrection. Defining, Measuring, And Analyzing",
+   "fcov": [
+    "covers/t/60f0a2b0db59.jpg",
+    "covers/t/df24e103a623.jpg",
+    "covers/t/368a78f8fa3f.jpg"
+   ],
+   "file": "R&amp;E-M7-L0-IntroductiontoResurrectionStrategies.mp4",
+   "folder": "covers/t/368a78f8fa3f.jpg",
+   "id": "t:18e2b62d6f43",
+   "key": "learn|1- Tech/4- Reforge/2- Retention & Engagement/W6-Resurrection. Defining, Measuring, And Analyzing/R&amp;E-M7-L0-IntroductiontoResurrectionStrategies.mp4",
+   "n": 6,
+   "next": true,
+   "sub": null,
+   "title": "R&E-M7-L0 - Introduction to Resurrection Strategies",
+   "trail": [
+    "Reforge",
+    "Retention & Engagement",
+    "W6 - Resurrection. Defining, Measuring, And Analyzing"
+   ],
+   "v24": true,
+   "year": null
+  },
+  {
+   "category": "Reforge",
+   "cord": "002006",
+   "corder": "004",
+   "course": "W6 - Resurrection. Defining, Measuring, And Analyzing",
+   "fcov": [
+    "covers/t/60f0a2b0db59.jpg",
+    "covers/t/df24e103a623.jpg",
+    "covers/t/368a78f8fa3f.jpg"
+   ],
+   "file": "R&amp;E-M7-L1-StrategiesForAtRiskUsers.mp4",
+   "folder": "covers/t/368a78f8fa3f.jpg",
+   "id": "t:83672029edb6",
+   "key": "learn|1- Tech/4- Reforge/2- Retention & Engagement/W6-Resurrection. Defining, Measuring, And Analyzing/R&amp;E-M7-L1-StrategiesForAtRiskUsers.mp4",
+   "n": 7,
+   "next": true,
+   "sub": null,
+   "title": "R&E-M7-L1 - Strategies For At Risk Users",
+   "trail": [
+    "Reforge",
+    "Retention & Engagement",
+    "W6 - Resurrection. Defining, Measuring, And Analyzing"
+   ],
+   "v24": true,
+   "year": null
+  },
+  {
+   "category": "Reforge",
+   "cord": "002006",
+   "corder": "004",
+   "course": "W6 - Resurrection. Defining, Measuring, And Analyzing",
+   "fcov": [
+    "covers/t/60f0a2b0db59.jpg",
+    "covers/t/df24e103a623.jpg",
+    "covers/t/368a78f8fa3f.jpg"
+   ],
+   "file": "R&amp;E-M7-L2-InvoluntaryDormantStrategies.mp4",
+   "folder": "covers/t/368a78f8fa3f.jpg",
+   "id": "t:160f13de5eac",
+   "key": "learn|1- Tech/4- Reforge/2- Retention & Engagement/W6-Resurrection. Defining, Measuring, And Analyzing/R&amp;E-M7-L2-InvoluntaryDormantStrategies.mp4",
+   "n": 8,
+   "next": true,
+   "sub": null,
+   "title": "R&E-M7-L2 - Involuntary Dormant Strategies",
+   "trail": [
+    "Reforge",
+    "Retention & Engagement",
+    "W6 - Resurrection. Defining, Measuring, And Analyzing"
+   ],
+   "v24": true,
+   "year": null
+  },
+  {
+   "category": "Reforge",
+   "cord": "002006",
+   "corder": "004",
+   "course": "W6 - Resurrection. Defining, Measuring, And Analyzing",
+   "fcov": [
+    "covers/t/60f0a2b0db59.jpg",
+    "covers/t/df24e103a623.jpg",
+    "covers/t/368a78f8fa3f.jpg"
+   ],
+   "file": "R&amp;E-M7-L3-ResurrectingVoluntaryDormantUsers.mp4",
+   "folder": "covers/t/368a78f8fa3f.jpg",
+   "id": "t:dff217567a95",
+   "key": "learn|1- Tech/4- Reforge/2- Retention & Engagement/W6-Resurrection. Defining, Measuring, And Analyzing/R&amp;E-M7-L3-ResurrectingVoluntaryDormantUsers.mp4",
+   "n": 9,
+   "next": true,
+   "sub": null,
+   "title": "R&E-M7-L3 - Resurrecting Voluntary Dormant Users",
+   "trail": [
+    "Reforge",
+    "Retention & Engagement",
+    "W6 - Resurrection. Defining, Measuring, And Analyzing"
+   ],
+   "v24": true,
+   "year": null
+  },
+  {
+   "category": "Reforge",
+   "cord": "002006",
+   "corder": "004",
+   "course": "W6 - Resurrection. Defining, Measuring, And Analyzing",
+   "fcov": [
+    "covers/t/60f0a2b0db59.jpg",
+    "covers/t/df24e103a623.jpg",
+    "covers/t/368a78f8fa3f.jpg"
+   ],
    "file": "W6 Event.mp4",
    "folder": "covers/t/368a78f8fa3f.jpg",
    "id": "t:c74864ee3193",
    "key": "learn|1- Tech/4- Reforge/2- Retention & Engagement/W6-Resurrection. Defining, Measuring, And Analyzing/W6 Event.mp4",
-   "n": 1,
+   "n": 10,
    "next": true,
    "sub": null,
    "title": "W6 Event",
@@ -20138,271 +20372,18 @@
   },
   {
    "category": "Reforge",
-   "cord": "002006007",
+   "cord": "002007",
    "corder": "004",
-   "course": "Module 7",
+   "course": "W7 - ICED Theory (Bonus)",
    "fcov": [
     "covers/t/60f0a2b0db59.jpg",
     "covers/t/df24e103a623.jpg",
-    "covers/t/368a78f8fa3f.jpg",
-    "covers/t/368a78f8fa3f.jpg"
-   ],
-   "file": "1-Introduction To Resurrection.mp4",
-   "folder": "covers/t/368a78f8fa3f.jpg",
-   "id": "t:9549982e67d1",
-   "key": "learn|1- Tech/4- Reforge/2- Retention & Engagement/W6-Resurrection. Defining, Measuring, And Analyzing/Module 7/1-Introduction To Resurrection.mp4",
-   "n": 1,
-   "next": true,
-   "sub": null,
-   "title": "Introduction To Resurrection",
-   "trail": [
-    "Reforge",
-    "Retention & Engagement",
-    "W6 - Resurrection. Defining, Measuring, And Analyzing",
-    "Module 7"
-   ],
-   "v24": true,
-   "year": null
-  },
-  {
-   "category": "Reforge",
-   "cord": "002006007",
-   "corder": "004",
-   "course": "Module 7",
-   "fcov": [
-    "covers/t/60f0a2b0db59.jpg",
-    "covers/t/df24e103a623.jpg",
-    "covers/t/368a78f8fa3f.jpg",
-    "covers/t/368a78f8fa3f.jpg"
-   ],
-   "file": "2-When You Should Focus On Resurrection.mp4",
-   "folder": "covers/t/368a78f8fa3f.jpg",
-   "id": "t:585518c7ba75",
-   "key": "learn|1- Tech/4- Reforge/2- Retention & Engagement/W6-Resurrection. Defining, Measuring, And Analyzing/Module 7/2-When You Should Focus On Resurrection.mp4",
-   "n": 2,
-   "next": true,
-   "sub": null,
-   "title": "When You Should Focus On Resurrection",
-   "trail": [
-    "Reforge",
-    "Retention & Engagement",
-    "W6 - Resurrection. Defining, Measuring, And Analyzing",
-    "Module 7"
-   ],
-   "v24": true,
-   "year": null
-  },
-  {
-   "category": "Reforge",
-   "cord": "002006007",
-   "corder": "004",
-   "course": "Module 7",
-   "fcov": [
-    "covers/t/60f0a2b0db59.jpg",
-    "covers/t/df24e103a623.jpg",
-    "covers/t/368a78f8fa3f.jpg",
-    "covers/t/368a78f8fa3f.jpg"
-   ],
-   "file": "3-Defining At Risk Users For Churn Prediction.mp4",
-   "folder": "covers/t/368a78f8fa3f.jpg",
-   "id": "t:1eac6ba7df0e",
-   "key": "learn|1- Tech/4- Reforge/2- Retention & Engagement/W6-Resurrection. Defining, Measuring, And Analyzing/Module 7/3-Defining At Risk Users For Churn Prediction.mp4",
-   "n": 3,
-   "next": true,
-   "sub": null,
-   "title": "Defining At Risk Users For Churn Prediction",
-   "trail": [
-    "Reforge",
-    "Retention & Engagement",
-    "W6 - Resurrection. Defining, Measuring, And Analyzing",
-    "Module 7"
-   ],
-   "v24": true,
-   "year": null
-  },
-  {
-   "category": "Reforge",
-   "cord": "002006007",
-   "corder": "004",
-   "course": "Module 7",
-   "fcov": [
-    "covers/t/60f0a2b0db59.jpg",
-    "covers/t/df24e103a623.jpg",
-    "covers/t/368a78f8fa3f.jpg",
-    "covers/t/368a78f8fa3f.jpg"
-   ],
-   "file": "4-Defining Dormant Engagement State.mp4",
-   "folder": "covers/t/368a78f8fa3f.jpg",
-   "id": "t:b60bbe415371",
-   "key": "learn|1- Tech/4- Reforge/2- Retention & Engagement/W6-Resurrection. Defining, Measuring, And Analyzing/Module 7/4-Defining Dormant Engagement State.mp4",
-   "n": 4,
-   "next": true,
-   "sub": null,
-   "title": "Defining Dormant Engagement State",
-   "trail": [
-    "Reforge",
-    "Retention & Engagement",
-    "W6 - Resurrection. Defining, Measuring, And Analyzing",
-    "Module 7"
-   ],
-   "v24": true,
-   "year": null
-  },
-  {
-   "category": "Reforge",
-   "cord": "002006007",
-   "corder": "004",
-   "course": "Module 7",
-   "fcov": [
-    "covers/t/60f0a2b0db59.jpg",
-    "covers/t/df24e103a623.jpg",
-    "covers/t/368a78f8fa3f.jpg",
-    "covers/t/368a78f8fa3f.jpg"
-   ],
-   "file": "5-Defining Churned Engagement State.mp4",
-   "folder": "covers/t/368a78f8fa3f.jpg",
-   "id": "t:5fbef4bfd2db",
-   "key": "learn|1- Tech/4- Reforge/2- Retention & Engagement/W6-Resurrection. Defining, Measuring, And Analyzing/Module 7/5-Defining Churned Engagement State.mp4",
-   "n": 5,
-   "next": true,
-   "sub": null,
-   "title": "Defining Churned Engagement State",
-   "trail": [
-    "Reforge",
-    "Retention & Engagement",
-    "W6 - Resurrection. Defining, Measuring, And Analyzing",
-    "Module 7"
-   ],
-   "v24": true,
-   "year": null
-  },
-  {
-   "category": "Reforge",
-   "cord": "002006008",
-   "corder": "004",
-   "course": "Module 8",
-   "fcov": [
-    "covers/t/60f0a2b0db59.jpg",
-    "covers/t/df24e103a623.jpg",
-    "covers/t/368a78f8fa3f.jpg",
-    "covers/t/368a78f8fa3f.jpg"
-   ],
-   "file": "R&amp;E-M7-L0-IntroductiontoResurrectionStrategies.mp4",
-   "folder": "covers/t/368a78f8fa3f.jpg",
-   "id": "t:8c44c85352e0",
-   "key": "learn|1- Tech/4- Reforge/2- Retention & Engagement/W6-Resurrection. Defining, Measuring, And Analyzing/Module 8/R&amp;E-M7-L0-IntroductiontoResurrectionStrategies.mp4",
-   "n": 1,
-   "next": true,
-   "sub": null,
-   "title": "R&E-M7-L0 - Introduction to Resurrection Strategies",
-   "trail": [
-    "Reforge",
-    "Retention & Engagement",
-    "W6 - Resurrection. Defining, Measuring, And Analyzing",
-    "Module 8"
-   ],
-   "v24": true,
-   "year": null
-  },
-  {
-   "category": "Reforge",
-   "cord": "002006008",
-   "corder": "004",
-   "course": "Module 8",
-   "fcov": [
-    "covers/t/60f0a2b0db59.jpg",
-    "covers/t/df24e103a623.jpg",
-    "covers/t/368a78f8fa3f.jpg",
-    "covers/t/368a78f8fa3f.jpg"
-   ],
-   "file": "R&amp;E-M7-L1-StrategiesForAtRiskUsers.mp4",
-   "folder": "covers/t/368a78f8fa3f.jpg",
-   "id": "t:59bf576b6e6b",
-   "key": "learn|1- Tech/4- Reforge/2- Retention & Engagement/W6-Resurrection. Defining, Measuring, And Analyzing/Module 8/R&amp;E-M7-L1-StrategiesForAtRiskUsers.mp4",
-   "n": 2,
-   "next": true,
-   "sub": null,
-   "title": "R&E-M7-L1 - Strategies For At Risk Users",
-   "trail": [
-    "Reforge",
-    "Retention & Engagement",
-    "W6 - Resurrection. Defining, Measuring, And Analyzing",
-    "Module 8"
-   ],
-   "v24": true,
-   "year": null
-  },
-  {
-   "category": "Reforge",
-   "cord": "002006008",
-   "corder": "004",
-   "course": "Module 8",
-   "fcov": [
-    "covers/t/60f0a2b0db59.jpg",
-    "covers/t/df24e103a623.jpg",
-    "covers/t/368a78f8fa3f.jpg",
-    "covers/t/368a78f8fa3f.jpg"
-   ],
-   "file": "R&amp;E-M7-L2-InvoluntaryDormantStrategies.mp4",
-   "folder": "covers/t/368a78f8fa3f.jpg",
-   "id": "t:beaa78ba2131",
-   "key": "learn|1- Tech/4- Reforge/2- Retention & Engagement/W6-Resurrection. Defining, Measuring, And Analyzing/Module 8/R&amp;E-M7-L2-InvoluntaryDormantStrategies.mp4",
-   "n": 3,
-   "next": true,
-   "sub": null,
-   "title": "R&E-M7-L2 - Involuntary Dormant Strategies",
-   "trail": [
-    "Reforge",
-    "Retention & Engagement",
-    "W6 - Resurrection. Defining, Measuring, And Analyzing",
-    "Module 8"
-   ],
-   "v24": true,
-   "year": null
-  },
-  {
-   "category": "Reforge",
-   "cord": "002006008",
-   "corder": "004",
-   "course": "Module 8",
-   "fcov": [
-    "covers/t/60f0a2b0db59.jpg",
-    "covers/t/df24e103a623.jpg",
-    "covers/t/368a78f8fa3f.jpg",
-    "covers/t/368a78f8fa3f.jpg"
-   ],
-   "file": "R&amp;E-M7-L3-ResurrectingVoluntaryDormantUsers.mp4",
-   "folder": "covers/t/368a78f8fa3f.jpg",
-   "id": "t:0bb0b50e12b0",
-   "key": "learn|1- Tech/4- Reforge/2- Retention & Engagement/W6-Resurrection. Defining, Measuring, And Analyzing/Module 8/R&amp;E-M7-L3-ResurrectingVoluntaryDormantUsers.mp4",
-   "n": 4,
-   "next": true,
-   "sub": null,
-   "title": "R&E-M7-L3 - Resurrecting Voluntary Dormant Users",
-   "trail": [
-    "Reforge",
-    "Retention & Engagement",
-    "W6 - Resurrection. Defining, Measuring, And Analyzing",
-    "Module 8"
-   ],
-   "v24": true,
-   "year": null
-  },
-  {
-   "category": "Reforge",
-   "cord": "002006009",
-   "corder": "004",
-   "course": "Module 9 - ICED Theory",
-   "fcov": [
-    "covers/t/60f0a2b0db59.jpg",
-    "covers/t/df24e103a623.jpg",
-    "covers/t/368a78f8fa3f.jpg",
-    "covers/t/368a78f8fa3f.jpg"
+    "covers/t/df24e103a623.jpg"
    ],
    "file": "ICEDTheoryS0L1-IntroductiontoManagingInfrequentProducts.mp4",
-   "folder": "covers/t/368a78f8fa3f.jpg",
-   "id": "t:3afbd671ce6f",
-   "key": "learn|1- Tech/4- Reforge/2- Retention & Engagement/W6-Resurrection. Defining, Measuring, And Analyzing/Module 9 - ICED Theory/ICEDTheoryS0L1-IntroductiontoManagingInfrequentProducts.mp4",
+   "folder": "covers/t/df24e103a623.jpg",
+   "id": "t:fec384399598",
+   "key": "learn|1- Tech/4- Reforge/2- Retention & Engagement/W7- ICED Theory (Bonus)/ICEDTheoryS0L1-IntroductiontoManagingInfrequentProducts.mp4",
    "n": 1,
    "next": true,
    "sub": null,
@@ -20410,27 +20391,25 @@
    "trail": [
     "Reforge",
     "Retention & Engagement",
-    "W6 - Resurrection. Defining, Measuring, And Analyzing",
-    "Module 9 - ICED Theory"
+    "W7 - ICED Theory (Bonus)"
    ],
    "v24": true,
    "year": null
   },
   {
    "category": "Reforge",
-   "cord": "002006009",
+   "cord": "002007",
    "corder": "004",
-   "course": "Module 9 - ICED Theory",
+   "course": "W7 - ICED Theory (Bonus)",
    "fcov": [
     "covers/t/60f0a2b0db59.jpg",
     "covers/t/df24e103a623.jpg",
-    "covers/t/368a78f8fa3f.jpg",
-    "covers/t/368a78f8fa3f.jpg"
+    "covers/t/df24e103a623.jpg"
    ],
    "file": "ICEDTheoryS1L1-The4DimensionsofInfrequentProducts.mp4",
-   "folder": "covers/t/368a78f8fa3f.jpg",
-   "id": "t:0ca980e902a4",
-   "key": "learn|1- Tech/4- Reforge/2- Retention & Engagement/W6-Resurrection. Defining, Measuring, And Analyzing/Module 9 - ICED Theory/ICEDTheoryS1L1-The4DimensionsofInfrequentProducts.mp4",
+   "folder": "covers/t/df24e103a623.jpg",
+   "id": "t:3019f645eaa7",
+   "key": "learn|1- Tech/4- Reforge/2- Retention & Engagement/W7- ICED Theory (Bonus)/ICEDTheoryS1L1-The4DimensionsofInfrequentProducts.mp4",
    "n": 2,
    "next": true,
    "sub": null,
@@ -20438,27 +20417,25 @@
    "trail": [
     "Reforge",
     "Retention & Engagement",
-    "W6 - Resurrection. Defining, Measuring, And Analyzing",
-    "Module 9 - ICED Theory"
+    "W7 - ICED Theory (Bonus)"
    ],
    "v24": true,
    "year": null
   },
   {
    "category": "Reforge",
-   "cord": "002006009",
+   "cord": "002007",
    "corder": "004",
-   "course": "Module 9 - ICED Theory",
+   "course": "W7 - ICED Theory (Bonus)",
    "fcov": [
     "covers/t/60f0a2b0db59.jpg",
     "covers/t/df24e103a623.jpg",
-    "covers/t/368a78f8fa3f.jpg",
-    "covers/t/368a78f8fa3f.jpg"
+    "covers/t/df24e103a623.jpg"
    ],
    "file": "ICEDTheoryS1L2-ManagingInfrequency.mp4",
-   "folder": "covers/t/368a78f8fa3f.jpg",
-   "id": "t:2799724c95c6",
-   "key": "learn|1- Tech/4- Reforge/2- Retention & Engagement/W6-Resurrection. Defining, Measuring, And Analyzing/Module 9 - ICED Theory/ICEDTheoryS1L2-ManagingInfrequency.mp4",
+   "folder": "covers/t/df24e103a623.jpg",
+   "id": "t:0572c483fbdd",
+   "key": "learn|1- Tech/4- Reforge/2- Retention & Engagement/W7- ICED Theory (Bonus)/ICEDTheoryS1L2-ManagingInfrequency.mp4",
    "n": 3,
    "next": true,
    "sub": null,
@@ -20466,27 +20443,25 @@
    "trail": [
     "Reforge",
     "Retention & Engagement",
-    "W6 - Resurrection. Defining, Measuring, And Analyzing",
-    "Module 9 - ICED Theory"
+    "W7 - ICED Theory (Bonus)"
    ],
    "v24": true,
    "year": null
   },
   {
    "category": "Reforge",
-   "cord": "002006009",
+   "cord": "002007",
    "corder": "004",
-   "course": "Module 9 - ICED Theory",
+   "course": "W7 - ICED Theory (Bonus)",
    "fcov": [
     "covers/t/60f0a2b0db59.jpg",
     "covers/t/df24e103a623.jpg",
-    "covers/t/368a78f8fa3f.jpg",
-    "covers/t/368a78f8fa3f.jpg"
+    "covers/t/df24e103a623.jpg"
    ],
    "file": "ICEDTheoryS1L3-ControlOverExperience.mp4",
-   "folder": "covers/t/368a78f8fa3f.jpg",
-   "id": "t:5b12983957fd",
-   "key": "learn|1- Tech/4- Reforge/2- Retention & Engagement/W6-Resurrection. Defining, Measuring, And Analyzing/Module 9 - ICED Theory/ICEDTheoryS1L3-ControlOverExperience.mp4",
+   "folder": "covers/t/df24e103a623.jpg",
+   "id": "t:a4ac9de55fb3",
+   "key": "learn|1- Tech/4- Reforge/2- Retention & Engagement/W7- ICED Theory (Bonus)/ICEDTheoryS1L3-ControlOverExperience.mp4",
    "n": 4,
    "next": true,
    "sub": null,
@@ -20494,27 +20469,25 @@
    "trail": [
     "Reforge",
     "Retention & Engagement",
-    "W6 - Resurrection. Defining, Measuring, And Analyzing",
-    "Module 9 - ICED Theory"
+    "W7 - ICED Theory (Bonus)"
    ],
    "v24": true,
    "year": null
   },
   {
    "category": "Reforge",
-   "cord": "002006009",
+   "cord": "002007",
    "corder": "004",
-   "course": "Module 9 - ICED Theory",
+   "course": "W7 - ICED Theory (Bonus)",
    "fcov": [
     "covers/t/60f0a2b0db59.jpg",
     "covers/t/df24e103a623.jpg",
-    "covers/t/368a78f8fa3f.jpg",
-    "covers/t/368a78f8fa3f.jpg"
+    "covers/t/df24e103a623.jpg"
    ],
    "file": "ICEDTheoryS1L4-ManagingDegreeofEngagement.mp4",
-   "folder": "covers/t/368a78f8fa3f.jpg",
-   "id": "t:3796739038a2",
-   "key": "learn|1- Tech/4- Reforge/2- Retention & Engagement/W6-Resurrection. Defining, Measuring, And Analyzing/Module 9 - ICED Theory/ICEDTheoryS1L4-ManagingDegreeofEngagement.mp4",
+   "folder": "covers/t/df24e103a623.jpg",
+   "id": "t:fa224fd010de",
+   "key": "learn|1- Tech/4- Reforge/2- Retention & Engagement/W7- ICED Theory (Bonus)/ICEDTheoryS1L4-ManagingDegreeofEngagement.mp4",
    "n": 5,
    "next": true,
    "sub": null,
@@ -20522,27 +20495,25 @@
    "trail": [
     "Reforge",
     "Retention & Engagement",
-    "W6 - Resurrection. Defining, Measuring, And Analyzing",
-    "Module 9 - ICED Theory"
+    "W7 - ICED Theory (Bonus)"
    ],
    "v24": true,
    "year": null
   },
   {
    "category": "Reforge",
-   "cord": "002006009",
+   "cord": "002007",
    "corder": "004",
-   "course": "Module 9 - ICED Theory",
+   "course": "W7 - ICED Theory (Bonus)",
    "fcov": [
     "covers/t/60f0a2b0db59.jpg",
     "covers/t/df24e103a623.jpg",
-    "covers/t/368a78f8fa3f.jpg",
-    "covers/t/368a78f8fa3f.jpg"
+    "covers/t/df24e103a623.jpg"
    ],
    "file": "ICEDTheoryS1L5-ManagingComplexity.mp4",
-   "folder": "covers/t/368a78f8fa3f.jpg",
-   "id": "t:450d502781ac",
-   "key": "learn|1- Tech/4- Reforge/2- Retention & Engagement/W6-Resurrection. Defining, Measuring, And Analyzing/Module 9 - ICED Theory/ICEDTheoryS1L5-ManagingComplexity.mp4",
+   "folder": "covers/t/df24e103a623.jpg",
+   "id": "t:13cd5ec75368",
+   "key": "learn|1- Tech/4- Reforge/2- Retention & Engagement/W7- ICED Theory (Bonus)/ICEDTheoryS1L5-ManagingComplexity.mp4",
    "n": 6,
    "next": true,
    "sub": null,
@@ -20550,27 +20521,25 @@
    "trail": [
     "Reforge",
     "Retention & Engagement",
-    "W6 - Resurrection. Defining, Measuring, And Analyzing",
-    "Module 9 - ICED Theory"
+    "W7 - ICED Theory (Bonus)"
    ],
    "v24": true,
    "year": null
   },
   {
    "category": "Reforge",
-   "cord": "002006009",
+   "cord": "002007",
    "corder": "004",
-   "course": "Module 9 - ICED Theory",
+   "course": "W7 - ICED Theory (Bonus)",
    "fcov": [
     "covers/t/60f0a2b0db59.jpg",
     "covers/t/df24e103a623.jpg",
-    "covers/t/368a78f8fa3f.jpg",
-    "covers/t/368a78f8fa3f.jpg"
+    "covers/t/df24e103a623.jpg"
    ],
    "file": "ICEDTheoryS1L6-ExpandingTouchpoints.mp4",
-   "folder": "covers/t/368a78f8fa3f.jpg",
-   "id": "t:f39783c3c050",
-   "key": "learn|1- Tech/4- Reforge/2- Retention & Engagement/W6-Resurrection. Defining, Measuring, And Analyzing/Module 9 - ICED Theory/ICEDTheoryS1L6-ExpandingTouchpoints.mp4",
+   "folder": "covers/t/df24e103a623.jpg",
+   "id": "t:13ac5003a3d2",
+   "key": "learn|1- Tech/4- Reforge/2- Retention & Engagement/W7- ICED Theory (Bonus)/ICEDTheoryS1L6-ExpandingTouchpoints.mp4",
    "n": 7,
    "next": true,
    "sub": null,
@@ -20578,27 +20547,25 @@
    "trail": [
     "Reforge",
     "Retention & Engagement",
-    "W6 - Resurrection. Defining, Measuring, And Analyzing",
-    "Module 9 - ICED Theory"
+    "W7 - ICED Theory (Bonus)"
    ],
    "v24": true,
    "year": null
   },
   {
    "category": "Reforge",
-   "cord": "002006009",
+   "cord": "002007",
    "corder": "004",
-   "course": "Module 9 - ICED Theory",
+   "course": "W7 - ICED Theory (Bonus)",
    "fcov": [
     "covers/t/60f0a2b0db59.jpg",
     "covers/t/df24e103a623.jpg",
-    "covers/t/368a78f8fa3f.jpg",
-    "covers/t/368a78f8fa3f.jpg"
+    "covers/t/df24e103a623.jpg"
    ],
    "file": "ICEDTheoryS1L7-DistinguishingInfrequentProducts.mp4",
-   "folder": "covers/t/368a78f8fa3f.jpg",
-   "id": "t:9187b4345cd3",
-   "key": "learn|1- Tech/4- Reforge/2- Retention & Engagement/W6-Resurrection. Defining, Measuring, And Analyzing/Module 9 - ICED Theory/ICEDTheoryS1L7-DistinguishingInfrequentProducts.mp4",
+   "folder": "covers/t/df24e103a623.jpg",
+   "id": "t:1da69f124718",
+   "key": "learn|1- Tech/4- Reforge/2- Retention & Engagement/W7- ICED Theory (Bonus)/ICEDTheoryS1L7-DistinguishingInfrequentProducts.mp4",
    "n": 8,
    "next": true,
    "sub": null,
@@ -20606,27 +20573,25 @@
    "trail": [
     "Reforge",
     "Retention & Engagement",
-    "W6 - Resurrection. Defining, Measuring, And Analyzing",
-    "Module 9 - ICED Theory"
+    "W7 - ICED Theory (Bonus)"
    ],
    "v24": true,
    "year": null
   },
   {
    "category": "Reforge",
-   "cord": "002006009",
+   "cord": "002007",
    "corder": "004",
-   "course": "Module 9 - ICED Theory",
+   "course": "W7 - ICED Theory (Bonus)",
    "fcov": [
     "covers/t/60f0a2b0db59.jpg",
     "covers/t/df24e103a623.jpg",
-    "covers/t/368a78f8fa3f.jpg",
-    "covers/t/368a78f8fa3f.jpg"
+    "covers/t/df24e103a623.jpg"
    ],
    "file": "ICEDTheoryS1L8-TheICEDTheoryCanvas.mp4",
-   "folder": "covers/t/368a78f8fa3f.jpg",
-   "id": "t:02915820503d",
-   "key": "learn|1- Tech/4- Reforge/2- Retention & Engagement/W6-Resurrection. Defining, Measuring, And Analyzing/Module 9 - ICED Theory/ICEDTheoryS1L8-TheICEDTheoryCanvas.mp4",
+   "folder": "covers/t/df24e103a623.jpg",
+   "id": "t:0d2a8264756e",
+   "key": "learn|1- Tech/4- Reforge/2- Retention & Engagement/W7- ICED Theory (Bonus)/ICEDTheoryS1L8-TheICEDTheoryCanvas.mp4",
    "n": 9,
    "next": true,
    "sub": null,
@@ -20634,8 +20599,7 @@
    "trail": [
     "Reforge",
     "Retention & Engagement",
-    "W6 - Resurrection. Defining, Measuring, And Analyzing",
-    "Module 9 - ICED Theory"
+    "W7 - ICED Theory (Bonus)"
    ],
    "v24": true,
    "year": null
@@ -21318,5 +21282,5 @@
    "year": 1959
   }
  ],
- "updated": "2026-11-11T12:31Z"
+ "updated": "2026-11-11T13:07Z"
 }
