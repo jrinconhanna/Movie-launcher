@@ -15364,6 +15364,7 @@
    "folder": "covers/learn/gsp-series/folder.jpg",
    "key": "learn|1- Tech/2- TOC/1- GSP Series/✅ 1. Operations - DBR and Buffer Management.mp4",
    "n": 1,
+   "old": true,
    "title": "Operations - DBR and Buffer Management",
    "year": 1999
   },
@@ -15376,6 +15377,7 @@
    "folder": "covers/learn/gsp-series/folder.jpg",
    "key": "learn|1- Tech/2- TOC/1- GSP Series/✅ 2. Finance and Measurements - T, I & OE and Throughput Accounting.mp4",
    "n": 2,
+   "old": true,
    "title": "Finance and Measurements - T, I & OE and Throughput Accounting",
    "year": 1999
   },
@@ -15388,6 +15390,7 @@
    "folder": "covers/learn/gsp-series/folder.jpg",
    "key": "learn|1- Tech/2- TOC/1- GSP Series/✅ 3. Project Management and Engineering - Critical Chain (CCPM) and Product Development.mp4",
    "n": 3,
+   "old": true,
    "title": "Project Management and Engineering - Critical Chain (CCPM) and Product Development",
    "year": 1999
   },
@@ -15400,6 +15403,7 @@
    "folder": "covers/learn/gsp-series/folder.jpg",
    "key": "learn|1- Tech/2- TOC/1- GSP Series/✅ 4. Distribution and Supply Chain - Pull System and Replenishment.mp4",
    "n": 4,
+   "old": true,
    "title": "Distribution and Supply Chain - Pull System and Replenishment",
    "year": 1999
   },
@@ -15412,6 +15416,7 @@
    "folder": "covers/learn/gsp-series/folder.jpg",
    "key": "learn|1- Tech/2- TOC/1- GSP Series/✅ 5. Marketing - Unrefusable Offers and Market Segmentation.mp4",
    "n": 5,
+   "old": true,
    "title": "Marketing - Unrefusable Offers and Market Segmentation",
    "year": 1999
   },
@@ -15424,6 +15429,7 @@
    "folder": "covers/learn/gsp-series/folder.jpg",
    "key": "learn|1- Tech/2- TOC/1- GSP Series/✅ 6. Sales and Buy-in - Overcoming Resistance and Handling Reservations.mp4",
    "n": 6,
+   "old": true,
    "title": "Sales and Buy-in - Overcoming Resistance and Handling Reservations",
    "year": 1999
   },
@@ -15436,6 +15442,7 @@
    "folder": "covers/learn/gsp-series/folder.jpg",
    "key": "learn|1- Tech/2- TOC/1- GSP Series/7. Managing People - Communication and Team Building.mp4",
    "n": 7,
+   "old": true,
    "title": "Managing People - Communication and Team Building",
    "year": 1999
   },
@@ -15448,8 +15455,962 @@
    "folder": "covers/learn/gsp-series/folder.jpg",
    "key": "learn|1- Tech/2- TOC/1- GSP Series/8. Strategy and Tactics - Immunizing the Future of your Company.mp4",
    "n": 8,
+   "old": true,
    "title": "Strategy and Tactics - Immunizing the Future of your Company",
    "year": 1999
+  },
+  {
+   "category": "TOC",
+   "cord": "001",
+   "corder": "002",
+   "course": "GSP Series",
+   "cover": "covers/t/8acc255071e4w.jpg",
+   "fcov": [
+    "covers/t/54a0f5512b88.jpg"
+   ],
+   "file": "1. Operations - DBR and Buffer Management.mp4",
+   "folder": "covers/t/54a0f5512b88.jpg",
+   "id": "GSP Series:1",
+   "key": "learn|1- Tech/2- TOC/1- GSP Series/1. Operations - DBR and Buffer Management.mp4",
+   "n": 1,
+   "sub": null,
+   "title": "Operations - DBR and Buffer Management",
+   "trail": [
+    "GSP Series"
+   ],
+   "v24": true,
+   "year": null
+  },
+  {
+   "category": "TOC",
+   "cord": "001",
+   "corder": "002",
+   "course": "GSP Series",
+   "cover": "covers/t/9163124c75b9w.jpg",
+   "fcov": [
+    "covers/t/54a0f5512b88.jpg"
+   ],
+   "file": "2. Finance and Measurements - T, I & OE and Throughput Accounting.mp4",
+   "folder": "covers/t/54a0f5512b88.jpg",
+   "id": "GSP Series:2",
+   "key": "learn|1- Tech/2- TOC/1- GSP Series/2. Finance and Measurements - T, I & OE and Throughput Accounting.mp4",
+   "n": 2,
+   "sub": null,
+   "title": "Finance and Measurements - T, I & OE and Throughput Accounting",
+   "trail": [
+    "GSP Series"
+   ],
+   "v24": true,
+   "year": null
+  },
+  {
+   "category": "TOC",
+   "cord": "001",
+   "corder": "002",
+   "course": "GSP Series",
+   "cover": "covers/t/8a0205aea901w.jpg",
+   "fcov": [
+    "covers/t/54a0f5512b88.jpg"
+   ],
+   "file": "3. Project Management and Engineering - Critical Chain (CCPM) and Product Development.mp4",
+   "folder": "covers/t/54a0f5512b88.jpg",
+   "id": "GSP Series:3",
+   "key": "learn|1- Tech/2- TOC/1- GSP Series/3. Project Management and Engineering - Critical Chain (CCPM) and Product Development.mp4",
+   "n": 3,
+   "sub": null,
+   "title": "Project Management and Engineering - Critical Chain (CCPM) and Product Development",
+   "trail": [
+    "GSP Series"
+   ],
+   "v24": true,
+   "year": null
+  },
+  {
+   "category": "TOC",
+   "cord": "001",
+   "corder": "002",
+   "course": "GSP Series",
+   "cover": "covers/t/22a170baf23cw.jpg",
+   "fcov": [
+    "covers/t/54a0f5512b88.jpg"
+   ],
+   "file": "4. Distribution and Supply Chain - Pull System and Replenishment.mp4",
+   "folder": "covers/t/54a0f5512b88.jpg",
+   "id": "GSP Series:4",
+   "key": "learn|1- Tech/2- TOC/1- GSP Series/4. Distribution and Supply Chain - Pull System and Replenishment.mp4",
+   "n": 4,
+   "sub": null,
+   "title": "Distribution and Supply Chain - Pull System and Replenishment",
+   "trail": [
+    "GSP Series"
+   ],
+   "v24": true,
+   "year": null
+  },
+  {
+   "category": "TOC",
+   "cord": "001",
+   "corder": "002",
+   "course": "GSP Series",
+   "cover": "covers/t/7ea5026d6724w.jpg",
+   "fcov": [
+    "covers/t/54a0f5512b88.jpg"
+   ],
+   "file": "5. Marketing - Unrefusable Offers and Market Segmentation.mp4",
+   "folder": "covers/t/54a0f5512b88.jpg",
+   "id": "GSP Series:5",
+   "key": "learn|1- Tech/2- TOC/1- GSP Series/5. Marketing - Unrefusable Offers and Market Segmentation.mp4",
+   "n": 5,
+   "sub": null,
+   "title": "Marketing - Unrefusable Offers and Market Segmentation",
+   "trail": [
+    "GSP Series"
+   ],
+   "v24": true,
+   "year": null
+  },
+  {
+   "category": "TOC",
+   "cord": "001",
+   "corder": "002",
+   "course": "GSP Series",
+   "cover": "covers/t/1b8337d8c28ew.jpg",
+   "fcov": [
+    "covers/t/54a0f5512b88.jpg"
+   ],
+   "file": "6. Sales and Buy-in - Overcoming Resistance and Handling Reservations.mp4",
+   "folder": "covers/t/54a0f5512b88.jpg",
+   "id": "GSP Series:6",
+   "key": "learn|1- Tech/2- TOC/1- GSP Series/6. Sales and Buy-in - Overcoming Resistance and Handling Reservations.mp4",
+   "n": 6,
+   "sub": null,
+   "title": "Sales and Buy-in - Overcoming Resistance and Handling Reservations",
+   "trail": [
+    "GSP Series"
+   ],
+   "v24": true,
+   "year": null
+  },
+  {
+   "category": "TOC",
+   "cord": "001",
+   "corder": "002",
+   "course": "GSP Series",
+   "cover": "covers/t/1675c16dab81w.jpg",
+   "fcov": [
+    "covers/t/54a0f5512b88.jpg"
+   ],
+   "file": "7. Managing People - Communication and Team Building.mp4",
+   "folder": "covers/t/54a0f5512b88.jpg",
+   "id": "GSP Series:7",
+   "key": "learn|1- Tech/2- TOC/1- GSP Series/7. Managing People - Communication and Team Building.mp4",
+   "n": 7,
+   "sub": null,
+   "title": "Managing People - Communication and Team Building",
+   "trail": [
+    "GSP Series"
+   ],
+   "v24": true,
+   "year": null
+  },
+  {
+   "category": "TOC",
+   "cord": "001",
+   "corder": "002",
+   "course": "GSP Series",
+   "cover": "covers/t/2bd5cba7dd35w.jpg",
+   "fcov": [
+    "covers/t/54a0f5512b88.jpg"
+   ],
+   "file": "8. Strategy and Tactics - Immunizing the Future of your Company.mp4",
+   "folder": "covers/t/54a0f5512b88.jpg",
+   "id": "GSP Series:8",
+   "key": "learn|1- Tech/2- TOC/1- GSP Series/8. Strategy and Tactics - Immunizing the Future of your Company.mp4",
+   "n": 8,
+   "sub": null,
+   "title": "Strategy and Tactics - Immunizing the Future of your Company",
+   "trail": [
+    "GSP Series"
+   ],
+   "v24": true,
+   "year": null
+  },
+  {
+   "category": "TOC",
+   "cord": "002",
+   "corder": "002",
+   "course": "TOC Case Studies",
+   "fcov": [
+    "covers/t/446321d6701f.jpg"
+   ],
+   "file": "Azul K - Strategy for Enduring Success.mp4",
+   "folder": "covers/t/446321d6701f.jpg",
+   "id": "t:42af6d9e7907",
+   "key": "learn|1- Tech/2- TOC/2- TOC Case Studies/Azul K - Strategy for Enduring Success.mp4",
+   "n": 1,
+   "sub": null,
+   "title": "Azul K - Strategy for Enduring Success",
+   "trail": [
+    "TOC Case Studies"
+   ],
+   "v24": true,
+   "year": null
+  },
+  {
+   "category": "TOC",
+   "cord": "002",
+   "corder": "002",
+   "course": "TOC Case Studies",
+   "fcov": [
+    "covers/t/446321d6701f.jpg"
+   ],
+   "file": "Decisive Competitive Edge in Auto After Market.mp4",
+   "folder": "covers/t/446321d6701f.jpg",
+   "id": "t:ca61f962224e",
+   "key": "learn|1- Tech/2- TOC/2- TOC Case Studies/Decisive Competitive Edge in Auto After Market.mp4",
+   "n": 2,
+   "sub": null,
+   "title": "Decisive Competitive Edge in Auto After Market",
+   "trail": [
+    "TOC Case Studies"
+   ],
+   "v24": true,
+   "year": null
+  },
+  {
+   "category": "TOC",
+   "cord": "002",
+   "corder": "002",
+   "course": "TOC Case Studies",
+   "fcov": [
+    "covers/t/446321d6701f.jpg"
+   ],
+   "file": "Evolution of a Viable Vision.mp4",
+   "folder": "covers/t/446321d6701f.jpg",
+   "id": "t:57d0d70afb14",
+   "key": "learn|1- Tech/2- TOC/2- TOC Case Studies/Evolution of a Viable Vision.mp4",
+   "n": 3,
+   "sub": null,
+   "title": "Evolution of a Viable Vision",
+   "trail": [
+    "TOC Case Studies"
+   ],
+   "v24": true,
+   "year": null
+  },
+  {
+   "category": "TOC",
+   "cord": "002",
+   "corder": "002",
+   "course": "TOC Case Studies",
+   "fcov": [
+    "covers/t/446321d6701f.jpg"
+   ],
+   "file": "First Solar case study.mp4",
+   "folder": "covers/t/446321d6701f.jpg",
+   "id": "t:923d596a35d7",
+   "key": "learn|1- Tech/2- TOC/2- TOC Case Studies/First Solar case study.mp4",
+   "n": 4,
+   "sub": null,
+   "title": "First Solar case study",
+   "trail": [
+    "TOC Case Studies"
+   ],
+   "v24": true,
+   "year": null
+  },
+  {
+   "category": "TOC",
+   "cord": "002",
+   "corder": "002",
+   "course": "TOC Case Studies",
+   "fcov": [
+    "covers/t/446321d6701f.jpg"
+   ],
+   "file": "From Push to Pull Titan Watch Division.mp4",
+   "folder": "covers/t/446321d6701f.jpg",
+   "id": "t:94ca7184ff5d",
+   "key": "learn|1- Tech/2- TOC/2- TOC Case Studies/From Push to Pull Titan Watch Division.mp4",
+   "n": 5,
+   "sub": null,
+   "title": "From Push to Pull Titan Watch Division",
+   "trail": [
+    "TOC Case Studies"
+   ],
+   "v24": true,
+   "year": null
+  },
+  {
+   "category": "TOC",
+   "cord": "002",
+   "corder": "002",
+   "course": "TOC Case Studies",
+   "fcov": [
+    "covers/t/446321d6701f.jpg"
+   ],
+   "file": "Holistic Implementation in NAT Steel Equipment.mp4",
+   "folder": "covers/t/446321d6701f.jpg",
+   "id": "t:aec0eb41b31a",
+   "key": "learn|1- Tech/2- TOC/2- TOC Case Studies/Holistic Implementation in NAT Steel Equipment.mp4",
+   "n": 6,
+   "sub": null,
+   "title": "Holistic Implementation in NAT Steel Equipment",
+   "trail": [
+    "TOC Case Studies"
+   ],
+   "v24": true,
+   "year": null
+  },
+  {
+   "category": "TOC",
+   "cord": "002",
+   "corder": "002",
+   "course": "TOC Case Studies",
+   "fcov": [
+    "covers/t/446321d6701f.jpg"
+   ],
+   "file": "How people grow in TOC.mp4",
+   "folder": "covers/t/446321d6701f.jpg",
+   "id": "t:9b89662b86d7",
+   "key": "learn|1- Tech/2- TOC/2- TOC Case Studies/How people grow in TOC.mp4",
+   "n": 7,
+   "sub": null,
+   "title": "How people grow in TOC",
+   "trail": [
+    "TOC Case Studies"
+   ],
+   "v24": true,
+   "year": null
+  },
+  {
+   "category": "TOC",
+   "cord": "002",
+   "corder": "002",
+   "course": "TOC Case Studies",
+   "fcov": [
+    "covers/t/446321d6701f.jpg"
+   ],
+   "file": "Lessons Learned in Implementing Make-to-Availability and Distrib.mp4",
+   "folder": "covers/t/446321d6701f.jpg",
+   "id": "t:663ad2098829",
+   "key": "learn|1- Tech/2- TOC/2- TOC Case Studies/Lessons Learned in Implementing Make-to-Availability and Distrib.mp4",
+   "n": 8,
+   "sub": null,
+   "title": "Lessons Learned in Implementing Make-to-Availability and Distrib",
+   "trail": [
+    "TOC Case Studies"
+   ],
+   "v24": true,
+   "year": null
+  },
+  {
+   "category": "TOC",
+   "cord": "002",
+   "corder": "002",
+   "course": "TOC Case Studies",
+   "fcov": [
+    "covers/t/446321d6701f.jpg"
+   ],
+   "file": "Manufacturing Insights with the Theory of Constraints - Meeting.mp4",
+   "folder": "covers/t/446321d6701f.jpg",
+   "id": "t:044f62abc828",
+   "key": "learn|1- Tech/2- TOC/2- TOC Case Studies/Manufacturing Insights with the Theory of Constraints - Meeting.mp4",
+   "n": 9,
+   "sub": null,
+   "title": "Manufacturing Insights with the Theory of Constraints - Meeting",
+   "trail": [
+    "TOC Case Studies"
+   ],
+   "v24": true,
+   "year": null
+  },
+  {
+   "category": "TOC",
+   "cord": "002",
+   "corder": "002",
+   "course": "TOC Case Studies",
+   "fcov": [
+    "covers/t/446321d6701f.jpg"
+   ],
+   "file": "Opening Doors From Frustration to Opportunity.mp4",
+   "folder": "covers/t/446321d6701f.jpg",
+   "id": "t:9e018854e940",
+   "key": "learn|1- Tech/2- TOC/2- TOC Case Studies/Opening Doors From Frustration to Opportunity.mp4",
+   "n": 10,
+   "sub": null,
+   "title": "Opening Doors From Frustration to Opportunity",
+   "trail": [
+    "TOC Case Studies"
+   ],
+   "v24": true,
+   "year": null
+  },
+  {
+   "category": "TOC",
+   "cord": "002",
+   "corder": "002",
+   "course": "TOC Case Studies",
+   "fcov": [
+    "covers/t/446321d6701f.jpg"
+   ],
+   "file": "The Five focusing Steps and its Application in Manufacturing Companies.mp4",
+   "folder": "covers/t/446321d6701f.jpg",
+   "id": "t:92641b871354",
+   "key": "learn|1- Tech/2- TOC/2- TOC Case Studies/The Five focusing Steps and its Application in Manufacturing Companies.mp4",
+   "n": 11,
+   "sub": null,
+   "title": "The Five focusing Steps and its Application in Manufacturing Companies",
+   "trail": [
+    "TOC Case Studies"
+   ],
+   "v24": true,
+   "year": null
+  },
+  {
+   "category": "TOC",
+   "cord": "002",
+   "corder": "002",
+   "course": "TOC Case Studies",
+   "fcov": [
+    "covers/t/446321d6701f.jpg"
+   ],
+   "file": "Turning around Africa's largest coal mine - Gupta Sanjeev.mp4",
+   "folder": "covers/t/446321d6701f.jpg",
+   "id": "t:095df78aa477",
+   "key": "learn|1- Tech/2- TOC/2- TOC Case Studies/Turning around Africa's largest coal mine - Gupta Sanjeev.mp4",
+   "n": 12,
+   "sub": null,
+   "title": "Turning around Africa's largest coal mine - Gupta Sanjeev",
+   "trail": [
+    "TOC Case Studies"
+   ],
+   "v24": true,
+   "year": null
+  },
+  {
+   "category": "TOC",
+   "cord": "002",
+   "corder": "002",
+   "course": "TOC Case Studies",
+   "fcov": [
+    "covers/t/446321d6701f.jpg"
+   ],
+   "file": "Viable Vision - A reality at Fleetguard Filters.mp4",
+   "folder": "covers/t/446321d6701f.jpg",
+   "id": "t:f9a9388247a1",
+   "key": "learn|1- Tech/2- TOC/2- TOC Case Studies/Viable Vision - A reality at Fleetguard Filters.mp4",
+   "n": 13,
+   "sub": null,
+   "title": "Viable Vision - A reality at Fleetguard Filters",
+   "trail": [
+    "TOC Case Studies"
+   ],
+   "v24": true,
+   "year": null
+  },
+  {
+   "category": "TOC",
+   "cord": "002",
+   "corder": "002",
+   "course": "TOC Case Studies",
+   "fcov": [
+    "covers/t/446321d6701f.jpg"
+   ],
+   "file": "Viable Vision implementation experience in Neuland.mp4",
+   "folder": "covers/t/446321d6701f.jpg",
+   "id": "t:ddcf7ffe0b39",
+   "key": "learn|1- Tech/2- TOC/2- TOC Case Studies/Viable Vision implementation experience in Neuland.mp4",
+   "n": 14,
+   "sub": null,
+   "title": "Viable Vision implementation experience in Neuland",
+   "trail": [
+    "TOC Case Studies"
+   ],
+   "v24": true,
+   "year": null
+  },
+  {
+   "category": "TOC",
+   "cord": "003",
+   "corder": "002",
+   "course": "TOC Videos",
+   "fcov": [
+    "covers/t/eae1ed8eaf01.jpg"
+   ],
+   "file": "A Matter of Choice.mp4",
+   "folder": "covers/t/eae1ed8eaf01.jpg",
+   "id": "t:fa1017c74103",
+   "key": "learn|1- Tech/2- TOC/3- TOC Videos/A Matter of Choice.mp4",
+   "n": 1,
+   "sub": null,
+   "title": "A Matter of Choice",
+   "trail": [
+    "TOC Videos"
+   ],
+   "v24": true,
+   "year": null
+  },
+  {
+   "category": "TOC",
+   "cord": "003",
+   "corder": "002",
+   "course": "TOC Videos",
+   "fcov": [
+    "covers/t/eae1ed8eaf01.jpg"
+   ],
+   "file": "A solution to address the market constraint rather than operations.mp4",
+   "folder": "covers/t/eae1ed8eaf01.jpg",
+   "id": "t:65d0be37ebe6",
+   "key": "learn|1- Tech/2- TOC/3- TOC Videos/A solution to address the market constraint rather than operations.mp4",
+   "n": 2,
+   "sub": null,
+   "title": "A solution to address the market constraint rather than operations",
+   "trail": [
+    "TOC Videos"
+   ],
+   "v24": true,
+   "year": null
+  },
+  {
+   "category": "TOC",
+   "cord": "003",
+   "corder": "002",
+   "course": "TOC Videos",
+   "fcov": [
+    "covers/t/eae1ed8eaf01.jpg"
+   ],
+   "file": "Above and Beyond the Competition - Eli Goldratt.mp4",
+   "folder": "covers/t/eae1ed8eaf01.jpg",
+   "id": "t:500284c5e071",
+   "key": "learn|1- Tech/2- TOC/3- TOC Videos/Above and Beyond the Competition - Eli Goldratt.mp4",
+   "n": 3,
+   "sub": null,
+   "title": "Above and Beyond the Competition - Eli Goldratt",
+   "trail": [
+    "TOC Videos"
+   ],
+   "v24": true,
+   "year": null
+  },
+  {
+   "category": "TOC",
+   "cord": "003",
+   "corder": "002",
+   "course": "TOC Videos",
+   "fcov": [
+    "covers/t/eae1ed8eaf01.jpg"
+   ],
+   "file": "Building a blue market.mp4",
+   "folder": "covers/t/eae1ed8eaf01.jpg",
+   "id": "t:007d91a45979",
+   "key": "learn|1- Tech/2- TOC/3- TOC Videos/Building a blue market.mp4",
+   "n": 4,
+   "sub": null,
+   "title": "Building a blue market",
+   "trail": [
+    "TOC Videos"
+   ],
+   "v24": true,
+   "year": null
+  },
+  {
+   "category": "TOC",
+   "cord": "003",
+   "corder": "002",
+   "course": "TOC Videos",
+   "fcov": [
+    "covers/t/eae1ed8eaf01.jpg"
+   ],
+   "file": "Capacity Control in Make to Availability - Protecting and Expand.mp4",
+   "folder": "covers/t/eae1ed8eaf01.jpg",
+   "id": "t:37e36be58bbf",
+   "key": "learn|1- Tech/2- TOC/3- TOC Videos/Capacity Control in Make to Availability - Protecting and Expand.mp4",
+   "n": 5,
+   "sub": null,
+   "title": "Capacity Control in Make to Availability - Protecting and Expand",
+   "trail": [
+    "TOC Videos"
+   ],
+   "v24": true,
+   "year": null
+  },
+  {
+   "category": "TOC",
+   "cord": "003",
+   "corder": "002",
+   "course": "TOC Videos",
+   "fcov": [
+    "covers/t/eae1ed8eaf01.jpg"
+   ],
+   "file": "Comparing the Toyota Way and TOC.mp4",
+   "folder": "covers/t/eae1ed8eaf01.jpg",
+   "id": "t:2beb893d4211",
+   "key": "learn|1- Tech/2- TOC/3- TOC Videos/Comparing the Toyota Way and TOC.mp4",
+   "n": 6,
+   "sub": null,
+   "title": "Comparing the Toyota Way and TOC",
+   "trail": [
+    "TOC Videos"
+   ],
+   "v24": true,
+   "year": null
+  },
+  {
+   "category": "TOC",
+   "cord": "003",
+   "corder": "002",
+   "course": "TOC Videos",
+   "fcov": [
+    "covers/t/eae1ed8eaf01.jpg"
+   ],
+   "file": "Conflicts as guides.mp4",
+   "folder": "covers/t/eae1ed8eaf01.jpg",
+   "id": "t:2861f7d8a129",
+   "key": "learn|1- Tech/2- TOC/3- TOC Videos/Conflicts as guides.mp4",
+   "n": 7,
+   "sub": null,
+   "title": "Conflicts as guides",
+   "trail": [
+    "TOC Videos"
+   ],
+   "v24": true,
+   "year": null
+  },
+  {
+   "category": "TOC",
+   "cord": "003",
+   "corder": "002",
+   "course": "TOC Videos",
+   "fcov": [
+    "covers/t/eae1ed8eaf01.jpg"
+   ],
+   "file": "Creating a Culture for Positive Change.mp4",
+   "folder": "covers/t/eae1ed8eaf01.jpg",
+   "id": "t:ea25ed4ecbf7",
+   "key": "learn|1- Tech/2- TOC/3- TOC Videos/Creating a Culture for Positive Change.mp4",
+   "n": 8,
+   "sub": null,
+   "title": "Creating a Culture for Positive Change",
+   "trail": [
+    "TOC Videos"
+   ],
+   "v24": true,
+   "year": null
+  },
+  {
+   "category": "TOC",
+   "cord": "003",
+   "corder": "002",
+   "course": "TOC Videos",
+   "fcov": [
+    "covers/t/eae1ed8eaf01.jpg"
+   ],
+   "file": "Ellwood City Forges Quest to Become Ever Flourishing.mp4",
+   "folder": "covers/t/eae1ed8eaf01.jpg",
+   "id": "t:b0858cb8beea",
+   "key": "learn|1- Tech/2- TOC/3- TOC Videos/Ellwood City Forges Quest to Become Ever Flourishing.mp4",
+   "n": 9,
+   "sub": null,
+   "title": "Ellwood City Forges Quest to Become Ever Flourishing",
+   "trail": [
+    "TOC Videos"
+   ],
+   "v24": true,
+   "year": null
+  },
+  {
+   "category": "TOC",
+   "cord": "003",
+   "corder": "002",
+   "course": "TOC Videos",
+   "fcov": [
+    "covers/t/eae1ed8eaf01.jpg"
+   ],
+   "file": "How to reach a much higher level of performance.mp4",
+   "folder": "covers/t/eae1ed8eaf01.jpg",
+   "id": "t:7f9a22faa4be",
+   "key": "learn|1- Tech/2- TOC/3- TOC Videos/How to reach a much higher level of performance.mp4",
+   "n": 10,
+   "sub": null,
+   "title": "How to reach a much higher level of performance",
+   "trail": [
+    "TOC Videos"
+   ],
+   "v24": true,
+   "year": null
+  },
+  {
+   "category": "TOC",
+   "cord": "003",
+   "corder": "002",
+   "course": "TOC Videos",
+   "fcov": [
+    "covers/t/eae1ed8eaf01.jpg"
+   ],
+   "file": "Introduction to TOC - how to cause the improvement.mp4",
+   "folder": "covers/t/eae1ed8eaf01.jpg",
+   "id": "t:8c3d95ac6c04",
+   "key": "learn|1- Tech/2- TOC/3- TOC Videos/Introduction to TOC - how to cause the improvement.mp4",
+   "n": 11,
+   "sub": null,
+   "title": "Introduction to TOC - how to cause the improvement",
+   "trail": [
+    "TOC Videos"
+   ],
+   "v24": true,
+   "year": null
+  },
+  {
+   "category": "TOC",
+   "cord": "003",
+   "corder": "002",
+   "course": "TOC Videos",
+   "fcov": [
+    "covers/t/eae1ed8eaf01.jpg"
+   ],
+   "file": "Introduction to TOC - My perspective.mp4",
+   "folder": "covers/t/eae1ed8eaf01.jpg",
+   "id": "t:9aba7545beb3",
+   "key": "learn|1- Tech/2- TOC/3- TOC Videos/Introduction to TOC - My perspective.mp4",
+   "n": 12,
+   "sub": null,
+   "title": "Introduction to TOC - My perspective",
+   "trail": [
+    "TOC Videos"
+   ],
+   "v24": true,
+   "year": null
+  },
+  {
+   "category": "TOC",
+   "cord": "003",
+   "corder": "002",
+   "course": "TOC Videos",
+   "fcov": [
+    "covers/t/eae1ed8eaf01.jpg"
+   ],
+   "file": "Managing Production Priorities.mp4",
+   "folder": "covers/t/eae1ed8eaf01.jpg",
+   "id": "t:e18d19c9b2f1",
+   "key": "learn|1- Tech/2- TOC/3- TOC Videos/Managing Production Priorities.mp4",
+   "n": 13,
+   "sub": null,
+   "title": "Managing Production Priorities",
+   "trail": [
+    "TOC Videos"
+   ],
+   "v24": true,
+   "year": null
+  },
+  {
+   "category": "TOC",
+   "cord": "003",
+   "corder": "002",
+   "course": "TOC Videos",
+   "fcov": [
+    "covers/t/eae1ed8eaf01.jpg"
+   ],
+   "file": "Motivation creating a real harmonious working environment - TOC.mp4",
+   "folder": "covers/t/eae1ed8eaf01.jpg",
+   "id": "t:85ed045a8769",
+   "key": "learn|1- Tech/2- TOC/3- TOC Videos/Motivation creating a real harmonious working environment - TOC.mp4",
+   "n": 14,
+   "sub": null,
+   "title": "Motivation creating a real harmonious working environment - TOC",
+   "trail": [
+    "TOC Videos"
+   ],
+   "v24": true,
+   "year": null
+  },
+  {
+   "category": "TOC",
+   "cord": "003",
+   "corder": "002",
+   "course": "TOC Videos",
+   "fcov": [
+    "covers/t/eae1ed8eaf01.jpg"
+   ],
+   "file": "Overcoming resistance.mp4",
+   "folder": "covers/t/eae1ed8eaf01.jpg",
+   "id": "t:9c666046f341",
+   "key": "learn|1- Tech/2- TOC/3- TOC Videos/Overcoming resistance.mp4",
+   "n": 15,
+   "sub": null,
+   "title": "Overcoming resistance",
+   "trail": [
+    "TOC Videos"
+   ],
+   "v24": true,
+   "year": null
+  },
+  {
+   "category": "TOC",
+   "cord": "003",
+   "corder": "002",
+   "course": "TOC Videos",
+   "fcov": [
+    "covers/t/eae1ed8eaf01.jpg"
+   ],
+   "file": "Overcoming resistance to learning.mp4",
+   "folder": "covers/t/eae1ed8eaf01.jpg",
+   "id": "t:6fcc51e59f59",
+   "key": "learn|1- Tech/2- TOC/3- TOC Videos/Overcoming resistance to learning.mp4",
+   "n": 16,
+   "sub": null,
+   "title": "Overcoming resistance to learning",
+   "trail": [
+    "TOC Videos"
+   ],
+   "v24": true,
+   "year": null
+  },
+  {
+   "category": "TOC",
+   "cord": "003",
+   "corder": "002",
+   "course": "TOC Videos",
+   "fcov": [
+    "covers/t/eae1ed8eaf01.jpg"
+   ],
+   "file": "Putting the bar on a different level.mp4",
+   "folder": "covers/t/eae1ed8eaf01.jpg",
+   "id": "t:33d070554f92",
+   "key": "learn|1- Tech/2- TOC/3- TOC Videos/Putting the bar on a different level.mp4",
+   "n": 17,
+   "sub": null,
+   "title": "Putting the bar on a different level",
+   "trail": [
+    "TOC Videos"
+   ],
+   "v24": true,
+   "year": null
+  },
+  {
+   "category": "TOC",
+   "cord": "003",
+   "corder": "002",
+   "course": "TOC Videos",
+   "fcov": [
+    "covers/t/eae1ed8eaf01.jpg"
+   ],
+   "file": "Strategy Tactic Implementation Audit Process .mp4",
+   "folder": "covers/t/eae1ed8eaf01.jpg",
+   "id": "t:033b1ee316d1",
+   "key": "learn|1- Tech/2- TOC/3- TOC Videos/Strategy Tactic Implementation Audit Process .mp4",
+   "n": 18,
+   "sub": null,
+   "title": "Strategy Tactic Implementation Audit Process",
+   "trail": [
+    "TOC Videos"
+   ],
+   "v24": true,
+   "year": null
+  },
+  {
+   "category": "TOC",
+   "cord": "003",
+   "corder": "002",
+   "course": "TOC Videos",
+   "fcov": [
+    "covers/t/eae1ed8eaf01.jpg"
+   ],
+   "file": "The application of TOC to environments other than productionoper.mp4",
+   "folder": "covers/t/eae1ed8eaf01.jpg",
+   "id": "t:0077723cb30f",
+   "key": "learn|1- Tech/2- TOC/3- TOC Videos/The application of TOC to environments other than productionoper.mp4",
+   "n": 19,
+   "sub": null,
+   "title": "The application of TOC to environments other than productionoper",
+   "trail": [
+    "TOC Videos"
+   ],
+   "v24": true,
+   "year": null
+  },
+  {
+   "category": "TOC",
+   "cord": "003",
+   "corder": "002",
+   "course": "TOC Videos",
+   "fcov": [
+    "covers/t/eae1ed8eaf01.jpg"
+   ],
+   "file": "Three legs of TOC implementations.mp4",
+   "folder": "covers/t/eae1ed8eaf01.jpg",
+   "id": "t:cb23c4189413",
+   "key": "learn|1- Tech/2- TOC/3- TOC Videos/Three legs of TOC implementations.mp4",
+   "n": 20,
+   "sub": null,
+   "title": "Three legs of TOC implementations",
+   "trail": [
+    "TOC Videos"
+   ],
+   "v24": true,
+   "year": null
+  },
+  {
+   "category": "TOC",
+   "cord": "003",
+   "corder": "002",
+   "course": "TOC Videos",
+   "fcov": [
+    "covers/t/eae1ed8eaf01.jpg"
+   ],
+   "file": "Viable Vision.mp4",
+   "folder": "covers/t/eae1ed8eaf01.jpg",
+   "id": "t:3f844cb0d19a",
+   "key": "learn|1- Tech/2- TOC/3- TOC Videos/Viable Vision.mp4",
+   "n": 21,
+   "sub": null,
+   "title": "Viable Vision",
+   "trail": [
+    "TOC Videos"
+   ],
+   "v24": true,
+   "year": null
+  },
+  {
+   "category": "TOC",
+   "cord": "003",
+   "corder": "002",
+   "course": "TOC Videos",
+   "fcov": [
+    "covers/t/eae1ed8eaf01.jpg"
+   ],
+   "file": "What is TOC .mp4",
+   "folder": "covers/t/eae1ed8eaf01.jpg",
+   "id": "t:0f7c29ba7537",
+   "key": "learn|1- Tech/2- TOC/3- TOC Videos/What is TOC .mp4",
+   "n": 22,
+   "sub": null,
+   "title": "What is TOC",
+   "trail": [
+    "TOC Videos"
+   ],
+   "v24": true,
+   "year": null
+  },
+  {
+   "category": "TOC",
+   "cord": "003",
+   "corder": "002",
+   "course": "TOC Videos",
+   "fcov": [
+    "covers/t/eae1ed8eaf01.jpg"
+   ],
+   "file": "What was hidden behind the so called green and red curves - TOC.mp4",
+   "folder": "covers/t/eae1ed8eaf01.jpg",
+   "id": "t:226429cc2b3f",
+   "key": "learn|1- Tech/2- TOC/3- TOC Videos/What was hidden behind the so called green and red curves - TOC.mp4",
+   "n": 23,
+   "sub": null,
+   "title": "What was hidden behind the so called green and red curves - TOC",
+   "trail": [
+    "TOC Videos"
+   ],
+   "v24": true,
+   "year": null
   }
  ],
  "unmatched": [
@@ -16129,5 +17090,5 @@
    "year": 1959
   }
  ],
- "updated": "2026-11-11T11:01Z"
+ "updated": "2026-11-11T11:04Z"
 }
