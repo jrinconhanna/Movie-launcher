@@ -355,6 +355,9 @@ with sync_playwright() as p:
             pg.evaluate("(b=>b&&b.click())([...document.querySelectorAll('#wkrow button')].find(b=>b.textContent==='W1'))"); pg.wait_for_timeout(600)
             n = pg.evaluate("[...document.querySelectorAll('#grid .lcard:not(.ccard) img.fg')].filter(i=>i.complete&&i.naturalWidth>0).length")
             rec(f"F2 [{size}] Reforge W1 frame covers {'show (live)' if want else 'stay hidden in ?v23'}", (n == 8) if want else (n == 0), n)
+            for t2 in ("Watching", "Next"):
+                tab(pg, t2); pg.wait_for_timeout(200)
+                rec(f"F3 [{size}] week chips hidden on {t2} after a Reforge week", pg.evaluate("document.getElementById('wkrow').hidden && !document.querySelectorAll('#wkrow button:not([hidden])').length || getComputedStyle(document.getElementById('wkrow')).display==='none'"))
             pg.context.close()
         pg = page(b, vp, "?v23")
         tab(pg, "Discover"); pg.evaluate("[...document.querySelectorAll('#tabs button')].find(b=>b.firstChild.textContent==='Tech').click()"); pg.wait_for_timeout(300)

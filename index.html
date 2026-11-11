@@ -651,7 +651,7 @@ body.sorting .ic { opacity: 0 !important; }
   function render() {
     renderTop(); renderTabs();
     var real = state.shelf; if (AFTER && top === 'Next') state.shelf = 'Watch Next';
-    if (AFTER && top === 'Watching') { $('crow').hidden = true; var g0 = $('grid'); g0.innerHTML = ''; g0.classList.remove('vids', 'techin'); /* fix: Discover › Tech sizes leaked into Watching */ if (!tok) g0.appendChild(connRow());
+    if (AFTER && top === 'Watching') { $('crow').hidden = true; $('wkrow').hidden = true; /* fix 11 Nov: week chips leaked from Discover */ var g0 = $('grid'); g0.innerHTML = ''; g0.classList.remove('vids', 'techin'); /* fix: Discover › Tech sizes leaked into Watching */ if (!tok) g0.appendChild(connRow());
       if (LEARN && learn.length) { // V2.3: only course videos you added (⋯ ▶ in Discover › Tech); watched ones leave
         var lv = learn.filter(function (v) { return learnWatch.indexOf(lid(v)) >= 0 && learnDone.indexOf(lid(v)) < 0; });
         if (lv.length) { var hl = document.createElement('div'); hl.className = 'sech'; hl.textContent = 'Learn'; g0.appendChild(hl);
@@ -662,7 +662,7 @@ body.sorting .ic { opacity: 0 !important; }
       if (!wl.length) { var e0 = document.createElement('div'); e0.className = 'empty'; e0.textContent = 'Nothing in progress. Start a series or movie in Infuse and it shows up here.'; g0.appendChild(e0); }
       else { wl.forEach(function (it) { var c = mcard(it); c.dataset.sec = 'worder'; g0.appendChild(c); }); sortable(g0); }
       renderFoot(); return; }
-    if (AFTER && top === 'Next') { $('crow').hidden = true; var gn = $('grid'); gn.innerHTML = ''; gn.classList.remove('vids', 'techin');
+    if (AFTER && top === 'Next') { $('crow').hidden = true; $('wkrow').hidden = true; var gn = $('grid'); gn.innerHTML = ''; gn.classList.remove('vids', 'techin');
       [['Parked', parked], ['Backlog', next]].forEach(function (sec) {
         var hd = document.createElement('div'); hd.className = 'sech'; hd.textContent = sec[0] + ' · ' + sec[1].length + '/' + (sec[0] === 'Parked' ? LIM.park : LIM.backlog); if (sec[1].length >= (sec[0] === 'Parked' ? LIM.park : LIM.backlog)) hd.textContent += ' · full'; gn.appendChild(hd);
         var its = sec[1].map(function (k) { return items.filter(function (i) { return i.key === k; })[0]; }).filter(Boolean);
