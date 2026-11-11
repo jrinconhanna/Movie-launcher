@@ -25503,30 +25503,6 @@
   },
   {
    "category": "Playlists",
-   "cord": "1797493jim rohn",
-   "corder": "005",
-   "course": "Jim Rohn",
-   "fcov": [
-    "covers/t/b30a88fcd5b7.jpg",
-    "covers/t/31a69e69127e.jpg"
-   ],
-   "file": "Jim Rohn - Building Unstoppable Confidence.mp4",
-   "folder": "covers/t/31a69e69127e.jpg",
-   "id": "t:26bea864b28d",
-   "key": "learn|1- Tech/5- Playlists/2025-06 - Jim Rohn/Jim Rohn - Building Unstoppable Confidence.mp4",
-   "n": 1,
-   "next": true,
-   "sub": null,
-   "title": "Jim Rohn - Building Unstoppable Confidence",
-   "trail": [
-    "Playlists",
-    "Jim Rohn"
-   ],
-   "v24": true,
-   "year": null
-  },
-  {
-   "category": "Playlists",
    "cord": "9",
    "corder": "005",
    "course": "Backlog",
@@ -25566,6 +25542,30 @@
    "next": true,
    "sub": null,
    "title": "Jeff Bezos - Dealbook Summit (Amazon, Space, Innovation, Progress)",
+   "trail": [
+    "Playlists",
+    "Backlog"
+   ],
+   "v24": true,
+   "year": null
+  },
+  {
+   "category": "Playlists",
+   "cord": "9",
+   "corder": "005",
+   "course": "Backlog",
+   "fcov": [
+    "covers/t/b30a88fcd5b7.jpg",
+    "covers/t/b30a88fcd5b7.jpg"
+   ],
+   "file": "Jim Rohn - Building Unstoppable Confidence.mp4",
+   "folder": "covers/t/b30a88fcd5b7.jpg",
+   "id": "t:4c64f4c05fa5",
+   "key": "learn|1- Tech/5- Playlists/z - Backlog/z- Jim Rohn/Jim Rohn - Building Unstoppable Confidence.mp4",
+   "n": 3,
+   "next": true,
+   "sub": null,
+   "title": "Jim Rohn - Building Unstoppable Confidence",
    "trail": [
     "Playlists",
     "Backlog"
@@ -26251,5 +26251,5 @@
    "year": 1959
   }
  ],
- "updated": "2026-11-11T14:38Z"
+ "updated": "2026-11-11T14:39Z"
 }

@@ -515,8 +515,6 @@
 4- Reforge/2- Retention & Engagement/W7- ICED Theory (Bonus)/S1-L8 - The ICED Theory Canvas.mp4
 4- Reforge/2- Retention & Engagement/folder.jpg
 4- Reforge/folder.jpg
-5- Playlists/2025-06 - Jim Rohn/Jim Rohn - Building Unstoppable Confidence.mp4
-5- Playlists/2025-06 - Jim Rohn/folder.jpg
 5- Playlists/2025-11 - Hamel Husein (Evals)/A Deep Dive on LLM Evaluation.mp4
 5- Playlists/2025-11 - Hamel Husein (Evals)/AI Eng vs. PMs： Who Should Drive Evals？.mp4
 5- Playlists/2025-11 - Hamel Husein (Evals)/AI Evals For Engineers： Course Preview (Chapters 1-3 of 8).mp4
@@ -740,4 +738,6 @@
 5- Playlists/z - Backlog/z- Arnold/Arnold Schwarzenegger's 2017 University of Houston Commencement Address.mp4
 5- Playlists/z - Backlog/z- Jeff Bezos/Jeff Bezos - Dealbook Summit (Amazon, Space, Innovation, Progress).mp4
 5- Playlists/z - Backlog/z- Jeff Bezos/folder.jpg
+5- Playlists/z - Backlog/z- Jim Rohn/Jim Rohn - Building Unstoppable Confidence.mp4
+5- Playlists/z - Backlog/z- Jim Rohn/folder.jpg
 folder.png
