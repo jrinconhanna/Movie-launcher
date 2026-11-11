@@ -189,6 +189,7 @@ def playlists(rel, parts, base):
     """'5- Playlists/3- Kanye West/2003-08-15 - Kanye West - Interview …' : Playlists chip opens into its folders
     (your numbers; same number -> by name); 'z - Backlog' sub-folders shown as one Backlog folder; family tapes left out.
     Dated videos by date (year/month shown under the title), series by episode, the rest by title. Behind ?next (V2.4.1)."""
+    if "Rincon VCR" in parts[0]: return None                                  # family tapes: not Tech; their own place later (11 Nov)
     m = re.match(r"^(\d{4})-(\d{2})\s*-\s*(.+)$", parts[0])               # '2026-10 - Ryan Serhant': month added (11 Nov), newest first
     if parts[0].lower().startswith("z"): name, cord = "Backlog", "9"
     elif m: name, cord = m.group(3).strip(), "1%06d" % (999999 - int(m.group(1) + m.group(2))) + m.group(3).strip().lower()

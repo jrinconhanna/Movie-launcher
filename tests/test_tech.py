@@ -1,5 +1,5 @@
 """V2.4 piece 1: Steve Jobs from the real Whatbox list. Run: python3 tests/test_tech.py"""
-import json, os, sys
+import json, os, re, sys
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(ROOT, "scripts"))
 import tech
@@ -67,4 +67,15 @@ check("R5 renamed files (11 Nov) show 'CODE - Title' and keep their order", rc("
 check("R6 W6 is one flat week (defining 1-5, then strategies, then the event); ICED Theory is its own W7", rc("W6 - Resurrection. Defining, Measuring, And Analyzing") == ["Introduction To Resurrection", "When You Should Focus On Resurrection", "Defining At Risk Users For Churn Prediction", "Defining Dormant Engagement State", "Defining Churned Engagement State", "M7-L0 - Introduction To Resurrection Strategies", "M7-L1 - Strategies For At Risk Users", "M7-L2 - Involuntary Dormant Strategies", "M7-L3 - Resurrecting Voluntary Dormant Users", "W6 Event"] and len(rc("W7 - ICED Theory (Bonus)")) == 9 and not any(len(t["trail"]) > 3 for t in rf), str(rc("W6 - Resurrection. Defining, Measuring, And Analyzing")))
 check("R7 every Reforge folder level has a cover (W0 and modules use their parent's)", all(all(t["fcov"]) for t in rf))
 check("R8 the Reforge folder uses its own folder.jpg (not AI Strategy's)", all(t["src_fcov"][0] == "4- Reforge/folder.jpg" for t in rf) and rf[0]["src_fcov"][1] == "4- Reforge/1- AI Strategy/folder.jpg")
+pl = [t for t in ALL if t["category"] == "Playlists"]
+pc = lambda c: [t["title"] for t in pl if t["course"] == c]
+order = list(dict.fromkeys(t["course"] for t in pl))
+check("P1 Playlists behind ?next; folders 'YYYY-MM - Name' newest first (same month by name), Backlog last", all(t.get("next") for t in pl) and order[:2] == ["Ryan Serhant", "Alan Mulally"] and order[2:8] == sorted(order[2:8], key=str.lower) and order[-2:] == ["Hamel Husein (Evals)", "Backlog"], str(order))
+check("P2 family tapes left out of Tech", not any("Rincon" in t["course"] for t in pl))
+k = [t for t in pl if t["course"] == "Kanye West"]
+check("P3 Kanye by date, year under the title, month where known", [t["year"] for t in k] == sorted(t["year"] for t in k) and k[0]["title"] == "Kanye West Classic Before The Wire! Interview Before He Flipped His BMW! DJ Whoo Kid Exclusive! RadioPlanet tv Where Hip Hop Meets Hollywood" and any(t.get("mon") == 8 for t in k), str([t["title"] for t in k[:2]]))
+check("P4 Exodus by episode: 'Episode 1 - Faith as an Adventure' … 11", pc("Exodus Jordan Peterson")[0] == "Episode 1 - Faith as an Adventure" and len(pc("Exodus Jordan Peterson")) == 11)
+check("P5 odd characters cleaned, no ticks", not any(re.search("[\uff1a\uff5c\u29f8\uff1f\uff02\u2705]", t["title"]) for t in pl) and "AI Eng vs. PMs: Who Should Drive Evals?" in pc("Hamel Husein (Evals)"))
+check("P6 Backlog holds the z- sub-folders' videos (Jim Rohn moved in)", any("Jim Rohn" in x for x in pc("Backlog")) and "Jim Rohn" not in order)
+check("P7 every Playlists folder has a cover (Backlog borrows)", all(all(t["fcov"]) for t in pl))
 print("%d failed" % fails); sys.exit(1 if fails else 0)
