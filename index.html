@@ -480,8 +480,10 @@ body.sorting .ic { opacity: 0 !important; }
   }
   function go(u) { (window.__go || function (x) { location.href = x; })(u); }
   function playLearn(v) {
-    copyText(v.title).then(function (ok) {
-      toast(ok ? 'Title copied · in Infuse, open Search and paste' : 'Couldn’t copy · search Infuse for: ' + v.title);
+    // V2.4: copy the file name (e.g. "2001-05 - WWDC"), unique in Infuse where titles repeat
+    var q = V24 && v.v24 && v.file ? v.file.replace(/\.[^.\/]+$/, '') : v.title;
+    copyText(q).then(function (ok) {
+      toast(ok ? (q === v.title ? 'Title' : 'Name') + ' copied · in Infuse, open Search and paste' : 'Couldn’t copy · search Infuse for: ' + q);
       setTimeout(function () { go('infuse://'); }, ok ? 900 : 2500);
     });
   }
