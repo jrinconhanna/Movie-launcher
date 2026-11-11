@@ -1,0 +1,19 @@
+name: One-off - Jim Rohn into Backlog (Javi, 11 Nov)
+on:
+  push:
+    paths: [".github/workflows/oneoff-rohn.yml"]
+permissions:
+  contents: read
+jobs:
+  move:
+    runs-on: ubuntu-latest
+    steps:
+      - env:
+          KEY: ${{ secrets.WHATBOX_SSH_KEY }}
+        run: |
+          mkdir -p ~/.ssh && chmod 700 ~/.ssh
+          printf '%s\n' "$KEY" > ~/.ssh/whatbox && chmod 600 ~/.ssh/whatbox
+          ssh-keyscan -H kiwi.whatbox.ca >> ~/.ssh/known_hosts 2>/dev/null
+          ssh -i ~/.ssh/whatbox -o BatchMode=yes -o ConnectTimeout=20 javierrincon@kiwi.whatbox.ca '
+            cd "files/Javi/1- Tech/5- Playlists" && test ! -e "z - Backlog/z- Jim Rohn" && mv -n "2025-06 - Jim Rohn" "z - Backlog/z- Jim Rohn" && echo MOVED && ls "z - Backlog"'
+          rm -f ~/.ssh/whatbox
