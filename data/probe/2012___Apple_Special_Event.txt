@@ -1,0 +1,18 @@
+-rw------- 1 javierrincon javierrincon 305534310 2026-09-03 08:02 6) 2008-2011 (iPad & Final)/2012 - Apple Special Event.mp4
+Input #0, mov,mp4,m4a,3gp,3g2,mj2, from '6) 2008-2011 (iPad & Final)/2012 - Apple Special Event.mp4':
+  Metadata:
+    major_brand     : isom
+    minor_version   : 512
+    compatible_brands: isomiso2avc1mp41
+    title           : Apple keynote Special Event - October 2012
+    artist          : Apple Novinky
+    date            : 2018
+    encoder         : Lavf58.39.101
+    comment         : https://www.youtube.com/watch?v=bbWNu79bXLg
+  Duration: 01:12:43.03, start: 0.000000, bitrate: 560 kb/s
+  Stream #0:0[0x1](und): Video: h264 (High) (avc1 / 0x31637661), yuv420p(tv, bt709, progressive), 1270x720 [SAR 1:1 DAR 127:72], 424 kb/s, 29.97 fps, 29.97 tbr, 30k tbn (default)
+    Metadata:
+      handler_name    : ISO Media file produced by Google Inc.
+  Stream #0:1[0x2](und): Audio: aac (LC) (mp4a / 0x6134706D), 44100 Hz, stereo, fltp, 127 kb/s (default)
+    Metadata:
+      handler_name    : ISO Media file produced by Google Inc.
