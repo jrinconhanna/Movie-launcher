@@ -135,9 +135,54 @@ def lean(rel, parts, base):
     return it
 
 
-RULES = {"1- Steve Jobs": steve_jobs, "2- TOC": toc, "3- Lean": lean}
+def camel(t):
+    """'RetentionMakesCompanies' -> 'Retention Makes Companies' (only for names with no spaces)."""
+    if " " in t.strip(): return t
+    t = re.sub(r"(?<=[a-z0-9])(?=[A-Z])|(?<=[A-Z])(?=[A-Z][a-z])|(?<=[A-Za-z])(?=\d)", " ", t)  # ICEDTheory, The4
+    return re.sub(r"(?<=[a-z])(to|of) (?=[A-Z])", r" \1 ", t)  # Introductionto Managing, Degreeof Engagement
+
+
+def reforge_dir(name):
+    """'Week 1 - The Strategic Landscape' / 'W2-Activation. …' / 'W0- How …' -> 'W1 - …' (shorter, same everywhere)."""
+    n, o = clean(name)
+    m = re.match(r"^(?:Week\s*|W)(\d+)\s*-\s*(.*)$", n)
+    if m: return "W%s - %s" % (m.group(1), m.group(2).strip()), m.group(1).zfill(3)
+    m = re.match(r"^Module\s+(\d+)", n)
+    return n, (m.group(1).zfill(3) if m else o)
+
+
+def reforge(rel, parts, base):
+    """'4- Reforge/2- Retention & Engagement/W1- Retention/1-Introduction To Retention.mp4'
+    Reforge chip opens into its 2 courses › W folders › (modules) › videos. Behind ?next (V2.4.1)."""
+    names, cord = [], ""
+    for f in parts:
+        n, o = reforge_dir(f); names.append(n); cord += o or "999"
+    t = strip_junk(base).replace("&amp;", "&").replace("BONU.", "BONUS.").strip()
+    k1, k2, k3 = 50, 0, ""  # order: numbered/coded lessons, then BONUS, then the live/event session
+    m = re.match(r"^(\d+)([a-z])?\s*-\s*(.+)$", t)                      # '1a - …', '2b- …', '1-…'
+    live = re.search(r"\b(Live|Event)$", t)
+    if m:
+        k1, k2, t = int(m.group(1)), ord(m.group(2)) if m.group(2) else 0, m.group(3).strip()
+    elif re.match(r"^M\d+-L\d+-", t):                                    # 'M0-L1-RetentionMakesCompanies'
+        x = re.match(r"^M\d+-L(\d+)-(.+)$", t); k1, t = int(x.group(1)), camel(x.group(2))
+    elif re.match(r"^ICEDTheoryS\d+L\d+-", t):                           # 'ICEDTheoryS1L2-ManagingInfrequency'
+        x = re.match(r"^ICEDTheoryS(\d+)L(\d+)-(.+)$", t); k1, k2, t = int(x.group(1)), int(x.group(2)), camel(x.group(3))
+    elif re.match(r"^R&E-M\d+-L\d+-", t):                                # Module 8: keep 'R&E-M7-L0' as asked
+        x = re.match(r"^(R&E-M\d+-L(\d+))-(.+)$", t); k1, t = int(x.group(2)), x.group(1) + " - " + camel(x.group(3))
+    elif live:
+        k1 = 99
+        w = re.search(r"Week\s*(\d+)\s+Live", t); t = ("W%s Live" % w.group(1)) if w else t
+    elif t.upper().startswith("BONUS"):
+        k1 = 60
+    t = re.sub(r"\s{2,}", " ", t)
+    return {"course": names[-1], "cord": cord, "sub": None, "title": t, "year": None, "next": True,
+            "trail": ["Reforge"] + names, "tdirs": [rel.split("/")[0] + "/" + "/".join(parts[:i + 1]) for i in range(-1, len(parts))],
+            "sort": (k1, k2, 0, t.lower())}
+
+
+RULES = {"1- Steve Jobs": steve_jobs, "2- TOC": toc, "3- Lean": lean, "4- Reforge": reforge}
 # Piece 1 (11 Nov): first era only, to prove list → covers → tiles → tap → marks end to end. Empty = everything.
-ONLY = ["1- Steve Jobs/1) 1976-1984 (Apple I & Mac)/", "1- Steve Jobs/2) 1985-1995 (Next & Pixar)/", "1- Steve Jobs/3) 1996-1999 (Apple Comeback)/", "1- Steve Jobs/4) 2000-2004 (iPod & Digital Hub)/", "1- Steve Jobs/5) 2005-2007 (iPhone)/", "1- Steve Jobs/6) 2008-2011 (iPad & Final)/", "1- Steve Jobs/99- Other/", "2- TOC/", "3- Lean/"]  # eras added one at a time (11 Nov)
+ONLY = ["1- Steve Jobs/1) 1976-1984 (Apple I & Mac)/", "1- Steve Jobs/2) 1985-1995 (Next & Pixar)/", "1- Steve Jobs/3) 1996-1999 (Apple Comeback)/", "1- Steve Jobs/4) 2000-2004 (iPod & Digital Hub)/", "1- Steve Jobs/5) 2005-2007 (iPhone)/", "1- Steve Jobs/6) 2008-2011 (iPad & Final)/", "1- Steve Jobs/99- Other/", "2- TOC/", "3- Lean/", "4- Reforge/"]  # eras added one at a time (11 Nov)
 
 
 def tech_items(lines):
@@ -164,9 +209,11 @@ def tech_items(lines):
         for dd in it.pop("tdirs"):
             src = next((low[(dd + "/" + fn).lower()] for fn in ("folder.jpg", "folder.jpeg", "folder.png") if (dd + "/" + fn).lower() in low), None)
             it["src_fcov"].append(src); it["fcov"].append("covers/t/%s.jpg" % h(src) if src else None)
-        if cat == "Lean":  # a folder without its own cover borrows the first one below it (Toyota Virtual Plant)
+        if cat in ("Lean", "Reforge"):  # a folder without its own cover borrows the first one below it (Toyota Virtual Plant)…
             for i in range(len(it["fcov"]) - 2, -1, -1):
                 if not it["fcov"][i]: it["src_fcov"][i], it["fcov"][i] = it["src_fcov"][i + 1], it["fcov"][i + 1]
+            for i in range(1, len(it["fcov"])):  # …or, with none below, its parent's (Reforge W0, Week 6 modules)
+                if not it["fcov"][i]: it["src_fcov"][i], it["fcov"][i] = it["src_fcov"][i - 1], it["fcov"][i - 1]
         if it.get("legacy_id"): it["id"] = it.pop("legacy_id")
         if it["fcov"][-1]:
             it["src_folder"], it["folder"] = it["src_fcov"][-1], it["fcov"][-1]

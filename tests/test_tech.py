@@ -55,4 +55,15 @@ check("N6 Lean Videos: loose talks alphabetical, no ticks or .mp4", lv == sorted
 check("N7 Toyota series: 'Episode 1' .. in order (14 + 5)", [t["title"] for t in lc("How Toyota Cars are made")] == ["Episode %d" % i for i in range(1, 15)] and len(lc("The Toyota Production System as Taught by Toyota")) == 5)
 check("N8 every Lean folder level has a cover (Folder.jpg any case; Toyota top borrows its first series')", all(all(t["fcov"]) for t in lean))
 check("N9 Lean is live (no ?next flag)", lean and not any(t.get("next") for t in lean))
+rf = [t for t in ALL if t["category"] == "Reforge"]
+rc = lambda c: [t["title"] for t in rf if t["course"] == c]
+check("R1 Reforge: 97 videos in 2 courses, behind ?next", len(rf) >= 97 and list(dict.fromkeys(t["trail"][1] for t in rf)) == ["AI Strategy", "Retention & Engagement"] and all(t.get("next") for t in rf), str(len(rf)))
+check("R2 weeks named 'W1 - …' in both courses, in order", list(dict.fromkeys(t["trail"][2] for t in rf if t["trail"][1] == "AI Strategy")) == ["W1 - The Strategic Landscape", "W2 - Market Strategy", "W3 - Product Strategy", "W4 - Execution Strategy"] and list(dict.fromkeys(t["trail"][2] for t in rf if t["trail"][1] != "AI Strategy"))[:3] == ["W0 - How Retention Determines The Top 1%", "W1 - Retention", "W2 - Activation. Defining, Measuring, And Analyzing"])
+w1 = rc("W1 - The Strategic Landscape")
+check("R3 AI Strategy: lessons by code (1a…2c), code dropped, live session last as 'W1 Live'", w1[0] == "AI Tech Shift - How AI Is Creating More Red Ocean vs Blue Ocean" and w1[-1] == "W1 Live" and len(w1) == 8, str(w1[:1] + w1[-1:]))
+r2 = rc("W2 - Activation. Defining, Measuring, And Analyzing")
+check("R4 R&E: numbered lessons, then BONUS (BONU fixed), event last", r2[0] == "Introduction To Activation" and r2[-1] == "W2 Event" and "BONUS. Venn Diagram Analysis" in r2 and r2.index("BONUS. Venn Diagram Analysis") > r2.index("Analyzing Your Activation Flow"), str(r2))
+check("R5 joined-up names get spaces; R&E kept as asked", rc("W0 - How Retention Determines The Top 1%")[0] == "Retention Makes Companies" and rc("Module 9 - ICED Theory")[1] == "The 4 Dimensions of Infrequent Products" and rc("Module 8")[0] == "R&E-M7-L0 - Introduction to Resurrection Strategies")
+check("R6 W6 holds 3 module folders and its event", sorted({t["trail"][3] for t in rf if len(t["trail"]) == 4}) == ["Module 7", "Module 8", "Module 9 - ICED Theory"] and rc("W6 - Resurrection. Defining, Measuring, And Analyzing") == ["W6 Event"])
+check("R7 every Reforge folder level has a cover (W0 and modules use their parent's)", all(all(t["fcov"]) for t in rf))
 print("%d failed" % fails); sys.exit(1 if fails else 0)
