@@ -2813,7 +2813,7 @@
    "overview": "Two mismatched entrepreneurs – egghead innovator Mike Lazaridis and cut-throat businessman Jim Balsillie – joined forces in an endeavour that was to become a worldwide hit in little more than a decade. The story of the meteoric rise and catastrophic demise of the world's first smartphone.",
    "poster": "/nQSvHZDuMlrZdm7ooMo8gb4CXhW.jpg",
    "progress": null,
-   "status": "unwatched",
+   "status": "watched",
    "title": "BlackBerry",
    "tmdb": 1016084
   },
@@ -2843,7 +2843,7 @@
    "overview": "An aviator ignores skeptics to make the first commercial flight from San Francisco to China.",
    "poster": "/ror6YJqekDOkByfCGPuNRlsEOEY.jpg",
    "progress": null,
-   "status": "watched",
+   "status": "unwatched",
    "title": "China Clipper",
    "tmdb": 78598
   },
@@ -2933,7 +2933,7 @@
    "overview": "When a western Pennsylvania auto plant is acquired by a Japanese company, brokering auto worker Hunt Stevenson faces the tricky challenge of mediating the assimilation of two clashing corporate cultures. At one end is the Japanese plant manager and the sycophant who is angling for his position. At the other, a number of disgruntled long-time union members struggle with the new exigencies of Japane",
    "poster": "/sxnlQEb8dugTFK2KyFrq3iv3bHn.jpg",
    "progress": null,
-   "status": "unwatched",
+   "status": "watched",
    "title": "Gung Ho",
    "tmdb": 13698
   },
@@ -2963,7 +2963,7 @@
    "overview": "Rival Chicago reporters Sabrina Peterson and Peter Brackett join forces to uncover a train wreck conspiracy.",
    "poster": "/2uyytK3XFRPFXoTchFDtsWiSujn.jpg",
    "progress": null,
-   "status": "unwatched",
+   "status": "watched",
    "title": "I Love Trouble",
    "tmdb": 10879
   },
@@ -3023,7 +3023,7 @@
    "overview": "The story of how Richard Williams served as a coach to his daughters Venus and Serena, who will soon become two of the most legendary tennis players in history.",
    "poster": "/2dfujXrxePtYJPiPHj1HkAFQvpu.jpg",
    "progress": null,
-   "status": "unwatched",
+   "status": "watched",
    "title": "King Richard",
    "tmdb": 614917
   },
@@ -3143,7 +3143,7 @@
    "overview": "After his entire department is outsourced, an American novelty products salesman heads to India to train his replacement.",
    "poster": "/mbsjim3GhRn1nPwbJ9GOkj2PKIV.jpg",
    "progress": null,
-   "status": "unwatched",
+   "status": "watched",
    "title": "Outsourced",
    "tmdb": 7861
   },
@@ -3383,7 +3383,7 @@
    "overview": "A story centered around an Indian family who moves to France and opens a restaurant across the street from a Michelin-starred French restaurant.",
    "poster": "/1vFhSr7INoulu18smHqicft05i8.jpg",
    "progress": null,
-   "status": "unwatched",
+   "status": "watched",
    "title": "The Hundred-Foot Journey",
    "tmdb": 228194
   },
@@ -5183,7 +5183,7 @@
    "overview": "The story of Oakland Athletics general manager Billy Beane's successful attempt to put together a baseball team on a budget, by employing computer-generated analysis to draft his players.",
    "poster": "/4yIQq1e6iOcaZ5rLDG3lZBP3j7a.jpg",
    "progress": null,
-   "status": "unwatched",
+   "status": "watched",
    "title": "Moneyball",
    "tmdb": 60308
   },
@@ -5303,7 +5303,7 @@
    "overview": "Rocky Balboa holds the world heavyweight championship, but a new challenger has stepped forward: Drago, a six-foot-four, 261-pound fighter who has the backing of the Soviet Union. This time, Rocky's training regimen takes him to Siberia, where he prepares for a globally televised match in the heart of Moscow. But nothing can truly prepare him for what he's about to face – a fight to the finish, in",
    "poster": "/2MHUit4H6OK5adcOjnCN6suCKOl.jpg",
    "progress": null,
-   "status": "unwatched",
+   "status": "watched",
    "title": "Rocky IV",
    "tmdb": 1374
   },
@@ -5348,7 +5348,7 @@
    "overview": "New Jersey teen Daniel LaRusso moves to Los Angeles with his mother, and soon strikes up a relationship with Ali. He quickly finds himself the target of bullying by a group of thugs, led by Ali's ex-boyfriend Johnny, who study karate at the Cobra Kai dojo under ruthless sensei John Kreese. Fortunately, Daniel befriends Mr. Miyagi, an unassuming repairman who just happens to be a martial arts maste",
    "poster": "/1mp4ViklKvA0WXXsNvNx0RBuiit.jpg",
    "progress": null,
-   "status": "unwatched",
+   "status": "watched",
    "title": "The Karate Kid",
    "tmdb": 1885
   },
@@ -5438,7 +5438,7 @@
    "overview": "A former high-school football star loses his shot at a college scholarship due to a devastating gridiron injury, but gets a second chance at living his dream.",
    "poster": "/6tc4S4UJzAUtZJPHFpq2Weaa1bA.jpg",
    "progress": null,
-   "status": "unwatched",
+   "status": "watched",
    "title": "Touchback",
    "tmdb": 75074
   },
@@ -26544,5 +26544,5 @@
    "year": 1959
   }
  ],
- "updated": "2026-11-12T00:31Z"
+ "updated": "2026-11-12T03:52Z"
 }
