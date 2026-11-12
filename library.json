@@ -830,16 +830,16 @@
    "key": "doc|2- Sports/1- American Football/All or Nothing (2016)",
    "kind": "tv",
    "next_ep": {
-    "e": 6,
-    "name": "Under Pressure",
+    "e": 8,
+    "name": "Burn the Ships",
     "s": 5,
-    "still": "/ydjjymexWcu6Om7baYVIJpvdp9C.jpg"
+    "still": "/9MNH6rLu7YluwYC130ZpLGm7uTD.jpg"
    },
    "order": "002.001",
    "overview": "For the first time in history, Amazon and NFL Films present an unprecedented inside look at the lives of players, coaches and owners of a franchise over the course of an entire NFL season. Witness the real life, behind the scenes journey on the field, off the field, and everything in between.",
    "poster": "/kzTYIvVu6fJ6X5224ZvvrsRFxzL.jpg",
    "progress": [
-    37,
+    39,
     40
    ],
    "status": "progress",
@@ -26544,5 +26544,5 @@
    "year": 1959
   }
  ],
- "updated": "2026-11-12T12:50Z"
+ "updated": "2026-11-12T20:53Z"
 }
