@@ -371,10 +371,10 @@ with sync_playwright() as p:
         ks = pg.evaluate("[...document.querySelectorAll('.p2r')].map(r=>r.querySelector('.k').textContent)")
         rec(f"X2 [{size}] a folder added to the top of Next shows on Watching, Tech first with the border", bool(ks) and ks[0] == "Tech" and pg.evaluate("document.querySelector('.p2r').classList.contains('top')"), ks)
         cnt = {k: ks.count(k) for k in set(ks)}
-        rec(f"X3 [{size}] places per kind are respected (Docu-series ≤2, Series ≤2, others ≤1)", all(v <= (2 if k in ("Docu-series", "Series") else 1) for k, v in cnt.items()), cnt)
+        rec(f"X3 [{size}] places per kind are respected (Docs ≤2, Series ≤2, others ≤1)", all(v <= (2 if k in ("Docs", "Series") else 1) for k, v in cnt.items()), cnt)
         tab(pg, "Next")
         chips = pg.evaluate("[...document.querySelectorAll('.p2chips button')].map(b=>b.firstChild.textContent.trim())")
-        rec(f"X4 [{size}] Next shows chips per kind", chips == ["Tech", "Playlists", "Docu-series", "Series", "Movies", "Other"], chips)
+        rec(f"X4 [{size}] Next shows chips per kind", chips == ["Tech", "Playlists", "Docs", "Series", "Movies", "Other"], chips)
         pg.evaluate("[...document.querySelectorAll('.p2chips button')][3].click()"); pg.wait_for_timeout(200)
         names = pg.evaluate("[...document.querySelectorAll('.p2n .nm')].map(x=>x.firstChild.textContent)")
         if len(names) >= 3:
@@ -393,6 +393,22 @@ with sync_playwright() as p:
         rec(f"X9 [{size}] kind lists go into the Trakt snapshot and come back the same", rt[0] and rt[1] == 6, rt)
         rec(f"X8 [{size}] no page errors (V2.4.2 live)", not pg.errs, pg.errs)
         pg.context.close()
+        # X10 (12 Nov): the folder decides the kind; a Docs single sitting in Movies moves to Docs on open
+        import json as _j
+        lib = _j.load(open(os.path.join(ROOT, "library.json")))["items"]
+        dsingle = next(x for x in lib if x["group"] == "Docs" and x["kind"] == "movie" and x.get("tmdb"))
+        mv = next(x for x in lib if x["group"] == "Movies" and x.get("tmdb"))
+        ctx = b.new_context(viewport=vp); pg = ctx.new_page(); pg.errs = []; pg.on("pageerror", lambda e: pg.errs.append(str(e)))
+        pg.route("**/api.trakt.tv/**", lambda r: r.abort())
+        seedL = {"lists": {"Tech": [], "Playlists": [], "Docu-series": [], "Series": [], "Movies": ["i:" + dsingle["key"], "i:" + mv["key"]], "Other": []}, "lay": "x11b", "chip": "Movies"}
+        pg.add_init_script("localStorage.setItem('proto2', " + _j.dumps(_j.dumps(seedL)) + ")")
+        pg.goto(BASE); pg.wait_for_timeout(1200); tab(pg, "Next")
+        L = pg.evaluate("JSON.parse(localStorage.getItem('proto2')).lists")
+        rec(f"X10 [{size}] a Docs single in Movies moves to Docs; a real movie stays in Movies", L["Docu-series"] == ["i:" + dsingle["key"]] and L["Movies"] == ["i:" + mv["key"]], L)
+        pg.evaluate("[...document.querySelectorAll('.p2chips button')].find(b=>b.firstChild.textContent.trim()==='Docs').click()"); pg.wait_for_timeout(200)
+        rec(f"X11 [{size}] the Docs chip lists the single", dsingle["title"] in pg.evaluate("[...document.querySelectorAll('.p2n .nm')].map(x=>x.firstChild.textContent)"))
+        rec(f"X12 [{size}] no page errors (kind fix)", not pg.errs, pg.errs)
+        ctx.close()
         pg = page(b, vp, "?v23")
         tab(pg, "Discover"); pg.evaluate("[...document.querySelectorAll('#tabs button')].find(b=>b.firstChild.textContent==='Tech').click()"); pg.wait_for_timeout(300)
         rec(f"J10 [{size}] ?v23 still shows the old Tech view (GSP only)", pg.evaluate("[...document.querySelectorAll('#grid .ccard .t')].map(x=>x.textContent)") == ["GSP Series"])
