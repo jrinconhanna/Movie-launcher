@@ -2522,9 +2522,9 @@
    "key": "doc|5- Japan/Begin Japanology (2000)",
    "kind": "tv",
    "next_ep": {
-    "e": 19,
-    "name": "Matcha",
-    "s": 1,
+    "e": 15,
+    "name": "Robots",
+    "s": 3,
     "still": null
    },
    "order": "005",
@@ -11183,10 +11183,10 @@
    "key": "tv|Early Edition",
    "kind": "tv",
    "next_ep": {
-    "e": 13,
-    "name": "Walk, Don't Run",
-    "s": 2,
-    "still": "/mDaVgxUjU6nUbPPuJgfPqIEIAel.jpg"
+    "e": 1,
+    "name": "Blackout",
+    "s": 3,
+    "still": "/yrrCZt784ES7ap0Mcqep0HFnMdy.jpg"
    },
    "order": "000",
    "overview": "Gary Hobson thinks he may even be losing his mind when tomorrow's newspaper mysteriously arrives today giving him a disconcerting look into the future. What will he do with tomorrow's news?",
@@ -11231,10 +11231,10 @@
    "key": "tv|Gold Rush",
    "kind": "tv",
    "next_ep": {
-    "e": 1,
-    "name": "No Guts, No Glory",
-    "s": 1,
-    "still": "/h4Rhi8IoPNwijbETGNTHgfHDXFo.jpg"
+    "e": 2,
+    "name": "Million Dollar Season",
+    "s": 3,
+    "still": "/1H6oX8zKtgSxo4vyGTFg9n8YO9p.jpg"
    },
    "order": "000",
    "overview": "Follow the lives of ambitious miners as they head north in pursuit of gold. With new miners, new claims, new machines and new ways to pull gold out of the ground, the stakes are higher than ever. But will big risks lead to an even bigger pay out?",
@@ -11327,10 +11327,10 @@
    "key": "tv|Rick and Morty",
    "kind": "tv",
    "next_ep": {
-    "e": 5,
-    "name": "Amortycan Grickfitti",
+    "e": 8,
+    "name": "Rickternal Friendshine of the Spotless Mort",
     "s": 5,
-    "still": "/5nCh9wrr93WdYhquBFEMjZrDgFq.jpg"
+    "still": "/oKf0YQVIQFYVIO2bgsDtxXLYLLJ.jpg"
    },
    "order": "000",
    "overview": "Follows a sociopathic genius scientist who drags his inherently timid grandson on adventures across the universe.",
@@ -11375,10 +11375,10 @@
    "key": "tv|Star Trek TNG",
    "kind": "tv",
    "next_ep": {
-    "e": 2,
-    "name": "The Naked Now",
-    "s": 1,
-    "still": "/mhDWO4T9GvrWKY95ZdyJX4oMd3g.jpg"
+    "e": 6,
+    "name": "Phantasms",
+    "s": 7,
+    "still": "/mIRiD06kLMsROtTQMQRg4xDZCea.jpg"
    },
    "order": "000",
    "overview": "Follow the intergalactic adventures of Capt. Jean-Luc Picard and his loyal crew aboard the all-new USS Enterprise NCC-1701D, as they explore new worlds.",
@@ -26544,5 +26544,5 @@
    "year": 1959
   }
  ],
- "updated": "2026-11-12T00:24Z"
+ "updated": "2026-11-12T00:31Z"
 }
