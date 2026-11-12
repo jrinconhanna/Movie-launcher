@@ -153,6 +153,10 @@ body.sorting .ic { opacity: 0 !important; }
 .p2menu{position:fixed;z-index:50;background:#fff;color:#111;border-radius:12px;box-shadow:0 10px 30px rgba(0,0,0,.25);padding:5px;min-width:230px}.p2menu button{display:block;width:100%;text-align:left;border:0;background:transparent;padding:10px 12px;border-radius:8px;font:500 14px var(--font);color:#111;cursor:pointer}.p2menu button:hover{background:#eee}
 .p2r.drag,.p2n.drag{opacity:.4}
 @media (min-width:641px){.p2r{grid-template-columns:260px minmax(0,1fr);gap:18px}.p2r .t{font-size:16px}}
+
+html.p2dark { --bg: #0b0b0c; --surface: #1c1c1e; --fg: #f2f1ee; --muted: #9a9893; --line: #262628; --accent: #f07a3e; --accent-ink: #1a0f08; --chip: #1f1f21; --good: #5fbf86; color-scheme: dark; }
+html.p2light { --bg: #f4f2ee; --surface: #ffffff; --fg: #1c1b19; --muted: #6d6a63; --line: #e2ded6; --accent: #e8662a; --accent-ink: #ffffff; --chip: #ebe8e1; --good: #2f7d4f; color-scheme: light; }
+html.p2dark .p2r.top{background:rgba(214,60,60,.10)} html.p2dark .p2menu{background:#2c2c2e;color:#f2f1ee} html.p2dark .p2menu button{color:#f2f1ee} html.p2dark .p2menu button:hover{background:#3a3a3c}
 </style>
 </head>
 <body>
@@ -392,6 +396,7 @@ body.sorting .ic { opacity: 0 !important; }
   function techRootFolders() { var keep = state.course, cat = state.cat; state.course = ''; state.cat = 'All'; var r = techLevel().list; state.course = keep; state.cat = cat; return r; }
   function techUp() { var P = state.course.split('/'); P.pop(); var to = P.join('/'); state.course = ''; var L = techLevel(); state.course = L.implicit && L.P.join('/') === to ? '' : to; save(); render(); } // from a chip that opened straight into its folder, going up lands back on the chip
   function renderTop() {
+    if (PROTO && V24 && !p2 && learn.length && items.length) p2Seed();
     var t = $('top'); t.innerHTML = ''; t.hidden = !AFTER; if (!AFTER) return;
     TOP.forEach(function (s) {
       var b = document.createElement('button'); b.type = 'button'; b.setAttribute('role', 'tab');
@@ -758,6 +763,7 @@ body.sorting .ic { opacity: 0 !important; }
   }
 
   // ---- ?proto v2 (V2.4.2 prototype): Watching shelf by kind + Next shelf by kind. Local to this device; nothing is written to Trakt except ✓ on a Tech/Playlists video ----
+  if (PROTO) { var p2theme = 'dark'; try { p2theme = localStorage.getItem('proto2-theme') || 'dark'; } catch (e) {} document.documentElement.classList.add(p2theme === 'light' ? 'p2light' : 'p2dark'); }
   var P2K = ['Tech', 'Playlists', 'Docu-series', 'Series', 'Movies', 'Other'], P2P = { Tech: 1, Playlists: 1, 'Docu-series': 2, Series: 2, Movies: 1, Other: 1 };
   var p2 = ls('proto2', null);
   function p2Save() { try { localStorage.setItem('proto2', JSON.stringify(p2)); } catch (e) {} }
@@ -805,6 +811,7 @@ body.sorting .ic { opacity: 0 !important; }
     el.addEventListener('drop', function (e) { e.preventDefault(); var from = e.dataTransfer.getData('text/plain'); if (!from || from === id) return; var L = p2.lists[k]; if (L.indexOf(from) < 0) return; var to = L.indexOf(id); p2Move(k, from, to); render(); }); }
   function p2Bar(g) { var bar = document.createElement('div'); bar.className = 'p2bar'; bar.appendChild(document.createTextNode('Prototype · Next style: '));
     [['x11', 'X11 wide'], ['x11b', 'X11b next picture'], ['x13', 'X13 portrait']].forEach(function (x) { var b = document.createElement('button'); b.type = 'button'; b.textContent = x[1]; b.setAttribute('aria-pressed', p2.lay === x[0] ? 'true' : 'false'); b.onclick = function () { p2.lay = x[0]; p2Save(); render(); }; bar.appendChild(b); });
+    var dk = document.documentElement.classList.contains('p2dark'), tb = document.createElement('button'); tb.type = 'button'; tb.textContent = dk ? '☀ Light' : '☾ Dark'; tb.onclick = function () { var h = document.documentElement; h.classList.toggle('p2dark', !dk); h.classList.toggle('p2light', dk); try { localStorage.setItem('proto2-theme', dk ? 'light' : 'dark'); } catch (e) {} render(); }; bar.appendChild(tb);
     var rs = document.createElement('button'); rs.type = 'button'; rs.textContent = 'Reset from my lists'; rs.onclick = function () { p2Seed(); render(); toast('Prototype lists rebuilt from Watching, Parked, Backlog and started Tech folders'); }; bar.appendChild(rs); g.appendChild(bar); }
   function p2Watching(g0) { if (!p2) p2Seed(); p2Bar(g0); var wrap = document.createElement('div'); wrap.className = 'p2list'; g0.appendChild(wrap); var first = true;
     P2K.forEach(function (k) { p2.lists[k].map(p2Res).filter(Boolean).slice(0, P2P[k]).forEach(function (r) {
