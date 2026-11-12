@@ -344,6 +344,39 @@ def main():
             print("TMDB episode count failed:", tid, e)
             return c["n"] if c else None
 
+    stills = load("stills.json", {})  # next episode per show: {tid: {"k": seen-signature, "at": iso, "ep": {...}}}
+    def next_ep(tid, seen, files):
+        """The next episode to watch and its TMDB still (V2.4.2: Next shows the picture of what plays next)."""
+        sig = f"{len(seen)}:{max(seen) if seen else ''}:{len(files)}"
+        c = stills.get(str(tid))
+        if c and c.get("k") == sig and c.get("at", "") > (datetime.datetime.utcnow() - datetime.timedelta(days=30)).isoformat():
+            return c["ep"]
+        try:
+            if files:
+                left = sorted(e for e in files if e not in seen and e[0] > 0) or sorted(e for e in files if e not in seen)
+                if not left:
+                    return None
+                s0, e0 = left[0]
+                eps = tmdb_get(f"/tv/{tid}/season/{s0}", {}, token).get("episodes") or []
+                ep = next((x for x in eps if x.get("episode_number") == e0), None)
+            else:
+                s0 = max((e[0] for e in seen if e[0] > 0), default=1)
+                ep = None
+                for sn in (s0, s0 + 1):
+                    eps = tmdb_get(f"/tv/{tid}/season/{sn}", {}, token).get("episodes") or []
+                    ep = next((x for x in eps if (sn, x.get("episode_number")) not in seen), None)
+                    if ep:
+                        break
+                if not ep:
+                    return None
+                s0, e0 = ep.get("season_number", s0), ep.get("episode_number")
+            r = {"s": s0, "e": e0, "name": (ep or {}).get("name") or "", "still": (ep or {}).get("still_path")}
+            stills[str(tid)] = {"k": sig, "at": datetime.datetime.utcnow().isoformat(), "ep": r}
+            return r
+        except Exception as e:
+            print("TMDB next episode failed:", tid, e)
+            return c["ep"] if c else None
+
     out, unmatched = [], []
     sugg = load("suggestions.json", {})  # cached loose-search candidates, checked by hand before use
     for key, it in sorted(items.items()):
@@ -379,8 +412,13 @@ def main():
                     "kind": m["kind"], "tmdb": m["tmdb"], "title": m["title"],
                     "date": m["date"], "poster": m["poster"], "overview": m["overview"],
                     "status": status, "progress": prog, "files": it["files"]})
+        if m["kind"] == "tv" and status != "watched":
+            nx = next_ep(m["tmdb"], watched_eps.get(m["tmdb"], set()), it["eps"])
+            if nx:
+                out[-1]["next_ep"] = nx
 
     save("epcounts.json", epc)
+    save("stills.json", {k: v for k, v in stills.items() if int(k) in {o["tmdb"] for o in out}})
     save("suggestions.json", {k: v for k, v in sugg.items() if k in items})
     save("library.json", {"updated": time.strftime("%Y-%m-%dT%H:%MZ", time.gmtime()),
                           "items": out, "unmatched": unmatched, "learn": learn}, root=True)

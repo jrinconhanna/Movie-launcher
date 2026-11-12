@@ -176,6 +176,7 @@ html.p2dark .p2r.top{background:rgba(214,60,60,.10)} html.p2dark .p2menu{backgro
   var V24 = !/[?&]v23\b/.test(location.search); if (V24) document.documentElement.classList.add('v24'); // V2.4 live 11 Nov (?v23 shows the old view for comparison)
   var PROTO = /[?&]proto\b/.test(location.search); // V2.4.2 prototype: subscribe to folders, one channel each on Watching (this device only)
   var NEXT = /[?&]next\b/.test(location.search); // V2.4.1 preview (Lean onward): items flagged next only show with ?next until Javier says go
+  var P2ON = PROTO || NEXT; // V2.4.2 Watching/Next by kind: on ?next (and ?proto) until Javier says go
   var learn = [], learnDone = [], learnWatch = [], forder = {}, vorder = {}; // vorder: your video order per playlist (?next) // forder: your folder order per Tech level ('' = Tech › All), synced via Trakt
   var SHELVES = AFTER ? ['Movies', 'Series', 'Docs'] : ['Watch Next', 'Movies', 'Series', 'Docs'];
   var TOP = ['Watching', 'Next', 'Discover'], top = 'Watching';
@@ -230,7 +231,9 @@ html.p2dark .p2r.top{background:rgba(214,60,60,.10)} html.p2dark .p2menu{backgro
   function bySid(x) { for (var i = 0; i < items.length; i++) if (sid(items[i]) === x) return items[i]; return null; }
   function enc(keys) { return keys.map(byKey).filter(function (it) { return it && it.tmdb; }).map(sid); }
   function dec(ids) { return (ids || []).map(bySid).filter(Boolean).map(function (it) { return it.key; }); }
-  function snapshot() { return { v: 1, o: enc(worder), w: enc(watch), p: enc(parked), b: enc(next), r: enc(removed), d: enc(done), u: enc(undone), L: learnDone.slice(), LW: learnWatch.slice(), F: forder, V: vorder }; }
+  function snapshot() { return { v: 1, o: enc(worder), w: enc(watch), p: enc(parked), b: enc(next), r: enc(removed), d: enc(done), u: enc(undone), L: learnDone.slice(), LW: learnWatch.slice(), F: forder, V: vorder, K: p2 ? p2Enc(p2.lists) : undefined }; }
+  function p2Enc(L) { var o = {}; Object.keys(L).forEach(function (k) { o[k] = L[k].map(function (id) { if (id.indexOf('i:') !== 0) return id; var it = byKey(id.slice(2)); return it && it.tmdb ? 'i:' + sid(it) : 'k:' + id.slice(2); }); }); return o; }
+  function p2Dec(K) { var o = {}; P2K.forEach(function (k) { o[k] = (K[k] || []).map(function (id) { if (id.indexOf('k:') === 0) return 'i:' + id.slice(2); if (id.indexOf('i:') !== 0) return id; var it = bySid(id.slice(2)); return it ? 'i:' + it.key : null; }).filter(Boolean); }); return o; }
   function listItems(st) {
     var all = {}; ['o', 'w', 'p', 'b', 'r'].forEach(function (k) { st[k].forEach(function (x) { all[x] = 1; }); });
     var body = { movies: [], shows: [] };
@@ -249,6 +252,7 @@ html.p2dark .p2r.top{background:rgba(214,60,60,.10)} html.p2dark .p2menu{backgro
     if (j.L) { learnDone = j.L.slice(); try { localStorage.setItem('learndone', JSON.stringify(learnDone)); } catch (e) {} } else if (learnDone.length) setTimeout(function () { push(true); }, 0);
     if (j.V) { vorder = j.V; try { localStorage.setItem('vorder', JSON.stringify(vorder)); } catch (e) {} } else if (Object.keys(vorder).length) setTimeout(function () { push(true); }, 0);
     if (j.F) { forder = j.F; try { localStorage.setItem('forder', JSON.stringify(forder)); } catch (e) {} } else if (Object.keys(forder).length) setTimeout(function () { push(true); }, 0);
+    if (j.K) { p2 = { lists: p2Dec(j.K), lay: 'x11b', chip: (p2 && p2.chip) || 'Series' }; try { localStorage.setItem('proto2', JSON.stringify(p2)); } catch (e) {} } else if (p2) setTimeout(function () { push(true); }, 0);
     lastIds = listItems(j).ids; return true;
   }
   function pull() {
@@ -396,13 +400,13 @@ html.p2dark .p2r.top{background:rgba(214,60,60,.10)} html.p2dark .p2menu{backgro
   function techRootFolders() { var keep = state.course, cat = state.cat; state.course = ''; state.cat = 'All'; var r = techLevel().list; state.course = keep; state.cat = cat; return r; }
   function techUp() { var P = state.course.split('/'); P.pop(); var to = P.join('/'); state.course = ''; var L = techLevel(); state.course = L.implicit && L.P.join('/') === to ? '' : to; save(); render(); } // from a chip that opened straight into its folder, going up lands back on the chip
   function renderTop() {
-    if (PROTO && V24 && !p2 && learn.length && items.length) p2Seed();
+    if (P2ON && V24 && !p2 && learn.length && items.length) p2Seed();
     var t = $('top'); t.innerHTML = ''; t.hidden = !AFTER; if (!AFTER) return;
     TOP.forEach(function (s) {
       var b = document.createElement('button'); b.type = 'button'; b.setAttribute('role', 'tab');
       b.setAttribute('aria-selected', s === top ? 'true' : 'false'); b.textContent = s;
-      if (s === 'Watching' && MOCK) { var cw = document.createElement('span'); cw.className = 'n'; var wn = items.filter(inWatching).length; if (PROTO && p2) { var c2 = 0; P2K.forEach(function (k) { c2 += Math.min(P2P[k], p2.lists[k].map(p2Res).filter(Boolean).length); }); cw.textContent = c2; b.appendChild(cw); b.onclick = function () { top = s; render(); window.scrollTo(0, 0); }; t.appendChild(b); return; } cw.textContent = wn + '/' + LIM.watching; if (wn > LIM.watching) { cw.classList.add('over'); b.title = 'Over 5 · park or remove one to stay focused'; } b.appendChild(cw); }
-      if (s === 'Next') { var c = document.createElement('span'); c.className = 'n'; c.textContent = PROTO && p2 ? P2K.reduce(function (a, k) { return a + p2.lists[k].length; }, 0) : next.length + parked.length; b.appendChild(c); }
+      if (s === 'Watching' && MOCK) { var cw = document.createElement('span'); cw.className = 'n'; var wn = items.filter(inWatching).length; if (P2ON && p2) { var c2 = 0; P2K.forEach(function (k) { c2 += Math.min(P2P[k], p2.lists[k].map(p2Res).filter(Boolean).length); }); cw.textContent = c2; b.appendChild(cw); b.onclick = function () { top = s; render(); window.scrollTo(0, 0); }; t.appendChild(b); return; } cw.textContent = wn + '/' + LIM.watching; if (wn > LIM.watching) { cw.classList.add('over'); b.title = 'Over 5 · park or remove one to stay focused'; } b.appendChild(cw); }
+      if (s === 'Next') { var c = document.createElement('span'); c.className = 'n'; c.textContent = P2ON && p2 ? P2K.reduce(function (a, k) { return a + p2.lists[k].length; }, 0) : next.length + parked.length; b.appendChild(c); }
       b.onclick = function () { top = s; render(); window.scrollTo(0, 0); };
       t.appendChild(b);
     });
@@ -596,7 +600,7 @@ html.p2dark .p2r.top{background:rgba(214,60,60,.10)} html.p2dark .p2menu{backgro
     var y = document.createElement('div'); y.className = 'y'; y.textContent = [c.year, state.cat === 'All' && !(V24 && state.course) && c.category && c.category !== 'Other' && c.category !== c.course ? c.category : ''].filter(Boolean).join(' · '); d.appendChild(y); // like movies: category only when no chip is picked
     var nxt = c.videos.filter(function (v) { return learnDone.indexOf(lid(v)) < 0 && learnWatch.indexOf(lid(v)) < 0; })[0];
     var acts = []; if (nxt) acts.push(['watching', 'Watching · add the next video (' + nxt.n + ')', function () { watchLearn(nxt, true); }]);
-    if (PROTO && V24 && c.path && isLeaf(c)) { acts.unshift(['ntop', ACT.ntop[1], function () { p2Add('f:' + c.path, p2KindPath(c.path), 'top'); }], ['nbot', ACT.nbot[1], function () { p2Add('f:' + c.path, p2KindPath(c.path), 'bottom'); }]); }
+    if (P2ON && V24 && c.path && isLeaf(c)) { acts.unshift(['ntop', ACT.ntop[1], function () { p2Add('f:' + c.path, p2KindPath(c.path), 'top'); }], ['nbot', ACT.nbot[1], function () { p2Add('f:' + c.path, p2KindPath(c.path), 'bottom'); }]); }
     if (dn < tot) acts.push(['watched', 'Mark the whole course watched', function () { markCourse(c, true); }]);
     if (dn) acts.push(['unwatched', 'Mark the whole course not watched', function () { markCourse(c, false); }]);
     var ic = document.createElement('div'); ic.className = 'ic wm'; var opts = document.createElement('span'); opts.className = 'opts';
@@ -639,7 +643,7 @@ html.p2dark .p2r.top{background:rgba(214,60,60,.10)} html.p2dark .p2menu{backgro
     var more = document.createElement('button'); more.type = 'button'; more.className = 'more'; more.textContent = '⋯'; more.title = acts.map(function (a) { return ACT[a][1].split(' · ')[0]; }).join(', '); more.setAttribute('aria-label', 'Options for ' + it.title);
     var opts = document.createElement('span'); opts.className = 'opts';
     if (top !== 'Discover' && w === 'watching' && it.kind === 'movie') acts = acts.concat(['watched']);
-    if (PROTO && V24 && top === 'Discover') acts = ['ntop', 'nbot'].concat(acts);
+    if (P2ON && V24 && top === 'Discover') acts = ['ntop', 'nbot'].concat(acts);
     if (top === 'Discover') { acts = acts.concat([isWatched(it) ? 'unwatched' : 'watched']); more.title = acts.map(function (a) { return ACT[a][1].split(' · ')[0].replace(' (this device)', ''); }).join(', '); }
     acts.forEach(function (o) {
       var b = document.createElement('button'); b.type = 'button'; b.textContent = ACT[o][0]; b.title = ACT[o][1]; b.setAttribute('aria-label', ACT[o][1]);
@@ -763,10 +767,12 @@ html.p2dark .p2r.top{background:rgba(214,60,60,.10)} html.p2dark .p2menu{backgro
   }
 
   // ---- ?proto v2 (V2.4.2 prototype): Watching shelf by kind + Next shelf by kind. Local to this device; nothing is written to Trakt except ✓ on a Tech/Playlists video ----
-  if (PROTO) { var p2theme = 'dark'; try { p2theme = localStorage.getItem('proto2-theme') || 'dark'; } catch (e) {} document.documentElement.classList.add(p2theme === 'light' ? 'p2light' : 'p2dark'); }
+  if (P2ON) { var p2theme = 'dark'; try { p2theme = localStorage.getItem('proto2-theme') || 'dark'; } catch (e) {} document.documentElement.classList.add(p2theme === 'light' ? 'p2light' : 'p2dark'); }
   var P2K = ['Tech', 'Playlists', 'Docu-series', 'Series', 'Movies', 'Other'], P2P = { Tech: 1, Playlists: 1, 'Docu-series': 2, Series: 2, Movies: 1, Other: 1 };
   var p2 = ls('proto2', null);
-  function p2Save() { try { localStorage.setItem('proto2', JSON.stringify(p2)); } catch (e) {} }
+  function p2Save() { try { localStorage.setItem('proto2', JSON.stringify(p2)); } catch (e) {} if (window.__push) window.__push(); }
+  if (p2) p2.lay = 'x11b';
+  window.__p2rt = function () { var a = JSON.stringify(p2.lists), k = snapshot().K; return [a === JSON.stringify(p2Dec(JSON.parse(JSON.stringify(k)))), Object.keys(k).length]; }; // test hook: Trakt round trip
   function p2KindItem(it) { return it.group === 'Movies' ? 'Movies' : it.group === 'Series' ? 'Series' : it.group === 'Docs' ? (it.kind === 'tv' ? 'Docu-series' : 'Movies') : 'Other'; }
   function p2KindPath(path) { var t = path.split('/')[0]; return t === 'Steve Jobs' || t === 'Playlists' ? 'Playlists' : 'Tech'; }
   function p2Seed() {
@@ -778,16 +784,19 @@ html.p2dark .p2r.top{background:rgba(214,60,60,.10)} html.p2dark .p2menu{backgro
     learn.forEach(function (v) { var pth = trail(v).join('/'), w = learnWatch.indexOf(lid(v)) >= 0, d = learnDone.indexOf(lid(v)) >= 0; if (w || d) { if (!started[pth]) { started[pth] = { w: 0 }; order.push(pth); } if (w) started[pth].w = 1; } });
     (proto && proto.subs || []).slice().reverse().forEach(function (pth) { if (!started[pth]) { started[pth] = { w: 1 }; order.unshift(pth); } });
     order.sort(function (a, b) { return started[b].w - started[a].w; }).forEach(function (pth) { var f = p2Folder(pth); if (f && f.next) { var k = p2KindPath(pth); if (L[k].indexOf('f:' + pth) < 0) L[k].push('f:' + pth); } });
-    p2 = { lists: L, lay: (p2 && p2.lay) || 'x11', chip: 'Series' }; p2Save(); }
+    p2 = { lists: L, lay: 'x11b', chip: (p2 && p2.chip) || 'Series' }; p2Save(); }
   function p2Folder(pth) { var vs = folderVids(pth); if (!vs.length) return null; var dn = vs.filter(function (v) { return learnDone.indexOf(lid(v)) >= 0; }).length, nx = vs.filter(function (v) { return learnDone.indexOf(lid(v)) < 0; })[0] || null;
     var P = pth.split('/'), v0 = vs[0], cov = (v0.fcov && v0.fcov[P.length - 1]) || (trail(v0).length === P.length ? v0.folder : null);
     return { path: pth, name: P[P.length - 1].replace(/^(W\d+) - .*/, '$1'), where: P.map(function (x) { return x.replace('Retention & Engagement', 'R&E').replace(/^(W\d+) - .*/, '$1'); }).join(' › '), vids: vs, done: dn, total: vs.length, next: nx, cover: cov }; }
   function p2Res(id) { if (id.indexOf('i:') === 0) { var it = byKey(id.slice(2)); return it ? { id: id, it: it } : null; } var f = p2Folder(id.slice(2)); return f ? { id: id, f: f } : null; }
   function p2Img(r, mode) { // mode: 'video' (what plays next), 'art' (show/folder, wide), 'port' (show/folder, portrait)
+    if (r.it && mode === 'video' && r.it.next_ep && r.it.next_ep.still) return { src: 'https://image.tmdb.org/t/p/w300' + r.it.next_ep.still };
     if (r.it) return r.it.poster ? { src: 'https://image.tmdb.org/t/p/' + (mode === 'port' ? 'w185' : 'w342') + r.it.poster, pt: mode !== 'port' } : null;
     var nv = r.f.next; if (mode === 'video' && nv && (nv.cover || nv.frame)) return { src: nv.cover || nv.frame };
     if (r.f.cover) return { src: r.f.cover, pt: false }; return nv && (nv.cover || nv.frame) ? { src: nv.cover || nv.frame } : null; }
-  function p2Prog(r) { if (r.it) { var it = r.it; if (it.kind === 'tv' && it.progress) return { t: 'Episode ' + Math.min(it.progress[0] + 1, it.progress[1]) + ' of ' + it.progress[1], m: it.title, n: it.progress[0], of: it.progress[1], c: it.progress[0] + '/' + it.progress[1], v: 0 };
+  function p2Prog(r) { if (r.it) { var it = r.it; var ne = it.next_ep, se = ne ? 'S' + ne.s + ' E' + ne.e : '';
+      if (it.kind === 'tv' && it.progress) return { t: ne && ne.name ? ne.name : 'Episode ' + Math.min(it.progress[0] + 1, it.progress[1]) + ' of ' + it.progress[1], m: it.title + (se ? ' · ' + se : ''), n: it.progress[0], of: it.progress[1], c: it.progress[0] + '/' + it.progress[1], v: 0, badge: se };
+      if (it.kind === 'tv' && ne) return { t: ne.name || it.title, m: it.title + ' · ' + se, c: '', v: 0, badge: se };
       if (it.kind === 'movie') { var pc = paused[it.key]; return { t: it.title, m: year(it) + (it.category ? ' · ' + it.category : ''), c: pc != null ? Math.round(pc) + '%' : '', v: pc || 0, badge: pc != null ? Math.round(pc) + '%' : '' }; }
       return { t: it.title, m: it.category || '', c: '', v: 0 }; }
     var f = r.f; return { t: f.next ? f.next.title : 'All watched', m: f.where, n: f.done, of: f.total, c: f.done + '/' + f.total, v: 0, badge: f.next ? (f.vids.indexOf(f.next) + 1) + '/' + f.total : '' }; }
@@ -809,8 +818,7 @@ html.p2dark .p2r.top{background:rgba(214,60,60,.10)} html.p2dark .p2menu{backgro
   function p2Drag(el, k, id) { el.draggable = true; el.addEventListener('dragstart', function (e) { el.classList.add('drag'); e.dataTransfer.setData('text/plain', id); });
     el.addEventListener('dragend', function () { el.classList.remove('drag'); }); el.addEventListener('dragover', function (e) { e.preventDefault(); });
     el.addEventListener('drop', function (e) { e.preventDefault(); var from = e.dataTransfer.getData('text/plain'); if (!from || from === id) return; var L = p2.lists[k]; if (L.indexOf(from) < 0) return; var to = L.indexOf(id); p2Move(k, from, to); render(); }); }
-  function p2Bar(g) { var bar = document.createElement('div'); bar.className = 'p2bar'; bar.appendChild(document.createTextNode('Prototype · Next style: '));
-    [['x11', 'X11 wide'], ['x11b', 'X11b next picture'], ['x13', 'X13 portrait']].forEach(function (x) { var b = document.createElement('button'); b.type = 'button'; b.textContent = x[1]; b.setAttribute('aria-pressed', p2.lay === x[0] ? 'true' : 'false'); b.onclick = function () { p2.lay = x[0]; p2Save(); render(); }; bar.appendChild(b); });
+  function p2Bar(g) { var bar = document.createElement('div'); bar.className = 'p2bar'; bar.appendChild(document.createTextNode('Preview V2.4.2 · '));
     var dk = document.documentElement.classList.contains('p2dark'), tb = document.createElement('button'); tb.type = 'button'; tb.textContent = dk ? '☀ Light' : '☾ Dark'; tb.onclick = function () { var h = document.documentElement; h.classList.toggle('p2dark', !dk); h.classList.toggle('p2light', dk); try { localStorage.setItem('proto2-theme', dk ? 'light' : 'dark'); } catch (e) {} render(); }; bar.appendChild(tb);
     var rs = document.createElement('button'); rs.type = 'button'; rs.textContent = 'Reset from my lists'; rs.onclick = function () { p2Seed(); render(); toast('Prototype lists rebuilt from Watching, Parked, Backlog and started Tech folders'); }; bar.appendChild(rs); g.appendChild(bar); }
   function p2Watching(g0) { if (!p2) p2Seed(); p2Bar(g0); var wrap = document.createElement('div'); wrap.className = 'p2list'; g0.appendChild(wrap); var first = true;
@@ -847,7 +855,7 @@ html.p2dark .p2r.top{background:rgba(214,60,60,.10)} html.p2dark .p2menu{backgro
     renderTop(); renderTabs();
     var real = state.shelf; if (AFTER && top === 'Next') state.shelf = 'Watch Next';
     if (AFTER && top === 'Watching') { $('crow').hidden = true; $('wkrow').hidden = true; /* fix 11 Nov: week chips leaked from Discover */ var g0 = $('grid'); g0.innerHTML = ''; g0.classList.remove('vids', 'techin'); /* fix: Discover › Tech sizes leaked into Watching */ if (!tok) g0.appendChild(connRow());
-      if (PROTO && V24 && LEARN && learn.length) { p2Watching(g0); renderFoot(); return; }
+      if (P2ON && V24 && LEARN && learn.length) { p2Watching(g0); renderFoot(); return; }
       if (LEARN && learn.length) { // V2.3: only course videos you added (⋯ ▶ in Discover › Tech); watched ones leave
         var lv = learn.filter(function (v) { return learnWatch.indexOf(lid(v)) >= 0 && learnDone.indexOf(lid(v)) < 0; });
         if (lv.length) { var hl = document.createElement('div'); hl.className = 'sech'; hl.textContent = 'Learn'; g0.appendChild(hl);
@@ -859,7 +867,7 @@ html.p2dark .p2r.top{background:rgba(214,60,60,.10)} html.p2dark .p2menu{backgro
       else { wl.forEach(function (it) { var c = mcard(it); c.dataset.sec = 'worder'; g0.appendChild(c); }); sortable(g0); }
       renderFoot(); return; }
     if (AFTER && top === 'Next') { $('crow').hidden = true; $('wkrow').hidden = true; var gn = $('grid'); gn.innerHTML = ''; gn.classList.remove('vids', 'techin');
-      if (PROTO && V24 && LEARN && learn.length) { p2Next(gn); renderFoot(); state.shelf = real; return; }
+      if (P2ON && V24 && LEARN && learn.length) { p2Next(gn); renderFoot(); state.shelf = real; return; }
       [['Parked', parked], ['Backlog', next]].forEach(function (sec) {
         var hd = document.createElement('div'); hd.className = 'sech'; hd.textContent = sec[0] + ' · ' + sec[1].length + '/' + (sec[0] === 'Parked' ? LIM.park : LIM.backlog); if (sec[1].length >= (sec[0] === 'Parked' ? LIM.park : LIM.backlog)) hd.textContent += ' · full'; gn.appendChild(hd);
         var its = sec[1].map(function (k) { return items.filter(function (i) { return i.key === k; })[0]; }).filter(Boolean);
