@@ -157,6 +157,7 @@ body.sorting .ic { opacity: 0 !important; }
 html.p2dark { --bg: #0b0b0c; --surface: #1c1c1e; --fg: #f2f1ee; --muted: #9a9893; --line: #262628; --accent: #f07a3e; --accent-ink: #1a0f08; --chip: #1f1f21; --good: #5fbf86; color-scheme: dark; }
 html.p2light { --bg: #f4f2ee; --surface: #ffffff; --fg: #1c1b19; --muted: #6d6a63; --line: #e2ded6; --accent: #e8662a; --accent-ink: #ffffff; --chip: #ebe8e1; --good: #2f7d4f; color-scheme: light; }
 html.p2dark .p2r.top{background:rgba(214,60,60,.10)} html.p2dark .p2menu{background:#2c2c2e;color:#f2f1ee} html.p2dark .p2menu button{color:#f2f1ee} html.p2dark .p2menu button:hover{background:#3a3a3c}
+html .ic.wm.open .opts button.on{background:#000;color:#fff;outline:2px solid #fff}.ic.wm .opts button svg{display:block}
 </style>
 </head>
 <body>
@@ -176,6 +177,7 @@ html.p2dark .p2r.top{background:rgba(214,60,60,.10)} html.p2dark .p2menu{backgro
   var V24 = !/[?&]v23\b/.test(location.search); if (V24) document.documentElement.classList.add('v24'); // V2.4 live 11 Nov (?v23 shows the old view for comparison)
   var PROTO = /[?&]proto\b/.test(location.search); // V2.4.2 prototype: subscribe to folders, one channel each on Watching (this device only)
   var NEXT = /[?&]next\b/.test(location.search); // V2.4.1 preview (Lean onward): items flagged next only show with ?next until Javier says go
+  var B1 = /[?&]next\b/.test(location.search); // 'One set of state buttons' (V2.4.2) preview: ?next until Javier says go
   var P2ON = !/[?&]v241\b/.test(location.search); // V2.4.2 Watching/Next by kind: live 12 Nov (?v241 shows the old shelves)
   var learn = [], learnDone = [], learnWatch = [], forder = {}, vorder = {}; // vorder: your video order per playlist (?next) // forder: your folder order per Tech level ('' = Tech › All), synced via Trakt
   var SHELVES = AFTER ? ['Movies', 'Series', 'Docs'] : ['Watch Next', 'Movies', 'Series', 'Docs'];
@@ -547,6 +549,12 @@ html.p2dark .p2r.top{background:rgba(214,60,60,.10)} html.p2dark .p2menu{backgro
        .catch(function (e) { toast(word + ' on this device · couldn’t save to Trakt (' + e.message + ')', undo); });
   }
   var ACT = { watched: ['✓', 'Mark watched'], unwatched: ['↺', 'Mark not watched'], watching: ['▶', 'Watching · start or continue'], park: ['⏸', 'Park · watch on and off'], backlog: ['＋', 'Backlog · later'], remove: ['✕', 'Remove'], sub: ['☆', 'Subscribe · a channel on Watching (prototype)'], ntop: ['⤒', 'Next · top of its kind (prototype)'], nbot: ['⤓', 'Next · bottom of its kind (prototype)'], unsub: ['★', 'Unsubscribe'], focus: ['◎', 'Make it my focus'] };
+  var SVG_ADD = '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M3 6h12M3 12h12M3 18h7M18 13v8M14 17h8"/></svg>', SVG_OUT = '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M3 6h12M3 12h12M3 18h7M14 17h8"/></svg>';
+  ACT.nadd = [SVG_ADD, 'Add to Next (last in its kind)']; ACT.nout = [SVG_OUT, 'Take out of Next']; ACT.unwx = ['✕', 'Mark not watched'];
+  function icon(b, o) { if (ACT[o][0].indexOf('<svg') === 0) b.innerHTML = ACT[o][0]; else b.textContent = ACT[o][0]; if (o === 'nout' || o === 'unwx') b.classList.add('on'); }
+  function b1Where(id, k) { if (!p2) p2Seed(); var L = p2.lists[k], i = L.indexOf(id); return i < 0 ? '' : i < P2P[k] ? 'Watching' : 'Next'; }
+  function b1In(id) { if (!p2) p2Seed(); return P2K.some(function (k) { return p2.lists[k].indexOf(id) >= 0; }); }
+  function b1Out(id) { P2K.forEach(function (k) { var L = p2.lists[k], i = L.indexOf(id); if (i >= 0) L.splice(i, 1); }); p2Save(); toast('Out of Next'); render(); }
   function where(it) { return inWatching(it) ? 'watching' : parked.indexOf(it.key) >= 0 ? 'park' : next.indexOf(it.key) >= 0 ? 'backlog' : 'discover'; }
   // V2.3 tap: Infuse links can't search, so copy the title, open Infuse, paste in its Search (Better: play straight away)
   function copyText(t) {
@@ -600,11 +608,13 @@ html.p2dark .p2r.top{background:rgba(214,60,60,.10)} html.p2dark .p2menu{backgro
     var y = document.createElement('div'); y.className = 'y'; y.textContent = [c.year, state.cat === 'All' && !(V24 && state.course) && c.category && c.category !== 'Other' && c.category !== c.course ? c.category : ''].filter(Boolean).join(' · '); d.appendChild(y); // like movies: category only when no chip is picked
     var nxt = c.videos.filter(function (v) { return learnDone.indexOf(lid(v)) < 0 && learnWatch.indexOf(lid(v)) < 0; })[0];
     var acts = []; if (nxt) acts.push(['watching', 'Watching · add the next video (' + nxt.n + ')', function () { watchLearn(nxt, true); }]);
-    if (P2ON && V24 && c.path && isLeaf(c)) { acts.unshift(['ntop', ACT.ntop[1], function () { p2Add('f:' + c.path, p2KindPath(c.path), 'top'); }], ['nbot', ACT.nbot[1], function () { p2Add('f:' + c.path, p2KindPath(c.path), 'bottom'); }]); }
-    if (dn < tot) acts.push(['watched', 'Mark the whole course watched', function () { markCourse(c, true); }]);
-    if (dn) acts.push(['unwatched', 'Mark the whole course not watched', function () { markCourse(c, false); }]);
+    if (B1 && P2ON && V24) { acts = []; if (c.path && isLeaf(c)) { var fid = 'f:' + c.path; acts.push(b1In(fid) ? ['nout', ACT.nout[1], function () { b1Out(fid); }] : ['nadd', ACT.nadd[1], function () { p2Add(fid, p2KindPath(c.path), 'bottom'); }]); var fw = b1Where(fid, p2KindPath(c.path)); if (fw) { var ftg = document.createElement('span'); ftg.className = 'where'; ftg.textContent = fw; a.appendChild(ftg); } } }
+    else if (P2ON && V24 && c.path && isLeaf(c)) { acts.unshift(['ntop', ACT.ntop[1], function () { p2Add('f:' + c.path, p2KindPath(c.path), 'top'); }], ['nbot', ACT.nbot[1], function () { p2Add('f:' + c.path, p2KindPath(c.path), 'bottom'); }]); }
+    if (B1 && P2ON && V24) acts.push(dn < tot ? ['watched', 'Mark the whole folder watched', function () { markCourse(c, true); }] : ['unwx', 'Mark the whole folder not watched', function () { markCourse(c, false); }]);
+    else { if (dn < tot) acts.push(['watched', 'Mark the whole course watched', function () { markCourse(c, true); }]); }
+    if (!(B1 && P2ON && V24) && dn) acts.push(['unwatched', 'Mark the whole course not watched', function () { markCourse(c, false); }]);
     var ic = document.createElement('div'); ic.className = 'ic wm'; var opts = document.createElement('span'); opts.className = 'opts';
-    acts.forEach(function (x) { var b = document.createElement('button'); b.type = 'button'; b.textContent = ACT[x[0]][0]; b.title = x[1]; b.setAttribute('aria-label', x[1]); b.onclick = function (e) { e.preventDefault(); x[2](); }; opts.appendChild(b); });
+    acts.forEach(function (x) { var b = document.createElement('button'); b.type = 'button'; icon(b, x[0]); b.title = x[1]; b.setAttribute('aria-label', x[1]); b.onclick = function (e) { e.preventDefault(); x[2](); }; opts.appendChild(b); });
     var more = document.createElement('button'); more.type = 'button'; more.className = 'more'; more.textContent = '⋯'; more.title = acts.map(function (x) { return x[1]; }).join(', '); more.setAttribute('aria-label', 'Options for ' + c.course);
     more.onclick = function (e) { e.preventDefault(); ic.classList.toggle('open'); };
     ic.appendChild(opts); ic.appendChild(more); d.appendChild(ic);
@@ -621,10 +631,10 @@ html.p2dark .p2r.top{background:rgba(214,60,60,.10)} html.p2dark .p2menu{backgro
     var seen = learnDone.indexOf(lid(v)) >= 0; if (seen && !(V24 && top === 'Discover' && state.wf === 'watched')) d.classList.add('seen'); // V2.4: the Watched filter shows them in full colour, like movies
     var ic = document.createElement('div'); ic.className = 'ic wm';
     var opts = document.createElement('span'); opts.className = 'opts';
-    var inW = learnWatch.indexOf(lid(v)) >= 0, acts = seen ? ['watching', 'unwatched'] : inW ? ['remove', 'watched'] : ['watching', 'watched'];
+    var inW = learnWatch.indexOf(lid(v)) >= 0, acts = B1 && P2ON && V24 ? [seen ? 'unwx' : 'watched'] : seen ? ['watching', 'unwatched'] : inW ? ['remove', 'watched'] : ['watching', 'watched'];
     acts.forEach(function (o) {
-      var mk = document.createElement('button'); mk.type = 'button'; var lab = { remove: 'Remove from Watching', watching: seen ? 'Watching · watch again (unmarks it)' : ACT.watching[1] }[o] || ACT[o][1]; mk.textContent = ACT[o][0]; mk.title = lab; mk.setAttribute('aria-label', lab);
-      mk.onclick = function (e) { e.preventDefault(); if (o === 'watched' || o === 'unwatched') markLearn(v, o === 'watched'); else watchLearn(v, o === 'watching'); }; opts.appendChild(mk);
+      var mk = document.createElement('button'); mk.type = 'button'; var lab = { remove: 'Remove from Watching', watching: seen ? 'Watching · watch again (unmarks it)' : ACT.watching[1] }[o] || ACT[o][1]; icon(mk, o); mk.title = lab; mk.setAttribute('aria-label', lab);
+      mk.onclick = function (e) { e.preventDefault(); if (o === 'unwx') markLearn(v, false); else if (o === 'watched' || o === 'unwatched') markLearn(v, o === 'watched'); else watchLearn(v, o === 'watching'); }; opts.appendChild(mk);
     });
     if (inW && top === 'Discover') { var tag = document.createElement('span'); tag.className = 'where'; tag.textContent = 'Watching'; a.appendChild(tag); }
     var more = document.createElement('button'); more.type = 'button'; more.className = 'more'; more.textContent = '⋯'; more.title = acts.map(function (o) { return ACT[o][1].split(' · ')[0]; }).join(', '); more.setAttribute('aria-label', 'Options for ' + v.title);
@@ -643,15 +653,16 @@ html.p2dark .p2r.top{background:rgba(214,60,60,.10)} html.p2dark .p2menu{backgro
     var more = document.createElement('button'); more.type = 'button'; more.className = 'more'; more.textContent = '⋯'; more.title = acts.map(function (a) { return ACT[a][1].split(' · ')[0]; }).join(', '); more.setAttribute('aria-label', 'Options for ' + it.title);
     var opts = document.createElement('span'); opts.className = 'opts';
     if (top !== 'Discover' && w === 'watching' && it.kind === 'movie') acts = acts.concat(['watched']);
-    if (P2ON && V24 && top === 'Discover') acts = ['ntop', 'nbot'].concat(acts);
-    if (top === 'Discover') { acts = acts.concat([isWatched(it) ? 'unwatched' : 'watched']); more.title = acts.map(function (a) { return ACT[a][1].split(' · ')[0].replace(' (this device)', ''); }).join(', '); }
+    if (P2ON && V24 && top === 'Discover') acts = B1 ? [b1In('i:' + it.key) ? 'nout' : 'nadd'] : ['ntop', 'nbot'].concat(acts);
+    if (top === 'Discover') { acts = acts.concat([isWatched(it) ? (B1 && P2ON && V24 ? 'unwx' : 'unwatched') : 'watched']); more.title = acts.map(function (a) { return ACT[a][1].split(' · ')[0].replace(' (this device)', ''); }).join(', '); }
     acts.forEach(function (o) {
-      var b = document.createElement('button'); b.type = 'button'; b.textContent = ACT[o][0]; b.title = ACT[o][1]; b.setAttribute('aria-label', ACT[o][1]);
-      b.onclick = function (e) { e.preventDefault(); if (o === 'ntop' || o === 'nbot') { p2Add('i:' + it.key, p2KindItem(it), o === 'ntop' ? 'top' : 'bottom'); return; } if (o === 'watched' || o === 'unwatched') markWatched(it, o === 'watched'); else place(it, o); }; opts.appendChild(b);
+      var b = document.createElement('button'); b.type = 'button'; icon(b, o); b.title = ACT[o][1]; b.setAttribute('aria-label', ACT[o][1]);
+      b.onclick = function (e) { e.preventDefault(); if (o === 'nadd') { p2Add('i:' + it.key, p2KindItem(it), 'bottom'); return; } if (o === 'nout') { b1Out('i:' + it.key); return; } if (o === 'unwx') { markWatched(it, false); return; } if (o === 'ntop' || o === 'nbot') { p2Add('i:' + it.key, p2KindItem(it), o === 'ntop' ? 'top' : 'bottom'); return; } if (o === 'watched' || o === 'unwatched') markWatched(it, o === 'watched'); else place(it, o); }; opts.appendChild(b);
     });
     more.onclick = function (e) { e.preventDefault(); ic.classList.toggle('open'); };
     ic.appendChild(opts); ic.appendChild(more);
-    if (w !== 'discover' && top === 'Discover') { var tag = document.createElement('span'); tag.className = 'where'; tag.textContent = { watching: 'Watching', park: 'Parked', backlog: 'Backlog' }[w]; d.querySelector('.poster').appendChild(tag); }
+    if (B1 && P2ON && V24 && top === 'Discover') { var bw = b1Where('i:' + it.key, p2KindItem(it)); if (bw) { var tg = document.createElement('span'); tg.className = 'where'; tg.textContent = bw; d.querySelector('.poster').appendChild(tg); } }
+    else if (w !== 'discover' && top === 'Discover') { var tag = document.createElement('span'); tag.className = 'where'; tag.textContent = { watching: 'Watching', park: 'Parked', backlog: 'Backlog' }[w]; d.querySelector('.poster').appendChild(tag); }
     return d;
   }
   function saveOrder(g, sec) {
@@ -731,7 +742,7 @@ html.p2dark .p2r.top{background:rgba(214,60,60,.10)} html.p2dark .p2menu{backgro
     var acts = [['watched', 'Mark watched · the next one comes up', function () { markLearn(ch.next, true); }]];
     if (!foc) acts.push(['focus', ACT.focus[1], function () { protoFocus(ch.path); }]);
     acts.push(['remove', 'Unsubscribe', function () { protoSub(ch.path, false); }]);
-    acts.forEach(function (x) { var b = document.createElement('button'); b.type = 'button'; b.textContent = ACT[x[0]][0]; b.title = x[1]; b.setAttribute('aria-label', x[1]); b.onclick = function (e) { e.preventDefault(); x[2](); }; opts.appendChild(b); });
+    acts.forEach(function (x) { var b = document.createElement('button'); b.type = 'button'; icon(b, x[0]); b.title = x[1]; b.setAttribute('aria-label', x[1]); b.onclick = function (e) { e.preventDefault(); x[2](); }; opts.appendChild(b); });
     more.title = acts.map(function (x) { return x[1].split(' · ')[0]; }).join(', ');
     return d; }
   function protoWatching(g0) {
@@ -852,7 +863,7 @@ html.p2dark .p2r.top{background:rgba(214,60,60,.10)} html.p2dark .p2menu{backgro
       d.appendChild(tx); var gr = document.createElement('span'); gr.className = 'gr'; gr.textContent = '≡'; d.appendChild(gr); wrap.appendChild(d); p2Drag(d, k, r.id);
       var acts = function () { return [['⤒ Move to top' + (P2P[k] ? ' (on Watching)' : ''), function () { p2Move(k, r.id, 'top'); render(); }], ['↑ Move up', function () { p2Move(k, r.id, 'up'); render(); }], ['⤓ Move to bottom', function () { p2Move(k, r.id, 'bottom'); render(); }], ['✕ Remove from Next', function () { var L = p2.lists[k]; L.splice(L.indexOf(r.id), 1); p2Save(); render(); }]]; };
       p2Hold(d, acts, function (e) { p2Menu(e.clientX, e.clientY, acts()); }); }); }
-  function p2Add(id, k, pos) { if (!p2) p2Seed(); P2K.forEach(function (x) { var L = p2.lists[x], i = L.indexOf(id); if (i >= 0) L.splice(i, 1); }); if (pos === 'top') p2.lists[k].unshift(id); else p2.lists[k].push(id); p2Save(); toast('In Next › ' + p2Lab(k) + (pos === 'top' ? ' (top: on Watching)' : ' (bottom)')); render(); }
+  function p2Add(id, k, pos) { if (!p2) p2Seed(); P2K.forEach(function (x) { var L = p2.lists[x], i = L.indexOf(id); if (i >= 0) L.splice(i, 1); }); if (pos === 'top') p2.lists[k].unshift(id); else p2.lists[k].push(id); p2Save(); toast('In Next › ' + p2Lab(k) + (pos === 'top' ? ' (top: on Watching)' : B1 ? ' · ' + p2.lists[k].length + ' in the list' : ' (bottom)')); render(); }
   function render() {
     renderTop(); renderTabs();
     var real = state.shelf; if (AFTER && top === 'Next') state.shelf = 'Watch Next';
