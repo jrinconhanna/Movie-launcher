@@ -347,13 +347,16 @@ def main():
     stills = load("stills.json", {})  # next episode per show: {tid: {"k": seen-signature, "at": iso, "ep": {...}}}
     def next_ep(tid, seen, files):
         """The next episode to watch and its TMDB still (V2.4.2: Next shows the picture of what plays next)."""
-        sig = f"{len(seen)}:{max(seen) if seen else ''}:{len(files)}"
+        sig = f"v2:{len(seen)}:{max(seen) if seen else ''}:{len(files)}"
         c = stills.get(str(tid))
         if c and c.get("k") == sig and c.get("at", "") > (datetime.datetime.utcnow() - datetime.timedelta(days=30)).isoformat():
             return c["ep"]
         try:
             if files:
                 left = sorted(e for e in files if e not in seen and e[0] > 0) or sorted(e for e in files if e not in seen)
+                last = max((e for e in files if e in seen), default=None)  # carry on after the last one watched
+                after = [e for e in left if last and e > last]
+                left = after or left
                 if not left:
                     return None
                 s0, e0 = left[0]
