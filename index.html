@@ -177,7 +177,7 @@ html .ic.wm.open .opts button.on{background:#000;color:#fff;outline:2px solid #f
   var V24 = !/[?&]v23\b/.test(location.search); if (V24) document.documentElement.classList.add('v24'); // V2.4 live 11 Nov (?v23 shows the old view for comparison)
   var PROTO = /[?&]proto\b/.test(location.search); // V2.4.2 prototype: subscribe to folders, one channel each on Watching (this device only)
   var NEXT = /[?&]next\b/.test(location.search); // V2.4.1 preview (Lean onward): items flagged next only show with ?next until Javier says go
-  var B1 = /[?&]next\b/.test(location.search); // 'One set of state buttons' (V2.4.2) preview: ?next until Javier says go
+  var B1 = true; // 'One set of state buttons' (V2.4.2) piece 1: live 14 Nov on Javier's go
   var P2ON = !/[?&]v241\b/.test(location.search); // V2.4.2 Watching/Next by kind: live 12 Nov (?v241 shows the old shelves)
   var learn = [], learnDone = [], learnWatch = [], forder = {}, vorder = {}; // vorder: your video order per playlist (?next) // forder: your folder order per Tech level ('' = Tech › All), synced via Trakt
   var SHELVES = AFTER ? ['Movies', 'Series', 'Docs'] : ['Watch Next', 'Movies', 'Series', 'Docs'];
