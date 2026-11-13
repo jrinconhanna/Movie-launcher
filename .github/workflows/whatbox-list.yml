@@ -1,0 +1,43 @@
+name: Whatbox list (read-only)
+
+# Lists the files under one folder of files/Javi on Whatbox (read-only)
+# and writes them to data/whatbox-list.txt. Used for one-off adds to library.txt.
+
+on:
+  workflow_dispatch:
+    inputs:
+      folder:
+        description: "Folder under files/Javi (e.g. z- Other/2- TV Series)"
+        required: true
+        default: "z- Other/2- TV Series"
+
+permissions:
+  contents: write
+
+jobs:
+  list:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up the key
+        env:
+          KEY: ${{ secrets.WHATBOX_SSH_KEY }}
+        run: |
+          test -n "$KEY" || { echo "Secret WHATBOX_SSH_KEY is missing"; exit 1; }
+          mkdir -p ~/.ssh && chmod 700 ~/.ssh
+          printf '%s\n' "$KEY" > ~/.ssh/whatbox && chmod 600 ~/.ssh/whatbox
+          ssh-keyscan -H kiwi.whatbox.ca >> ~/.ssh/known_hosts 2>/dev/null
+      - name: List the folder
+        env:
+          FOLDER: ${{ github.event.inputs.folder }}
+        run: |
+          {
+            echo "Run: $(date -u '+%Y-%m-%d %H:%M UTC') · folder: $FOLDER"
+            ssh -i ~/.ssh/whatbox -o BatchMode=yes -o ConnectTimeout=20 javierrincon@kiwi.whatbox.ca "cd files/Javi && find \"./$FOLDER\" -type f | sort"
+          } > data/whatbox-list.txt
+      - name: Save
+        run: |
+          git config user.name "github-actions" && git config user.email "actions@github.com"
+          git add data/whatbox-list.txt
+          git commit -m "Whatbox list: ${{ github.event.inputs.folder }}" || exit 0
+          git pull --rebase -q && git push
