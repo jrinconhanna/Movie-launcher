@@ -4013,7 +4013,7 @@
    "overview": "In one of Paris's finest restaurants, Remy, a determined young rat, dreams of becoming a renowned French chef. Torn between his family's wishes and his true calling, Remy and his pal Linguini set in motion a hilarious chain of events that turns the City of Lights upside down.",
    "poster": "/t3vaWRPSf6WjDSamIkKDs1iQWna.jpg",
    "progress": null,
-   "status": "unwatched",
+   "status": "watched",
    "title": "Ratatouille",
    "tmdb": 2062
   },
@@ -4028,7 +4028,7 @@
    "overview": "When the cast comes off his once broken arm, a 12-year-old boy can throw a 100-mile-an-hour fastball, and the Chicago Cubs want him as their new pitcher.",
    "poster": "/9If8XnhBdEbQ2Q0ggAQC92CptjU.jpg",
    "progress": null,
-   "status": "unwatched",
+   "status": "watched",
    "title": "Rookie of the Year",
    "tmdb": 21845
   },
@@ -8843,7 +8843,7 @@
    "overview": "Val McKee and Earl Bassett are in a fight for their lives when they discover that their desolate town has been infested with gigantic, man-eating creatures that live below the ground.",
    "poster": "/cA4ggkZ3r1d5r9hOAUWC8x5ul2i.jpg",
    "progress": null,
-   "status": "unwatched",
+   "status": "watched",
    "title": "Tremors",
    "tmdb": 9362
   },
@@ -26544,5 +26544,5 @@
    "year": 1959
   }
  ],
- "updated": "2026-11-13T01:54Z"
+ "updated": "2026-11-13T09:39Z"
 }
