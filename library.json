@@ -9443,7 +9443,7 @@
    "overview": "The story of Michael Jackson, one of the most influential artists the world has ever known, and his life beyond the music. His journey from the discovery of his extraordinary talent as the lead of the Jackson Five, to the visionary artist whose creative ambition fueled a relentless pursuit to become the biggest entertainer in the world, highlighting both his life off-stage and some of the most ico",
    "poster": "/dueFqKLvjftnELZaGYwY7xinfaI.jpg",
    "progress": null,
-   "status": "watched",
+   "status": "unwatched",
    "title": "Michael",
    "tmdb": 936075
   },
@@ -11318,6 +11318,30 @@
    "status": "unwatched",
    "title": "Million Dollar Listing Los Angeles",
    "tmdb": 16859
+  },
+  {
+   "category": "TV series",
+   "date": "1984-09-30",
+   "files": 22,
+   "group": "Series",
+   "key": "tv|Murder She Wrote",
+   "kind": "tv",
+   "next_ep": {
+    "e": 4,
+    "name": "Hooray for Homicide",
+    "s": 1,
+    "still": "/atqQnG4YCkRsFsZpbSIlKD8b244.jpg"
+   },
+   "order": "000",
+   "overview": "An unassuming mystery writer turned sleuth uses her professional insight to help solve real-life homicide cases.",
+   "poster": "/3UxBFG4fiuZ0P9n2sCrjXh64Avy.jpg",
+   "progress": [
+    2,
+    22
+   ],
+   "status": "progress",
+   "title": "Murder, She Wrote",
+   "tmdb": 484
   },
   {
    "category": "TV series",
@@ -26544,5 +26568,5 @@
    "year": 1959
   }
  ],
- "updated": "2026-11-13T23:33Z"
+ "updated": "2026-11-13T23:37Z"
 }

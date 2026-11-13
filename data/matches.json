@@ -5855,6 +5855,14 @@
   "title": "Million Dollar Listing Los Angeles",
   "tmdb": 16859
  },
+ "tv|Murder She Wrote": {
+  "date": "1984-09-30",
+  "kind": "tv",
+  "overview": "An unassuming mystery writer turned sleuth uses her professional insight to help solve real-life homicide cases.",
+  "poster": "/3UxBFG4fiuZ0P9n2sCrjXh64Avy.jpg",
+  "title": "Murder, She Wrote",
+  "tmdb": 484
+ },
  "tv|Rick and Morty": {
   "date": "2013-12-02",
   "kind": "tv",
