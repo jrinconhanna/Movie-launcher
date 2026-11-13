@@ -2730,3 +2730,25 @@
 ./z- Other/5- Concerts/Michael Jackson - Live in Munich (1997).mp4
 ./z- Other/5- Concerts/An Evening With Howard Keel, Part One (1985).mp4
 ./z- Other/5- Concerts/An Evening With Howard Keel, Part Two (1985).mp4
+./z- Other/2- TV Series/Murder She Wrote/Murder, She Wrote (1984) - 01x01 - The Murder of Sherlock Holmes.mp4
+./z- Other/2- TV Series/Murder She Wrote/Murder, She Wrote (1984) - 01x02 - Deadly Lady.mp4
+./z- Other/2- TV Series/Murder She Wrote/Murder, She Wrote (1984) - 01x03 - Birds of a Feather.mp4
+./z- Other/2- TV Series/Murder She Wrote/Murder, She Wrote (1984) - 01x04 - Hooray for Homicide.mp4
+./z- Other/2- TV Series/Murder She Wrote/Murder, She Wrote (1984) - 01x05 - It`s a Dog`s Life.mp4
+./z- Other/2- TV Series/Murder She Wrote/Murder, She Wrote (1984) - 01x06 - Lovers and Other Killers.mp4
+./z- Other/2- TV Series/Murder She Wrote/Murder, She Wrote (1984) - 01x07 - Hit, Run and Homicide.mp4
+./z- Other/2- TV Series/Murder She Wrote/Murder, She Wrote (1984) - 01x08 - We`re Off to Kill the Wizard.mp4
+./z- Other/2- TV Series/Murder She Wrote/Murder, She Wrote (1984) - 01x09 - Death Takes a Curtain Call.mp4
+./z- Other/2- TV Series/Murder She Wrote/Murder, She Wrote (1984) - 01x10 - Death Casts a Spell.mp4
+./z- Other/2- TV Series/Murder She Wrote/Murder, She Wrote (1984) - 01x11 - Capitol Offense.mp4
+./z- Other/2- TV Series/Murder She Wrote/Murder, She Wrote (1984) - 01x12 - Broadway Malady.mp4
+./z- Other/2- TV Series/Murder She Wrote/Murder, She Wrote (1984) - 01x13 - Murder to a Jazz Beat.mp4
+./z- Other/2- TV Series/Murder She Wrote/Murder, She Wrote (1984) - 01x14 - My Johnny Lies Over the Ocean.mp4
+./z- Other/2- TV Series/Murder She Wrote/Murder, She Wrote (1984) - 01x15 - Paint Me a Murder.mp4
+./z- Other/2- TV Series/Murder She Wrote/Murder, She Wrote (1984) - 01x16 - Tough Guys Don`t Die.mp4
+./z- Other/2- TV Series/Murder She Wrote/Murder, She Wrote (1984) - 01x17 - Sudden Death.mp4
+./z- Other/2- TV Series/Murder She Wrote/Murder, She Wrote (1984) - 01x18 - Footnote to Murder.mp4
+./z- Other/2- TV Series/Murder She Wrote/Murder, She Wrote (1984) - 01x19 - Murder Takes the Bus.mp4
+./z- Other/2- TV Series/Murder She Wrote/Murder, She Wrote (1984) - 01x20 - Armed Response.mp4
+./z- Other/2- TV Series/Murder She Wrote/Murder, She Wrote (1984) - 01x21 - Murder at the Oasis.mp4
+./z- Other/2- TV Series/Murder She Wrote/Murder, She Wrote (1984) - 01x22 - Funeral at Fifty-Mile.mp4
