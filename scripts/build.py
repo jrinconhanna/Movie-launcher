@@ -347,7 +347,7 @@ def main():
     stills = load("stills.json", {})  # next episode per show: {tid: {"k": seen-signature, "at": iso, "ep": {...}}}
     def next_ep(tid, seen, files):
         """The next episode to watch and its TMDB still (V2.4.2: Next shows the picture of what plays next)."""
-        sig = f"v2:{len(seen)}:{max(seen) if seen else ''}:{len(files)}"
+        sig = f"v3:{len(seen)}:{max(seen) if seen else ''}:{len(files)}"
         c = stills.get(str(tid))
         if c and c.get("k") == sig and c.get("at", "") > (datetime.datetime.utcnow() - datetime.timedelta(days=30)).isoformat():
             return c["ep"]
@@ -373,12 +373,25 @@ def main():
                 if not ep:
                     return None
                 s0, e0 = ep.get("season_number", s0), ep.get("episode_number")
-            r = {"s": s0, "e": e0, "name": (ep or {}).get("name") or "", "still": (ep or {}).get("still_path")}
+            r = {"s": s0, "e": e0, "name": (ep or {}).get("name") or "", "still": (ep or {}).get("still_path"), "rt": (ep or {}).get("runtime") or None}  # rt: episode length in minutes (V2.4.2 Total length)
             stills[str(tid)] = {"k": sig, "at": datetime.datetime.utcnow().isoformat(), "ep": r}
             return r
         except Exception as e:
             print("TMDB next episode failed:", tid, e)
             return c["ep"] if c else None
+
+    runtimes = load("runtimes.json", {})  # movie length in minutes, {tmdb: min}; fetched once (V2.4.2 Total length)
+    def movie_rt(tid):
+        k = str(tid)
+        if k in runtimes and runtimes[k] is not None:
+            return runtimes[k]
+        try:
+            runtimes[k] = tmdb_get(f"/movie/{tid}", {}, token).get("runtime") or None
+            time.sleep(0.03)
+        except Exception as e:
+            print("TMDB runtime failed:", tid, e)
+            runtimes.setdefault(k, None)
+        return runtimes[k]
 
     out, unmatched = [], []
     sugg = load("suggestions.json", {})  # cached loose-search candidates, checked by hand before use
@@ -415,12 +428,17 @@ def main():
                     "kind": m["kind"], "tmdb": m["tmdb"], "title": m["title"],
                     "date": m["date"], "poster": m["poster"], "overview": m["overview"],
                     "status": status, "progress": prog, "files": it["files"]})
+        if m["kind"] == "movie":
+            rt = movie_rt(m["tmdb"])
+            if rt:
+                out[-1]["rt"] = rt
         if m["kind"] == "tv" and status != "watched":
             nx = next_ep(m["tmdb"], watched_eps.get(m["tmdb"], set()), it["eps"])
             if nx:
                 out[-1]["next_ep"] = nx
 
     save("epcounts.json", epc)
+    save("runtimes.json", {k: v for k, v in runtimes.items() if v})
     save("stills.json", {k: v for k, v in stills.items() if int(k) in {o["tmdb"] for o in out}})
     save("suggestions.json", {k: v for k, v in sugg.items() if k in items})
     save("library.json", {"updated": time.strftime("%Y-%m-%dT%H:%MZ", time.gmtime()),

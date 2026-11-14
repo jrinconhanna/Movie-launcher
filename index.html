@@ -181,7 +181,7 @@ header{position:sticky}#nowslim .th{position:relative;aspect-ratio:16/9;border-r
 #nowslim.istoc:before{content:'';position:absolute;left:0;top:12px;bottom:12px;width:3px;border-radius:2px;background:#a07cf0}
 html.p2light #nowslim{background:var(--surface)}
 @media (min-width:701px){#nowslim{max-width:900px;grid-template-columns:260px minmax(0,1fr);gap:18px}}
-#nowbot{position:fixed;z-index:40;left:0;right:0;bottom:0;padding:0 12px calc(10px + env(safe-area-inset-bottom));pointer-events:none;transform:translateY(110%);opacity:0;transition:transform .28s ease,opacity .28s ease}
+#nowbot{position:fixed;z-index:40;left:0;right:0;bottom:0;padding:8px 12px calc(10px + env(safe-area-inset-bottom));background:var(--bg);border-top:1px solid var(--line);pointer-events:none;transform:translateY(110%);opacity:0;transition:transform .28s ease,opacity .28s ease}
 #nowbot.show{transform:none;opacity:1}#nowbot .in{pointer-events:auto;display:flex;align-items:center;gap:12px;max-width:900px;padding:10px 12px;border-radius:16px;background:#2a2a2e;border:1px solid rgba(255,255,255,.08);box-shadow:0 8px 28px rgba(0,0,0,.5);cursor:pointer;position:relative}
 #nowbot .th{width:96px;aspect-ratio:16/9;border-radius:8px;background:#333 center/cover;flex:none}#nowbot .x{flex:1;min-width:0}#nowbot b{display:block;font:600 15px/1.25 var(--font);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}#nowbot small{display:block;font-size:12px;color:var(--muted);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 #nowbot .pl{width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.92);color:#111;display:grid;place-items:center;font-size:14px;padding-left:2px;flex:none;box-sizing:border-box}
@@ -189,6 +189,7 @@ html.p2light #nowslim{background:var(--surface)}
 html.p2light #nowbot .in{background:var(--surface)}
 @media (max-width:700px){html.pvnext #nowbot{bottom:calc(60px + env(safe-area-inset-bottom));padding-bottom:8px}}
 @media (min-width:701px){#nowbot{padding-left:14px}#nowbot .th{width:120px}#nowbot b{font-size:16px}}
+.nowc .lenb{position:absolute;right:10px;bottom:10px;background:rgba(0,0,0,.72);color:#fff;font:700 12px var(--font);padding:3px 7px;border-radius:6px}
 .nowlbl{grid-column:1/-1;font:700 10px var(--font);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:10px 0 0}
 @media (min-width:701px){.nowc{display:grid;grid-template-columns:min(480px,50%) 1fr}.nowc .bd{padding:22px}.nowc b{font-size:24px}.nowc small{font-size:15px}}
 .vrl{border:0;background:none;color:inherit;font:inherit;padding:0;cursor:pointer;text-decoration:underline dotted;text-underline-offset:3px}
@@ -542,7 +543,7 @@ html .ic.wm.open .opts button.on{background:#000;color:#fff;outline:2px solid #f
     if (it.poster) { var img = document.createElement('img'); img.loading = 'lazy'; img.alt = ''; img.src = 'https://image.tmdb.org/t/p/w342' + it.poster; a.appendChild(img); }
     else { var ph = document.createElement('div'); ph.className = 'ph'; ph.textContent = it.title; a.appendChild(ph); }
     if (isStarted(it)) { var mb = document.createElement('span'); mb.className = 'badge'; mb.textContent = paused[it.key] + '%'; a.appendChild(mb); if (BAR) { var mpb = document.createElement('span'); mpb.className = 'pbar'; var mpf = document.createElement('i'); mpf.style.width = Math.max(3, paused[it.key]) + '%'; mpb.appendChild(mpf); a.appendChild(mpb); } }
-    if (it.status === 'progress' && it.progress) { var bd = document.createElement('span'); bd.className = 'badge'; bd.textContent = it.progress[0] + '/' + it.progress[1]; a.appendChild(bd); }
+    if (it.status === 'progress' && it.progress) { var bd = document.createElement('span'); bd.className = 'badge'; bd.textContent = it.progress[0] + '/' + it.progress[1]; a.appendChild(bd); } else if (NEXT && it.kind === 'movie' && it.rt) { var lbd = document.createElement('span'); lbd.className = 'badge'; lbd.textContent = fmtLen(it.rt); a.appendChild(lbd); }
     if (BAR && it.status === 'progress' && it.progress && it.progress[1]) { var pb = document.createElement('span'); pb.className = 'pbar'; var pf = document.createElement('i'); pf.style.width = Math.max(3, Math.round(100 * it.progress[0] / it.progress[1])) + '%'; pb.appendChild(pf); a.appendChild(pb); }
     d.appendChild(a);
     var t = document.createElement('div'); t.className = 't'; t.textContent = it.title; d.appendChild(t);
@@ -888,10 +889,11 @@ html .ic.wm.open .opts button.on{background:#000;color:#fff;outline:2px solid #f
     if (r.it) return r.it.poster ? { src: 'https://image.tmdb.org/t/p/' + (mode === 'port' ? 'w185' : 'w342') + r.it.poster, pt: mode !== 'port' } : null;
     var nv = r.f.next; if (mode === 'video' && nv && (nv.cover || nv.frame)) return { src: nv.cover || nv.frame };
     if (r.f.cover) return { src: r.f.cover, pt: false }; return nv && (nv.cover || nv.frame) ? { src: nv.cover || nv.frame } : null; }
-  function p2Prog(r) { if (r.it) { var it = r.it; var ne = it.next_ep, se = ne ? 'S' + ne.s + ' E' + ne.e : '';
+  function fmtLen(m) { if (!m) return ''; return m < 60 ? m + 'm' : Math.floor(m / 60) + 'h' + (m % 60 ? ' ' + (m % 60) + 'm' : ''); } /* V2.4.2 Total length (staging): 42m, 1h 52m */
+  function p2Prog(r) { if (r.it) { var it = r.it; var ne = it.next_ep, se = ne ? 'S' + ne.s + ' E' + ne.e + (NEXT && ne.rt ? ' \u00b7 ' + fmtLen(ne.rt) : '') : '';
       if (it.kind === 'tv' && it.progress) return { t: ne && ne.name ? ne.name : 'Episode ' + Math.min(it.progress[0] + 1, it.progress[1]) + ' of ' + it.progress[1], m: it.title + (se ? ' · ' + se : ''), n: it.progress[0], of: it.progress[1], c: it.progress[0] + '/' + it.progress[1], v: 0, badge: se };
       if (it.kind === 'tv' && ne) return { t: ne.name || it.title, m: it.title + ' · ' + se, c: '', v: 0, badge: se };
-      if (it.kind === 'movie') { var pc = paused[it.key]; return { t: it.title, m: year(it) + (it.category ? ' · ' + it.category : ''), c: pc != null ? Math.round(pc) + '%' : '', v: pc || 0, badge: pc != null ? Math.round(pc) + '%' : '' }; }
+      if (it.kind === 'movie') { var pc = paused[it.key]; return { t: it.title, m: year(it) + (it.category ? ' · ' + it.category : ''), c: pc != null ? Math.round(pc) + '%' : '', v: pc || 0, badge: (pc != null ? Math.round(pc) + '%' : '') + (NEXT && it.rt ? (pc != null ? ' \u00b7 ' : '') + fmtLen(it.rt) : '') }; }
       return { t: it.title, m: it.category || '', c: '', v: 0 }; }
     var f = r.f; return { t: f.next ? f.next.title : 'All watched', m: f.where, n: f.done, of: f.total, c: f.done + '/' + f.total, v: 0, badge: f.next ? (f.vids.indexOf(f.next) + 1) + '/' + f.total : '' }; }
   function p2Play(r) { if (r.it) { notePlay('i:' + sid(r.it)); go(link(r.it)); } else if (r.f.next) playLearn(r.f.next); }
@@ -945,11 +947,12 @@ html .ic.wm.open .opts button.on{background:#000;color:#fff;outline:2px solid #f
     window.addEventListener('scroll', onS, { passive: true }); window.addEventListener('touchstart', ts, { passive: true }); window.addEventListener('touchend', te, { passive: true });
     nowObs = { disconnect: function () { window.removeEventListener('scroll', onS); window.removeEventListener('touchstart', ts); window.removeEventListener('touchend', te); clearTimeout(snapT); } }; chk(); }
   function p2NowCard(g0, onId) { var c = miniItem(); if (!c) return; var r = onId ? p2Res(onId) : null, img = '', t = '', sub = '', pc = 0, play;
-    if (r) { var pr = p2Prog(r), im = p2Img(r, 'video'); img = im ? im.src : ''; t = pr.t; sub = r.it ? pr.m.replace(r.it.title + ' · ', '') + ' \u2022 ' + r.it.title : pr.m; var isToc = r.id === p2FirstId(), nudge = isToc && pr.of > pr.n ? (pr.of - pr.n) + ' left to finish' : ''; if (pr.of) { pc = Math.round(100 * pr.n / pr.of); sub += ' \u2022 ' + pr.c; } /* 14 Nov: title first, then S5 E8 \u2022 show \u2022 39/40 */ play = function () { p2Play(r); }; }
+    if (r) { var pr = p2Prog(r), im = p2Img(r, 'video'); img = im ? im.src : ''; t = pr.t; sub = r.it ? pr.m.replace(r.it.title + ' · ', '') + ' \u2022 ' + r.it.title : pr.m; var lenB = r.it ? (r.it.kind === 'movie' ? fmtLen(r.it.rt) : (r.it.next_ep ? fmtLen(r.it.next_ep.rt) : '')) : '', isToc = r.id === p2FirstId(), nudge = isToc && pr.of > pr.n ? (pr.of - pr.n) + ' left to finish' : ''; if (pr.of) { pc = Math.round(100 * pr.n / pr.of); sub += ' \u2022 ' + pr.c; } /* 14 Nov: title first, then S5 E8 \u2022 show \u2022 39/40 */ play = function () { p2Play(r); }; }
     else if (c.it) { t = c.it.title; img = c.it.poster ? 'https://image.tmdb.org/t/p/w500' + c.it.poster : ''; sub = c.it.kind === 'tv' && c.it.next_ep ? 'Next: S' + c.it.next_ep.s + ' E' + c.it.next_ep.e : 'Movie'; play = function () { notePlay('i:' + sid(c.it)); go(link(c.it)); }; }
     else { t = c.v.title; img = c.v.cover || ''; sub = 'Tech' + (c.v.course ? ' · ' + c.v.course : ''); play = function () { playLearn(c.v); }; }
     var d = document.createElement('div'); d.className = 'nowc'; d.innerHTML = '<div class="im"><span class="lb">Now watching</span><span class="npl" aria-label="Continue">▶</span></div><div class="bd"><b></b><small></small>' + (pc ? '<span class="pg"><i></i></span>' : '') + '</div>';
     if (img) d.querySelector('.im').style.backgroundImage = 'url("' + img + '")'; d.querySelector('b').textContent = t; d.querySelector('small').textContent = sub; if (pc) d.querySelector('.pg i').style.width = pc + '%';
+    if (typeof lenB !== 'undefined' && lenB) { var lb2 = document.createElement('span'); lb2.className = 'lenb'; lb2.textContent = lenB; d.querySelector('.im').appendChild(lb2); }
     if (typeof isToc !== 'undefined' && isToc) { d.classList.add('istoc'); if (nudge) { var nu = document.createElement('div'); nu.className = 'p2nudge'; nu.textContent = nudge; d.querySelector('.bd').appendChild(nu); } }
     d.onclick = play; g0.appendChild(d); nowSlim(img, t, sub.split(' \u2022 ').slice(0, 2).join(' \u2022 '), play, d, typeof isToc !== 'undefined' && isToc); var l = document.createElement('div'); l.className = 'nowlbl'; l.textContent = 'Switch the channel'; g0.appendChild(l); }
   function p2Watching(g0) { if (!p2) p2Seed(); p2Fix(); var onId = NEXT ? p2OnId() : null; if (NEXT) p2NowCard(g0, onId); var wrap = document.createElement('div'); wrap.className = 'p2list'; g0.appendChild(wrap); var first = true;
