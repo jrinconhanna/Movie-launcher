@@ -138,6 +138,12 @@ body.sorting .ic { opacity: 0 !important; }
 /* ?proto v2 (V2.4.2): Watching shelf by kind, Next shelf by kind */
 .p2bar{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:6px;align-items:center;font:600 12px var(--font);color:var(--muted);margin:2px 0 6px}.p2bar button{font:600 12px var(--font);border:1px solid var(--line,#ddd);background:transparent;color:var(--fg);border-radius:999px;padding:4px 10px;cursor:pointer}.p2bar button[aria-pressed=true]{background:var(--fg);color:var(--bg)}
 .p2bar.bot{margin:18px 0 6px}
+/* ?next (V2.4.2 prototype): mini player, resume what I watched last */
+#mini{position:fixed;z-index:40;left:50%;transform:translateX(-50%);bottom:calc(12px + env(safe-area-inset-bottom));width:min(560px,calc(100% - 24px));box-sizing:border-box;display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:16px;background:#1d1d1f;color:#fff;box-shadow:0 6px 18px rgba(0,0,0,.3);border:1px solid rgba(255,255,255,.12);cursor:pointer;font-family:var(--font)}
+#mini .th{width:48px;height:32px;border-radius:6px;background:#444 center/cover;flex:none}#mini .x{flex:1;min-width:0}#mini b{display:block;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}#mini small{display:block;font-size:12px;color:#bbb;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#mini .bar{display:block;height:3px;background:#555;border-radius:2px;margin-top:4px}#mini .bar i{display:block;height:100%;background:#d63c3c;border-radius:2px}
+#mini .pl{width:36px;height:36px;border-radius:50%;border:0;background:#fff;color:#111;font-size:14px;flex:none;cursor:pointer}
+body.hasmini{padding-bottom:84px}body.hasmini .toast{bottom:calc(84px + env(safe-area-inset-bottom))}
 .p2list{grid-column:1/-1;max-width:900px;width:100%}
 .p2r{display:grid;grid-template-columns:50% minmax(0,1fr);gap:14px;align-items:start;padding:12px 0;border-bottom:1px solid var(--line,#e5e5e5);cursor:pointer;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
 .p2r.top{border:2px solid #d63c3c;border-radius:16px;padding:10px;margin:2px 0 8px;background:rgba(214,60,60,.06)}
@@ -325,8 +331,27 @@ html .ic.wm.open .opts button.on{background:#000;color:#fff;outline:2px solid #f
   }
   var paused = ls('paused', {});  // key -> % watched
   function isStarted(it) { return it.kind === 'movie' && paused[it.key] != null && !isWatched(it); }
+  var lastPlay = ls('lastplay', null), tplay = []; // ?next mini player: last Tech video played here, Trakt paused movies/episodes (last 7 days)
+  function loadPlay() { if (!NEXT) return; tapi('/sync/playback').then(function (r) { return r.ok ? r.json() : []; }).then(function (list) {
+      tplay = (list || []).filter(function (x) { return x.progress >= 2 && x.progress < 95 && Date.now() - Date.parse(x.paused_at) <= 7 * 864e5; }).map(function (x) {
+        var it = x.movie ? bySid('m' + (x.movie.ids && x.movie.ids.tmdb)) : x.show ? bySid('t' + (x.show.ids && x.show.ids.tmdb)) : null;
+        return it ? { it: it, p: Math.round(x.progress), at: Date.parse(x.paused_at), ep: x.episode ? { s: x.episode.season, e: x.episode.number } : null } : null; }).filter(Boolean);
+      renderMini(); }).catch(function () {}); }
+  function renderMini() { if (!NEXT) return; var c = null, i;
+    tplay.forEach(function (x) { if (!c || x.at > c.at) c = x; });
+    if (lastPlay && Date.now() - lastPlay.at <= 7 * 864e5 && learnDone.indexOf(lastPlay.k) < 0 && (!c || lastPlay.at > c.at)) for (i = 0; i < learn.length; i++) if (lid(learn[i]) === lastPlay.k) { c = { v: learn[i], at: lastPlay.at }; break; }
+    var b = document.getElementById('mini'); if (!c) { if (b) b.remove(); document.body.classList.remove('hasmini'); return; }
+    if (!b) { b = document.createElement('div'); b.id = 'mini'; document.body.appendChild(b); } document.body.classList.add('hasmini');
+    b.innerHTML = '<span class="th"></span><span class="x"><b></b><small></small>' + (c.it ? '<span class="bar"><i></i></span>' : '') + '</span><button type="button" class="pl" aria-label="Resume">▶</button>';
+    var img = c.it ? (c.it.poster ? 'https://image.tmdb.org/t/p/w185' + c.it.poster : '') : (c.v.cover || c.v.frame || '');
+    if (img) b.querySelector('.th').style.backgroundImage = 'url("' + img + '")';
+    b.querySelector('b').textContent = c.it ? c.it.title : c.v.title;
+    b.querySelector('small').textContent = c.it ? (c.ep ? 'S' + c.ep.s + ' E' + c.ep.e + ' · ' : '') + c.p + '% watched' : 'Tech' + (c.v.course ? ' · ' + c.v.course : '');
+    if (c.it) b.querySelector('.bar i').style.width = c.p + '%';
+    b.onclick = function () { if (c.it) go(link(c.it)); else playLearn(c.v); }; }
   function loadPaused() {
     if (!tok || !items.length) return;
+    loadPlay();
     tapi('/sync/playback/movies').then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); }).then(function (list) {
       var m = {};
       list.forEach(function (x) { var id = x.movie && x.movie.ids && x.movie.ids.tmdb; if (!id || x.progress < 2 || x.progress >= 95 || Date.now() - Date.parse(x.paused_at) > 90 * 864e5) return; var it = bySid('m' + id); if (it && (m[it.key] == null || x.progress > m[it.key])) m[it.key] = Math.round(x.progress); });
@@ -402,7 +427,7 @@ html .ic.wm.open .opts button.on{background:#000;color:#fff;outline:2px solid #f
   }
   function techRootFolders() { var keep = state.course, cat = state.cat; state.course = ''; state.cat = 'All'; var r = techLevel().list; state.course = keep; state.cat = cat; return r; }
   function techUp() { var P = state.course.split('/'); P.pop(); var to = P.join('/'); state.course = ''; var L = techLevel(); state.course = L.implicit && L.P.join('/') === to ? '' : to; save(); render(); } // from a chip that opened straight into its folder, going up lands back on the chip
-  function renderTop() {
+  function renderTop() { renderMini();
     if (P2ON && V24 && !p2 && learn.length && items.length) p2Seed();
     var t = $('top'); t.innerHTML = ''; t.hidden = !AFTER; if (!AFTER) return;
     TOP.forEach(function (s) {
@@ -565,6 +590,7 @@ html .ic.wm.open .opts button.on{background:#000;color:#fff;outline:2px solid #f
   }
   function go(u) { (window.__go || function (x) { location.href = x; })(u); }
   function playLearn(v) {
+    if (NEXT) { lastPlay = { k: lid(v), at: Date.now() }; lsSet('lastplay', lastPlay); }
     // V2.4: copy the file name (e.g. "2001-05 - WWDC"), unique in Infuse where titles repeat
     var q = V24 && v.v24 && v.file ? v.file.replace(/\.[^.\/]+$/, '') : v.title;
     copyText(q).then(function (ok) {
