@@ -347,7 +347,7 @@ def main():
     stills = load("stills.json", {})  # next episode per show: {tid: {"k": seen-signature, "at": iso, "ep": {...}}}
     def next_ep(tid, seen, files):
         """The next episode to watch and its TMDB still (V2.4.2: Next shows the picture of what plays next)."""
-        sig = f"v3:{len(seen)}:{max(seen) if seen else ''}:{len(files)}"
+        sig = f"v4:{len(seen)}:{max(seen) if seen else ''}:{len(files)}"
         c = stills.get(str(tid))
         if c and c.get("k") == sig and c.get("at", "") > (datetime.datetime.utcnow() - datetime.timedelta(days=30)).isoformat():
             return c["ep"]
@@ -373,7 +373,8 @@ def main():
                 if not ep:
                     return None
                 s0, e0 = ep.get("season_number", s0), ep.get("episode_number")
-            r = {"s": s0, "e": e0, "name": (ep or {}).get("name") or "", "still": (ep or {}).get("still_path"), "rt": (ep or {}).get("runtime") or None}  # rt: episode length in minutes (V2.4.2 Total length)
+            r = {"s": s0, "e": e0, "name": (ep or {}).get("name") or "", "still": (ep or {}).get("still_path"), "rt": (ep or {}).get("runtime") or None,  # rt: episode length in minutes (V2.4.2 Total length)
+                 "sn": len([x for x in eps if x.get("episode_number")]) or None, "sw": len({e for (s, e) in seen if s == s0})}  # season count (V2.4.2): episodes in this season, watched in it
             stills[str(tid)] = {"k": sig, "at": datetime.datetime.utcnow().isoformat(), "ep": r}
             return r
         except Exception as e:
