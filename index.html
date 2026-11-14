@@ -883,7 +883,7 @@ html .ic.wm.open .opts button.on{background:#000;color:#fff;outline:2px solid #f
         a.push(['⏸ Park · back to Next', function () { p2Leave(k, r.id, 'park'); }]); a.push(['✕ Remove', function () { p2Leave(k, r.id, 'remove'); }]);
         if (r.f) a.push(['↗ Open folder', function () { top = 'Discover'; state.shelf = 'Tech'; state.cat = 'All'; state.course = r.f.path; save(); render(); }]); return a; }, function () { p2Play(r); }); }); });
     if (first) { var e = document.createElement('div'); e.className = 'empty'; e.textContent = 'Nothing on Watching yet. Open Next and move something to the top of a kind.'; wrap.appendChild(e); } p2Bar(g0, true); }
-  function p2Next(gn) { if (!p2) p2Seed(); p2Fix(); p2Bar(gn); var k = p2.chip || 'Series';
+  function p2Next(gn) { if (!p2) p2Seed(); p2Fix(); var k = p2.chip || 'Series';
     var ch = document.createElement('div'); ch.className = 'p2chips'; P2K.forEach(function (x) { var b = document.createElement('button'); b.type = 'button'; b.setAttribute('aria-pressed', x === k ? 'true' : 'false'); b.innerHTML = p2Lab(x) + ' <small></small>'; b.querySelector('small').textContent = p2.lists[x].length; b.onclick = function () { p2.chip = x; p2Save(); render(); }; ch.appendChild(b); }); gn.appendChild(ch);
     var wrap = document.createElement('div'); wrap.className = 'p2list'; gn.appendChild(wrap); var rs = p2.lists[k].map(p2Res).filter(Boolean), mode = p2.lay === 'x13' ? 'port' : p2.lay === 'x11b' ? 'video' : 'art';
     if (!rs.length) { var e = document.createElement('div'); e.className = 'empty'; e.textContent = 'Nothing here yet. In Discover, ⋯ › ⤒ Next top or ＋ Next bottom.'; wrap.appendChild(e); }
@@ -898,7 +898,7 @@ html .ic.wm.open .opts button.on{background:#000;color:#fff;outline:2px solid #f
       var nb = tx.querySelector('.nb'); if (pr.of) nb.firstChild.style.width = Math.round(100 * pr.n / pr.of) + '%'; else if (pr.v) nb.firstChild.style.width = pr.v + '%'; else nb.style.visibility = notStarted ? 'hidden' : 'visible';
       d.appendChild(tx); var gr = document.createElement('span'); gr.className = 'gr'; gr.textContent = '≡'; d.appendChild(gr); wrap.appendChild(d); p2Drag(d, k, r.id);
       var acts = function () { return [['⤒ Move to top' + (P2P[k] ? ' (on Watching)' : ''), function () { p2Move(k, r.id, 'top'); render(); }], ['↑ Move up', function () { p2Move(k, r.id, 'up'); render(); }], ['⤓ Move to bottom', function () { p2Move(k, r.id, 'bottom'); render(); }], ['✕ Remove from Next', function () { var L = p2.lists[k]; L.splice(L.indexOf(r.id), 1); p2Save(); render(); }]]; };
-      p2Hold(d, acts, function (e) { p2Menu(e.clientX, e.clientY, acts()); }); }); }
+      p2Hold(d, acts, function (e) { p2Menu(e.clientX, e.clientY, acts()); }); }); p2Bar(gn, true); }
   function p2Add(id, k, pos) { if (!p2) p2Seed(); P2K.forEach(function (x) { var L = p2.lists[x], i = L.indexOf(id); if (i >= 0) L.splice(i, 1); }); if (pos === 'top') p2.lists[k].unshift(id); else p2.lists[k].push(id); p2Save(); toast('In Next › ' + p2Lab(k) + (pos === 'top' ? ' (top: on Watching)' : B1 ? ' · ' + p2.lists[k].length + ' in the list' : ' (bottom)')); render(); }
   function render() {
     renderTop(); renderTabs();
