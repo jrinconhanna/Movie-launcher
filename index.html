@@ -143,7 +143,7 @@ body.sorting .ic { opacity: 0 !important; }
 #mini .th{width:48px;height:32px;border-radius:6px;background:#444 center/cover;flex:none}#mini .x{flex:1;min-width:0}#mini b{display:block;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}#mini small{display:block;font-size:12px;color:#bbb;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 #mini .bar{display:block;height:3px;background:#555;border-radius:2px;margin-top:4px}#mini .bar i{display:block;height:100%;background:#d63c3c;border-radius:2px}
 #mini .pl{width:36px;height:36px;border-radius:50%;border:0;background:#fff;color:#111;font-size:14px;flex:none;cursor:pointer}
-body.hasmini{padding-bottom:84px}body.hasmini .toast{bottom:calc(84px + env(safe-area-inset-bottom))}
+body.hasmini{padding-bottom:84px}body.hasmini::after{content:'';position:fixed;left:0;right:0;bottom:0;height:calc(96px + env(safe-area-inset-bottom));background:linear-gradient(to bottom,transparent,var(--bg) 45%);pointer-events:none;z-index:39}html.pvnext .p2r.top,html.pvnext.p2dark .p2r.top{border:1px solid rgba(214,60,60,.6);background:transparent;padding:11px}body.hasmini .toast{bottom:calc(84px + env(safe-area-inset-bottom))}
 .p2list{grid-column:1/-1;max-width:900px;width:100%}
 .p2r{display:grid;grid-template-columns:50% minmax(0,1fr);gap:14px;align-items:start;padding:12px 0;border-bottom:1px solid var(--line,#e5e5e5);cursor:pointer;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
 .p2r.top{border:2px solid #d63c3c;border-radius:16px;padding:10px;margin:2px 0 8px;background:rgba(214,60,60,.06)}
@@ -183,7 +183,7 @@ html .ic.wm.open .opts button.on{background:#000;color:#fff;outline:2px solid #f
   var LEARN = true; // V2.3 live 10 Nov (was the ?v23 preview)
   var V24 = !/[?&]v23\b/.test(location.search); if (V24) document.documentElement.classList.add('v24'); // V2.4 live 11 Nov (?v23 shows the old view for comparison)
   var PROTO = /[?&]proto\b/.test(location.search); // V2.4.2 prototype: subscribe to folders, one channel each on Watching (this device only)
-  var NEXT = /[?&]next\b/.test(location.search); // V2.4.1 preview (Lean onward): items flagged next only show with ?next until Javier says go
+  var NEXT = /[?&]next\b/.test(location.search); if (NEXT) document.documentElement.classList.add('pvnext'); // V2.4.1 preview (Lean onward): items flagged next only show with ?next until Javier says go
   var B1 = true; // 'One set of state buttons' (V2.4.2) piece 1: live 14 Nov on Javier's go
   var P2ON = !/[?&]v241\b/.test(location.search); // V2.4.2 Watching/Next by kind: live 12 Nov (?v241 shows the old shelves)
   var learn = [], learnDone = [], learnWatch = [], forder = {}, vorder = {}; // vorder: your video order per playlist (?next) // forder: your folder order per Tech level ('' = Tech › All), synced via Trakt
