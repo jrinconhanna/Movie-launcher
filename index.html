@@ -164,7 +164,11 @@ html.pvnext .p2r.top,html.pvnext.p2dark .p2r.top{border:1px solid rgba(214,60,60
 .nowc .npl{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:58px;height:58px;border-radius:50%;background:rgba(255,255,255,.92);color:#111;display:grid;place-items:center;font-size:20px;padding-left:3px;box-sizing:border-box;box-shadow:0 6px 20px rgba(0,0,0,.4)}
 .nowc b{font-size:22px}
 html.isstg .nowc .pg i,html.isstg .p2cp .cb i{background:#e8e6e1}
-html.isstg.p2dark .nowc{background:#2a2a2e} /* lighter card background (dark mode) */
+html.isstg.p2dark .nowc{background:#2a2a2e}
+/* staging 14 Nov: TOC focus = thin purple line on the left + 'N left to finish' (no red frame) */
+html.isstg .p2r.top,html.isstg.pvnext .p2r.top,html.isstg.pvnext.p2dark .p2r.top,html.isstg.pvnext.p2light .p2r.top{border:0;border-radius:0;background:transparent;padding:10px 0 10px 12px;margin:0;position:relative}
+html.isstg .p2r.top:before{content:'';position:absolute;left:0;top:10px;bottom:10px;width:3px;border-radius:2px;background:#a07cf0}
+.p2nudge{font:600 12px var(--font);color:#a07cf0;margin-top:6px} /* lighter card background (dark mode) */
 .nowlbl{grid-column:1/-1;font:700 10px var(--font);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:10px 0 0}
 @media (min-width:701px){.nowc{display:grid;grid-template-columns:min(480px,50%) 1fr}.nowc .bd{padding:22px}.nowc b{font-size:24px}.nowc small{font-size:15px}}
 .vrl{border:0;background:none;color:inherit;font:inherit;padding:0;cursor:pointer;text-decoration:underline dotted;text-underline-offset:3px}
@@ -908,7 +912,7 @@ html .ic.wm.open .opts button.on{background:#000;color:#fff;outline:2px solid #f
       var v = document.createElement('div'); v.className = 'p2v'; if (im) { var i = document.createElement('img'); i.loading = 'lazy'; i.alt = ''; i.src = im.src; if (im.pt) i.className = 'pt'; v.appendChild(i); } else { var n = document.createElement('span'); n.className = 'ln'; n.textContent = r.f ? '▶' : '·'; v.appendChild(n); }
       if (pr.badge) { var bd = document.createElement('span'); bd.className = 'badge'; bd.textContent = pr.badge; v.appendChild(bd); } var pb = document.createElement('span'); pb.className = 'pbar'; var pf = document.createElement('i'); pf.style.width = (pr.v || 0) + '%'; pb.appendChild(pf); v.appendChild(pb); d.appendChild(v);
       var tx = document.createElement('div'); tx.innerHTML = '<div class="k"></div><div class="t"></div><div class="m"></div>'; tx.querySelector('.k').textContent = p2Lab(k); tx.querySelector('.t').textContent = pr.t; tx.querySelector('.m').textContent = pr.m;
-      if (pr.of) { var cp = document.createElement('div'); cp.className = 'p2cp'; cp.innerHTML = '<span class="cb"><i></i></span><span></span>'; cp.querySelector('i').style.width = Math.round(100 * pr.n / pr.of) + '%'; cp.lastChild.textContent = pr.c; tx.appendChild(cp); }
+      if (pr.of) { var cp = document.createElement('div'); cp.className = 'p2cp'; cp.innerHTML = '<span class="cb"><i></i></span><span></span>'; cp.querySelector('i').style.width = Math.round(100 * pr.n / pr.of) + '%'; cp.lastChild.textContent = pr.c; tx.appendChild(cp); if (NEXT && d.classList.contains('top') && pr.of > pr.n) { var nu = document.createElement('div'); nu.className = 'p2nudge'; nu.textContent = (pr.of - pr.n) + ' left to finish'; tx.appendChild(nu); } }
       d.appendChild(tx); wrap.appendChild(d);
       p2Hold(d, function () { var a = []; if (r.f && r.f.next) a.push(['✓ Watched this video · the next one comes up', function () { markLearn(r.f.next, true); }]);
         a.push(['✓ Finished' + (r.f ? ' (whole folder)' : '') + ' · next in ' + p2Lab(k) + ' comes up', function () { p2Leave(k, r.id, 'finished'); }]);
