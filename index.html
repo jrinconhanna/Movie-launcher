@@ -172,6 +172,7 @@ html.isstg .p2r.top:before{content:'';position:absolute;left:0;top:10px;bottom:1
 .nowc.istoc{position:relative}.nowc.istoc:before{content:'';position:absolute;left:0;top:14px;bottom:14px;width:3px;border-radius:2px;background:#a07cf0;z-index:1}.nowc .p2nudge{font-size:13px;margin-top:8px} /* lighter card background (dark mode) */
 #nowslim{display:grid;grid-template-columns:50% minmax(0,1fr);gap:14px;align-items:center;padding:10px;border-radius:16px;background:#2a2a2e;cursor:pointer;position:absolute;left:0;right:0;top:calc(100% + 6px);box-shadow:0 8px 24px rgba(0,0,0,.45);opacity:0;transform:translateY(-12px) scale(.98);pointer-events:none;transition:opacity .25s ease,transform .25s ease}
 #nowslim.show{opacity:1;transform:none;pointer-events:auto}
+.nowc{transition:opacity .25s ease}.nowc.gone{opacity:0}
 header{position:sticky}#nowslim .th{position:relative;aspect-ratio:16/9;border-radius:12px;background:#333 center/cover}
 #nowslim .th:after{content:'\25b6';position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.92);color:#111;display:grid;place-items:center;font-size:14px;padding-left:2px;box-sizing:border-box}
 #nowslim .x{min-width:0}#nowslim .tag{display:block;font:700 10px var(--font);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:3px}
@@ -917,7 +918,7 @@ html .ic.wm.open .opts button.on{background:#000;color:#fff;outline:2px solid #f
     if (!sl) { sl = document.createElement('div'); sl.id = 'nowslim'; sl.innerHTML = '<span class="th"></span><span class="x"><span class="tag">Now watching</span><b></b><small></small></span>'; h.appendChild(sl); }
     sl.querySelector('.th').style.backgroundImage = img ? 'url("' + img + '")' : ''; sl.querySelector('b').textContent = t; sl.querySelector('small').textContent = sub; sl.classList.toggle('istoc', !!toc); sl.onclick = play; sl.classList.remove('show');
     if (nowObs) nowObs.disconnect(); var ticking = false; /* show once most of the card has scrolled under the top */
-    function chk() { ticking = false; if (!card.isConnected) return; var hb = h.getBoundingClientRect().bottom, cb = card.getBoundingClientRect(); sl.classList.toggle('show', cb.bottom < hb + cb.height * 0.45); }
+    function chk() { ticking = false; if (!card.isConnected) return; var hb = h.getBoundingClientRect().bottom, cb = card.getBoundingClientRect(); var on = cb.bottom < hb + cb.height * 0.45; sl.classList.toggle('show', on); card.classList.toggle('gone', on); } /* the big card fades out as the slim one fades in */
     function onS() { if (!ticking) { ticking = true; requestAnimationFrame(chk); } }
     window.addEventListener('scroll', onS, { passive: true }); nowObs = { disconnect: function () { window.removeEventListener('scroll', onS); } }; chk(); }
   function p2NowCard(g0, onId) { var c = miniItem(); if (!c) return; var r = onId ? p2Res(onId) : null, img = '', t = '', sub = '', pc = 0, play;
