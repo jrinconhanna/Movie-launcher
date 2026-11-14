@@ -194,7 +194,7 @@ html .ic.wm.open .opts button.on{background:#000;color:#fff;outline:2px solid #f
   var next = [], worder = [], watch = [], parked = [], removed = [], done = [], undone = [];
   function ls(k, d) { try { var v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch (e) { return d; } }
   function lsSet(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} if (SYNC_KEYS.indexOf(k) >= 0 && window.__push) window.__push(); }
-  var SYNC_KEYS = ['worder', 'watch', 'parked', 'next', 'removed', 'done', 'undone', 'learndone', 'learnwatch', 'forder', 'vorder'];
+  var SYNC_KEYS = ['worder', 'watch', 'parked', 'next', 'removed', 'done', 'undone', 'learndone', 'learnwatch', 'forder', 'vorder', 'lastplay'];
   next = ls('next', []); worder = ls('worder', []); watch = ls('watch', []); parked = ls('parked', []); removed = ls('removed', []); done = ls('done', []); undone = ls('undone', []); learnDone = ls('learndone', []); learnWatch = ls('learnwatch', []); forder = ls('forder', {}); vorder = ls('vorder', {}); state = Object.assign(state, ls('view', {})); if (['unwatched', 'watched', 'all'].indexOf(state.wf) < 0) state.wf = 'unwatched'; if (AFTER && state.shelf === 'Watch Next') state.shelf = 'Movies'; if (!LEARN && state.shelf === 'Tech') state.shelf = 'Movies';
   var $ = function (id) { return document.getElementById(id); };
   // ---------- Trakt login (device code, no secret; once per device, renewed on open) ----------
@@ -240,7 +240,7 @@ html .ic.wm.open .opts button.on{background:#000;color:#fff;outline:2px solid #f
   function bySid(x) { for (var i = 0; i < items.length; i++) if (sid(items[i]) === x) return items[i]; return null; }
   function enc(keys) { return keys.map(byKey).filter(function (it) { return it && it.tmdb; }).map(sid); }
   function dec(ids) { return (ids || []).map(bySid).filter(Boolean).map(function (it) { return it.key; }); }
-  function snapshot() { return { v: 1, o: enc(worder), w: enc(watch), p: enc(parked), b: enc(next), r: enc(removed), d: enc(done), u: enc(undone), L: learnDone.slice(), LW: learnWatch.slice(), F: forder, V: vorder, K: p2 ? p2Enc(p2.lists) : undefined }; }
+  function snapshot() { return { v: 1, o: enc(worder), w: enc(watch), p: enc(parked), b: enc(next), r: enc(removed), d: enc(done), u: enc(undone), L: learnDone.slice(), LW: learnWatch.slice(), F: forder, V: vorder, K: p2 ? p2Enc(p2.lists) : undefined, LP: lastPlay || undefined }; }
   function p2Enc(L) { var o = {}; Object.keys(L).forEach(function (k) { o[k] = L[k].map(function (id) { if (id.indexOf('i:') !== 0) return id; var it = byKey(id.slice(2)); return it && it.tmdb ? 'i:' + sid(it) : 'k:' + id.slice(2); }); }); return o; }
   function p2Dec(K) { var o = {}; P2K.forEach(function (k) { o[k] = (K[k] || []).map(function (id) { if (id.indexOf('k:') === 0) return 'i:' + id.slice(2); if (id.indexOf('i:') !== 0) return id; var it = bySid(id.slice(2)); return it ? 'i:' + it.key : null; }).filter(Boolean); }); return o; }
   function listItems(st) {
@@ -261,6 +261,7 @@ html .ic.wm.open .opts button.on{background:#000;color:#fff;outline:2px solid #f
     if (j.L) { learnDone = j.L.slice(); try { localStorage.setItem('learndone', JSON.stringify(learnDone)); } catch (e) {} } else if (learnDone.length) setTimeout(function () { push(true); }, 0);
     if (j.V) { vorder = j.V; try { localStorage.setItem('vorder', JSON.stringify(vorder)); } catch (e) {} } else if (Object.keys(vorder).length) setTimeout(function () { push(true); }, 0);
     if (j.F) { forder = j.F; try { localStorage.setItem('forder', JSON.stringify(forder)); } catch (e) {} } else if (Object.keys(forder).length) setTimeout(function () { push(true); }, 0);
+    if (j.LP && (!lastPlay || j.LP.at > lastPlay.at)) { lastPlay = j.LP; try { localStorage.setItem('lastplay', JSON.stringify(lastPlay)); } catch (e) {} }
     if (j.K) { p2 = { lists: p2Dec(j.K), lay: 'x11b', chip: (p2 && p2.chip) || 'Series' }; try { localStorage.setItem('proto2', JSON.stringify(p2)); } catch (e) {} } else if (p2) setTimeout(function () { push(true); }, 0);
     lastIds = listItems(j).ids; return true;
   }
@@ -331,27 +332,27 @@ html .ic.wm.open .opts button.on{background:#000;color:#fff;outline:2px solid #f
   }
   var paused = ls('paused', {});  // key -> % watched
   function isStarted(it) { return it.kind === 'movie' && paused[it.key] != null && !isWatched(it); }
-  var lastPlay = ls('lastplay', null), tplay = []; // ?next mini player: last Tech video played here, Trakt paused movies/episodes (last 7 days)
-  function loadPlay() { if (!NEXT) return; tapi('/sync/playback').then(function (r) { return r.ok ? r.json() : []; }).then(function (list) {
-      tplay = (list || []).filter(function (x) { return x.progress >= 2 && x.progress < 95 && Date.now() - Date.parse(x.paused_at) <= 7 * 864e5; }).map(function (x) {
-        var it = x.movie ? bySid('m' + (x.movie.ids && x.movie.ids.tmdb)) : x.show ? bySid('t' + (x.show.ids && x.show.ids.tmdb)) : null;
-        return it ? { it: it, p: Math.round(x.progress), at: Date.parse(x.paused_at), ep: x.episode ? { s: x.episode.season, e: x.episode.number } : null } : null; }).filter(Boolean);
-      renderMini(); }).catch(function () {}); }
-  function renderMini() { if (!NEXT) return; var c = null, i;
-    tplay.forEach(function (x) { if (!c || x.at > c.at) c = x; });
-    if (lastPlay && Date.now() - lastPlay.at <= 7 * 864e5 && learnDone.indexOf(lastPlay.k) < 0 && (!c || lastPlay.at > c.at)) for (i = 0; i < learn.length; i++) if (lid(learn[i]) === lastPlay.k) { c = { v: learn[i], at: lastPlay.at }; break; }
-    var b = document.getElementById('mini'); if (!c) { if (b) b.remove(); document.body.classList.remove('hasmini'); return; }
+  var lastPlay = ls('lastplay', null); // ?next mini player: the last thing tapped to play in the launcher {k: 'i:<sid>' | 'v:<video id>', at}, synced via Trakt
+  function notePlay(k) { if (!NEXT) return; lastPlay = { k: k, at: Date.now() }; lsSet('lastplay', lastPlay); renderMini(); }
+  function miniItem() { if (!lastPlay || Date.now() - lastPlay.at > 7 * 864e5) return null; var k = lastPlay.k, i;
+    if (k.indexOf('i:') === 0) { var it = bySid(k.slice(2)); return it && !isWatched(it) ? { it: it } : null; }
+    if (k.indexOf('v:') === 0) { k = k.slice(2); if (learnDone.indexOf(k) >= 0) return null; for (i = 0; i < learn.length; i++) if (lid(learn[i]) === k) return { v: learn[i] }; }
+    return null; }
+  function renderMini() { if (!NEXT) return; var c = miniItem(), b = document.getElementById('mini');
+    if (!c) { if (b) b.remove(); document.body.classList.remove('hasmini'); return; }
     if (!b) { b = document.createElement('div'); b.id = 'mini'; document.body.appendChild(b); } document.body.classList.add('hasmini');
-    b.innerHTML = '<span class="th"></span><span class="x"><b></b><small></small>' + (c.it ? '<span class="bar"><i></i></span>' : '') + '</span><button type="button" class="pl" aria-label="Resume">▶</button>';
-    var img = c.it ? (c.it.poster ? 'https://image.tmdb.org/t/p/w185' + c.it.poster : '') : (c.v.cover || c.v.frame || '');
+    var it = c.it, sub = '', pc = 0;
+    if (it && it.kind === 'tv') { var ne = it.next_ep; sub = ne ? 'Next: S' + ne.s + ' E' + ne.e + (ne.name ? ' · ' + ne.name : '') : 'Series'; if (it.progress) { pc = Math.round(100 * it.progress[0] / it.progress[1]); sub += ' · ' + it.progress[0] + '/' + it.progress[1]; } }
+    else if (it) { pc = paused[it.key] != null ? Math.round(paused[it.key]) : 0; sub = 'Movie' + (pc ? ' · ' + pc + '% watched' : ''); }
+    else sub = 'Tech' + (c.v.course ? ' · ' + c.v.course : '');
+    b.innerHTML = '<span class="th"></span><span class="x"><b></b><small></small>' + (pc ? '<span class="bar"><i></i></span>' : '') + '</span><button type="button" class="pl" aria-label="Resume">▶</button>';
+    var img = it ? (it.kind === 'tv' && it.next_ep && it.next_ep.still ? 'https://image.tmdb.org/t/p/w185' + it.next_ep.still : it.poster ? 'https://image.tmdb.org/t/p/w185' + it.poster : '') : (c.v.cover || c.v.frame || '');
     if (img) b.querySelector('.th').style.backgroundImage = 'url("' + img + '")';
-    b.querySelector('b').textContent = c.it ? c.it.title : c.v.title;
-    b.querySelector('small').textContent = c.it ? (c.ep ? 'S' + c.ep.s + ' E' + c.ep.e + ' · ' : '') + c.p + '% watched' : 'Tech' + (c.v.course ? ' · ' + c.v.course : '');
-    if (c.it) b.querySelector('.bar i').style.width = c.p + '%';
-    b.onclick = function () { if (c.it) go(link(c.it)); else playLearn(c.v); }; }
+    b.querySelector('b').textContent = it ? it.title : c.v.title; b.querySelector('small').textContent = sub;
+    if (pc) b.querySelector('.bar i').style.width = pc + '%';
+    b.onclick = function () { if (it) { notePlay('i:' + sid(it)); go(link(it)); } else playLearn(c.v); }; }
   function loadPaused() {
     if (!tok || !items.length) return;
-    loadPlay();
     tapi('/sync/playback/movies').then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); }).then(function (list) {
       var m = {};
       list.forEach(function (x) { var id = x.movie && x.movie.ids && x.movie.ids.tmdb; if (!id || x.progress < 2 || x.progress >= 95 || Date.now() - Date.parse(x.paused_at) > 90 * 864e5) return; var it = bySid('m' + id); if (it && (m[it.key] == null || x.progress > m[it.key])) m[it.key] = Math.round(x.progress); });
@@ -484,7 +485,7 @@ html .ic.wm.open .opts button.on{background:#000;color:#fff;outline:2px solid #f
   }
   function card(it) {
     var d = document.createElement('div'); d.className = 'card' + (state.wf === 'all' && state.shelf !== 'Watch Next' && isWatched(it) ? ' seen' : '');
-    var a = document.createElement('a'); a.className = 'poster'; a.href = link(it); a.setAttribute('aria-label', 'Open ' + it.title + ' in Infuse');
+    var a = document.createElement('a'); a.className = 'poster'; a.href = link(it); a.addEventListener('click', function () { notePlay('i:' + sid(it)); }); a.setAttribute('aria-label', 'Open ' + it.title + ' in Infuse');
     if (it.poster) { var img = document.createElement('img'); img.loading = 'lazy'; img.alt = ''; img.src = 'https://image.tmdb.org/t/p/w342' + it.poster; a.appendChild(img); }
     else { var ph = document.createElement('div'); ph.className = 'ph'; ph.textContent = it.title; a.appendChild(ph); }
     if (isStarted(it)) { var mb = document.createElement('span'); mb.className = 'badge'; mb.textContent = paused[it.key] + '%'; a.appendChild(mb); if (BAR) { var mpb = document.createElement('span'); mpb.className = 'pbar'; var mpf = document.createElement('i'); mpf.style.width = Math.max(3, paused[it.key]) + '%'; mpb.appendChild(mpf); a.appendChild(mpb); } }
@@ -590,7 +591,7 @@ html .ic.wm.open .opts button.on{background:#000;color:#fff;outline:2px solid #f
   }
   function go(u) { (window.__go || function (x) { location.href = x; })(u); }
   function playLearn(v) {
-    if (NEXT) { lastPlay = { k: lid(v), at: Date.now() }; lsSet('lastplay', lastPlay); }
+    notePlay('v:' + lid(v));
     // V2.4: copy the file name (e.g. "2001-05 - WWDC"), unique in Infuse where titles repeat
     var q = V24 && v.v24 && v.file ? v.file.replace(/\.[^.\/]+$/, '') : v.title;
     copyText(q).then(function (ok) {
@@ -796,7 +797,7 @@ html .ic.wm.open .opts button.on{background:#000;color:#fff;outline:2px solid #f
     rest.forEach(function (c) { var d = chCard(c, false); lg.appendChild(d); });
     learn.filter(function (v) { return learnWatch.indexOf(lid(v)) >= 0 && learnDone.indexOf(lid(v)) < 0 && !proto.subs.some(function (p) { return trail(v).join('/').indexOf(p) === 0; }); }).forEach(function (v) { lg.appendChild(lcard(v)); }); // videos you added one by one stay
     var wl = items.filter(inWatching).sort(function (a, b) { var ia = worder.indexOf(a.key), ib = worder.indexOf(b.key); if (ia < 0) ia = 1e6; if (ib < 0) ib = 1e6; return ia - ib || a.title.localeCompare(b.title); });
-    wl.forEach(function (it) { var d = mcard(it); d.classList.add('pwide'); var c = document.createElement('button'); c.type = 'button'; c.className = 'pchip'; c.textContent = it.title; c.onclick = function (e) { e.preventDefault(); e.stopPropagation(); go(link(it)); }; d.querySelector('.poster').appendChild(c);
+    wl.forEach(function (it) { var d = mcard(it); d.classList.add('pwide'); var c = document.createElement('button'); c.type = 'button'; c.className = 'pchip'; c.textContent = it.title; c.onclick = function (e) { e.preventDefault(); e.stopPropagation(); notePlay('i:' + sid(it)); go(link(it)); }; d.querySelector('.poster').appendChild(c);
       var y = d.querySelector('.y'); if (it.kind === 'tv' && it.progress && y) y.textContent = 'Next episode · ' + Math.min(it.progress[0] + 1, it.progress[1]) + ' of ' + it.progress[1]; lg.appendChild(d); });
     if (proto.shelf && chs.length) { var hh = document.createElement('div'); hh.className = 'sech'; hh.textContent = 'Subscribed · ' + chs.length; g0.appendChild(hh);
       var sg = document.createElement('div'); sg.className = 'grid subgrid'; g0.appendChild(sg);
@@ -840,9 +841,9 @@ html .ic.wm.open .opts button.on{background:#000;color:#fff;outline:2px solid #f
       if (it.kind === 'movie') { var pc = paused[it.key]; return { t: it.title, m: year(it) + (it.category ? ' · ' + it.category : ''), c: pc != null ? Math.round(pc) + '%' : '', v: pc || 0, badge: pc != null ? Math.round(pc) + '%' : '' }; }
       return { t: it.title, m: it.category || '', c: '', v: 0 }; }
     var f = r.f; return { t: f.next ? f.next.title : 'All watched', m: f.where, n: f.done, of: f.total, c: f.done + '/' + f.total, v: 0, badge: f.next ? (f.vids.indexOf(f.next) + 1) + '/' + f.total : '' }; }
-  function p2Play(r) { if (r.it) go(link(r.it)); else if (r.f.next) playLearn(r.f.next); }
+  function p2Play(r) { if (r.it) { notePlay('i:' + sid(r.it)); go(link(r.it)); } else if (r.f.next) playLearn(r.f.next); }
   function p2Move(k, id, to) { var L = p2.lists[k], i = L.indexOf(id); if (i < 0) return; L.splice(i, 1); if (to === 'top') L.unshift(id); else if (to === 'bottom') L.push(id); else if (to === 'park') L.splice(Math.min(P2P[k], L.length), 0, id); else if (to === 'up') L.splice(Math.max(0, i - 1), 0, id); else if (typeof to === 'number') L.splice(to, 0, id); p2Save(); }
-  function p2Leave(k, id, how) { var L = p2.lists[k], i = L.indexOf(id), nx = L[P2P[k]]; var nr = nx && p2Res(nx), nm = nr ? (nr.it ? nr.it.title : nr.f.name) : '';
+  function p2Leave(k, id, how) { if (how === 'finished' && lastPlay) { var lr = p2Res(id); if (lr && (lr.it ? lastPlay.k === 'i:' + sid(lr.it) : lr.f && lr.f.vids && lr.f.vids.some(function (v) { return lastPlay.k === 'v:' + lid(v); }))) { lastPlay = null; lsSet('lastplay', null); } } var L = p2.lists[k], i = L.indexOf(id), nx = L[P2P[k]]; var nr = nx && p2Res(nx), nm = nr ? (nr.it ? nr.it.title : nr.f.name) : '';
     if (how === 'park') p2Move(k, id, 'park'); else { L.splice(i, 1); p2Save(); }
     render(); toast((how === 'park' ? 'Parked' : how === 'finished' ? 'Finished' : 'Removed') + (nm && i < P2P[k] ? ' · ' + nm + ' comes up' : '')); }
   function p2Menu(x, y, acts) { p2Close(); var m = document.createElement('div'); m.className = 'p2menu'; m.id = 'p2menu'; acts.forEach(function (a) { var b = document.createElement('button'); b.type = 'button'; b.textContent = a[0]; b.onclick = function (e) { e.stopPropagation(); p2Close(); a[1](); }; m.appendChild(b); });
