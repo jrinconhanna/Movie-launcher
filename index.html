@@ -1020,7 +1020,7 @@ html .ic.wm.open .opts button.on{background:#000;color:#fff;outline:2px solid #f
     if (updated) { dotc(); var ud = new Date(updated); fs.appendChild(document.createTextNode('Updated ' + (isNaN(ud) ? updated : ud.toLocaleString('en-GB', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })))); }
     var dk = document.documentElement.classList.contains('p2dark'); dotc();
     fs.appendChild(lnk(dk ? '\u2600 Light' : '\u263e Dark', function () { var h = document.documentElement; h.classList.toggle('p2dark', !dk); h.classList.toggle('p2light', dk); try { localStorage.setItem('proto2-theme', dk ? 'light' : 'dark'); } catch (e) {} render(); }));
-    dotc(); fs.appendChild(lnk('Reset lists', function () { p2Seed(); render(); toast('Lists rebuilt from Watching, Parked, Backlog and started Tech folders'); }, 'Rebuild Watching and Next from my lists'));
+    /* 'Reset lists' removed 14 Nov (no longer needed; p2Seed() still exists if a rebuild is ever wanted) */
     if (tok) { dotc(); fs.appendChild(document.createTextNode('Trakt \u2713' + (saveState ? ' ' + saveState.toLowerCase() : ''))); dotc();
       fs.appendChild(lnk('Disconnect', function () { setTok(null); synced = false; paused = {}; try { localStorage.removeItem('paused'); } catch (e) {} clearTimeout(pushT); pushT = null; render(); toast('Disconnected \u00b7 saved on this device only'); })); }
     f.appendChild(fs);
