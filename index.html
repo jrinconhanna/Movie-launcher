@@ -143,9 +143,10 @@ body.sorting .ic { opacity: 0 !important; }
 #mini .th{width:48px;height:32px;border-radius:6px;background:#444 center/cover;flex:none}#mini .x{flex:1;min-width:0}#mini b{display:block;font-size:14px;line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}#mini small{display:block;font-size:12px;line-height:1.3;color:#bbb;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 #mini .bar{display:block;height:3px;background:#555;border-radius:2px;margin-top:4px}#mini .bar i{display:block;height:100%;background:#d63c3c;border-radius:2px}
 #mini .pl{width:36px;height:36px;border-radius:50%;border:0;background:#fff;color:#111;font-size:14px;flex:none;cursor:pointer}
-body.hasmini{padding-bottom:96px}#minidock{position:fixed;z-index:40;left:0;right:0;bottom:0;padding:8px 12px calc(10px + env(safe-area-inset-bottom));background:var(--bg);border-top:1px solid var(--line)}@media (max-width:700px){ /* ?next: phone tabs at the bottom like an app; Mac keeps them at the top */
+body.hasmini{padding-bottom:96px}#minidock{position:fixed;z-index:40;left:0;right:0;bottom:0;padding:8px 12px calc(10px + env(safe-area-inset-bottom));background:var(--bg);border-top:1px solid var(--line)}html.pvnext #top .n{display:none}html.pvnext #top .tic{display:none}
+@media (max-width:700px){ /* ?next: phone tabs at the bottom like an app; Mac keeps them at the top */
 html.pvnext #top{position:fixed;z-index:41;left:0;right:0;bottom:0;margin:0;border-radius:0;padding:6px 12px calc(6px + env(safe-area-inset-bottom));background:var(--bg);border-top:1px solid var(--line)}
-html.pvnext #top button{padding:10px 4px}
+html.pvnext #top button{padding:6px 4px 5px;display:flex;flex-direction:column;align-items:center;gap:2px;font-size:11px}html.pvnext #top .tic{display:block;width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}html.pvnext #top button:first-child .tic path{fill:currentColor;stroke-width:1.5}
 html.pvnext body{padding-bottom:calc(64px + env(safe-area-inset-bottom))}
 html.pvnext #minidock{padding-bottom:calc(60px + env(safe-area-inset-bottom))}
 html.pvnext body.hasmini{padding-bottom:calc(150px + env(safe-area-inset-bottom))}
@@ -436,12 +437,14 @@ html .ic.wm.open .opts button.on{background:#000;color:#fff;outline:2px solid #f
   }
   function techRootFolders() { var keep = state.course, cat = state.cat; state.course = ''; state.cat = 'All'; var r = techLevel().list; state.course = keep; state.cat = cat; return r; }
   function techUp() { var P = state.course.split('/'); P.pop(); var to = P.join('/'); state.course = ''; var L = techLevel(); state.course = L.implicit && L.P.join('/') === to ? '' : to; save(); render(); } // from a chip that opened straight into its folder, going up lands back on the chip
+  var TABIC = { Watching: '<path d="M8 5.5v13l10.5-6.5z"/>', Next: '<path d="M4 6h16M4 12h16M4 18h11"/>', Discover: '<circle cx="10.5" cy="10.5" r="6"/><path d="M15 15l5 5"/>' }; // ?next phone tab icons
   function renderTop() { renderMini();
     if (P2ON && V24 && !p2 && learn.length && items.length) p2Seed();
     var t = $('top'); t.innerHTML = ''; t.hidden = !AFTER; if (!AFTER) return;
     TOP.forEach(function (s) {
       var b = document.createElement('button'); b.type = 'button'; b.setAttribute('role', 'tab');
       b.setAttribute('aria-selected', s === top ? 'true' : 'false'); b.textContent = s;
+      if (NEXT && TABIC[s]) b.insertAdjacentHTML('afterbegin', '<svg class="tic" viewBox="0 0 24 24" aria-hidden="true">' + TABIC[s] + '</svg>');
       if (s === 'Watching' && MOCK) { var cw = document.createElement('span'); cw.className = 'n'; var wn = items.filter(inWatching).length; if (P2ON && p2) { var c2 = 0; P2K.forEach(function (k) { c2 += Math.min(P2P[k], p2.lists[k].map(p2Res).filter(Boolean).length); }); cw.textContent = c2; b.appendChild(cw); b.onclick = function () { top = s; render(); window.scrollTo(0, 0); }; t.appendChild(b); return; } cw.textContent = wn + '/' + LIM.watching; if (wn > LIM.watching) { cw.classList.add('over'); b.title = 'Over 5 · park or remove one to stay focused'; } b.appendChild(cw); }
       if (s === 'Next') { var c = document.createElement('span'); c.className = 'n'; c.textContent = P2ON && p2 ? P2K.reduce(function (a, k) { return a + p2.lists[k].length; }, 0) : next.length + parked.length; b.appendChild(c); }
       b.onclick = function () { top = s; render(); window.scrollTo(0, 0); };
