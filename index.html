@@ -410,7 +410,16 @@ html .ic.wm.open .opts button.on{background:#000;color:#fff;outline:2px solid #f
       list.forEach(function (x) { var id = x.movie && x.movie.ids && x.movie.ids.tmdb; if (!id || x.progress < 2 || x.progress >= 95 || Date.now() - Date.parse(x.paused_at) > 90 * 864e5) return; var it = bySid('m' + id); if (it && (m[it.key] == null || x.progress > m[it.key])) m[it.key] = Math.round(x.progress); });
       paused = m; try { localStorage.setItem('paused', JSON.stringify(m)); } catch (e) {} render();
     }).catch(function () {});
+    if (NEXT) tapi('/sync/playback/episodes').then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); }).then(function (list) { /* V2.4.2 Time left (staging): where you stopped in an episode */
+      var m = {}; list.forEach(function (x) { var id = x.show && x.show.ids && x.show.ids.tmdb, ep = x.episode; if (!id || !ep || x.progress < 2 || x.progress >= 95 || Date.now() - Date.parse(x.paused_at) > 90 * 864e5) return; var k = String(id); if (!m[k] || Date.parse(x.paused_at) > m[k].at) m[k] = { s: ep.season, e: ep.number, p: Math.round(x.progress), at: Date.parse(x.paused_at) }; });
+      pausedEp = m; try { localStorage.setItem('pausedEp', JSON.stringify(m)); } catch (e) {} render(); }).catch(function () {});
   }
+  var pausedEp = ls('pausedEp', {});
+  function timeLeft(it) { /* {p: % watched of the video, left: '18m left'} for the next episode or a movie; null if not started */
+    if (!it) return null; var p = null, rt = null;
+    if (it.kind === 'movie') { p = paused[it.key]; rt = it.rt; }
+    else if (it.next_ep) { var pe = pausedEp[String(it.tmdb)]; if (pe && pe.s === it.next_ep.s && pe.e === it.next_ep.e) p = pe.p; rt = it.next_ep.rt; }
+    if (p == null) return null; return { p: p, left: rt ? fmtLen(Math.max(1, Math.round(rt * (100 - p) / 100))) + ' left' : Math.round(p) + '%' }; }
   function connRow() {
     var d = document.createElement('div'); d.className = 'conn';
     if (pending) {
@@ -890,10 +899,10 @@ html .ic.wm.open .opts button.on{background:#000;color:#fff;outline:2px solid #f
     var nv = r.f.next; if (mode === 'video' && nv && (nv.cover || nv.frame)) return { src: nv.cover || nv.frame };
     if (r.f.cover) return { src: r.f.cover, pt: false }; return nv && (nv.cover || nv.frame) ? { src: nv.cover || nv.frame } : null; }
   function fmtLen(m) { if (!m) return ''; return m < 60 ? m + 'm' : Math.floor(m / 60) + 'h' + (m % 60 ? ' ' + (m % 60) + 'm' : ''); } /* V2.4.2 Total length (staging): 42m, 1h 52m */
-  function p2Prog(r) { if (r.it) { var it = r.it; var ne = it.next_ep, se = ne ? 'S' + ne.s + ' E' + ne.e + (NEXT && ne.rt ? ' \u00b7 ' + fmtLen(ne.rt) : '') : '';
-      if (it.kind === 'tv' && it.progress) return { t: ne && ne.name ? ne.name : 'Episode ' + Math.min(it.progress[0] + 1, it.progress[1]) + ' of ' + it.progress[1], m: it.title + (se ? ' · ' + se : ''), n: it.progress[0], of: it.progress[1], c: it.progress[0] + '/' + it.progress[1], v: 0, badge: se };
-      if (it.kind === 'tv' && ne) return { t: ne.name || it.title, m: it.title + ' · ' + se, c: '', v: 0, badge: se };
-      if (it.kind === 'movie') { var pc = paused[it.key]; return { t: it.title, m: year(it) + (it.category ? ' · ' + it.category : ''), c: pc != null ? Math.round(pc) + '%' : '', v: pc || 0, badge: (pc != null ? Math.round(pc) + '%' : '') + (NEXT && it.rt ? (pc != null ? ' \u00b7 ' : '') + fmtLen(it.rt) : '') }; }
+  function p2Prog(r) { if (r.it) { var it = r.it; var ne = it.next_ep, se = ne ? 'S' + ne.s + ' E' + ne.e : '', tl = NEXT ? timeLeft(it) : null, sb = se + (NEXT && ne ? (tl ? ' \u00b7 ' + tl.left : ne.rt ? ' \u00b7 ' + fmtLen(ne.rt) : '') : '');
+      if (it.kind === 'tv' && it.progress) return { t: ne && ne.name ? ne.name : 'Episode ' + Math.min(it.progress[0] + 1, it.progress[1]) + ' of ' + it.progress[1], m: it.title + (se ? ' · ' + se : ''), n: it.progress[0], of: it.progress[1], c: it.progress[0] + '/' + it.progress[1], v: tl ? tl.p : 0, badge: sb };
+      if (it.kind === 'tv' && ne) return { t: ne.name || it.title, m: it.title + ' · ' + se, c: '', v: tl ? tl.p : 0, badge: sb };
+      if (it.kind === 'movie') { var pc = paused[it.key]; return { t: it.title, m: year(it) + (it.category ? ' · ' + it.category : ''), c: pc != null ? Math.round(pc) + '%' : '', v: pc || 0, badge: NEXT ? (tl ? tl.left : it.rt ? fmtLen(it.rt) : '') : (pc != null ? Math.round(pc) + '%' : '') }; }
       return { t: it.title, m: it.category || '', c: '', v: 0 }; }
     var f = r.f; return { t: f.next ? f.next.title : 'All watched', m: f.where, n: f.done, of: f.total, c: f.done + '/' + f.total, v: 0, badge: f.next ? (f.vids.indexOf(f.next) + 1) + '/' + f.total : '' }; }
   function p2Play(r) { if (r.it) { notePlay('i:' + sid(r.it)); go(link(r.it)); } else if (r.f.next) playLearn(r.f.next); }
@@ -947,12 +956,13 @@ html .ic.wm.open .opts button.on{background:#000;color:#fff;outline:2px solid #f
     window.addEventListener('scroll', onS, { passive: true }); window.addEventListener('touchstart', ts, { passive: true }); window.addEventListener('touchend', te, { passive: true });
     nowObs = { disconnect: function () { window.removeEventListener('scroll', onS); window.removeEventListener('touchstart', ts); window.removeEventListener('touchend', te); clearTimeout(snapT); } }; chk(); }
   function p2NowCard(g0, onId) { var c = miniItem(); if (!c) return; var r = onId ? p2Res(onId) : null, img = '', t = '', sub = '', pc = 0, play;
-    if (r) { var pr = p2Prog(r), im = p2Img(r, 'video'); img = im ? im.src : ''; t = pr.t; sub = r.it ? pr.m.replace(r.it.title + ' · ', '') + ' \u2022 ' + r.it.title : pr.m; var lenB = r.it ? (r.it.kind === 'movie' ? fmtLen(r.it.rt) : (r.it.next_ep ? fmtLen(r.it.next_ep.rt) : '')) : '', isToc = r.id === p2FirstId(), nudge = isToc && pr.of > pr.n ? (pr.of - pr.n) + ' left to finish' : ''; if (pr.of) { pc = Math.round(100 * pr.n / pr.of); sub += ' \u2022 ' + pr.c; } /* 14 Nov: title first, then S5 E8 \u2022 show \u2022 39/40 */ play = function () { p2Play(r); }; }
+    if (r) { var pr = p2Prog(r), im = p2Img(r, 'video'); img = im ? im.src : ''; t = pr.t; sub = r.it ? pr.m.replace(r.it.title + ' · ', '') + ' \u2022 ' + r.it.title : pr.m; var tlC = r.it ? timeLeft(r.it) : null, lenB = tlC ? tlC.left : r.it ? (r.it.kind === 'movie' ? fmtLen(r.it.rt) : (r.it.next_ep ? fmtLen(r.it.next_ep.rt) : '')) : '', isToc = r.id === p2FirstId(), nudge = isToc && pr.of > pr.n ? (pr.of - pr.n) + ' left to finish' : ''; if (pr.of) { pc = Math.round(100 * pr.n / pr.of); sub += ' \u2022 ' + pr.c; } /* 14 Nov: title first, then S5 E8 \u2022 show \u2022 39/40 */ play = function () { p2Play(r); }; }
     else if (c.it) { t = c.it.title; img = c.it.poster ? 'https://image.tmdb.org/t/p/w500' + c.it.poster : ''; sub = c.it.kind === 'tv' && c.it.next_ep ? 'Next: S' + c.it.next_ep.s + ' E' + c.it.next_ep.e : 'Movie'; play = function () { notePlay('i:' + sid(c.it)); go(link(c.it)); }; }
     else { t = c.v.title; img = c.v.cover || ''; sub = 'Tech' + (c.v.course ? ' · ' + c.v.course : ''); play = function () { playLearn(c.v); }; }
     var d = document.createElement('div'); d.className = 'nowc'; d.innerHTML = '<div class="im"><span class="lb">Now watching</span><span class="npl" aria-label="Continue">▶</span></div><div class="bd"><b></b><small></small>' + (pc ? '<span class="pg"><i></i></span>' : '') + '</div>';
     if (img) d.querySelector('.im').style.backgroundImage = 'url("' + img + '")'; d.querySelector('b').textContent = t; d.querySelector('small').textContent = sub; if (pc) d.querySelector('.pg i').style.width = pc + '%';
     if (typeof lenB !== 'undefined' && lenB) { var lb2 = document.createElement('span'); lb2.className = 'lenb'; lb2.textContent = lenB; d.querySelector('.im').appendChild(lb2); }
+    if (typeof tlC !== 'undefined' && tlC) { var cpb = document.createElement('span'); cpb.className = 'pbar'; cpb.innerHTML = '<i></i>'; cpb.firstChild.style.width = tlC.p + '%'; d.querySelector('.im').appendChild(cpb); }
     if (typeof isToc !== 'undefined' && isToc) { d.classList.add('istoc'); if (nudge) { var nu = document.createElement('div'); nu.className = 'p2nudge'; nu.textContent = nudge; d.querySelector('.bd').appendChild(nu); } }
     d.onclick = play; g0.appendChild(d); nowSlim(img, t, sub.split(' \u2022 ').slice(0, 2).join(' \u2022 '), play, d, typeof isToc !== 'undefined' && isToc); var l = document.createElement('div'); l.className = 'nowlbl'; l.textContent = 'Switch the channel'; g0.appendChild(l); }
   function p2Watching(g0) { if (!p2) p2Seed(); p2Fix(); var onId = NEXT ? p2OnId() : null; if (NEXT) p2NowCard(g0, onId); var wrap = document.createElement('div'); wrap.className = 'p2list'; g0.appendChild(wrap); var first = true;
