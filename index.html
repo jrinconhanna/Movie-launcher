@@ -333,9 +333,9 @@ html .ic.wm.open .opts button.on{background:#000;color:#fff;outline:2px solid #f
   var paused = ls('paused', {});  // key -> % watched
   function isStarted(it) { return it.kind === 'movie' && paused[it.key] != null && !isWatched(it); }
   var lastPlay = ls('lastplay', null); // ?next mini player: the last thing tapped to play in the launcher {k: 'i:<sid>' | 'v:<video id>', at}, synced via Trakt
-  function notePlay(k) { if (!NEXT) return; lastPlay = { k: k, at: Date.now() }; lsSet('lastplay', lastPlay); renderMini(); }
+  function notePlay(k) { if (!NEXT) return; var it0 = k.indexOf('i:') === 0 ? bySid(k.slice(2)) : null; lastPlay = { k: k, at: Date.now(), w: it0 && isWatched(it0) ? 1 : 0 }; /* w: already watched when tapped (a rewatch), so only a new mark hides it */ lsSet('lastplay', lastPlay); renderMini(); }
   function miniItem() { if (!lastPlay || Date.now() - lastPlay.at > 7 * 864e5) return null; var k = lastPlay.k, i;
-    if (k.indexOf('i:') === 0) { var it = bySid(k.slice(2)); return it && !isWatched(it) ? { it: it } : null; }
+    if (k.indexOf('i:') === 0) { var it = bySid(k.slice(2)); return it && (lastPlay.w || !isWatched(it)) ? { it: it } : null; }
     if (k.indexOf('v:') === 0) { k = k.slice(2); if (learnDone.indexOf(k) >= 0) return null; for (i = 0; i < learn.length; i++) if (lid(learn[i]) === k) return { v: learn[i] }; }
     return null; }
   function renderMini() { if (!NEXT) return; var c = miniItem(), b = document.getElementById('mini'), dk = document.getElementById('minidock');
