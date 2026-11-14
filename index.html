@@ -192,7 +192,7 @@ html .ic.wm.open .opts button.on{background:#000;color:#fff;outline:2px solid #f
   var LEARN = true; // V2.3 live 10 Nov (was the ?v23 preview)
   var V24 = !/[?&]v23\b/.test(location.search); if (V24) document.documentElement.classList.add('v24'); // V2.4 live 11 Nov (?v23 shows the old view for comparison)
   var PROTO = /[?&]proto\b/.test(location.search); // V2.4.2 prototype: subscribe to folders, one channel each on Watching (this device only)
-  var NEXT = /[?&]next\b/.test(location.search); if (NEXT) document.documentElement.classList.add('pvnext'); // V2.4.1 preview (Lean onward): items flagged next only show with ?next until Javier says go
+  var NEXT = /[?&]next\b/.test(location.search); var B2 = true; /* mini player, phone tabs at the bottom with icons, quieter TOC frame: live 14 Nov on Javier's go */ if (B2) document.documentElement.classList.add('pvnext'); // V2.4.1 preview (Lean onward): items flagged next only show with ?next until Javier says go
   var B1 = true; // 'One set of state buttons' (V2.4.2) piece 1: live 14 Nov on Javier's go
   var P2ON = !/[?&]v241\b/.test(location.search); // V2.4.2 Watching/Next by kind: live 12 Nov (?v241 shows the old shelves)
   var learn = [], learnDone = [], learnWatch = [], forder = {}, vorder = {}; // vorder: your video order per playlist (?next) // forder: your folder order per Tech level ('' = Tech › All), synced via Trakt
@@ -342,12 +342,12 @@ html .ic.wm.open .opts button.on{background:#000;color:#fff;outline:2px solid #f
   var paused = ls('paused', {});  // key -> % watched
   function isStarted(it) { return it.kind === 'movie' && paused[it.key] != null && !isWatched(it); }
   var lastPlay = ls('lastplay', null); // ?next mini player: the last thing tapped to play in the launcher {k: 'i:<sid>' | 'v:<video id>', at}, synced via Trakt
-  function notePlay(k) { if (!NEXT) return; var it0 = k.indexOf('i:') === 0 ? bySid(k.slice(2)) : null; lastPlay = { k: k, at: Date.now(), w: it0 && isWatched(it0) ? 1 : 0 }; /* w: already watched when tapped (a rewatch), so only a new mark hides it */ lsSet('lastplay', lastPlay); renderMini(); }
+  function notePlay(k) { if (!B2) return; var it0 = k.indexOf('i:') === 0 ? bySid(k.slice(2)) : null; lastPlay = { k: k, at: Date.now(), w: it0 && isWatched(it0) ? 1 : 0 }; /* w: already watched when tapped (a rewatch), so only a new mark hides it */ lsSet('lastplay', lastPlay); renderMini(); }
   function miniItem() { if (!lastPlay || Date.now() - lastPlay.at > 7 * 864e5) return null; var k = lastPlay.k, i;
     if (k.indexOf('i:') === 0) { var it = bySid(k.slice(2)); return it && (lastPlay.w || !isWatched(it)) ? { it: it } : null; }
     if (k.indexOf('v:') === 0) { k = k.slice(2); if (learnDone.indexOf(k) >= 0) return null; for (i = 0; i < learn.length; i++) if (lid(learn[i]) === k) return { v: learn[i] }; }
     return null; }
-  function renderMini() { if (!NEXT) return; var c = miniItem(), b = document.getElementById('mini'), dk = document.getElementById('minidock');
+  function renderMini() { if (!B2) return; var c = miniItem(), b = document.getElementById('mini'), dk = document.getElementById('minidock');
     if (!c) { if (dk) dk.remove(); document.body.classList.remove('hasmini'); return; }
     if (!b) { dk = document.createElement('div'); dk.id = 'minidock'; b = document.createElement('div'); b.id = 'mini'; dk.appendChild(b); document.body.appendChild(dk); } document.body.classList.add('hasmini');
     var it = c.it, sub = '', pc = 0;
@@ -444,7 +444,7 @@ html .ic.wm.open .opts button.on{background:#000;color:#fff;outline:2px solid #f
     TOP.forEach(function (s) {
       var b = document.createElement('button'); b.type = 'button'; b.setAttribute('role', 'tab');
       b.setAttribute('aria-selected', s === top ? 'true' : 'false'); b.textContent = s;
-      if (NEXT && TABIC[s]) b.insertAdjacentHTML('afterbegin', '<svg class="tic" viewBox="0 0 24 24" aria-hidden="true">' + TABIC[s] + '</svg>');
+      if (B2 && TABIC[s]) b.insertAdjacentHTML('afterbegin', '<svg class="tic" viewBox="0 0 24 24" aria-hidden="true">' + TABIC[s] + '</svg>');
       if (s === 'Watching' && MOCK) { var cw = document.createElement('span'); cw.className = 'n'; var wn = items.filter(inWatching).length; if (P2ON && p2) { var c2 = 0; P2K.forEach(function (k) { c2 += Math.min(P2P[k], p2.lists[k].map(p2Res).filter(Boolean).length); }); cw.textContent = c2; b.appendChild(cw); b.onclick = function () { top = s; render(); window.scrollTo(0, 0); }; t.appendChild(b); return; } cw.textContent = wn + '/' + LIM.watching; if (wn > LIM.watching) { cw.classList.add('over'); b.title = 'Over 5 · park or remove one to stay focused'; } b.appendChild(cw); }
       if (s === 'Next') { var c = document.createElement('span'); c.className = 'n'; c.textContent = P2ON && p2 ? P2K.reduce(function (a, k) { return a + p2.lists[k].length; }, 0) : next.length + parked.length; b.appendChild(c); }
       b.onclick = function () { top = s; render(); window.scrollTo(0, 0); };
