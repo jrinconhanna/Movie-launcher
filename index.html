@@ -181,6 +181,14 @@ header{position:sticky}#nowslim .th{position:relative;aspect-ratio:16/9;border-r
 #nowslim.istoc:before{content:'';position:absolute;left:0;top:12px;bottom:12px;width:3px;border-radius:2px;background:#a07cf0}
 html.p2light #nowslim{background:var(--surface)}
 @media (min-width:701px){#nowslim{max-width:900px;grid-template-columns:260px minmax(0,1fr);gap:18px}}
+#nowbot{position:fixed;z-index:40;left:0;right:0;bottom:0;padding:0 12px calc(10px + env(safe-area-inset-bottom));pointer-events:none;transform:translateY(110%);opacity:0;transition:transform .28s ease,opacity .28s ease}
+#nowbot.show{transform:none;opacity:1}#nowbot .in{pointer-events:auto;display:flex;align-items:center;gap:12px;max-width:900px;padding:10px 12px;border-radius:16px;background:#2a2a2e;border:1px solid rgba(255,255,255,.08);box-shadow:0 8px 28px rgba(0,0,0,.5);cursor:pointer;position:relative}
+#nowbot .th{width:96px;aspect-ratio:16/9;border-radius:8px;background:#333 center/cover;flex:none}#nowbot .x{flex:1;min-width:0}#nowbot b{display:block;font:600 15px/1.25 var(--font);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}#nowbot small{display:block;font-size:12px;color:var(--muted);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#nowbot .pl{width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.92);color:#111;display:grid;place-items:center;font-size:14px;padding-left:2px;flex:none;box-sizing:border-box}
+#nowbot.istoc .in:before{content:'';position:absolute;left:0;top:10px;bottom:10px;width:3px;border-radius:2px;background:#a07cf0}
+html.p2light #nowbot .in{background:var(--surface)}
+@media (max-width:700px){html.pvnext #nowbot{bottom:calc(60px + env(safe-area-inset-bottom));padding-bottom:8px}}
+@media (min-width:701px){#nowbot{padding-left:14px}#nowbot .th{width:120px}#nowbot b{font-size:16px}}
 .nowlbl{grid-column:1/-1;font:700 10px var(--font);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:10px 0 0}
 @media (min-width:701px){.nowc{display:grid;grid-template-columns:min(480px,50%) 1fr}.nowc .bd{padding:22px}.nowc b{font-size:24px}.nowc small{font-size:15px}}
 .vrl{border:0;background:none;color:inherit;font:inherit;padding:0;cursor:pointer;text-decoration:underline dotted;text-underline-offset:3px}
@@ -472,7 +480,7 @@ html .ic.wm.open .opts button.on{background:#000;color:#fff;outline:2px solid #f
   function techRootFolders() { var keep = state.course, cat = state.cat; state.course = ''; state.cat = 'All'; var r = techLevel().list; state.course = keep; state.cat = cat; return r; }
   function techUp() { var P = state.course.split('/'); P.pop(); var to = P.join('/'); state.course = ''; var L = techLevel(); state.course = L.implicit && L.P.join('/') === to ? '' : to; save(); render(); } // from a chip that opened straight into its folder, going up lands back on the chip
   var TABIC = { Watching: '<path d="M8 5.5v13l10.5-6.5z"/>', Next: '<path d="M4 6h16M4 12h16M4 18h11"/>', Discover: '<circle cx="10.5" cy="10.5" r="6"/><path d="M15 15l5 5"/>' }; // ?next phone tab icons
-  function renderTop() { var ns0 = document.getElementById('nowslim'); if (ns0) ns0.classList.remove('show'); if (nowObs) { nowObs.disconnect(); nowObs = null; } renderMini();
+  function renderTop() { var ns0 = document.getElementById('nowslim'); if (ns0) ns0.classList.remove('show'); var nb0 = document.getElementById('nowbot'); if (nb0) nb0.classList.remove('show'); if (nowObs) { nowObs.disconnect(); nowObs = null; } renderMini();
     if (P2ON && V24 && !p2 && learn.length && items.length) p2Seed();
     var t = $('top'); t.innerHTML = ''; t.hidden = !AFTER; if (!AFTER) return;
     TOP.forEach(function (s) {
@@ -914,8 +922,15 @@ html .ic.wm.open .opts button.on{background:#000;color:#fff;outline:2px solid #f
   function p2FirstId() { var f = null; P2K.forEach(function (k) { if (f) return; var r = p2.lists[k].map(p2Res).filter(Boolean).slice(0, P2P[k])[0]; if (r) f = r.id; }); return f; } /* TOC = the first channel */
   /* staging 14 Nov: when the Now watching card scrolls away, a slim copy stays fixed at the top (under the tabs on the Mac) */
   var nowObs = null;
-  var SLIM = false; /* 14 Nov: option 1 on staging = no fixed bar; tap the current tab to jump back to the top. Set true to bring the fixed bar back (options 2/3 build on it) */
-  function nowSlim(img, t, sub, play, card, toc) { var h = document.querySelector('header'); if (!h) return; if (!SLIM) { var o = document.getElementById('nowslim'); if (o) o.remove(); return; } var sl = document.getElementById('nowslim');
+  var SLIM = false; /* fixed bar at the TOP (snap version, parked). Option 1 + bottom bar below is what's on staging */
+  function nowBottom(img, t, sub, play, card, toc) { /* 14 Nov: when the Now watching card has scrolled away, a bar slides up at the bottom (above the tabs on the phone) */
+    var bb = document.getElementById('nowbot'); if (!bb) { bb = document.createElement('div'); bb.id = 'nowbot'; bb.innerHTML = '<div class="in"><span class="th"></span><span class="x"><b></b><small></small></span><span class="pl">\u25b6</span></div>'; document.body.appendChild(bb); }
+    bb.querySelector('.th').style.backgroundImage = img ? 'url("' + img + '")' : ''; bb.querySelector('b').textContent = t; bb.querySelector('small').textContent = sub; bb.classList.toggle('istoc', !!toc); bb.querySelector('.in').onclick = play; bb.classList.remove('show');
+    if (nowObs) nowObs.disconnect(); var tk = false, h = document.querySelector('header');
+    function chk() { tk = false; if (!card.isConnected) { bb.classList.remove('show'); return; } var hb = h ? h.getBoundingClientRect().bottom : 0; bb.classList.toggle('show', card.getBoundingClientRect().bottom < hb + 10); }
+    function onS() { if (!tk) { tk = true; requestAnimationFrame(chk); } }
+    window.addEventListener('scroll', onS, { passive: true }); nowObs = { disconnect: function () { window.removeEventListener('scroll', onS); bb.classList.remove('show'); } }; chk(); }
+  function nowSlim(img, t, sub, play, card, toc) { var h = document.querySelector('header'); if (!h) return; if (!SLIM) { var o = document.getElementById('nowslim'); if (o) o.remove(); nowBottom(img, t, sub, play, card, toc); return; } var sl = document.getElementById('nowslim');
     if (!sl) { sl = document.createElement('div'); sl.id = 'nowslim'; sl.innerHTML = '<span class="th"></span><span class="x"><span class="tag">Now watching</span><b></b><small></small></span>'; h.appendChild(sl); }
     sl.querySelector('.th').style.backgroundImage = img ? 'url("' + img + '")' : ''; sl.querySelector('b').textContent = t; sl.querySelector('small').textContent = sub; sl.classList.toggle('istoc', !!toc); sl.onclick = play; sl.classList.remove('show');
     if (nowObs) nowObs.disconnect(); var ticking = false; /* show once most of the card has scrolled under the top */
