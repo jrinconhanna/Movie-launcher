@@ -438,6 +438,31 @@ def main():
             if nx:
                 out[-1]["next_ep"] = nx
 
+    # V2.4.2 series page: every season's episodes per show on Watching/Next (picture, name, description, length, rating), refreshed weekly
+    epdir = os.path.join(ROOT, "eps"); os.makedirs(epdir, exist_ok=True)
+    week = (datetime.datetime.utcnow() - datetime.timedelta(days=7)).isoformat()
+    for o in out:
+        if o["kind"] != "tv" or not o.get("next_ep"):
+            continue
+        fp = os.path.join(epdir, f'{o["tmdb"]}.json')
+        try:
+            if os.path.exists(fp) and json.load(open(fp, encoding="utf-8")).get("at", "") > week:
+                continue
+            show = tmdb_get(f'/tv/{o["tmdb"]}', {}, token)
+            seasons = {}
+            for sn in sorted(x.get("season_number", 0) for x in show.get("seasons", [])):
+                if sn <= 0:
+                    continue
+                eps = tmdb_get(f'/tv/{o["tmdb"]}/season/{sn}', {}, token).get("episodes") or []
+                seasons[str(sn)] = [{"e": x.get("episode_number"), "name": x.get("name") or "", "ov": (x.get("overview") or "")[:600],
+                                     "still": x.get("still_path"), "rt": x.get("runtime"), "vote": round(x.get("vote_average") or 0, 1), "air": x.get("air_date") or ""}
+                                    for x in eps if x.get("episode_number")]
+                time.sleep(0.03)
+            with open(fp, "w", encoding="utf-8") as f:
+                json.dump({"at": datetime.datetime.utcnow().isoformat(), "tmdb": o["tmdb"], "title": o["title"], "seasons": seasons}, f, ensure_ascii=False)
+        except Exception as e:
+            print("TMDB seasons failed:", o["tmdb"], e)
+
     save("epcounts.json", epc)
     save("runtimes.json", {k: v for k, v in runtimes.items() if v})
     save("stills.json", {k: v for k, v in stills.items() if int(k) in {o["tmdb"] for o in out}})
