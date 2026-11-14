@@ -479,9 +479,9 @@ html .ic.wm.open .opts button.on{background:#000;color:#fff;outline:2px solid #f
       var b = document.createElement('button'); b.type = 'button'; b.setAttribute('role', 'tab');
       b.setAttribute('aria-selected', s === top ? 'true' : 'false'); b.textContent = s;
       if (B2 && TABIC[s]) b.insertAdjacentHTML('afterbegin', '<svg class="tic" viewBox="0 0 24 24" aria-hidden="true">' + TABIC[s] + '</svg>');
-      if (s === 'Watching' && MOCK) { var cw = document.createElement('span'); cw.className = 'n'; var wn = items.filter(inWatching).length; if (P2ON && p2) { var c2 = 0; P2K.forEach(function (k) { c2 += Math.min(P2P[k], p2.lists[k].map(p2Res).filter(Boolean).length); }); cw.textContent = c2; b.appendChild(cw); b.onclick = function () { top = s; render(); window.scrollTo(0, 0); }; t.appendChild(b); return; } cw.textContent = wn + '/' + LIM.watching; if (wn > LIM.watching) { cw.classList.add('over'); b.title = 'Over 5 · park or remove one to stay focused'; } b.appendChild(cw); }
+      if (s === 'Watching' && MOCK) { var cw = document.createElement('span'); cw.className = 'n'; var wn = items.filter(inWatching).length; if (P2ON && p2) { var c2 = 0; P2K.forEach(function (k) { c2 += Math.min(P2P[k], p2.lists[k].map(p2Res).filter(Boolean).length); }); cw.textContent = c2; b.appendChild(cw); b.onclick = function () { if (NEXT && s === top) { window.scrollTo({ top: 0, behavior: 'smooth' }); return; } top = s; render(); window.scrollTo(0, 0); }; t.appendChild(b); return; } cw.textContent = wn + '/' + LIM.watching; if (wn > LIM.watching) { cw.classList.add('over'); b.title = 'Over 5 · park or remove one to stay focused'; } b.appendChild(cw); }
       if (s === 'Next') { var c = document.createElement('span'); c.className = 'n'; c.textContent = P2ON && p2 ? P2K.reduce(function (a, k) { return a + p2.lists[k].length; }, 0) : next.length + parked.length; b.appendChild(c); }
-      b.onclick = function () { top = s; render(); window.scrollTo(0, 0); };
+      b.onclick = function () { if (NEXT && s === top) { window.scrollTo({ top: 0, behavior: 'smooth' }); return; } top = s; render(); window.scrollTo(0, 0); };
       t.appendChild(b);
     });
   }
@@ -914,7 +914,8 @@ html .ic.wm.open .opts button.on{background:#000;color:#fff;outline:2px solid #f
   function p2FirstId() { var f = null; P2K.forEach(function (k) { if (f) return; var r = p2.lists[k].map(p2Res).filter(Boolean).slice(0, P2P[k])[0]; if (r) f = r.id; }); return f; } /* TOC = the first channel */
   /* staging 14 Nov: when the Now watching card scrolls away, a slim copy stays fixed at the top (under the tabs on the Mac) */
   var nowObs = null;
-  function nowSlim(img, t, sub, play, card, toc) { var h = document.querySelector('header'); if (!h) return; var sl = document.getElementById('nowslim');
+  var SLIM = false; /* 14 Nov: option 1 on staging = no fixed bar; tap the current tab to jump back to the top. Set true to bring the fixed bar back (options 2/3 build on it) */
+  function nowSlim(img, t, sub, play, card, toc) { var h = document.querySelector('header'); if (!h) return; if (!SLIM) { var o = document.getElementById('nowslim'); if (o) o.remove(); return; } var sl = document.getElementById('nowslim');
     if (!sl) { sl = document.createElement('div'); sl.id = 'nowslim'; sl.innerHTML = '<span class="th"></span><span class="x"><span class="tag">Now watching</span><b></b><small></small></span>'; h.appendChild(sl); }
     sl.querySelector('.th').style.backgroundImage = img ? 'url("' + img + '")' : ''; sl.querySelector('b').textContent = t; sl.querySelector('small').textContent = sub; sl.classList.toggle('istoc', !!toc); sl.onclick = play; sl.classList.remove('show');
     if (nowObs) nowObs.disconnect(); var ticking = false; /* show once most of the card has scrolled under the top */
