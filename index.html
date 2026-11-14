@@ -170,6 +170,13 @@ html.isstg .p2r.top,html.isstg.pvnext .p2r.top,html.isstg.pvnext.p2dark .p2r.top
 html.isstg .p2r.top:before{content:'';position:absolute;left:0;top:10px;bottom:10px;width:3px;border-radius:2px;background:#a07cf0}
 .p2nudge{font:600 12px var(--font);color:#a07cf0;margin-top:6px}
 .nowc.istoc{position:relative}.nowc.istoc:before{content:'';position:absolute;left:0;top:14px;bottom:14px;width:3px;border-radius:2px;background:#a07cf0;z-index:1}.nowc .p2nudge{font-size:13px;margin-top:8px} /* lighter card background (dark mode) */
+#nowslim{display:none;align-items:center;gap:10px;margin:6px 0 4px;padding:6px 8px;border-radius:12px;background:#2a2a2e;cursor:pointer;position:relative}
+#nowslim.show{display:flex}#nowslim .th{width:64px;height:36px;border-radius:6px;background:#333 center/cover;flex:none}#nowslim .x{flex:1;min-width:0}
+#nowslim b{display:block;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}#nowslim small{display:block;font-size:11px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#nowslim .pl{width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,.92);color:#111;display:grid;place-items:center;font-size:12px;padding-left:2px;flex:none}
+#nowslim.istoc:before{content:'';position:absolute;left:0;top:8px;bottom:8px;width:3px;border-radius:2px;background:#a07cf0}
+html.p2light #nowslim{background:var(--surface)}
+@media (min-width:701px){#nowslim{max-width:900px;padding:8px 10px}#nowslim .th{width:80px;height:45px}#nowslim b{font-size:15px}}
 .nowlbl{grid-column:1/-1;font:700 10px var(--font);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:10px 0 0}
 @media (min-width:701px){.nowc{display:grid;grid-template-columns:min(480px,50%) 1fr}.nowc .bd{padding:22px}.nowc b{font-size:24px}.nowc small{font-size:15px}}
 .vrl{border:0;background:none;color:inherit;font:inherit;padding:0;cursor:pointer;text-decoration:underline dotted;text-underline-offset:3px}
@@ -461,7 +468,7 @@ html .ic.wm.open .opts button.on{background:#000;color:#fff;outline:2px solid #f
   function techRootFolders() { var keep = state.course, cat = state.cat; state.course = ''; state.cat = 'All'; var r = techLevel().list; state.course = keep; state.cat = cat; return r; }
   function techUp() { var P = state.course.split('/'); P.pop(); var to = P.join('/'); state.course = ''; var L = techLevel(); state.course = L.implicit && L.P.join('/') === to ? '' : to; save(); render(); } // from a chip that opened straight into its folder, going up lands back on the chip
   var TABIC = { Watching: '<path d="M8 5.5v13l10.5-6.5z"/>', Next: '<path d="M4 6h16M4 12h16M4 18h11"/>', Discover: '<circle cx="10.5" cy="10.5" r="6"/><path d="M15 15l5 5"/>' }; // ?next phone tab icons
-  function renderTop() { renderMini();
+  function renderTop() { var ns0 = document.getElementById('nowslim'); if (ns0) ns0.classList.remove('show'); if (nowObs) { nowObs.disconnect(); nowObs = null; } renderMini();
     if (P2ON && V24 && !p2 && learn.length && items.length) p2Seed();
     var t = $('top'); t.innerHTML = ''; t.hidden = !AFTER; if (!AFTER) return;
     TOP.forEach(function (s) {
@@ -901,6 +908,14 @@ html .ic.wm.open .opts button.on{background:#000;color:#fff;outline:2px solid #f
       if (c.it && r.it && sid(r.it) === sid(c.it)) hit = r.id; else if (c.v && r.f && r.f.vids && r.f.vids.some(function (v) { return lid(v) === lid(c.v); })) hit = r.id; }); });
     return hit; }
   function p2FirstId() { var f = null; P2K.forEach(function (k) { if (f) return; var r = p2.lists[k].map(p2Res).filter(Boolean).slice(0, P2P[k])[0]; if (r) f = r.id; }); return f; } /* TOC = the first channel */
+  /* staging 14 Nov: when the Now watching card scrolls away, a slim copy stays fixed at the top (under the tabs on the Mac) */
+  var nowObs = null;
+  function nowSlim(img, t, sub, play, card, toc) { var h = document.querySelector('header'); if (!h) return; var sl = document.getElementById('nowslim');
+    if (!sl) { sl = document.createElement('div'); sl.id = 'nowslim'; sl.innerHTML = '<span class="th"></span><span class="x"><b></b><small></small></span><span class="pl">\u25b6</span>'; h.appendChild(sl); }
+    sl.querySelector('.th').style.backgroundImage = img ? 'url("' + img + '")' : ''; sl.querySelector('b').textContent = t; sl.querySelector('small').textContent = sub; sl.classList.toggle('istoc', !!toc); sl.onclick = play; sl.classList.remove('show');
+    if (!('IntersectionObserver' in window)) return; if (nowObs) nowObs.disconnect();
+    nowObs = new IntersectionObserver(function (es) { es.forEach(function (en) { sl.classList.toggle('show', !en.isIntersecting && en.boundingClientRect.top < 0); }); }, { threshold: 0 });
+    nowObs.observe(card); }
   function p2NowCard(g0, onId) { var c = miniItem(); if (!c) return; var r = onId ? p2Res(onId) : null, img = '', t = '', sub = '', pc = 0, play;
     if (r) { var pr = p2Prog(r), im = p2Img(r, 'video'); img = im ? im.src : ''; t = pr.t; sub = r.it ? pr.m.replace(r.it.title + ' · ', '') + ' \u2022 ' + r.it.title : pr.m; var isToc = r.id === p2FirstId(), nudge = isToc && pr.of > pr.n ? (pr.of - pr.n) + ' left to finish' : ''; if (pr.of) { pc = Math.round(100 * pr.n / pr.of); sub += ' \u2022 ' + pr.c; } /* 14 Nov: title first, then S5 E8 \u2022 show \u2022 39/40 */ play = function () { p2Play(r); }; }
     else if (c.it) { t = c.it.title; img = c.it.poster ? 'https://image.tmdb.org/t/p/w500' + c.it.poster : ''; sub = c.it.kind === 'tv' && c.it.next_ep ? 'Next: S' + c.it.next_ep.s + ' E' + c.it.next_ep.e : 'Movie'; play = function () { notePlay('i:' + sid(c.it)); go(link(c.it)); }; }
@@ -908,7 +923,7 @@ html .ic.wm.open .opts button.on{background:#000;color:#fff;outline:2px solid #f
     var d = document.createElement('div'); d.className = 'nowc'; d.innerHTML = '<div class="im"><span class="lb">Now watching</span><span class="npl" aria-label="Continue">▶</span></div><div class="bd"><b></b><small></small>' + (pc ? '<span class="pg"><i></i></span>' : '') + '</div>';
     if (img) d.querySelector('.im').style.backgroundImage = 'url("' + img + '")'; d.querySelector('b').textContent = t; d.querySelector('small').textContent = sub; if (pc) d.querySelector('.pg i').style.width = pc + '%';
     if (typeof isToc !== 'undefined' && isToc) { d.classList.add('istoc'); if (nudge) { var nu = document.createElement('div'); nu.className = 'p2nudge'; nu.textContent = nudge; d.querySelector('.bd').appendChild(nu); } }
-    d.onclick = play; g0.appendChild(d); var l = document.createElement('div'); l.className = 'nowlbl'; l.textContent = 'Switch the channel'; g0.appendChild(l); }
+    d.onclick = play; g0.appendChild(d); nowSlim(img, t, sub.split(' \u2022 ').slice(0, 2).join(' \u2022 '), play, d, typeof isToc !== 'undefined' && isToc); var l = document.createElement('div'); l.className = 'nowlbl'; l.textContent = 'Switch the channel'; g0.appendChild(l); }
   function p2Watching(g0) { if (!p2) p2Seed(); p2Fix(); var onId = NEXT ? p2OnId() : null; if (NEXT) p2NowCard(g0, onId); var wrap = document.createElement('div'); wrap.className = 'p2list'; g0.appendChild(wrap); var first = true;
     P2K.forEach(function (k) { p2.lists[k].map(p2Res).filter(Boolean).slice(0, P2P[k]).forEach(function (r) { if (onId && r.id === onId) { first = false; return; } /* the frame belongs to TOC only: when TOC is on, no row gets it */
       var pr = p2Prog(r), im = p2Img(r, 'video'), d = document.createElement('div'); d.className = 'p2r' + (first ? ' top' : ''); first = false; d.dataset.id = r.id;
