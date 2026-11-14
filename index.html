@@ -137,6 +137,7 @@ body.sorting .ic { opacity: 0 !important; }
 
 /* ?proto v2 (V2.4.2): Watching shelf by kind, Next shelf by kind */
 .p2bar{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:6px;align-items:center;font:600 12px var(--font);color:var(--muted);margin:2px 0 6px}.p2bar button{font:600 12px var(--font);border:1px solid var(--line,#ddd);background:transparent;color:var(--fg);border-radius:999px;padding:4px 10px;cursor:pointer}.p2bar button[aria-pressed=true]{background:var(--fg);color:var(--bg)}
+.p2bar.bot{margin:18px 0 6px}
 .p2list{grid-column:1/-1;max-width:900px;width:100%}
 .p2r{display:grid;grid-template-columns:50% minmax(0,1fr);gap:14px;align-items:start;padding:12px 0;border-bottom:1px solid var(--line,#e5e5e5);cursor:pointer;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
 .p2r.top{border:2px solid #d63c3c;border-radius:16px;padding:10px;margin:2px 0 8px;background:rgba(214,60,60,.06)}
@@ -831,10 +832,10 @@ html .ic.wm.open .opts button.on{background:#000;color:#fff;outline:2px solid #f
   function p2Drag(el, k, id) { el.draggable = true; el.addEventListener('dragstart', function (e) { el.classList.add('drag'); e.dataTransfer.setData('text/plain', id); });
     el.addEventListener('dragend', function () { el.classList.remove('drag'); }); el.addEventListener('dragover', function (e) { e.preventDefault(); });
     el.addEventListener('drop', function (e) { e.preventDefault(); var from = e.dataTransfer.getData('text/plain'); if (!from || from === id) return; var L = p2.lists[k]; if (L.indexOf(from) < 0) return; var to = L.indexOf(id); p2Move(k, from, to); render(); }); }
-  function p2Bar(g) { var bar = document.createElement('div'); bar.className = 'p2bar'; bar.appendChild(document.createTextNode('Preview V2.4.2 · '));
+  function p2Bar(g, bottom) { var bar = document.createElement('div'); bar.className = 'p2bar' + (bottom ? ' bot' : ''); if (!bottom) bar.appendChild(document.createTextNode('Preview V2.4.2 · '));
     var dk = document.documentElement.classList.contains('p2dark'), tb = document.createElement('button'); tb.type = 'button'; tb.textContent = dk ? '☀ Light' : '☾ Dark'; tb.onclick = function () { var h = document.documentElement; h.classList.toggle('p2dark', !dk); h.classList.toggle('p2light', dk); try { localStorage.setItem('proto2-theme', dk ? 'light' : 'dark'); } catch (e) {} render(); }; bar.appendChild(tb);
     var rs = document.createElement('button'); rs.type = 'button'; rs.textContent = 'Reset from my lists'; rs.onclick = function () { p2Seed(); render(); toast('Prototype lists rebuilt from Watching, Parked, Backlog and started Tech folders'); }; bar.appendChild(rs); g.appendChild(bar); }
-  function p2Watching(g0) { if (!p2) p2Seed(); p2Fix(); p2Bar(g0); var wrap = document.createElement('div'); wrap.className = 'p2list'; g0.appendChild(wrap); var first = true;
+  function p2Watching(g0) { if (!p2) p2Seed(); p2Fix(); var wrap = document.createElement('div'); wrap.className = 'p2list'; g0.appendChild(wrap); var first = true;
     P2K.forEach(function (k) { p2.lists[k].map(p2Res).filter(Boolean).slice(0, P2P[k]).forEach(function (r) {
       var pr = p2Prog(r), im = p2Img(r, 'video'), d = document.createElement('div'); d.className = 'p2r' + (first ? ' top' : ''); first = false; d.dataset.id = r.id;
       var v = document.createElement('div'); v.className = 'p2v'; if (im) { var i = document.createElement('img'); i.loading = 'lazy'; i.alt = ''; i.src = im.src; if (im.pt) i.className = 'pt'; v.appendChild(i); } else { var n = document.createElement('span'); n.className = 'ln'; n.textContent = r.f ? '▶' : '·'; v.appendChild(n); }
@@ -846,7 +847,7 @@ html .ic.wm.open .opts button.on{background:#000;color:#fff;outline:2px solid #f
         a.push(['✓ Finished' + (r.f ? ' (whole folder)' : '') + ' · next in ' + p2Lab(k) + ' comes up', function () { p2Leave(k, r.id, 'finished'); }]);
         a.push(['⏸ Park · back to Next', function () { p2Leave(k, r.id, 'park'); }]); a.push(['✕ Remove', function () { p2Leave(k, r.id, 'remove'); }]);
         if (r.f) a.push(['↗ Open folder', function () { top = 'Discover'; state.shelf = 'Tech'; state.cat = 'All'; state.course = r.f.path; save(); render(); }]); return a; }, function () { p2Play(r); }); }); });
-    if (first) { var e = document.createElement('div'); e.className = 'empty'; e.textContent = 'Nothing on Watching yet. Open Next and move something to the top of a kind.'; wrap.appendChild(e); } }
+    if (first) { var e = document.createElement('div'); e.className = 'empty'; e.textContent = 'Nothing on Watching yet. Open Next and move something to the top of a kind.'; wrap.appendChild(e); } p2Bar(g0, true); }
   function p2Next(gn) { if (!p2) p2Seed(); p2Fix(); p2Bar(gn); var k = p2.chip || 'Series';
     var ch = document.createElement('div'); ch.className = 'p2chips'; P2K.forEach(function (x) { var b = document.createElement('button'); b.type = 'button'; b.setAttribute('aria-pressed', x === k ? 'true' : 'false'); b.innerHTML = p2Lab(x) + ' <small></small>'; b.querySelector('small').textContent = p2.lists[x].length; b.onclick = function () { p2.chip = x; p2Save(); render(); }; ch.appendChild(b); }); gn.appendChild(ch);
     var wrap = document.createElement('div'); wrap.className = 'p2list'; gn.appendChild(wrap); var rs = p2.lists[k].map(p2Res).filter(Boolean), mode = p2.lay === 'x13' ? 'port' : p2.lay === 'x11b' ? 'video' : 'art';
