@@ -161,6 +161,9 @@ html.pvnext .p2r.top,html.pvnext.p2dark .p2r.top{border:1px solid rgba(214,60,60
 .nowc .bd{padding:12px 14px 14px}.nowc b{display:block;font-size:18px;line-height:1.25}.nowc small{display:block;color:var(--muted);font-size:13px;margin-top:3px}
 .nowc .pg{display:block;height:4px;border-radius:2px;background:color-mix(in srgb,var(--fg) 15%,transparent);margin-top:10px}.nowc .pg i{display:block;height:100%;border-radius:2px;background:#3fa55b}
 .nowc .go{display:inline-flex;align-items:center;gap:8px;margin-top:12px;background:var(--fg);color:var(--bg);font:700 14px var(--font);padding:9px 18px;border-radius:999px;border:0;cursor:pointer}
+.nowc .npl{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:58px;height:58px;border-radius:50%;background:rgba(255,255,255,.92);color:#111;display:grid;place-items:center;font-size:20px;padding-left:3px;box-sizing:border-box;box-shadow:0 6px 20px rgba(0,0,0,.4)}
+.nowc b{font-size:22px}
+html.isstg .nowc .pg i,html.isstg .p2cp .cb i{background:#e8e6e1}
 .nowlbl{grid-column:1/-1;font:700 10px var(--font);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:10px 0 0}
 @media (min-width:701px){.nowc{display:grid;grid-template-columns:min(480px,50%) 1fr}.nowc .bd{padding:22px}.nowc b{font-size:24px}.nowc small{font-size:15px}}
 .vrl{border:0;background:none;color:inherit;font:inherit;padding:0;cursor:pointer;text-decoration:underline dotted;text-underline-offset:3px}
@@ -206,7 +209,7 @@ html .ic.wm.open .opts button.on{background:#000;color:#fff;outline:2px solid #f
   var LEARN = true; // V2.3 live 10 Nov (was the ?v23 preview)
   var V24 = !/[?&]v23\b/.test(location.search); if (V24) document.documentElement.classList.add('v24'); // V2.4 live 11 Nov (?v23 shows the old view for comparison)
   var PROTO = /[?&]proto\b/.test(location.search); // V2.4.2 prototype: subscribe to folders, one channel each on Watching (this device only)
-  var NEXT = /[?&](staging|next)\b/.test(location.search); /* ?staging = preview of what's built but not live yet (?next kept as old alias) */ var B2 = true; /* mini player, phone tabs at the bottom with icons, quieter TOC frame: live 14 Nov on Javier's go */ if (B2) document.documentElement.classList.add('pvnext'); // V2.4.1 preview (Lean onward): items flagged next only show with ?next until Javier says go
+  var NEXT = /[?&](staging|next)\b/.test(location.search); if (NEXT) document.documentElement.classList.add('isstg'); /* ?staging = preview of what's built but not live yet (?next kept as old alias) */ var B2 = true; /* mini player, phone tabs at the bottom with icons, quieter TOC frame: live 14 Nov on Javier's go */ if (B2) document.documentElement.classList.add('pvnext'); // V2.4.1 preview (Lean onward): items flagged next only show with ?next until Javier says go
   var B1 = true; // 'One set of state buttons' (V2.4.2) piece 1: live 14 Nov on Javier's go
   var P2ON = !/[?&]v241\b/.test(location.search); // V2.4.2 Watching/Next by kind: live 12 Nov (?v241 shows the old shelves)
   var learn = [], learnDone = [], learnWatch = [], forder = {}, vorder = {}; // vorder: your video order per playlist (?next) // forder: your folder order per Tech level ('' = Tech › All), synced via Trakt
@@ -892,10 +895,10 @@ html .ic.wm.open .opts button.on{background:#000;color:#fff;outline:2px solid #f
       if (c.it && r.it && sid(r.it) === sid(c.it)) hit = r.id; else if (c.v && r.f && r.f.vids && r.f.vids.some(function (v) { return lid(v) === lid(c.v); })) hit = r.id; }); });
     return hit; }
   function p2NowCard(g0, onId) { var c = miniItem(); if (!c) return; var r = onId ? p2Res(onId) : null, img = '', t = '', sub = '', pc = 0, play;
-    if (r) { var pr = p2Prog(r), im = p2Img(r, 'video'); img = im ? im.src : ''; t = r.it ? r.it.title : pr.t; sub = r.it ? pr.m.replace(r.it.title + ' · ', '') + ' · ' + pr.t : pr.m; if (pr.of) { pc = Math.round(100 * pr.n / pr.of); sub += ' · ' + pr.c; } play = function () { p2Play(r); }; }
+    if (r) { var pr = p2Prog(r), im = p2Img(r, 'video'); img = im ? im.src : ''; t = pr.t; sub = r.it ? pr.m.replace(r.it.title + ' · ', '') + ' \u2022 ' + r.it.title : pr.m; if (pr.of) { pc = Math.round(100 * pr.n / pr.of); sub += ' \u2022 ' + pr.c; } /* 14 Nov: title first, then S5 E8 \u2022 show \u2022 39/40 */ play = function () { p2Play(r); }; }
     else if (c.it) { t = c.it.title; img = c.it.poster ? 'https://image.tmdb.org/t/p/w500' + c.it.poster : ''; sub = c.it.kind === 'tv' && c.it.next_ep ? 'Next: S' + c.it.next_ep.s + ' E' + c.it.next_ep.e : 'Movie'; play = function () { notePlay('i:' + sid(c.it)); go(link(c.it)); }; }
     else { t = c.v.title; img = c.v.cover || ''; sub = 'Tech' + (c.v.course ? ' · ' + c.v.course : ''); play = function () { playLearn(c.v); }; }
-    var d = document.createElement('div'); d.className = 'nowc'; d.innerHTML = '<div class="im"><span class="lb">Now watching</span></div><div class="bd"><b></b><small></small>' + (pc ? '<span class="pg"><i></i></span>' : '') + '<button type="button" class="go">▶ Continue</button></div>';
+    var d = document.createElement('div'); d.className = 'nowc'; d.innerHTML = '<div class="im"><span class="lb">Now watching</span><span class="npl" aria-label="Continue">▶</span></div><div class="bd"><b></b><small></small>' + (pc ? '<span class="pg"><i></i></span>' : '') + '</div>';
     if (img) d.querySelector('.im').style.backgroundImage = 'url("' + img + '")'; d.querySelector('b').textContent = t; d.querySelector('small').textContent = sub; if (pc) d.querySelector('.pg i').style.width = pc + '%';
     d.onclick = play; g0.appendChild(d); var l = document.createElement('div'); l.className = 'nowlbl'; l.textContent = 'Switch the channel'; g0.appendChild(l); }
   function p2Watching(g0) { if (!p2) p2Seed(); p2Fix(); var onId = NEXT ? p2OnId() : null; if (NEXT) p2NowCard(g0, onId); var wrap = document.createElement('div'); wrap.className = 'p2list'; g0.appendChild(wrap); var first = true;
