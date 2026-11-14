@@ -358,7 +358,7 @@ html .ic.wm.open .opts button.on{background:#000;color:#fff;outline:2px solid #f
     if (k.indexOf('i:') === 0) { var it = bySid(k.slice(2)); return it && (lastPlay.w || !isWatched(it)) ? { it: it } : null; }
     if (k.indexOf('v:') === 0) { k = k.slice(2); if (learnDone.indexOf(k) >= 0) return null; for (i = 0; i < learn.length; i++) if (lid(learn[i]) === k) return { v: learn[i] }; }
     return null; }
-  function renderMini() { if (!B2) return; var c = NEXT && top === 'Watching' && AFTER ? null : miniItem(), b = document.getElementById('mini'), dk = document.getElementById('minidock');
+  function renderMini() { if (!B2) return; var c = NEXT ? null : miniItem(), /* staging: Continue lives only in the Now watching card */ b = document.getElementById('mini'), dk = document.getElementById('minidock');
     if (!c) { if (dk) dk.remove(); document.body.classList.remove('hasmini'); return; }
     if (!b) { dk = document.createElement('div'); dk.id = 'minidock'; b = document.createElement('div'); b.id = 'mini'; dk.appendChild(b); document.body.appendChild(dk); } document.body.classList.add('hasmini');
     var it = c.it, sub = '', pc = 0;
