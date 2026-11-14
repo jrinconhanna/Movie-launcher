@@ -164,6 +164,9 @@ html.pvnext .p2r.top,html.pvnext.p2dark .p2r.top{border:1px solid rgba(214,60,60
 .nowlbl{grid-column:1/-1;font:700 10px var(--font);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:10px 0 0}
 @media (min-width:701px){.nowc{display:grid;grid-template-columns:min(480px,50%) 1fr}.nowc .bd{padding:22px}.nowc b{font-size:24px}.nowc small{font-size:15px}}
 .vrl{border:0;background:none;color:inherit;font:inherit;padding:0;cursor:pointer;text-decoration:underline dotted;text-underline-offset:3px}
+.fset{font-size:12px;color:var(--muted)}.fset button{border:0;background:none;padding:0;font:inherit;color:inherit;cursor:pointer;text-decoration:underline;text-underline-offset:3px;text-decoration-color:color-mix(in srgb,currentColor 40%,transparent)}
+.fcred{font-size:10.5px;color:var(--muted);opacity:.7}
+.tocheck>summary{font-size:13px}.tocheck details{margin:8px 0 0 14px}
 .p2list{grid-column:1/-1;max-width:900px;width:100%}
 .p2r{display:grid;grid-template-columns:50% minmax(0,1fr);gap:14px;align-items:start;padding:12px 0;border-bottom:1px solid var(--line,#e5e5e5);cursor:pointer;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
 .p2r.top{border:2px solid #d63c3c;border-radius:16px;padding:10px;margin:2px 0 8px;background:rgba(214,60,60,.06)}
@@ -907,7 +910,7 @@ html .ic.wm.open .opts button.on{background:#000;color:#fff;outline:2px solid #f
         a.push(['✓ Finished' + (r.f ? ' (whole folder)' : '') + ' · next in ' + p2Lab(k) + ' comes up', function () { p2Leave(k, r.id, 'finished'); }]);
         a.push(['⏸ Park · back to Next', function () { p2Leave(k, r.id, 'park'); }]); a.push(['✕ Remove', function () { p2Leave(k, r.id, 'remove'); }]);
         if (r.f) a.push(['↗ Open folder', function () { top = 'Discover'; state.shelf = 'Tech'; state.cat = 'All'; state.course = r.f.path; save(); render(); }]); return a; }, function () { p2Play(r); }); }); });
-    if (first) { var e = document.createElement('div'); e.className = 'empty'; e.textContent = 'Nothing on Watching yet. Open Next and move something to the top of a kind.'; wrap.appendChild(e); } p2Bar(g0, true); }
+    if (first) { var e = document.createElement('div'); e.className = 'empty'; e.textContent = 'Nothing on Watching yet. Open Next and move something to the top of a kind.'; wrap.appendChild(e); } if (!NEXT) p2Bar(g0, true); }
   function p2Next(gn) { if (!p2) p2Seed(); p2Fix(); var k = p2.chip || 'Series';
     var ch = document.createElement('div'); ch.className = 'p2chips'; P2K.forEach(function (x) { var b = document.createElement('button'); b.type = 'button'; b.setAttribute('aria-pressed', x === k ? 'true' : 'false'); b.innerHTML = p2Lab(x) + ' <small></small>'; b.querySelector('small').textContent = p2.lists[x].length; b.onclick = function () { p2.chip = x; p2Save(); render(); }; ch.appendChild(b); }); gn.appendChild(ch);
     var wrap = document.createElement('div'); wrap.className = 'p2list'; gn.appendChild(wrap); var rs = p2.lists[k].map(p2Res).filter(Boolean), mode = p2.lay === 'x13' ? 'port' : p2.lay === 'x11b' ? 'video' : 'art';
@@ -923,7 +926,7 @@ html .ic.wm.open .opts button.on{background:#000;color:#fff;outline:2px solid #f
       var nb = tx.querySelector('.nb'); if (pr.of) nb.firstChild.style.width = Math.round(100 * pr.n / pr.of) + '%'; else if (pr.v) nb.firstChild.style.width = pr.v + '%'; else nb.style.visibility = notStarted ? 'hidden' : 'visible';
       d.appendChild(tx); var gr = document.createElement('span'); gr.className = 'gr'; gr.textContent = '≡'; d.appendChild(gr); wrap.appendChild(d); p2Drag(d, k, r.id);
       var acts = function () { return [['⤒ Move to top' + (P2P[k] ? ' (on Watching)' : ''), function () { p2Move(k, r.id, 'top'); render(); }], ['↑ Move up', function () { p2Move(k, r.id, 'up'); render(); }], ['⤓ Move to bottom', function () { p2Move(k, r.id, 'bottom'); render(); }], ['✕ Remove from Next', function () { var L = p2.lists[k]; L.splice(L.indexOf(r.id), 1); p2Save(); render(); }]]; };
-      p2Hold(d, acts, function (e) { p2Menu(e.clientX, e.clientY, acts()); }); }); p2Bar(gn, true); }
+      p2Hold(d, acts, function (e) { p2Menu(e.clientX, e.clientY, acts()); }); }); if (!NEXT) p2Bar(gn, true); }
   function p2Add(id, k, pos) { if (!p2) p2Seed(); P2K.forEach(function (x) { var L = p2.lists[x], i = L.indexOf(id); if (i >= 0) L.splice(i, 1); }); if (pos === 'top') p2.lists[k].unshift(id); else p2.lists[k].push(id); p2Save(); toast('In Next › ' + p2Lab(k) + (pos === 'top' ? ' (top: on Watching)' : B1 ? ' · ' + p2.lists[k].length + ' in the list' : ' (bottom)')); render(); }
   function render() {
     renderTop(); renderTabs();
@@ -976,7 +979,7 @@ html .ic.wm.open .opts button.on{background:#000;color:#fff;outline:2px solid #f
   }
   function renderFoot() {
     var f = $('foot'); f.innerHTML = '';
-    function gapList(list, label, hint) {
+    function gapList(list, label, hint, into) {
       if (!list.length) return;
       var d = document.createElement('details'); var s = document.createElement('summary');
       s.textContent = label + ' · ' + list.length; d.appendChild(s);
@@ -993,8 +996,9 @@ html .ic.wm.open .opts button.on{background:#000;color:#fff;outline:2px solid #f
         }
         ul.appendChild(li);
       });
-      d.appendChild(ul); f.appendChild(d);
+      d.appendChild(ul); (into || f).appendChild(d);
     }
+    if (!NEXT) {
     gapList(unmatched.filter(function (u) { return !u.video; }), 'Movies and docs to check', 'Probably on TMDB. Open the “Maybe” link; if it’s right, tell Claude and it becomes permanent.');
     gapList(unmatched.filter(function (u) { return u.video; }), 'Videos (not on TMDB)', 'YouTube clips, interviews and compilations. They will get their own home later.');
     var p = document.createElement('div');
@@ -1002,6 +1006,26 @@ html .ic.wm.open .opts button.on{background:#000;color:#fff;outline:2px solid #f
     p.appendChild(vr); p.appendChild(document.createTextNode(' \u00b7 ' + (updated ? 'Library updated ' + updated.replace('T', ' ').replace('Z', ' UTC') + '. ' : '') + 'Posters and titles from TMDB. This product uses the TMDB API but is not endorsed or certified by TMDB. Watched status from Trakt.'));
     f.appendChild(p);
     if (tok) { var fc = document.createElement('div'); fc.className = 'fconn'; fc.appendChild(document.createTextNode('Trakt connected on this device · ')); var stt = document.createElement('span'); stt.className = 'st'; stt.textContent = saveState; if (saveState) { fc.appendChild(stt); fc.appendChild(document.createTextNode(' · ')); } var dx = document.createElement('button'); dx.type = 'button'; dx.textContent = 'Disconnect'; dx.onclick = function () { setTok(null); synced = false; paused = {}; try { localStorage.removeItem('paused'); } catch (e) {} clearTimeout(pushT); pushT = null; render(); toast('Disconnected · saved on this device only'); }; fc.appendChild(dx); f.appendChild(fc); }
+    } else {
+    /* 14 Nov: bottom tidied into one fold, one settings line, one credits line */
+    var gm = unmatched.filter(function (u) { return !u.video; }), gv = unmatched.filter(function (u) { return u.video; });
+    if (gm.length || gv.length) { var tc = document.createElement('details'); tc.className = 'tocheck'; var ts = document.createElement('summary');
+      ts.textContent = 'To check' + (gm.length ? ' \u00b7 ' + gm.length + ' movies and docs' : '') + (gv.length ? ' \u00b7 ' + gv.length + ' videos' : ''); tc.appendChild(ts);
+      gapList(gm, 'Movies and docs to check', 'Probably on TMDB. Open the \u201cMaybe\u201d link; if it\u2019s right, tell Claude and it becomes permanent.', tc);
+      gapList(gv, 'Videos (not on TMDB)', 'YouTube clips, interviews and compilations. They will get their own home later.', tc); f.appendChild(tc); }
+    var fs = document.createElement('div'); fs.className = 'fset';
+    function lnk(txt, fn, title) { var b = document.createElement('button'); b.type = 'button'; b.textContent = txt; if (title) b.title = title; b.onclick = fn; return b; }
+    function dotc() { fs.appendChild(document.createTextNode(' \u00b7 ')); }
+    var vr = lnk((NEXT ? 'Staging \u00b7 V2.4.2' : 'Live \u00b7 V2.4.1') + ' \u21bb', function () { location.reload(); }, 'Tap to reload'); vr.className = 'vrl'; fs.appendChild(vr); /* tap the version to reload: Home Screen apps have no reload button */
+    if (updated) { dotc(); var ud = new Date(updated); fs.appendChild(document.createTextNode('Updated ' + (isNaN(ud) ? updated : ud.toLocaleString('en-GB', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })))); }
+    var dk = document.documentElement.classList.contains('p2dark'); dotc();
+    fs.appendChild(lnk(dk ? '\u2600 Light' : '\u263e Dark', function () { var h = document.documentElement; h.classList.toggle('p2dark', !dk); h.classList.toggle('p2light', dk); try { localStorage.setItem('proto2-theme', dk ? 'light' : 'dark'); } catch (e) {} render(); }));
+    dotc(); fs.appendChild(lnk('Reset lists', function () { p2Seed(); render(); toast('Lists rebuilt from Watching, Parked, Backlog and started Tech folders'); }, 'Rebuild Watching and Next from my lists'));
+    if (tok) { dotc(); fs.appendChild(document.createTextNode('Trakt \u2713' + (saveState ? ' ' + saveState.toLowerCase() : ''))); dotc();
+      fs.appendChild(lnk('Disconnect', function () { setTok(null); synced = false; paused = {}; try { localStorage.removeItem('paused'); } catch (e) {} clearTimeout(pushT); pushT = null; render(); toast('Disconnected \u00b7 saved on this device only'); })); }
+    f.appendChild(fs);
+    var cr = document.createElement('div'); cr.className = 'fcred'; cr.textContent = 'Posters and titles from TMDB. This product uses the TMDB API but is not endorsed or certified by TMDB. Watched status from Trakt.'; f.appendChild(cr);
+    }
   }
   function save() { lsSet('view', state); }
   $('wf').onchange = function () { state.wf = this.value; save(); render(); window.scrollTo(0, 0); };
