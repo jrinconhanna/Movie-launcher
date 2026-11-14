@@ -163,6 +163,7 @@ html.pvnext .p2r.top,html.pvnext.p2dark .p2r.top{border:1px solid rgba(214,60,60
 .nowc .go{display:inline-flex;align-items:center;gap:8px;margin-top:12px;background:var(--fg);color:var(--bg);font:700 14px var(--font);padding:9px 18px;border-radius:999px;border:0;cursor:pointer}
 .nowlbl{grid-column:1/-1;font:700 10px var(--font);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:10px 0 0}
 @media (min-width:701px){.nowc{display:grid;grid-template-columns:min(480px,50%) 1fr}.nowc .bd{padding:22px}.nowc b{font-size:24px}.nowc small{font-size:15px}}
+.vrl{border:0;background:none;color:inherit;font:inherit;padding:0;cursor:pointer;text-decoration:underline dotted;text-underline-offset:3px}
 .p2list{grid-column:1/-1;max-width:900px;width:100%}
 .p2r{display:grid;grid-template-columns:50% minmax(0,1fr);gap:14px;align-items:start;padding:12px 0;border-bottom:1px solid var(--line,#e5e5e5);cursor:pointer;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
 .p2r.top{border:2px solid #d63c3c;border-radius:16px;padding:10px;margin:2px 0 8px;background:rgba(214,60,60,.06)}
@@ -997,7 +998,8 @@ html .ic.wm.open .opts button.on{background:#000;color:#fff;outline:2px solid #f
     gapList(unmatched.filter(function (u) { return !u.video; }), 'Movies and docs to check', 'Probably on TMDB. Open the “Maybe” link; if it’s right, tell Claude and it becomes permanent.');
     gapList(unmatched.filter(function (u) { return u.video; }), 'Videos (not on TMDB)', 'YouTube clips, interviews and compilations. They will get their own home later.');
     var p = document.createElement('div');
-    p.textContent = (NEXT ? 'Staging \u00b7 V2.4.2' : 'Live \u00b7 V2.4.1') + ' \u00b7 ' + (updated ? 'Library updated ' + updated.replace('T', ' ').replace('Z', ' UTC') + '. ' : '') + 'Posters and titles from TMDB. This product uses the TMDB API but is not endorsed or certified by TMDB. Watched status from Trakt.';
+    var vr = document.createElement('button'); vr.type = 'button'; vr.className = 'vrl'; vr.title = 'Tap to reload'; vr.textContent = (NEXT ? 'Staging \u00b7 V2.4.2' : 'Live \u00b7 V2.4.1') + ' \u21bb'; vr.onclick = function () { location.reload(); }; /* tap the version to reload: Home Screen apps have no reload button */
+    p.appendChild(vr); p.appendChild(document.createTextNode(' \u00b7 ' + (updated ? 'Library updated ' + updated.replace('T', ' ').replace('Z', ' UTC') + '. ' : '') + 'Posters and titles from TMDB. This product uses the TMDB API but is not endorsed or certified by TMDB. Watched status from Trakt.'));
     f.appendChild(p);
     if (tok) { var fc = document.createElement('div'); fc.className = 'fconn'; fc.appendChild(document.createTextNode('Trakt connected on this device · ')); var stt = document.createElement('span'); stt.className = 'st'; stt.textContent = saveState; if (saveState) { fc.appendChild(stt); fc.appendChild(document.createTextNode(' · ')); } var dx = document.createElement('button'); dx.type = 'button'; dx.textContent = 'Disconnect'; dx.onclick = function () { setTok(null); synced = false; paused = {}; try { localStorage.removeItem('paused'); } catch (e) {} clearTimeout(pushT); pushT = null; render(); toast('Disconnected · saved on this device only'); }; fc.appendChild(dx); f.appendChild(fc); }
   }
