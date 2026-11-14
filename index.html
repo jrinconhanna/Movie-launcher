@@ -155,6 +155,14 @@ html.pvnext body.hasmini{padding-bottom:calc(160px + env(safe-area-inset-bottom)
 html.pvnext .toast{bottom:calc(72px + env(safe-area-inset-bottom))}html.pvnext body.hasmini .toast{bottom:calc(150px + env(safe-area-inset-bottom))}
 html.pvnext header{padding:8px 0 0;z-index:42}html.pvnext #crow{margin-bottom:8px}html.pvnext #tabs:not([hidden]){margin-top:6px}html.pvnext .p2chips{margin-top:0}}
 html.pvnext .p2r.top,html.pvnext.p2dark .p2r.top{border:1px solid rgba(214,60,60,.6);background:transparent;padding:11px}body.hasmini .toast{bottom:calc(96px + env(safe-area-inset-bottom))}
+/* ?next: Watching as a TV: the channel that's on sits in a big card on top, its slot in the list stays empty */
+.nowc{grid-column:1/-1;border-radius:18px;background:var(--surface);overflow:hidden;cursor:pointer;margin:2px 0 4px;max-width:900px}
+.nowc .im{position:relative;aspect-ratio:16/9;background:#333 center/cover}.nowc .im .lb{position:absolute;left:10px;top:10px;background:rgba(0,0,0,.65);color:#fff;font:700 10px var(--font);letter-spacing:.08em;text-transform:uppercase;padding:4px 8px;border-radius:6px}
+.nowc .bd{padding:12px 14px 14px}.nowc b{display:block;font-size:18px;line-height:1.25}.nowc small{display:block;color:var(--muted);font-size:13px;margin-top:3px}
+.nowc .pg{display:block;height:4px;border-radius:2px;background:color-mix(in srgb,var(--fg) 15%,transparent);margin-top:10px}.nowc .pg i{display:block;height:100%;border-radius:2px;background:#3fa55b}
+.nowc .go{display:inline-flex;align-items:center;gap:8px;margin-top:12px;background:var(--fg);color:var(--bg);font:700 14px var(--font);padding:9px 18px;border-radius:999px;border:0;cursor:pointer}
+.nowlbl{grid-column:1/-1;font:700 10px var(--font);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:10px 0 0}
+@media (min-width:701px){.nowc{display:grid;grid-template-columns:min(480px,50%) 1fr}.nowc .bd{padding:22px}.nowc b{font-size:24px}.nowc small{font-size:15px}}
 .p2list{grid-column:1/-1;max-width:900px;width:100%}
 .p2r{display:grid;grid-template-columns:50% minmax(0,1fr);gap:14px;align-items:start;padding:12px 0;border-bottom:1px solid var(--line,#e5e5e5);cursor:pointer;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
 .p2r.top{border:2px solid #d63c3c;border-radius:16px;padding:10px;margin:2px 0 8px;background:rgba(214,60,60,.06)}
@@ -344,12 +352,12 @@ html .ic.wm.open .opts button.on{background:#000;color:#fff;outline:2px solid #f
   var paused = ls('paused', {});  // key -> % watched
   function isStarted(it) { return it.kind === 'movie' && paused[it.key] != null && !isWatched(it); }
   var lastPlay = ls('lastplay', null); // ?next mini player: the last thing tapped to play in the launcher {k: 'i:<sid>' | 'v:<video id>', at}, synced via Trakt
-  function notePlay(k) { if (!B2) return; var it0 = k.indexOf('i:') === 0 ? bySid(k.slice(2)) : null; lastPlay = { k: k, at: Date.now(), w: it0 && isWatched(it0) ? 1 : 0 }; /* w: already watched when tapped (a rewatch), so only a new mark hides it */ lsSet('lastplay', lastPlay); renderMini(); }
+  function notePlay(k) { if (!B2) return; var it0 = k.indexOf('i:') === 0 ? bySid(k.slice(2)) : null; lastPlay = { k: k, at: Date.now(), w: it0 && isWatched(it0) ? 1 : 0 }; /* w: already watched when tapped (a rewatch), so only a new mark hides it */ lsSet('lastplay', lastPlay); if (NEXT && top === 'Watching') { render(); window.scrollTo(0, 0); } else renderMini(); }
   function miniItem() { if (!lastPlay || Date.now() - lastPlay.at > 7 * 864e5) return null; var k = lastPlay.k, i;
     if (k.indexOf('i:') === 0) { var it = bySid(k.slice(2)); return it && (lastPlay.w || !isWatched(it)) ? { it: it } : null; }
     if (k.indexOf('v:') === 0) { k = k.slice(2); if (learnDone.indexOf(k) >= 0) return null; for (i = 0; i < learn.length; i++) if (lid(learn[i]) === k) return { v: learn[i] }; }
     return null; }
-  function renderMini() { if (!B2) return; var c = miniItem(), b = document.getElementById('mini'), dk = document.getElementById('minidock');
+  function renderMini() { if (!B2) return; var c = NEXT && top === 'Watching' && AFTER ? null : miniItem(), b = document.getElementById('mini'), dk = document.getElementById('minidock');
     if (!c) { if (dk) dk.remove(); document.body.classList.remove('hasmini'); return; }
     if (!b) { dk = document.createElement('div'); dk.id = 'minidock'; b = document.createElement('div'); b.id = 'mini'; dk.appendChild(b); document.body.appendChild(dk); } document.body.classList.add('hasmini');
     var it = c.it, sub = '', pc = 0;
@@ -875,8 +883,19 @@ html .ic.wm.open .opts button.on{background:#000;color:#fff;outline:2px solid #f
   function p2Bar(g, bottom) { var bar = document.createElement('div'); bar.className = 'p2bar' + (bottom ? ' bot' : ''); if (!bottom) bar.appendChild(document.createTextNode('Preview V2.4.2 · '));
     var dk = document.documentElement.classList.contains('p2dark'), tb = document.createElement('button'); tb.type = 'button'; tb.textContent = dk ? '☀ Light' : '☾ Dark'; tb.onclick = function () { var h = document.documentElement; h.classList.toggle('p2dark', !dk); h.classList.toggle('p2light', dk); try { localStorage.setItem('proto2-theme', dk ? 'light' : 'dark'); } catch (e) {} render(); }; bar.appendChild(tb);
     var rs = document.createElement('button'); rs.type = 'button'; rs.textContent = 'Reset from my lists'; rs.onclick = function () { p2Seed(); render(); toast('Prototype lists rebuilt from Watching, Parked, Backlog and started Tech folders'); }; bar.appendChild(rs); g.appendChild(bar); }
-  function p2Watching(g0) { if (!p2) p2Seed(); p2Fix(); var wrap = document.createElement('div'); wrap.className = 'p2list'; g0.appendChild(wrap); var first = true;
-    P2K.forEach(function (k) { p2.lists[k].map(p2Res).filter(Boolean).slice(0, P2P[k]).forEach(function (r) {
+  function p2OnId() { var c = miniItem(); if (!c) return null; var hit = null; /* which Watching row is "on": the last thing tapped */
+    P2K.forEach(function (k) { p2.lists[k].map(p2Res).filter(Boolean).slice(0, P2P[k]).forEach(function (r) { if (hit) return;
+      if (c.it && r.it && sid(r.it) === sid(c.it)) hit = r.id; else if (c.v && r.f && r.f.vids && r.f.vids.some(function (v) { return lid(v) === lid(c.v); })) hit = r.id; }); });
+    return hit; }
+  function p2NowCard(g0, onId) { var c = miniItem(); if (!c) return; var r = onId ? p2Res(onId) : null, img = '', t = '', sub = '', pc = 0, play;
+    if (r) { var pr = p2Prog(r), im = p2Img(r, 'video'); img = im ? im.src : ''; t = r.it ? r.it.title : pr.t; sub = r.it ? pr.m.replace(r.it.title + ' · ', '') + ' · ' + pr.t : pr.m; if (pr.of) { pc = Math.round(100 * pr.n / pr.of); sub += ' · ' + pr.c; } play = function () { p2Play(r); }; }
+    else if (c.it) { t = c.it.title; img = c.it.poster ? 'https://image.tmdb.org/t/p/w500' + c.it.poster : ''; sub = c.it.kind === 'tv' && c.it.next_ep ? 'Next: S' + c.it.next_ep.s + ' E' + c.it.next_ep.e : 'Movie'; play = function () { notePlay('i:' + sid(c.it)); go(link(c.it)); }; }
+    else { t = c.v.title; img = c.v.cover || ''; sub = 'Tech' + (c.v.course ? ' · ' + c.v.course : ''); play = function () { playLearn(c.v); }; }
+    var d = document.createElement('div'); d.className = 'nowc'; d.innerHTML = '<div class="im"><span class="lb">Now watching</span></div><div class="bd"><b></b><small></small>' + (pc ? '<span class="pg"><i></i></span>' : '') + '<button type="button" class="go">▶ Continue</button></div>';
+    if (img) d.querySelector('.im').style.backgroundImage = 'url("' + img + '")'; d.querySelector('b').textContent = t; d.querySelector('small').textContent = sub; if (pc) d.querySelector('.pg i').style.width = pc + '%';
+    d.onclick = play; g0.appendChild(d); var l = document.createElement('div'); l.className = 'nowlbl'; l.textContent = 'Switch the channel'; g0.appendChild(l); }
+  function p2Watching(g0) { if (!p2) p2Seed(); p2Fix(); var onId = NEXT ? p2OnId() : null; if (NEXT) p2NowCard(g0, onId); var wrap = document.createElement('div'); wrap.className = 'p2list'; g0.appendChild(wrap); var first = true;
+    P2K.forEach(function (k) { p2.lists[k].map(p2Res).filter(Boolean).slice(0, P2P[k]).forEach(function (r) { if (onId && r.id === onId) return;
       var pr = p2Prog(r), im = p2Img(r, 'video'), d = document.createElement('div'); d.className = 'p2r' + (first ? ' top' : ''); first = false; d.dataset.id = r.id;
       var v = document.createElement('div'); v.className = 'p2v'; if (im) { var i = document.createElement('img'); i.loading = 'lazy'; i.alt = ''; i.src = im.src; if (im.pt) i.className = 'pt'; v.appendChild(i); } else { var n = document.createElement('span'); n.className = 'ln'; n.textContent = r.f ? '▶' : '·'; v.appendChild(n); }
       if (pr.badge) { var bd = document.createElement('span'); bd.className = 'badge'; bd.textContent = pr.badge; v.appendChild(bd); } var pb = document.createElement('span'); pb.className = 'pbar'; var pf = document.createElement('i'); pf.style.width = (pr.v || 0) + '%'; pb.appendChild(pf); v.appendChild(pb); d.appendChild(v);
