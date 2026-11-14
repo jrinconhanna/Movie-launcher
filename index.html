@@ -170,13 +170,15 @@ html.isstg .p2r.top,html.isstg.pvnext .p2r.top,html.isstg.pvnext.p2dark .p2r.top
 html.isstg .p2r.top:before{content:'';position:absolute;left:0;top:10px;bottom:10px;width:3px;border-radius:2px;background:#a07cf0}
 .p2nudge{font:600 12px var(--font);color:#a07cf0;margin-top:6px}
 .nowc.istoc{position:relative}.nowc.istoc:before{content:'';position:absolute;left:0;top:14px;bottom:14px;width:3px;border-radius:2px;background:#a07cf0;z-index:1}.nowc .p2nudge{font-size:13px;margin-top:8px} /* lighter card background (dark mode) */
-#nowslim{display:none;align-items:center;gap:10px;margin:6px 0 4px;padding:6px 8px;border-radius:12px;background:#2a2a2e;cursor:pointer;position:relative}
-#nowslim.show{display:flex}#nowslim .th{width:64px;height:36px;border-radius:6px;background:#333 center/cover;flex:none}#nowslim .x{flex:1;min-width:0}
-#nowslim b{display:block;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}#nowslim small{display:block;font-size:11px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-#nowslim .pl{width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,.92);color:#111;display:grid;place-items:center;font-size:12px;padding-left:2px;flex:none}
-#nowslim.istoc:before{content:'';position:absolute;left:0;top:8px;bottom:8px;width:3px;border-radius:2px;background:#a07cf0}
+#nowslim{display:none;grid-template-columns:50% minmax(0,1fr);gap:14px;align-items:center;margin:6px 0 4px;padding:10px;border-radius:16px;background:#2a2a2e;cursor:pointer;position:relative;box-shadow:0 8px 24px rgba(0,0,0,.45)}
+#nowslim.show{display:grid}#nowslim .th{position:relative;aspect-ratio:16/9;border-radius:12px;background:#333 center/cover}
+#nowslim .th:after{content:'\25b6';position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.92);color:#111;display:grid;place-items:center;font-size:14px;padding-left:2px;box-sizing:border-box}
+#nowslim .x{min-width:0}#nowslim .tag{display:block;font:700 10px var(--font);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:3px}
+#nowslim b{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;font:600 16px/1.3 var(--font)}#nowslim small{display:block;font-size:12px;color:var(--muted);margin-top:4px}
+#nowslim .pl{display:none}
+#nowslim.istoc:before{content:'';position:absolute;left:0;top:12px;bottom:12px;width:3px;border-radius:2px;background:#a07cf0}
 html.p2light #nowslim{background:var(--surface)}
-@media (min-width:701px){#nowslim{max-width:900px;padding:8px 10px}#nowslim .th{width:80px;height:45px}#nowslim b{font-size:15px}}
+@media (min-width:701px){#nowslim{max-width:900px;grid-template-columns:260px minmax(0,1fr);gap:18px}}
 .nowlbl{grid-column:1/-1;font:700 10px var(--font);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:10px 0 0}
 @media (min-width:701px){.nowc{display:grid;grid-template-columns:min(480px,50%) 1fr}.nowc .bd{padding:22px}.nowc b{font-size:24px}.nowc small{font-size:15px}}
 .vrl{border:0;background:none;color:inherit;font:inherit;padding:0;cursor:pointer;text-decoration:underline dotted;text-underline-offset:3px}
@@ -911,7 +913,7 @@ html .ic.wm.open .opts button.on{background:#000;color:#fff;outline:2px solid #f
   /* staging 14 Nov: when the Now watching card scrolls away, a slim copy stays fixed at the top (under the tabs on the Mac) */
   var nowObs = null;
   function nowSlim(img, t, sub, play, card, toc) { var h = document.querySelector('header'); if (!h) return; var sl = document.getElementById('nowslim');
-    if (!sl) { sl = document.createElement('div'); sl.id = 'nowslim'; sl.innerHTML = '<span class="th"></span><span class="x"><b></b><small></small></span><span class="pl">\u25b6</span>'; h.appendChild(sl); }
+    if (!sl) { sl = document.createElement('div'); sl.id = 'nowslim'; sl.innerHTML = '<span class="th"></span><span class="x"><span class="tag">Now watching</span><b></b><small></small></span>'; h.appendChild(sl); }
     sl.querySelector('.th').style.backgroundImage = img ? 'url("' + img + '")' : ''; sl.querySelector('b').textContent = t; sl.querySelector('small').textContent = sub; sl.classList.toggle('istoc', !!toc); sl.onclick = play; sl.classList.remove('show');
     if (!('IntersectionObserver' in window)) return; if (nowObs) nowObs.disconnect();
     nowObs = new IntersectionObserver(function (es) { es.forEach(function (en) { sl.classList.toggle('show', !en.isIntersecting && en.boundingClientRect.top < 0); }); }, { threshold: 0 });
