@@ -889,23 +889,14 @@
    "group": "Docs",
    "key": "doc|2- Sports/1- American Football/All or Nothing (2016)",
    "kind": "tv",
-   "next_ep": {
-    "e": 8,
-    "name": "Burn the Ships",
-    "rt": 51,
-    "s": 5,
-    "sn": 8,
-    "still": "/9MNH6rLu7YluwYC130ZpLGm7uTD.jpg",
-    "sw": 7
-   },
    "order": "002.001",
    "overview": "For the first time in history, Amazon and NFL Films present an unprecedented inside look at the lives of players, coaches and owners of a franchise over the course of an entire NFL season. Witness the real life, behind the scenes journey on the field, off the field, and everything in between.",
    "poster": "/kzTYIvVu6fJ6X5224ZvvrsRFxzL.jpg",
    "progress": [
-    39,
+    40,
     40
    ],
-   "status": "progress",
+   "status": "watched",
    "title": "All or Nothing",
    "tmdb": 66943
   },
@@ -12140,19 +12131,19 @@
    "key": "tv|Murder She Wrote",
    "kind": "tv",
    "next_ep": {
-    "e": 4,
-    "name": "Hooray for Homicide",
+    "e": 5,
+    "name": "It's a Dog's Life",
     "rt": 45,
     "s": 1,
     "sn": 22,
-    "still": "/atqQnG4YCkRsFsZpbSIlKD8b244.jpg",
-    "sw": 2
+    "still": "/zTzZNHObLEJbQ3uN4Dq2M8VBJjb.jpg",
+    "sw": 3
    },
    "order": "000",
    "overview": "An unassuming mystery writer turned sleuth uses her professional insight to help solve real-life homicide cases.",
    "poster": "/3UxBFG4fiuZ0P9n2sCrjXh64Avy.jpg",
    "progress": [
-    2,
+    3,
     22
    ],
    "status": "progress",
@@ -27402,5 +27393,5 @@
    "year": 1959
   }
  ],
- "updated": "2026-11-15T02:45Z"
+ "updated": "2026-11-15T11:06Z"
 }
