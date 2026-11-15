@@ -12131,19 +12131,19 @@
    "key": "tv|Murder She Wrote",
    "kind": "tv",
    "next_ep": {
-    "e": 5,
-    "name": "It's a Dog's Life",
+    "e": 8,
+    "name": "We're Off to Kill the Wizard",
     "rt": 45,
     "s": 1,
     "sn": 22,
-    "still": "/zTzZNHObLEJbQ3uN4Dq2M8VBJjb.jpg",
-    "sw": 3
+    "still": "/f3GbfNeCq1m5Xz0kkwPGLCRsLte.jpg",
+    "sw": 6
    },
    "order": "000",
    "overview": "An unassuming mystery writer turned sleuth uses her professional insight to help solve real-life homicide cases.",
    "poster": "/3UxBFG4fiuZ0P9n2sCrjXh64Avy.jpg",
    "progress": [
-    3,
+    6,
     22
    ],
    "status": "progress",
@@ -27393,5 +27393,5 @@
    "year": 1959
   }
  ],
- "updated": "2026-11-15T17:47Z"
+ "updated": "2026-11-15T22:55Z"
 }
