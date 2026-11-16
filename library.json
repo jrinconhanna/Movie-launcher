@@ -5907,7 +5907,7 @@
    "poster": "/vN5B5WgYscRGcQpVhHl6p9DDTP0.jpg",
    "progress": null,
    "rt": 116,
-   "status": "unwatched",
+   "status": "watched",
    "title": "Back to the Future",
    "tmdb": 105
   },
@@ -6147,7 +6147,7 @@
    "poster": "/d9mtMGQDLANKieb9PbD3yK7xxzo.jpg",
    "progress": null,
    "rt": 127,
-   "status": "unwatched",
+   "status": "watched",
    "title": "Jurassic Park",
    "tmdb": 329
   },
@@ -6371,7 +6371,7 @@
    "poster": "/xQCMAHeg5M9HpDIqanYbWdr4brB.jpg",
    "progress": null,
    "rt": 103,
-   "status": "unwatched",
+   "status": "watched",
    "title": "Star Trek: Insurrection",
    "tmdb": 200
   },
@@ -6419,7 +6419,7 @@
    "poster": "/4T6Po0XnZlevmhfPh3ZfEs5butR.jpg",
    "progress": null,
    "rt": 121,
-   "status": "unwatched",
+   "status": "watched",
    "title": "Stargate",
    "tmdb": 2164
   },
@@ -6435,7 +6435,7 @@
    "poster": "/cxCmv23O7p3hyHwqoktHYkZcGsY.jpg",
    "progress": null,
    "rt": 129,
-   "status": "unwatched",
+   "status": "watched",
    "title": "Starship Troopers",
    "tmdb": 563
   },
@@ -6547,7 +6547,7 @@
    "poster": "/dXNAPwY7VrqMAo51EKhhCJfaGb5.jpg",
    "progress": null,
    "rt": 136,
-   "status": "unwatched",
+   "status": "watched",
    "title": "The Matrix",
    "tmdb": 603
   },
@@ -27393,5 +27393,5 @@
    "year": 1959
   }
  ],
- "updated": "2026-11-16T11:35Z"
+ "updated": "2026-11-16T22:14Z"
 }
