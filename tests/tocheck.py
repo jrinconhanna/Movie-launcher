@@ -11,6 +11,7 @@ def rec(n, ok, d=""): R.append(ok); print(("PASS " if ok else "FAIL ") + n + (""
 lib = json.load(open(ROOT + "/library.json", encoding="utf-8"))
 tv = [i for i in lib["items"] if i.get("kind") == "tv"]
 tv[0]["epm"] = "0/47 episodes match TMDB"; tv[1]["epm"] = "ok"; body = json.dumps(lib)
+NB = len([i for i in tv if i.get("epm") and i["epm"] != "ok"])
 with sync_playwright() as p:
     b = p.chromium.launch(executable_path="/usr/bin/google-chrome")
     for q, stg in [("?staging", True), ("", False)]:
@@ -19,7 +20,7 @@ with sync_playwright() as p:
         pg.goto(f"http://127.0.0.1:{P}/index.html{q}"); pg.wait_for_timeout(1200)
         txt = pg.evaluate("(document.querySelector('.tocheck')||{}).innerText||''")
         if stg:
-            rec("C1 staging: To check counts the series", "1 series" in txt, txt[:120])
+            rec("C1 staging: To check counts the series", f"{NB} series" in txt, (NB, txt[:120]))
             pg.evaluate("document.querySelectorAll('.tocheck, .tocheck details').forEach(d=>d.open=true)"); pg.wait_for_timeout(150)
             t2 = pg.evaluate("document.querySelector('.tocheck').innerText")
             rec("C2 staging: the series is listed with its reason; matched ones aren't", (tv[0]["title"] + " — 0/47 episodes match TMDB") in t2 and (tv[1]["title"] + " —") not in t2, t2[:300])
