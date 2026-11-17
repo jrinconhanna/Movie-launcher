@@ -219,6 +219,21 @@ html.p2light { --bg: #f4f2ee; --surface: #ffffff; --fg: #1c1b19; --muted: #6d6a6
 html.p2dark .p2r.top{background:rgba(214,60,60,.10)} html.p2dark .p2menu{background:#2c2c2e;color:#f2f1ee} html.p2dark .p2menu button{color:#f2f1ee} html.p2dark .p2menu button:hover{background:#3a3a3c}
 html .ic.wm.open .opts button.on{background:#000;color:#fff;outline:2px solid #fff}.ic.wm .opts button svg{display:block}
 #newver { white-space: nowrap; position: fixed; left: 50%; transform: translateX(-50%); bottom: calc(84px + env(safe-area-inset-bottom)); z-index: 50; border: 0; border-radius: 999px; padding: 9px 16px; background: #fff; color: #000; font: 600 14px var(--font); box-shadow: 0 4px 16px rgba(0,0,0,.45); cursor: pointer; }
+
+/* staging 17 Nov: series page (Discover › tap a matched series) */
+#grid.serp { display: block; max-width: 760px; }
+.sp-top { display: flex; gap: 10px; align-items: center; margin: 4px 0 10px; } .sp-top b { display: block; font-size: 18px; } .sp-top small { color: var(--mut, #8a8a8a); font-size: 13px; }
+.sp-bk { border: 0; background: none; color: inherit; font-size: 28px; line-height: 1; padding: 0 6px 4px 0; cursor: pointer; } .sp-pt { width: 36px; height: 54px; border-radius: 6px; object-fit: cover; }
+.sp-chips { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 10px; } .sp-chips button { border: 1px solid rgba(128,128,128,.35); background: none; color: inherit; opacity: .7; font: 600 13px var(--font); border-radius: 8px; padding: 5px 12px; cursor: pointer; } .sp-chips button.on { opacity: 1; background: rgba(128,128,128,.25); }
+.sp-row { display: grid; grid-template-columns: minmax(130px, 40%) 1fr; gap: 12px; padding: 10px 0; border-bottom: 1px solid rgba(128,128,128,.18); }
+.sp-row.next { background: rgba(160,124,240,.10); border-radius: 12px; padding: 10px 8px; margin: 0 -8px; border-bottom: 0; }
+.sp-row b { font-size: 15px; line-height: 1.25; } .sp-meta { font-size: 12px; opacity: .65; margin-top: 2px; }
+.sp-ov { font-size: 13px; opacity: .8; margin-top: 4px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; cursor: pointer; } .sp-row.full .sp-ov { display: block; -webkit-line-clamp: unset; }
+.sp-pic { position: relative; aspect-ratio: 16 / 9; border-radius: 10px; overflow: hidden; background: rgba(128,128,128,.2); } .sp-pic img { width: 100%; height: 100%; object-fit: cover; display: block; } .sp-pic img.nop { filter: brightness(.55); }
+.sp-pic.seen img { filter: grayscale(.35) brightness(.72); }
+.sp-ep { position: absolute; left: 6px; bottom: 6px; background: rgba(0,0,0,.72); color: #fff; font: 700 11px var(--font); padding: 2px 6px; border-radius: 5px; }
+.sp-wk { position: absolute; right: 6px; bottom: 6px; width: 20px; height: 20px; border-radius: 50%; background: #e8e6e1; color: #111; display: grid; place-items: center; font: 700 11px var(--font); }
+.sp-un { position: absolute; left: 6px; top: 6px; padding: 4px 9px; border-radius: 999px; background: #a07cf0; color: #fff; font: 700 11px var(--font); box-shadow: 0 1px 4px rgba(0,0,0,.45); }
 </style>
 </head>
 <body>
@@ -237,7 +252,7 @@ html .ic.wm.open .opts button.on{background:#000;color:#fff;outline:2px solid #f
   var LEARN = true; // V2.3 live 10 Nov (was the ?v23 preview)
   var V24 = !/[?&]v23\b/.test(location.search); if (V24) document.documentElement.classList.add('v24'); // V2.4 live 11 Nov (?v23 shows the old view for comparison)
   var PROTO = /[?&]proto\b/.test(location.search); // V2.4.2 prototype: subscribe to folders, one channel each on Watching (this device only)
-  var BUILT = '2026-11-17 23:42'; /* set on every commit by the pre-commit hook; staging compares it to spot a newer version */ var NEXT = /[?&](staging|next)\b/.test(location.search); if (NEXT) document.documentElement.classList.add('isstg'); /* ?staging = preview of what's built but not live yet (?next kept as old alias) */ var NOTAP = NEXT; /* staging 17 Nov: Discover posters don't play; set to true on Javier's go */ var B2 = true; /* mini player, phone tabs at the bottom with icons, quieter TOC frame: live 14 Nov on Javier's go */ if (B2) document.documentElement.classList.add('pvnext'); // V2.4.1 preview (Lean onward): items flagged next only show with ?next until Javier says go
+  var BUILT = '2026-11-17 23:48'; /* set on every commit by the pre-commit hook; staging compares it to spot a newer version */ var NEXT = /[?&](staging|next)\b/.test(location.search); if (NEXT) document.documentElement.classList.add('isstg'); /* ?staging = preview of what's built but not live yet (?next kept as old alias) */ var NOTAP = NEXT; /* staging 17 Nov: Discover posters don't play; set to true on Javier's go */ var B2 = true; /* mini player, phone tabs at the bottom with icons, quieter TOC frame: live 14 Nov on Javier's go */ if (B2) document.documentElement.classList.add('pvnext'); // V2.4.1 preview (Lean onward): items flagged next only show with ?next until Javier says go
 
   /* staging 17 Nov: "New version · tap to reload" pill. Checks quietly on return to the page and every 30 s; never reloads by itself. */
   if (NEXT) (function () {
@@ -388,7 +403,7 @@ html .ic.wm.open .opts button.on{background:#000;color:#fff;outline:2px solid #f
       var acts = { m: a.movies && a.movies.watched_at, e: a.episodes && a.episodes.watched_at, r: a.movies && a.movies.rated_at };
       var old = (live && live.a) || {}, jobs = [], nl = Object.assign({}, live || {});
       if (!live || acts.m !== old.m) jobs.push(tall('/sync/watched/movies').then(function (d) { nl.m = d.map(function (x) { return x.movie && x.movie.ids && x.movie.ids.tmdb; }).filter(Boolean); }));
-      if (!live || acts.e !== old.e) jobs.push(tall('/sync/watched/shows').then(function (d) { var m = {}; d.forEach(function (x) { var id = x.show && x.show.ids && x.show.ids.tmdb; if (!id) return; var n = 0; (x.seasons || []).forEach(function (se) { if (se.number > 0) n += (se.episodes || []).length; }); m[id] = n; }); nl.s = m; }));
+      if (!live || acts.e !== old.e || !live.se) jobs.push(tall('/sync/watched/shows').then(function (d) { var m = {}, se2 = {}; d.forEach(function (x) { var id = x.show && x.show.ids && x.show.ids.tmdb; if (!id) return; var n = 0, w = {}; (x.seasons || []).forEach(function (se) { if (se.number > 0) { n += (se.episodes || []).length; w[se.number] = (se.episodes || []).map(function (e) { return e.number; }); } }); m[id] = n; se2[id] = w; }); nl.s = m; nl.se = se2; /* 17 Nov: which episodes are watched, for the series page */ }));
       if (!live || acts.r !== old.r) jobs.push(tall('/sync/ratings/movies').then(function (d) { var m = {}; d.forEach(function (x) { var id = x.movie && x.movie.ids && x.movie.ids.tmdb; if (id) m[id] = x.rating; }); nl.r = m; }));
       if (!jobs.length) return;
       return Promise.all(jobs).then(function () { nl.a = acts; live = nl; try { localStorage.setItem('trakt-live', JSON.stringify(live)); } catch (e) {} applyLive(); render(); });
@@ -561,7 +576,7 @@ html .ic.wm.open .opts button.on{background:#000;color:#fff;outline:2px solid #f
   function card(it) {
     var d = document.createElement('div'); d.className = 'card' + (state.wf === 'all' && state.shelf !== 'Watch Next' && isWatched(it) ? ' seen' : '');
     var a = document.createElement('a'); a.className = 'poster';
-    if (NOTAP && top === 'Discover') a.setAttribute('aria-label', it.title); /* staging 17 Nov: Discover only feeds Next (menu › Add to Next); tapping a movie/series poster does nothing (series will open its episodes in V2.5) */
+    if (NOTAP && top === 'Discover') { a.setAttribute('aria-label', it.title); if (it.kind === 'tv' && it.epm === 'ok') { a.href = '#'; a.setAttribute('aria-label', 'Open ' + it.title); a.addEventListener('click', function (e) { e.preventDefault(); if (a.dataset.noclick) return; serPage = { k: it.key }; render(); window.scrollTo(0, 0); }); } } /* staging 17 Nov: a matched series opens its page */ /* staging 17 Nov: Discover only feeds Next (menu › Add to Next); tapping a movie/series poster does nothing (series will open its episodes in V2.5) */
     else { a.href = link(it); a.addEventListener('click', function () { notePlay('i:' + sid(it)); }); a.setAttribute('aria-label', 'Open ' + it.title + ' in Infuse'); }
     if (it.poster) { var img = document.createElement('img'); img.loading = 'lazy'; img.alt = ''; img.src = 'https://image.tmdb.org/t/p/w342' + it.poster; a.appendChild(img); }
     else { var ph = document.createElement('div'); ph.className = 'ph'; ph.textContent = it.title; a.appendChild(ph); }
@@ -1014,8 +1029,38 @@ html .ic.wm.open .opts button.on{background:#000;color:#fff;outline:2px solid #f
       var acts = function () { return [['⤒ Move to top' + (P2P[k] ? ' (on Watching)' : ''), function () { p2Move(k, r.id, 'top'); render(); }], ['↑ Move up', function () { p2Move(k, r.id, 'up'); render(); }], ['⤓ Move to bottom', function () { p2Move(k, r.id, 'bottom'); render(); }], ['✕ Remove from Next', function () { var L = p2.lists[k]; L.splice(L.indexOf(r.id), 1); p2Save(); render(); }]].concat(r.f && NEXT ? [['↗ Open folder', function () { top = 'Discover'; state.shelf = 'Tech'; state.cat = 'All'; state.course = r.f.path; save(); render(); window.scrollTo(0, 0); }]] : []); }; /* 17 Nov: folders in Next can be opened too */
       p2Hold(d, acts, function (e) { p2Menu(e.clientX, e.clientY, acts()); }); }); if (!NEXT) p2Bar(gn, true); }
   function p2Add(id, k, pos) { if (!p2) p2Seed(); P2K.forEach(function (x) { var L = p2.lists[x], i = L.indexOf(id); if (i >= 0) L.splice(i, 1); }); var L0 = p2.lists[k], at = Math.min(P2P[k] || 0, L0.length); if (pos === 'top') L0.unshift(id); else if (pos === 'afterw') L0.splice(at, 0, id); else L0.push(id); p2Save(); toast('In Next › ' + p2Lab(k) + (pos === 'top' ? ' (top: on Watching)' : pos === 'afterw' ? ' · top, after Watching' : B1 ? ' · ' + p2.lists[k].length + ' in the list' : ' (bottom)')); render(); }
+  var serPage = null, epsCache = {}; /* staging 17 Nov: the open series page {k, s} */
+  function seriesPage() {
+    var it = items.filter(function (x) { return x.key === serPage.k; })[0], g = $('grid'); if (!it) { serPage = null; render(); return; }
+    ['crow', 'wkrow'].forEach(function (id) { if ($(id)) $(id).hidden = true; }); g.innerHTML = ''; if (!g.classList.contains('serp')) g.dataset.cls = g.className; g.className = 'serp';
+    var E = epsCache[it.tmdb]; if (!E) { g.innerHTML = '<div class="empty">Loading episodes\u2026</div>'; fetch('eps/' + it.tmdb + '.json', { cache: 'no-cache' }).then(function (r) { return r.json(); }).then(function (d) { epsCache[it.tmdb] = d; if (serPage && serPage.k === it.key) render(); }).catch(function () { g.innerHTML = '<div class="empty">Couldn\u2019t load the episodes.</div>'; }); return; }
+    var sns = Object.keys(E.seasons || {}).sort(function (a, b) { return a - b; }), ne = it.next_ep, sn = serPage.s || (ne && E.seasons[ne.s] ? String(ne.s) : sns[0]);
+    var W = ((live && live.se) || {})[it.tmdb] || {}, w = (W[sn] || []).map(Number), eps = E.seasons[sn] || [];
+    var onList = p2 && P2K.some(function (k) { return p2.lists[k].indexOf('i:' + it.key) >= 0; });
+    var hd = document.createElement('div'); hd.className = 'sp-top';
+    var bk = document.createElement('button'); bk.type = 'button'; bk.className = 'sp-bk'; bk.textContent = '\u2039'; bk.setAttribute('aria-label', 'Back'); bk.onclick = function () { serPage = null; render(); }; hd.appendChild(bk);
+    if (it.poster) { var pt = document.createElement('img'); pt.className = 'sp-pt'; pt.alt = ''; pt.src = 'https://image.tmdb.org/t/p/w92' + it.poster; hd.appendChild(pt); }
+    var ht = document.createElement('div'); ht.innerHTML = '<b></b><small></small>'; ht.querySelector('b').textContent = it.title; ht.querySelector('small').textContent = 'Season ' + sn + ' \u00b7 ' + eps.filter(function (x) { return w.indexOf(x.e) >= 0; }).length + '/' + eps.length + ' watched'; hd.appendChild(ht); g.appendChild(hd);
+    if (sns.length > 1) { var ch = document.createElement('div'); ch.className = 'sp-chips'; sns.forEach(function (k) { var b = document.createElement('button'); b.type = 'button'; b.textContent = 'S' + k; if (k === sn) b.className = 'on'; b.onclick = function () { serPage.s = k; render(); }; ch.appendChild(b); }); g.appendChild(ch); }
+    var ls0 = document.createElement('div'); ls0.className = 'sp-list';
+    eps.forEach(function (x) {
+      var ww = w.indexOf(x.e) >= 0, isN = onList && ne && String(ne.s) === sn && ne.e === x.e;
+      var r = document.createElement('div'); r.className = 'sp-row' + (isN ? ' next' : '') + (ww ? ' w' : '');
+      var pc = document.createElement('div'); pc.className = 'sp-pic' + (ww ? ' seen' : ''); var src = x.still ? 'https://image.tmdb.org/t/p/w300' + x.still : it.poster ? 'https://image.tmdb.org/t/p/w300' + it.poster : '';
+      if (src) { var im = document.createElement('img'); im.loading = 'lazy'; im.alt = ''; im.src = src; if (!x.still) im.className = 'nop'; pc.appendChild(im); }
+      pc.insertAdjacentHTML('beforeend', '<span class="sp-ep">E' + x.e + '</span>' + (ww ? '<span class="sp-wk">\u2713</span>' : '') + (isN ? '<span class="sp-un">\u25b6| Up next</span>' : '')); r.appendChild(pc);
+      var tx = document.createElement('div'); var nm = document.createElement('b'); nm.textContent = x.name || ('Episode ' + x.e); tx.appendChild(nm);
+      var mt = document.createElement('div'); mt.className = 'sp-meta'; mt.textContent = [x.rt ? (x.rt < 60 ? x.rt + 'm' : Math.floor(x.rt / 60) + 'h' + (x.rt % 60 ? ' ' + x.rt % 60 + 'm' : '')) : '', x.vote ? '\u2605 ' + x.vote : '', (x.air || '').slice(0, 4)].filter(Boolean).join(' \u00b7 '); tx.appendChild(mt);
+      if (x.ov) { var ov = document.createElement('div'); ov.className = 'sp-ov'; ov.textContent = x.ov; ov.onclick = function () { r.classList.toggle('full'); }; tx.appendChild(ov); }
+      r.appendChild(tx); ls0.appendChild(r);
+    });
+    if (!eps.length) ls0.innerHTML = '<div class="empty">No episodes for this season.</div>';
+    g.appendChild(ls0); var el = ls0.querySelector('.next'); if (el && !serPage.sc) { serPage.sc = 1; setTimeout(function () { el.scrollIntoView({ block: 'center' }); }, 0); }
+  }
   function render() {
     renderTop(); renderTabs();
+    if (NEXT && serPage && top === 'Discover') { seriesPage(); return; } else if (serPage && top !== 'Discover') serPage = null;
+    var gS = $('grid'); if (gS.classList.contains('serp')) { gS.className = gS.dataset.cls || 'grid'; ['crow', 'wkrow'].forEach(function (id) { if ($(id)) $(id).hidden = false; }); }
     var real = state.shelf; if (AFTER && top === 'Next') state.shelf = 'Watch Next';
     if (AFTER && top === 'Watching') { $('crow').hidden = true; $('wkrow').hidden = true; /* fix 11 Nov: week chips leaked from Discover */ var g0 = $('grid'); g0.innerHTML = ''; g0.classList.remove('vids', 'techin'); /* fix: Discover › Tech sizes leaked into Watching */ if (!tok) g0.appendChild(connRow());
       if (P2ON && V24 && LEARN && learn.length) { p2Watching(g0); renderFoot(); return; }
