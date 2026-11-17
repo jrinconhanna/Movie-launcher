@@ -258,7 +258,7 @@ html .ic.wm.open .opts button.on{background:#000;color:#fff;outline:2px solid #f
   var LEARN = true; // V2.3 live 10 Nov (was the ?v23 preview)
   var V24 = !/[?&]v23\b/.test(location.search); if (V24) document.documentElement.classList.add('v24'); // V2.4 live 11 Nov (?v23 shows the old view for comparison)
   var PROTO = /[?&]proto\b/.test(location.search); // V2.4.2 prototype: subscribe to folders, one channel each on Watching (this device only)
-  var BUILT = '2026-11-18 00:03'; /* set on every commit by the pre-commit hook; staging compares it to spot a newer version */ var NEXT = /[?&](staging|next)\b/.test(location.search); if (NEXT) document.documentElement.classList.add('isstg'); /* ?staging = preview of what's built but not live yet (?next kept as old alias) */ var NOTAP = NEXT; /* staging 17 Nov: Discover posters don't play; set to true on Javier's go */ var B2 = true; /* mini player, phone tabs at the bottom with icons, quieter TOC frame: live 14 Nov on Javier's go */ if (B2) document.documentElement.classList.add('pvnext'); // V2.4.1 preview (Lean onward): items flagged next only show with ?next until Javier says go
+  var BUILT = '2026-11-18 00:05'; /* set on every commit by the pre-commit hook; staging compares it to spot a newer version */ var NEXT = /[?&](staging|next)\b/.test(location.search); if (NEXT) document.documentElement.classList.add('isstg'); /* ?staging = preview of what's built but not live yet (?next kept as old alias) */ var NOTAP = NEXT; /* staging 17 Nov: Discover posters don't play; set to true on Javier's go */ var B2 = true; /* mini player, phone tabs at the bottom with icons, quieter TOC frame: live 14 Nov on Javier's go */ if (B2) document.documentElement.classList.add('pvnext'); // V2.4.1 preview (Lean onward): items flagged next only show with ?next until Javier says go
 
   /* staging 17 Nov: "New version · tap to reload" pill. Checks quietly on return to the page and every 30 s; never reloads by itself. */
   if (NEXT) (function () {
@@ -544,7 +544,7 @@ html .ic.wm.open .opts button.on{background:#000;color:#fff;outline:2px solid #f
       b.setAttribute('aria-selected', s === state.shelf ? 'true' : 'false');
       var n = s === 'Tech' ? learn.filter(showsL).length : s === 'Watch Next' ? next.length : items.filter(function (i) { return i.group === s && shows(i); }).length;
       b.textContent = s === 'Watch Next' ? 'Next' : s; var c = document.createElement('span'); c.className = 'n'; c.textContent = n; b.appendChild(c);
-      b.onclick = function () { state.shelf = s; state.cat = 'All'; state.course = ''; save(); render(); window.scrollTo(0, 0); };
+      b.onclick = function () { serPage = null; /* fix 18 Nov: a kind tab closes the series page */ state.shelf = s; state.cat = 'All'; state.course = ''; save(); render(); window.scrollTo(0, 0); };
       t.appendChild(b);
     });
   }

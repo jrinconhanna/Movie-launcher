@@ -51,6 +51,10 @@ with sync_playwright() as p:
         rec(f"P14 [{size}] ✕ unmarks it again", not pg.evaluate("!!document.querySelectorAll('.sp-row')[2].querySelector('.sp-wk')"))
         pg.evaluate("window.scrollTo(0, 2000)"); pg.wait_for_timeout(150)
         rec(f"P15 [{size}] the title + season chips stay on top while scrolling, below the tab bar (not under it)", pg.evaluate("(()=>{const h=document.querySelector('header').getBoundingClientRect(), t=document.querySelector('.sp-head').getBoundingClientRect(); return window.scrollY > 300 && t.top >= h.bottom - 1 && t.top < h.bottom + 40})()"), pg.evaluate("document.querySelector('.sp-head').getBoundingClientRect().top"))
+        pg.evaluate("[...document.querySelectorAll('#tabs button')].find(b=>b.firstChild.textContent==='Movies').click()"); pg.wait_for_timeout(300)
+        rec(f"P17 [{size}] tapping another kind tab (Movies) on a series page closes it and shows Movies", not pg.evaluate("!!document.querySelector('.serp')") and pg.evaluate("[...document.querySelectorAll('#tabs button')].find(b=>b.getAttribute('aria-selected')==='true').firstChild.textContent") == "Movies")
+        pg.evaluate("[...document.querySelectorAll('#tabs button')].find(b=>b.firstChild.textContent==='Series').click()"); pg.wait_for_timeout(250)
+        pg.evaluate("k=>document.querySelector('#grid .card[data-key=\"'+k+'\"] a.poster').click()", ms["key"]); pg.wait_for_timeout(500)
         pg.evaluate("document.querySelector('.sp-bk').click()"); pg.wait_for_timeout(300)
         rec(f"P7 [{size}] ‹ goes back to Discover", not pg.evaluate("!!document.querySelector('.serp')") and pg.evaluate("document.querySelectorAll('#grid .card').length") > 0)
         # U (17 Nov): ▶| Up next on episodes, only when the series is on Watching or Next
