@@ -76,6 +76,24 @@ with sync_playwright() as p:
         pg.evaluate("document.querySelectorAll('.sp-row')[4].querySelector('.sp-pic .more').click()"); pg.wait_for_timeout(100)
         pg.evaluate("document.querySelector('.sp-pic .ic.open .opts button').click()"); pg.wait_for_timeout(250)
         rec(f"S5 [{size}] marking E5 watched clears the pin", not pg.evaluate("k=>!!(JSON.parse(localStorage.getItem('proto2')).pin||{})['i:'+k]", ms["key"]) and not pg.evaluate("document.querySelectorAll('.sp-row')[4].classList.contains('next')"))
+        # O (18 Nov): ↗ Open series from Next and Watching
+        pg.evaluate("[...document.querySelectorAll('button')].find(b=>b.textContent.trim().startsWith('Next')).click()"); pg.wait_for_timeout(200)
+        pg.evaluate("[...document.querySelectorAll('button')].find(b=>b.textContent.trim().startsWith('Series'))?.click()"); pg.wait_for_timeout(200)
+        r = pg.evaluate("t=>{const e=[...document.querySelectorAll('.gr')].map(g=>g.parentElement).find(d=>d.textContent.includes(t)); if(!e) return null; const b=e.getBoundingClientRect(); return [b.x+b.width/2,b.y+b.height/2]}", ms["title"])
+        if r:
+            pg.mouse.click(r[0], r[1], button="right"); pg.wait_for_timeout(150)
+            rec(f"O1 [{size}] Next: a series row's menu has ↗ Open series", pg.evaluate("[...document.querySelectorAll('#p2menu button')].some(b=>b.textContent==='↗ Open series')"))
+            pg.evaluate("[...document.querySelectorAll('#p2menu button')].find(b=>b.textContent==='↗ Open series').click()"); pg.wait_for_timeout(500)
+            rec(f"O2 [{size}] it opens that series' page in Discover", pg.evaluate("t=>!!document.querySelector('.serp') && document.querySelector('.sp-top b').textContent===t", ms["title"]))
+        else: rec(f"O1 [{size}] series row found in Next", False)
+        pg.evaluate("[...document.querySelectorAll('button')].find(b=>b.textContent.trim().startsWith('Watching')).click()"); pg.wait_for_timeout(300)
+        r = pg.evaluate("t=>{const e=[...document.querySelectorAll('.nowc, .p2list > *')].find(e=>e.textContent.includes(t)); if(!e) return null; const b=e.getBoundingClientRect(); return [b.x+b.width*0.7,b.y+b.height/2]}", ms["title"])
+        if r:
+            pg.mouse.click(r[0], r[1], button="right"); pg.wait_for_timeout(150)
+            rec(f"O3 [{size}] Watching: the series' menu has ↗ Open series", pg.evaluate("[...document.querySelectorAll('#p2menu button')].some(b=>b.textContent==='↗ Open series')"))
+            pg.keyboard.press("Escape"); pg.evaluate("document.querySelectorAll('#p2menu').forEach(m=>m.remove())")
+        pg.evaluate("[...document.querySelectorAll('button')].find(b=>b.textContent.trim().startsWith('Discover')).click()"); pg.wait_for_timeout(250)
+        pg.evaluate("[...document.querySelectorAll('#tabs button')].find(b=>b.firstChild.textContent==='Series').click()"); pg.wait_for_timeout(200)
         if ms2:
             pg.evaluate("document.querySelector('.sp-bk') && document.querySelector('.sp-bk').click()"); pg.wait_for_timeout(250)
             pg.evaluate("k=>document.querySelector('#grid .card[data-key=\"'+k+'\"] a.poster').click()", ms2["key"]); pg.wait_for_timeout(700)
