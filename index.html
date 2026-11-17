@@ -237,7 +237,7 @@ html .ic.wm.open .opts button.on{background:#000;color:#fff;outline:2px solid #f
   var LEARN = true; // V2.3 live 10 Nov (was the ?v23 preview)
   var V24 = !/[?&]v23\b/.test(location.search); if (V24) document.documentElement.classList.add('v24'); // V2.4 live 11 Nov (?v23 shows the old view for comparison)
   var PROTO = /[?&]proto\b/.test(location.search); // V2.4.2 prototype: subscribe to folders, one channel each on Watching (this device only)
-  var BUILT = '2026-11-17 22:19'; /* set on every commit by the pre-commit hook; staging compares it to spot a newer version */ var NEXT = /[?&](staging|next)\b/.test(location.search); if (NEXT) document.documentElement.classList.add('isstg'); /* ?staging = preview of what's built but not live yet (?next kept as old alias) */ var NOTAP = NEXT; /* staging 17 Nov: Discover posters don't play; set to true on Javier's go */ var B2 = true; /* mini player, phone tabs at the bottom with icons, quieter TOC frame: live 14 Nov on Javier's go */ if (B2) document.documentElement.classList.add('pvnext'); // V2.4.1 preview (Lean onward): items flagged next only show with ?next until Javier says go
+  var BUILT = '2026-11-17 22:28'; /* set on every commit by the pre-commit hook; staging compares it to spot a newer version */ var NEXT = /[?&](staging|next)\b/.test(location.search); if (NEXT) document.documentElement.classList.add('isstg'); /* ?staging = preview of what's built but not live yet (?next kept as old alias) */ var NOTAP = NEXT; /* staging 17 Nov: Discover posters don't play; set to true on Javier's go */ var B2 = true; /* mini player, phone tabs at the bottom with icons, quieter TOC frame: live 14 Nov on Javier's go */ if (B2) document.documentElement.classList.add('pvnext'); // V2.4.1 preview (Lean onward): items flagged next only show with ?next until Javier says go
 
   /* staging 17 Nov: "New version · tap to reload" pill. Checks quietly on return to the page and every 30 s; never reloads by itself. */
   if (NEXT) (function () {
@@ -304,7 +304,7 @@ html .ic.wm.open .opts button.on{background:#000;color:#fff;outline:2px solid #f
   function bySid(x) { for (var i = 0; i < items.length; i++) if (sid(items[i]) === x) return items[i]; return null; }
   function enc(keys) { return keys.map(byKey).filter(function (it) { return it && it.tmdb; }).map(sid); }
   function dec(ids) { return (ids || []).map(bySid).filter(Boolean).map(function (it) { return it.key; }); }
-  function snapshot() { return { v: 1, o: enc(worder), w: enc(watch), p: enc(parked), b: enc(next), r: enc(removed), d: enc(done), u: enc(undone), L: learnDone.slice(), LW: learnWatch.slice(), F: forder, V: vorder, K: p2 ? p2Enc(p2.lists) : undefined, LP: lastPlay || undefined }; }
+  function snapshot() { return { v: 1, o: enc(worder), w: enc(watch), p: enc(parked), b: enc(next), r: enc(removed), d: enc(done), u: enc(undone), L: learnDone.slice(), LW: learnWatch.slice(), F: forder, V: vorder, K: p2 ? p2Enc(p2.lists) : undefined, PN: p2 && p2.pin && Object.keys(p2.pin).length ? p2.pin : undefined, LP: lastPlay || undefined }; }
   function p2Enc(L) { var o = {}; Object.keys(L).forEach(function (k) { o[k] = L[k].map(function (id) { if (id.indexOf('i:') !== 0) return id; var it = byKey(id.slice(2)); return it && it.tmdb ? 'i:' + sid(it) : 'k:' + id.slice(2); }); }); return o; }
   function p2Dec(K) { var o = {}; P2K.forEach(function (k) { o[k] = (K[k] || []).map(function (id) { if (id.indexOf('k:') === 0) return 'i:' + id.slice(2); if (id.indexOf('i:') !== 0) return id; var it = bySid(id.slice(2)); return it ? 'i:' + it.key : null; }).filter(Boolean); }); return o; }
   function listItems(st) {
@@ -326,7 +326,7 @@ html .ic.wm.open .opts button.on{background:#000;color:#fff;outline:2px solid #f
     if (j.V) { vorder = j.V; try { localStorage.setItem('vorder', JSON.stringify(vorder)); } catch (e) {} } else if (Object.keys(vorder).length) setTimeout(function () { push(true); }, 0);
     if (j.F) { forder = j.F; try { localStorage.setItem('forder', JSON.stringify(forder)); } catch (e) {} } else if (Object.keys(forder).length) setTimeout(function () { push(true); }, 0);
     if (j.LP && (!lastPlay || j.LP.at > lastPlay.at)) { lastPlay = j.LP; try { localStorage.setItem('lastplay', JSON.stringify(lastPlay)); } catch (e) {} }
-    if (j.K) { p2 = { lists: p2Dec(j.K), lay: 'x11b', chip: (p2 && p2.chip) || 'Series' }; try { localStorage.setItem('proto2', JSON.stringify(p2)); } catch (e) {} } else if (p2) setTimeout(function () { push(true); }, 0);
+    if (j.K) { p2 = { lists: p2Dec(j.K), lay: 'x11b', chip: (p2 && p2.chip) || 'Series', pin: j.PN || {} }; try { localStorage.setItem('proto2', JSON.stringify(p2)); } catch (e) {} } else if (p2) setTimeout(function () { push(true); }, 0);
     lastIds = listItems(j).ids; return true;
   }
   function pull() {
@@ -677,7 +677,7 @@ html .ic.wm.open .opts button.on{background:#000;color:#fff;outline:2px solid #f
     });
   }
   function lid(v) { return v.id || v.course + ':' + (v.n != null ? v.n : v.title); } // V2.4 videos carry a stable id (survives new files)
-  function markLearn(v, on) {
+  function markLearn(v, on) { if (on && p2 && p2.pin) Object.keys(p2.pin).forEach(function (f) { if (p2.pin[f] === lid(v)) { delete p2.pin[f]; try { localStorage.setItem('proto2', JSON.stringify(p2)); } catch (e) {} } });
     var before = learnDone.slice(), beforeW = learnWatch.slice(), k = lid(v), i = learnDone.indexOf(k);
     if (on && i < 0) learnDone.push(k); if (!on && i >= 0) learnDone.splice(i, 1);
     var wi = learnWatch.indexOf(k); if (on && wi >= 0) { learnWatch.splice(wi, 1); lsSet('learnwatch', learnWatch); }
@@ -725,6 +725,8 @@ html .ic.wm.open .opts button.on{background:#000;color:#fff;outline:2px solid #f
     ic.appendChild(opts); ic.appendChild(more); d.appendChild(ic);
     return d;
   }
+  function p2ChanOf(v) { if (!p2) return null; var t = trail(v); for (var i = t.length; i > 0; i--) { var f = 'f:' + t.slice(0, i).join('/'); if (P2K.some(function (k) { return p2.lists[k].indexOf(f) >= 0; })) return f; } return null; } /* 17 Nov: the channel (folder on Watching/Next) a video belongs to */
+  ACT.upnext = ['<svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M5 4.5v15l11-7.5z"/><rect x="17.5" y="4.5" width="2.6" height="15" rx="1"/></svg>', 'Up next'];
   function lcard(v) { // V2.3 Learn tile: no TMDB poster, so number + course on a plain tile
     var d = document.createElement('div'); d.className = 'card lcard'; d.dataset.key = v.key;
     var a = document.createElement('a'); a.className = 'poster ltile'; a.href = '#'; a.setAttribute('aria-label', v.title);
@@ -736,12 +738,12 @@ html .ic.wm.open .opts button.on{background:#000;color:#fff;outline:2px solid #f
     var seen = learnDone.indexOf(lid(v)) >= 0; if (seen && !(V24 && top === 'Discover' && state.wf === 'watched')) d.classList.add('seen'); // V2.4: the Watched filter shows them in full colour, like movies
     var ic = document.createElement('div'); ic.className = 'ic wm';
     var opts = document.createElement('span'); opts.className = 'opts';
-    var inW = learnWatch.indexOf(lid(v)) >= 0, acts = B1 && P2ON && V24 ? [seen ? 'unwx' : 'watched'] : seen ? ['watching', 'unwatched'] : inW ? ['remove', 'watched'] : ['watching', 'watched'];
+    var ch = NEXT && B1 && P2ON && V24 && !seen && top === 'Discover' ? p2ChanOf(v) : null, pinned = ch && p2.pin && p2.pin[ch] === lid(v); var inW = learnWatch.indexOf(lid(v)) >= 0, acts = B1 && P2ON && V24 ? (ch && !pinned ? ['upnext'] : []).concat([seen ? 'unwx' : 'watched']) : seen ? ['watching', 'unwatched'] : inW ? ['remove', 'watched'] : ['watching', 'watched'];
     acts.forEach(function (o) {
       var mk = document.createElement('button'); mk.type = 'button'; var lab = { remove: 'Remove from Watching', watching: seen ? 'Watching · watch again (unmarks it)' : ACT.watching[1] }[o] || ACT[o][1]; icon(mk, o); mk.title = lab; mk.setAttribute('aria-label', lab);
-      mk.onclick = function (e) { e.preventDefault(); if (o === 'unwx') markLearn(v, false); else if (o === 'watched' || o === 'unwatched') markLearn(v, o === 'watched'); else watchLearn(v, o === 'watching'); }; opts.appendChild(mk);
+      mk.onclick = function (e) { e.preventDefault(); if (o === 'upnext') { p2.pin = p2.pin || {}; p2.pin[ch] = lid(v); p2Save(); toast('Up next on ' + ch.split('/').pop()); render(); return; } if (o === 'unwx') markLearn(v, false); else if (o === 'watched' || o === 'unwatched') markLearn(v, o === 'watched'); else watchLearn(v, o === 'watching'); }; opts.appendChild(mk);
     });
-    if (inW && top === 'Discover') { var tag = document.createElement('span'); tag.className = 'where'; tag.textContent = 'Watching'; a.appendChild(tag); }
+    if (inW && top === 'Discover') { var tag = document.createElement('span'); tag.className = 'where'; tag.textContent = 'Watching'; a.appendChild(tag); } else if (pinned) { var tg = document.createElement('span'); tg.className = 'where'; tg.textContent = 'Up next'; a.appendChild(tg); }
     var more = document.createElement('button'); more.type = 'button'; more.className = 'more'; more.textContent = '⋯'; more.title = acts.map(function (o) { return ACT[o][1].split(' · ')[0]; }).join(', '); more.setAttribute('aria-label', 'Options for ' + v.title);
     more.onclick = function (e) { e.preventDefault(); ic.classList.toggle('open'); };
     ic.appendChild(opts); ic.appendChild(more);
@@ -903,7 +905,7 @@ html .ic.wm.open .opts button.on{background:#000;color:#fff;outline:2px solid #f
     (proto && proto.subs || []).slice().reverse().forEach(function (pth) { if (!started[pth]) { started[pth] = { w: 1 }; order.unshift(pth); } });
     order.sort(function (a, b) { return started[b].w - started[a].w; }).forEach(function (pth) { var f = p2Folder(pth); if (f && f.next) { var k = p2KindPath(pth); if (L[k].indexOf('f:' + pth) < 0) L[k].push('f:' + pth); } });
     p2 = { lists: L, lay: 'x11b', chip: (p2 && p2.chip) || 'Series' }; p2Save(); }
-  function p2Folder(pth) { var vs = folderVids(pth); if (!vs.length) return null; var dn = vs.filter(function (v) { return learnDone.indexOf(lid(v)) >= 0; }).length, nx = vs.filter(function (v) { return learnDone.indexOf(lid(v)) < 0; })[0] || null;
+  function p2Folder(pth) { var vs = folderVids(pth); if (!vs.length) return null; var dn = vs.filter(function (v) { return learnDone.indexOf(lid(v)) >= 0; }).length, nx = vs.filter(function (v) { return learnDone.indexOf(lid(v)) < 0; })[0] || null; var pn = p2 && p2.pin && p2.pin['f:' + pth]; if (pn) { var pv = vs.filter(function (v) { return lid(v) === pn && learnDone.indexOf(pn) < 0; })[0]; if (pv) nx = pv; } /* 17 Nov: 'Up next' pin; once watched, back to the first unwatched */
     var P = pth.split('/'), v0 = vs[0], cov = (v0.fcov && v0.fcov[P.length - 1]) || (trail(v0).length === P.length ? v0.folder : null);
     return { path: pth, name: P[P.length - 1].replace(/^(W\d+) - .*/, '$1'), where: P.map(function (x) { return x.replace('Retention & Engagement', 'R&E').replace(/^(W\d+) - .*/, '$1'); }).join(' › '), vids: vs, done: dn, total: vs.length, next: nx, cover: cov }; }
   function p2Res(id) { if (id.indexOf('i:') === 0) { var it = byKey(id.slice(2)); return it ? { id: id, it: it } : null; } var f = p2Folder(id.slice(2)); return f ? { id: id, f: f } : null; }
