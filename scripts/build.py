@@ -316,6 +316,9 @@ def main():
             if it.get("cover") and not os.path.exists(os.path.join(ROOT, it["cover"])): it.pop("cover")
             if it.get("folder") and not os.path.exists(os.path.join(ROOT, it["folder"])): it.pop("folder")
             learn.append(it)
+        desc = load("descriptions.json", {})  # 18 Nov: short researched descriptions, keyed by video id
+        for x in learn:
+            if x.get("id") in desc: x["ov"] = desc[x["id"]]
         newc = {x["course"] for x in learn if x.get("v24")}
         for x in learn:  # V2.3 course now read from Whatbox (GSP Series): the old entry only shows in ?v23
             if not x.get("v24") and x["course"] in newc: x["old"] = True

@@ -259,6 +259,7 @@ html .ic.wm.open .opts button.on{background:#000;color:#fff;outline:2px solid #f
 #grid.tbig .lcard { padding: 12px 0 14px; border-bottom: 1px solid rgba(128,128,128,.18); }
 #grid.tbig .lcard .poster { position: relative; } #grid.tbig .lcard .badge, #grid.tbig .lcard > .y { display: none; }
 #grid.tbig .lcard .t { margin-top: 9px; font-size: 16px; font-weight: 700; line-height: 1.25; -webkit-line-clamp: unset; display: block; }
+#grid.tbig .lcard .sp-ov.full { display: block; -webkit-line-clamp: unset; }
 #grid.tbig .lcard.seen .poster img { filter: grayscale(.35) brightness(.72); } #grid.tbig .lcard.seen { opacity: 1; }
 #grid.tbig .lcard .poster .sp-inf { position: absolute; right: 8px; bottom: 8px; background: rgba(0,0,0,.72); color: #fff; font: 600 12px var(--font); padding: 3px 8px; border-radius: 6px; }
 #grid.tbig .lcard .poster .sp-wk { position: absolute; left: 8px; bottom: 8px; width: 20px; height: 20px; border-radius: 50%; background: #e8e6e1; color: #111; display: grid; place-items: center; font: 700 11px var(--font); }
@@ -287,7 +288,7 @@ body.tbigon .chips.wkrow button[aria-pressed="true"], body.tbigon .chips.wkrow b
   var LEARN = true; // V2.3 live 10 Nov (was the ?v23 preview)
   var V24 = !/[?&]v23\b/.test(location.search); if (V24) document.documentElement.classList.add('v24'); // V2.4 live 11 Nov (?v23 shows the old view for comparison)
   var PROTO = /[?&]proto\b/.test(location.search); // V2.4.2 prototype: subscribe to folders, one channel each on Watching (this device only)
-  var BUILT = '2026-11-18 00:43'; /* set on every commit by the pre-commit hook; staging compares it to spot a newer version */ var NEXT = /[?&](staging|next)\b/.test(location.search); if (NEXT) document.documentElement.classList.add('isstg'); /* ?staging = preview of what's built but not live yet (?next kept as old alias) */ var NOTAP = NEXT; /* staging 17 Nov: Discover posters don't play; set to true on Javier's go */ var B2 = true; /* mini player, phone tabs at the bottom with icons, quieter TOC frame: live 14 Nov on Javier's go */ if (B2) document.documentElement.classList.add('pvnext'); // V2.4.1 preview (Lean onward): items flagged next only show with ?next until Javier says go
+  var BUILT = '2026-11-18 00:52'; /* set on every commit by the pre-commit hook; staging compares it to spot a newer version */ var NEXT = /[?&](staging|next)\b/.test(location.search); if (NEXT) document.documentElement.classList.add('isstg'); /* ?staging = preview of what's built but not live yet (?next kept as old alias) */ var NOTAP = NEXT; /* staging 17 Nov: Discover posters don't play; set to true on Javier's go */ var B2 = true; /* mini player, phone tabs at the bottom with icons, quieter TOC frame: live 14 Nov on Javier's go */ if (B2) document.documentElement.classList.add('pvnext'); // V2.4.1 preview (Lean onward): items flagged next only show with ?next until Javier says go
 
   /* staging 17 Nov: "New version · tap to reload" pill. Checks quietly on return to the page and every 30 s; never reloads by itself. */
   if (NEXT) (function () {
@@ -803,6 +804,7 @@ body.tbigon .chips.wkrow button[aria-pressed="true"], body.tbigon .chips.wkrow b
     if (NEXT && top === 'Discover') { var nn = v._pos != null && vDrag(v) ? v._pos : v.num != null ? v.num : v.n != null ? v.n : null; if (nn != null) { var nc = document.createElement('span'); nc.className = 'sp-en'; nc.textContent = nn; t.insertBefore(nc, t.firstChild); }
       var dt = (v.mon ? 'Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec'.split(' ')[v.mon - 1] + ' ' : '') + (v.year || ''); if (dt) { var db = document.createElement('span'); db.className = 'sp-inf'; db.textContent = dt; a.appendChild(db); }
       if (seen) { var wk = document.createElement('span'); wk.className = 'sp-wk'; wk.textContent = '\u2713'; a.appendChild(wk); }
+      if (v.ov) { var vo = document.createElement('div'); vo.className = 'sp-ov'; vo.textContent = v.ov; vo.onclick = function (e) { e.preventDefault(); e.stopPropagation(); vo.classList.toggle('full'); }; d.appendChild(vo); }
       var ut = a.querySelector('.where'); if (ut && ut.textContent === 'Up next') { ut.className = 'sp-un'; ut.textContent = '\u25b6| Up next'; } } /* staging 18 Nov: series-page style inside Tech folders */
     if (v.n != null) { var bd = document.createElement('span'); bd.className = 'badge'; bd.textContent = (v._pos != null && top === 'Discover' && vDrag(v) ? v._pos : v.n) + '/' + learn.filter(function (x) { return x.course === v.course; }).length; a.appendChild(bd); // same corner as a series' episode count
     } // no bar on a single video: a bar means that item's own progress (course progress sits on the folder)
