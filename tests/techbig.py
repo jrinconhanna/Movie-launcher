@@ -25,7 +25,10 @@ with sync_playwright() as p:
                  rec(f"T2 [{size}] staging: number chip leads the title", pg.evaluate("!!document.querySelector('#grid .lcard .t .sp-en')"))
                  rec(f"T3 [{size}] staging: date sits on the picture bottom-right", pg.evaluate("(()=>{const d=document.querySelector('#grid .lcard .poster .sp-inf'); if(!d) return !document.querySelector('#grid .lcard .y')||[...document.querySelectorAll('#grid .lcard .y')].every(y=>!/\\d{4}/.test(y.textContent)); const p=d.closest('.poster').getBoundingClientRect(); return Math.abs(d.getBoundingClientRect().right-(p.right-8))<2})()"))
                  if pg.evaluate("!document.getElementById('wkrow').hidden"):
-                     rec(f"T7 [{size}] staging: week chips are small outlined chips on one row", pg.evaluate("(()=>{const r=document.getElementById('wkrow'), b=r.querySelector('button'); return getComputedStyle(r).flexWrap==='nowrap' && getComputedStyle(b).borderRadius==='8px'})()"))
+                     pg.evaluate("window.scrollTo(0, 800)"); pg.wait_for_timeout(100)
+                    rec(f"T8 [{size}] staging: a gap of ~10px between the chips and the top bar's edge", pg.evaluate("(()=>{const h=document.querySelector('header').getBoundingClientRect(), c=document.querySelector('#wkrow button').getBoundingClientRect(); return h.bottom - c.bottom >= 9})()"), pg.evaluate("(()=>{const h=document.querySelector('header').getBoundingClientRect(), c=document.querySelector('#wkrow button').getBoundingClientRect(); return h.bottom - c.bottom})()"))
+                    pg.evaluate("window.scrollTo(0, 0)"); pg.wait_for_timeout(100)
+                    rec(f"T7 [{size}] staging: week chips are small outlined chips on one row", pg.evaluate("(()=>{const r=document.getElementById('wkrow'), b=r.querySelector('button'); return getComputedStyle(r).flexWrap==='nowrap' && getComputedStyle(b).borderRadius==='8px'})()"))
                  pg.evaluate("window.scrollTo(0, 1500)"); pg.wait_for_timeout(150)
                  rec(f"T4 [{size}] staging: back chip row stays on top while scrolling", pg.evaluate("(()=>{const c=document.getElementById('crow').getBoundingClientRect(); return window.scrollY>300 && c.top>=0 && c.bottom<220})()"))
              else:

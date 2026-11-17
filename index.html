@@ -266,7 +266,7 @@ html .ic.wm.open .opts button.on{background:#000;color:#fff;outline:2px solid #f
 #grid.tbig .lcard .ic.wm { flex-direction: row; align-items: flex-start; top: 20px; right: 8px; } #grid.tbig .lcard .ic.wm .opts { flex-direction: row; } #grid.tbig .lcard .ic button { width: 30px; height: 30px; }
 
 /* staging 18 Nov: week / year chips inside Tech folders look like the season chips (small, outlined, one row that scrolls sideways) */
-body.tbigon .chips.wkrow { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; gap: 6px; margin-top: 6px; } body.tbigon .chips.wkrow::-webkit-scrollbar { display: none; }
+body.tbigon .chips.wkrow { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; gap: 6px; margin-top: 6px; padding-bottom: 10px; } /* 18 Nov: same gap under the chips as the season chips */ body.tbigon .chips.wkrow::-webkit-scrollbar { display: none; }
 body.tbigon .chips.wkrow button { flex: none; border: 1px solid rgba(128,128,128,.35); background: none; color: var(--fg); opacity: .7; font: 600 13px var(--font); border-radius: 8px; padding: 5px 12px; box-shadow: none; }
 body.tbigon .chips.wkrow button[aria-pressed="true"], body.tbigon .chips.wkrow button.on { opacity: 1; background: rgba(128,128,128,.25); color: var(--fg); }
 </style>
@@ -287,7 +287,7 @@ body.tbigon .chips.wkrow button[aria-pressed="true"], body.tbigon .chips.wkrow b
   var LEARN = true; // V2.3 live 10 Nov (was the ?v23 preview)
   var V24 = !/[?&]v23\b/.test(location.search); if (V24) document.documentElement.classList.add('v24'); // V2.4 live 11 Nov (?v23 shows the old view for comparison)
   var PROTO = /[?&]proto\b/.test(location.search); // V2.4.2 prototype: subscribe to folders, one channel each on Watching (this device only)
-  var BUILT = '2026-11-18 00:42'; /* set on every commit by the pre-commit hook; staging compares it to spot a newer version */ var NEXT = /[?&](staging|next)\b/.test(location.search); if (NEXT) document.documentElement.classList.add('isstg'); /* ?staging = preview of what's built but not live yet (?next kept as old alias) */ var NOTAP = NEXT; /* staging 17 Nov: Discover posters don't play; set to true on Javier's go */ var B2 = true; /* mini player, phone tabs at the bottom with icons, quieter TOC frame: live 14 Nov on Javier's go */ if (B2) document.documentElement.classList.add('pvnext'); // V2.4.1 preview (Lean onward): items flagged next only show with ?next until Javier says go
+  var BUILT = '2026-11-18 00:43'; /* set on every commit by the pre-commit hook; staging compares it to spot a newer version */ var NEXT = /[?&](staging|next)\b/.test(location.search); if (NEXT) document.documentElement.classList.add('isstg'); /* ?staging = preview of what's built but not live yet (?next kept as old alias) */ var NOTAP = NEXT; /* staging 17 Nov: Discover posters don't play; set to true on Javier's go */ var B2 = true; /* mini player, phone tabs at the bottom with icons, quieter TOC frame: live 14 Nov on Javier's go */ if (B2) document.documentElement.classList.add('pvnext'); // V2.4.1 preview (Lean onward): items flagged next only show with ?next until Javier says go
 
   /* staging 17 Nov: "New version · tap to reload" pill. Checks quietly on return to the page and every 30 s; never reloads by itself. */
   if (NEXT) (function () {
