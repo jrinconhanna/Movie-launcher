@@ -448,6 +448,24 @@ with sync_playwright() as p:
         rec(f"T4 [{size}] staging: Watching posters still play (links kept)", pg.evaluate("[...document.querySelectorAll('#grid .card a.poster')].every(a=>/^infuse:/.test(a.getAttribute('href')||''))"))
         rec(f"T5 [{size}] no page errors (?staging)", not pg.errs, pg.errs)
         pg.context.close()
+        # T6-T8 (17 Nov, staging): Now watching follows the queues; a last play that isn't on a Watching row shows no card
+        pg = page(b, vp, "?staging")
+        sids = pg.evaluate("""fetch('library.json').then(r=>r.json()).then(d=>{ const L=(JSON.parse(localStorage.getItem('proto2')||'{}').lists)||{};
+          const on=new Set(); Object.keys(L).forEach(k=>on.add(L[k][0]));
+          const sid=i=>(i.kind==='movie'?'m':'t')+i.tmdb;
+          const mv=d.items.filter(i=>i.kind==='movie' && i.status!=='watched' && i.tmdb);
+          const stray=mv.find(i=>![...Object.values(L)].some(x=>x.includes('i:'+i.key)));
+          const top=(L.Movies||[]).map(id=>d.items.find(i=>'i:'+i.key===id)).find(Boolean);
+          return {stray: stray && sid(stray), top: top && top.status!=='watched' ? sid(top) : null}; })""")
+        pg.evaluate("k=>localStorage.setItem('lastplay', JSON.stringify({k:'i:'+k, at:Date.now(), w:1}))", sids["stray"])
+        pg.reload(); pg.wait_for_timeout(1200)
+        rec(f"T6 [{size}] staging: a play that isn't on Watching (e.g. from Discover) shows no Now watching card", pg.evaluate("document.querySelectorAll('.nowc').length") == 0, sids)
+        if sids["top"]:
+            pg.evaluate("k=>localStorage.setItem('lastplay', JSON.stringify({k:'i:'+k, at:Date.now(), w:1}))", sids["top"])
+            pg.reload(); pg.wait_for_timeout(1200)
+            rec(f"T8 [{size}] staging: a play of the movie on Watching still shows the Now watching card", pg.evaluate("document.querySelectorAll('.nowc').length") == 1, sids)
+        rec(f"T7 [{size}] no page errors (?staging, stray last play)", not pg.errs, pg.errs)
+        pg.context.close()
         pg = page(b, vp, "?v23")
         tab(pg, "Discover"); pg.evaluate("[...document.querySelectorAll('#tabs button')].find(b=>b.firstChild.textContent==='Tech').click()"); pg.wait_for_timeout(300)
         rec(f"J10 [{size}] ?v23 still shows the old Tech view (GSP only)", pg.evaluate("[...document.querySelectorAll('#grid .ccard .t')].map(x=>x.textContent)") == ["GSP Series"])
