@@ -249,6 +249,10 @@ html .ic.wm.open .opts button.on{background:#000;color:#fff;outline:2px solid #f
 .sp-tl { display: flex; align-items: baseline; gap: 10px; } .sp-tl b { flex: 1; min-width: 0; } .sp-tl .sp-meta { flex: none; white-space: nowrap; margin-top: 0; }
 
 .sp-en { opacity: .55; margin-right: 2px; }
+
+.sp-pic .sp-inf { position: absolute; right: 8px; bottom: 8px; background: rgba(0,0,0,.72); color: #fff; font: 600 12px var(--font); padding: 3px 8px; border-radius: 6px; }
+.sp-pic .sp-wk { right: auto; left: 8px; bottom: 8px; }
+.sp-en { display: inline-block; vertical-align: 2px; opacity: 1; font: 700 11px var(--font); padding: 2px 6px; border-radius: 5px; background: rgba(128,128,128,.28); margin-right: 7px; } /* 18 Nov: episode number as a chip before the title */
 </style>
 </head>
 <body>
@@ -267,7 +271,7 @@ html .ic.wm.open .opts button.on{background:#000;color:#fff;outline:2px solid #f
   var LEARN = true; // V2.3 live 10 Nov (was the ?v23 preview)
   var V24 = !/[?&]v23\b/.test(location.search); if (V24) document.documentElement.classList.add('v24'); // V2.4 live 11 Nov (?v23 shows the old view for comparison)
   var PROTO = /[?&]proto\b/.test(location.search); // V2.4.2 prototype: subscribe to folders, one channel each on Watching (this device only)
-  var BUILT = '2026-11-18 00:19'; /* set on every commit by the pre-commit hook; staging compares it to spot a newer version */ var NEXT = /[?&](staging|next)\b/.test(location.search); if (NEXT) document.documentElement.classList.add('isstg'); /* ?staging = preview of what's built but not live yet (?next kept as old alias) */ var NOTAP = NEXT; /* staging 17 Nov: Discover posters don't play; set to true on Javier's go */ var B2 = true; /* mini player, phone tabs at the bottom with icons, quieter TOC frame: live 14 Nov on Javier's go */ if (B2) document.documentElement.classList.add('pvnext'); // V2.4.1 preview (Lean onward): items flagged next only show with ?next until Javier says go
+  var BUILT = '2026-11-18 00:26'; /* set on every commit by the pre-commit hook; staging compares it to spot a newer version */ var NEXT = /[?&](staging|next)\b/.test(location.search); if (NEXT) document.documentElement.classList.add('isstg'); /* ?staging = preview of what's built but not live yet (?next kept as old alias) */ var NOTAP = NEXT; /* staging 17 Nov: Discover posters don't play; set to true on Javier's go */ var B2 = true; /* mini player, phone tabs at the bottom with icons, quieter TOC frame: live 14 Nov on Javier's go */ if (B2) document.documentElement.classList.add('pvnext'); // V2.4.1 preview (Lean onward): items flagged next only show with ?next until Javier says go
 
   /* staging 17 Nov: "New version · tap to reload" pill. Checks quietly on return to the page and every 30 s; never reloads by itself. */
   if (NEXT) (function () {
@@ -1079,7 +1083,7 @@ html .ic.wm.open .opts button.on{background:#000;color:#fff;outline:2px solid #f
         ic.appendChild(op); ic.appendChild(mo); pc.appendChild(ic); })(x, ww, isN);
       r.appendChild(pc);
       var tx = document.createElement('div'); var tl = document.createElement('div'); tl.className = 'sp-tl'; tx.appendChild(tl); var nm = document.createElement('b'); nm.innerHTML = '<span class="sp-en">E' + x.e + '</span> '; nm.appendChild(document.createTextNode(x.name || ('Episode ' + x.e))); tl.appendChild(nm); /* 18 Nov: episode number on the title line (was a small chip on the picture) */ /* 18 Nov: info line right-aligned after the title */
-      var mt = document.createElement('div'); mt.className = 'sp-meta'; mt.textContent = [x.rt ? (x.rt < 60 ? x.rt + 'm' : Math.floor(x.rt / 60) + 'h' + (x.rt % 60 ? ' ' + x.rt % 60 + 'm' : '')) : '', myR ? '\u2605 ' + myR : '', (x.air || '').slice(0, 4)].filter(Boolean).join(' \u00b7 '); tl.appendChild(mt);
+      var mt = document.createElement('div'); mt.className = 'sp-meta'; mt.textContent = [x.rt ? (x.rt < 60 ? x.rt + 'm' : Math.floor(x.rt / 60) + 'h' + (x.rt % 60 ? ' ' + x.rt % 60 + 'm' : '')) : '', myR ? '\u2605 ' + myR : '', (x.air || '').slice(0, 4)].filter(Boolean).join(' \u00b7 '); if (mt.textContent) { mt.className = 'sp-inf'; pc.appendChild(mt); } /* 18 Nov: length · my rating · year on the picture, bottom-right */
       if (x.ov) { var ov = document.createElement('div'); ov.className = 'sp-ov'; ov.textContent = x.ov; ov.onclick = function () { r.classList.toggle('full'); }; tx.appendChild(ov); }
       r.appendChild(tx); ls0.appendChild(r);
     });

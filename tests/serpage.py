@@ -31,13 +31,13 @@ with sync_playwright() as p:
         rec(f"P3 [{size}] every episode of the season is listed", pg.evaluate("document.querySelectorAll('.sp-row').length") == n1, (pg.evaluate("document.querySelectorAll('.sp-row').length"), n1))
         rec(f"P4 [{size}] watched episodes (E1, E2 from Trakt) get the ✓ badge + grey, others don't", pg.evaluate("[...document.querySelectorAll('.sp-row')].slice(0,3).map(r=>!!r.querySelector('.sp-wk')).join()") == "true,true,false")
         rec(f"P18 [{size}] Vertical big: picture spans the row, title sits under it", pg.evaluate("(()=>{const r=document.querySelector('.sp-row'), p=r.querySelector('.sp-pic').getBoundingClientRect(), b=r.querySelector('b').getBoundingClientRect(), rr=r.getBoundingClientRect(); return p.width > rr.width*0.9 && b.top > p.bottom})()"))
-        rec(f"P19 [{size}] info line sits right-aligned on the title's line", pg.evaluate("(()=>{const r=document.querySelector('.sp-row'), b=r.querySelector('b').getBoundingClientRect(), m=r.querySelector('.sp-meta').getBoundingClientRect(), rr=r.querySelector('.sp-tl').getBoundingClientRect(); return Math.abs(m.right-rr.right)<2 && m.top < b.bottom})()"))
+        rec(f"P19 [{size}] length · rating · year sit on the picture bottom-right; the title has the full width", pg.evaluate("(()=>{const r=document.querySelector('.sp-row'), p=r.querySelector('.sp-pic').getBoundingClientRect(), m=r.querySelector('.sp-pic .sp-inf').getBoundingClientRect(); return Math.abs(m.right-(p.right-8))<2 && Math.abs(m.bottom-(p.bottom-8))<2 && !r.querySelector('.sp-tl .sp-meta')})()"))
         rec(f"P5 [{size}] header counts watched in the season", f"2/{n1} watched" in pg.evaluate("document.querySelector('.sp-top small').textContent"))
         has_ov = pg.evaluate("!!document.querySelector('.sp-ov')")
         if has_ov:
             h0 = pg.evaluate("document.querySelector('.sp-ov').getBoundingClientRect().height"); pg.evaluate("document.querySelector('.sp-ov').click()"); pg.wait_for_timeout(100)
             rec(f"P6 [{size}] tapping a description opens it fully down", pg.evaluate("document.querySelector('.sp-row').classList.contains('full')") and pg.evaluate("document.querySelector('.sp-ov').getBoundingClientRect().height") >= h0)
-        metas = pg.evaluate("[...document.querySelectorAll('.sp-row .sp-meta')].slice(0,3).map(m=>m.textContent)")
+        metas = pg.evaluate("[...document.querySelectorAll('.sp-row')].slice(0,3).map(r=>(r.querySelector('.sp-inf')||{}).textContent||'')")
         rec(f"P9 [{size}] only my own rating shows (★ 9 on E2), no TMDB rating elsewhere", "\u2605 9" in metas[1] and "\u2605" not in metas[0] and "\u2605" not in metas[2], metas)
         if pg.evaluate("document.querySelectorAll('.sp-chips button').length") > 2:
             pg.evaluate("window.scrollTo(0, 400)"); pg.wait_for_timeout(100); cx0 = pg.evaluate("document.querySelector('.sp-chips').scrollLeft")
