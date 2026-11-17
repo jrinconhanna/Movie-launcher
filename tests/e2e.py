@@ -495,8 +495,9 @@ with sync_playwright() as p:
             if pg.evaluate("document.querySelectorAll('#grid .lcard:not(.ccard)').length"): break
             pg.evaluate("document.querySelector('#grid .ccard .poster')?.click()"); pg.wait_for_timeout(300)
         nv = pg.evaluate("document.querySelectorAll('#grid .lcard:not(.ccard)').length")
-        pg.evaluate("document.querySelector('#grid .lcard:not(.ccard) .poster').click()"); pg.wait_for_timeout(400)
-        rec(f"T13 [{size}] staging: tapping a video in Discover plays nothing", nv > 0 and not pg.evaluate("window.__went.length"), (nv, pg.evaluate("window.__went")))
+        lp0 = pg.evaluate("localStorage.getItem('lastplay')")
+        pg.evaluate("document.querySelector('#grid .lcard:not(.ccard) .poster').click()"); pg.wait_for_timeout(3000)
+        rec(f"T13 [{size}] staging: tapping a video in Discover plays nothing (no Infuse, no last play)", nv > 0 and not pg.evaluate("window.__went.length") and pg.evaluate("localStorage.getItem('lastplay')") == lp0, (nv, pg.evaluate("window.__went")))
         rec(f"T7 [{size}] no page errors (?staging, stray last play)", not pg.errs, pg.errs)
         pg.context.close()
         pg = page(b, vp, "?v23")
