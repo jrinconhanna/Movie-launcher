@@ -258,7 +258,7 @@ html .ic.wm.open .opts button.on{background:#000;color:#fff;outline:2px solid #f
   var LEARN = true; // V2.3 live 10 Nov (was the ?v23 preview)
   var V24 = !/[?&]v23\b/.test(location.search); if (V24) document.documentElement.classList.add('v24'); // V2.4 live 11 Nov (?v23 shows the old view for comparison)
   var PROTO = /[?&]proto\b/.test(location.search); // V2.4.2 prototype: subscribe to folders, one channel each on Watching (this device only)
-  var BUILT = '2026-11-17 23:54'; /* set on every commit by the pre-commit hook; staging compares it to spot a newer version */ var NEXT = /[?&](staging|next)\b/.test(location.search); if (NEXT) document.documentElement.classList.add('isstg'); /* ?staging = preview of what's built but not live yet (?next kept as old alias) */ var NOTAP = NEXT; /* staging 17 Nov: Discover posters don't play; set to true on Javier's go */ var B2 = true; /* mini player, phone tabs at the bottom with icons, quieter TOC frame: live 14 Nov on Javier's go */ if (B2) document.documentElement.classList.add('pvnext'); // V2.4.1 preview (Lean onward): items flagged next only show with ?next until Javier says go
+  var BUILT = '2026-11-17 23:57'; /* set on every commit by the pre-commit hook; staging compares it to spot a newer version */ var NEXT = /[?&](staging|next)\b/.test(location.search); if (NEXT) document.documentElement.classList.add('isstg'); /* ?staging = preview of what's built but not live yet (?next kept as old alias) */ var NOTAP = NEXT; /* staging 17 Nov: Discover posters don't play; set to true on Javier's go */ var B2 = true; /* mini player, phone tabs at the bottom with icons, quieter TOC frame: live 14 Nov on Javier's go */ if (B2) document.documentElement.classList.add('pvnext'); // V2.4.1 preview (Lean onward): items flagged next only show with ?next until Javier says go
 
   /* staging 17 Nov: "New version · tap to reload" pill. Checks quietly on return to the page and every 30 s; never reloads by itself. */
   if (NEXT) (function () {
@@ -1058,10 +1058,11 @@ html .ic.wm.open .opts button.on{background:#000;color:#fff;outline:2px solid #f
       var pc = document.createElement('div'); pc.className = 'sp-pic' + (ww ? ' seen' : ''); var src = x.still ? 'https://image.tmdb.org/t/p/w300' + x.still : it.poster ? 'https://image.tmdb.org/t/p/w300' + it.poster : '';
       if (src) { var im = document.createElement('img'); im.loading = 'lazy'; im.alt = ''; im.src = src; if (!x.still) im.className = 'nop'; pc.appendChild(im); }
       pc.insertAdjacentHTML('beforeend', '<span class="sp-ep">E' + x.e + '</span>' + (ww ? '<span class="sp-wk">\u2713</span>' : '') + (isN ? '<span class="sp-un">\u25b6| Up next</span>' : ''));
-      (function (x, ww) { var ic = document.createElement('div'); ic.className = 'ic wm'; var op = document.createElement('span'); op.className = 'opts';
+      (function (x, ww, isN) { var ic = document.createElement('div'); ic.className = 'ic wm'; var op = document.createElement('span'); op.className = 'opts';
         var mk = document.createElement('button'); mk.type = 'button'; mk.textContent = ww ? '\u2715' : '\u2713'; if (ww) mk.classList.add('on'); mk.title = ww ? 'Mark not watched' : 'Mark watched'; mk.setAttribute('aria-label', mk.title); mk.onclick = function (e) { e.preventDefault(); e.stopPropagation(); markEp(it, sn, x.e, !ww); }; op.appendChild(mk);
+        if (onList && !isN) { var up = document.createElement('button'); up.type = 'button'; up.innerHTML = ACT.upnext[0]; up.title = 'Up next'; up.setAttribute('aria-label', 'Up next'); up.onclick = function (e) { e.preventDefault(); e.stopPropagation(); p2.pin = p2.pin || {}; p2.pin['i:' + it.key] = { s: +sn, e: x.e, name: x.name, still: x.still, rt: x.rt, rw: ww ? 1 : 0 }; p2Save(); toast('E' + x.e + ' is up next on Watching'); render(); }; op.appendChild(up); }
         var mo = document.createElement('button'); mo.type = 'button'; mo.className = 'more'; mo.textContent = '\u22ef'; mo.setAttribute('aria-label', 'Options for E' + x.e); mo.onclick = function (e) { e.preventDefault(); e.stopPropagation(); var was = ic.classList.contains('open'); document.querySelectorAll('.sp-pic .ic.open').forEach(function (q) { q.classList.remove('open'); }); if (!was) ic.classList.add('open'); };
-        ic.appendChild(op); ic.appendChild(mo); pc.appendChild(ic); })(x, ww);
+        ic.appendChild(op); ic.appendChild(mo); pc.appendChild(ic); })(x, ww, isN);
       r.appendChild(pc);
       var tx = document.createElement('div'); var nm = document.createElement('b'); nm.textContent = x.name || ('Episode ' + x.e); tx.appendChild(nm);
       var mt = document.createElement('div'); mt.className = 'sp-meta'; mt.textContent = [x.rt ? (x.rt < 60 ? x.rt + 'm' : Math.floor(x.rt / 60) + 'h' + (x.rt % 60 ? ' ' + x.rt % 60 + 'm' : '')) : '', myR ? '\u2605 ' + myR : '', (x.air || '').slice(0, 4)].filter(Boolean).join(' \u00b7 '); tx.appendChild(mt);
@@ -1071,7 +1072,14 @@ html .ic.wm.open .opts button.on{background:#000;color:#fff;outline:2px solid #f
     if (!eps.length) ls0.innerHTML = '<div class="empty">No episodes for this season.</div>';
     g.appendChild(ls0); var el = ls0.querySelector('.next'); if (el && !serPage.sc) { serPage.sc = 1; setTimeout(function () { el.scrollIntoView({ block: 'center' }); }, 0); }
   }
-  function markEp(it, sn, e, on) { /* staging 17 Nov: mark one episode watched / not watched, saved to Trakt (Infuse reads it) */
+  function applyPins() { /* staging 17 Nov: a series' 'Up next' pin becomes its next episode on Watching; an unwatched pin clears once watched */
+    if (!NEXT) return; var ch = false; items.forEach(function (it) { if (it.kind !== 'tv') return; if (it._ne0 === undefined) it._ne0 = it.next_ep || null;
+      var k = 'i:' + it.key, pn = p2 && p2.pin && p2.pin[k], W = ((live && live.se) || {})[it.tmdb] || {};
+      if (pn && !pn.rw && (W[pn.s] || []).map(Number).indexOf(pn.e) >= 0) { delete p2.pin[k]; pn = null; ch = true; }
+      it.next_ep = pn ? { s: pn.s, e: pn.e, name: pn.name, still: pn.still, rt: pn.rt } : it._ne0; });
+    if (ch) try { localStorage.setItem('proto2', JSON.stringify(p2)); } catch (x) {} }
+  function markEp(it, sn, e, on) {
+    if (on && p2 && p2.pin && p2.pin['i:' + it.key] && +p2.pin['i:' + it.key].s === +sn && p2.pin['i:' + it.key].e === e) { delete p2.pin['i:' + it.key]; p2Save(); } /* watching the pinned episode clears the pin (re-watch too) */ /* staging 17 Nov: mark one episode watched / not watched, saved to Trakt (Infuse reads it) */
     live = live || {}; live.se = live.se || {}; var W = live.se[it.tmdb] = live.se[it.tmdb] || {}, L = W[sn] = (W[sn] || []).map(Number), i = L.indexOf(e);
     if (on && i < 0) L.push(e); if (!on && i >= 0) L.splice(i, 1); try { localStorage.setItem('trakt-live', JSON.stringify(live)); } catch (x) {} render();
     var word = on ? 'E' + e + ' marked watched' : 'E' + e + ' marked not watched';
@@ -1081,7 +1089,7 @@ html .ic.wm.open .opts button.on{background:#000;color:#fff;outline:2px solid #f
       .then(function (r) { if (!r.ok) throw new Error(r.status); toast(word + ' \u00b7 saved to Trakt'); }).catch(function (x) { toast(word + ' on this device \u00b7 couldn\u2019t save to Trakt (' + x.message + ')'); });
   }
   function render() {
-    renderTop(); renderTabs();
+    applyPins(); renderTop(); renderTabs();
     if (NEXT && serPage && top === 'Discover') { seriesPage(); return; } else if (serPage && top !== 'Discover') serPage = null;
     var gS = $('grid'); if (gS.classList.contains('serp')) { gS.className = gS.dataset.cls || 'grid'; ['crow', 'wkrow'].forEach(function (id) { if ($(id)) $(id).hidden = false; }); }
     var real = state.shelf; if (AFTER && top === 'Next') state.shelf = 'Watch Next';
