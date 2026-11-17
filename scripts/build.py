@@ -63,6 +63,47 @@ def episode(name):
     return int(s), int(e)
 
 
+EPF_RE = [re.compile(r"[Ss](\d+)\s*\.?\s*[Ee](\d+)\s*[-\u2219\u00b7:]*\s*(.*)$"), re.compile(r"(\d+)x(\d+)\s*-?\s*(.*)$")]
+
+
+def ep_file(path):
+    """'Show (1984) - 01x02 - Title.mp4', 'Show - S19.E1 \u2219 Title.mp4', 'Season 1/2 - Title.mp4' -> (season, episode, title)."""
+    base = re.sub(r"\.\w+$", "", path.rsplit("/", 1)[-1])
+    for rx in EPF_RE:
+        m = rx.search(base)
+        if m:
+            return int(m.group(1)), int(m.group(2)), m.group(3)
+    m = re.search(r"Season (\d+)/(\d+)\s*-\s*(.*)$", re.sub(r"\.\w+$", "", path))
+    return (int(m.group(1)), int(m.group(2)), m.group(3)) if m else None
+
+
+def ep_match(o, lines, fp):
+    """'ok' when at least 90% of the show's files match a TMDB episode (same number, similar title) and every file name has a number; else the reason."""
+    import difflib
+    path = o["key"].split("|", 1)[1]
+    files = [l.strip() for l in lines if ("/" + path + "/") in l and l.strip().lower().endswith(VIDEO)]
+    if not os.path.exists(fp):
+        return "no TMDB episodes yet"
+    seasons = json.load(open(fp, encoding="utf-8")).get("seasons", {})
+    tm = {(int(sn), e["e"]): e["name"] for sn in seasons for e in seasons[sn]}
+    norm = lambda t: re.sub(r"[^a-z0-9]+", " ", (t or "").lower()).strip()
+    ok = num = unread = 0
+    for f in files:
+        p = ep_file(f)
+        if not p:
+            unread += 1
+            continue
+        num += 1
+        n = tm.get((p[0], p[1]))
+        if n is not None and (not p[2].strip() or difflib.SequenceMatcher(None, norm(p[2]), norm(n)).ratio() > 0.6):
+            ok += 1
+    if unread:
+        return f"{unread} of {len(files)} file names have no episode number"
+    if not num or ok / num < 0.9:
+        return f"{ok}/{num} episodes match TMDB"
+    return "ok"
+
+
 def group_items(lines):
     """Return dict key -> item skeleton."""
     items = {}
@@ -442,7 +483,7 @@ def main():
     epdir = os.path.join(ROOT, "eps"); os.makedirs(epdir, exist_ok=True)
     week = (datetime.datetime.utcnow() - datetime.timedelta(days=7)).isoformat()
     for o in out:
-        if o["kind"] != "tv" or not o.get("next_ep"):
+        if o["kind"] != "tv":  # 17 Nov: every series (was only those with a next episode), so each can be checked
             continue
         fp = os.path.join(epdir, f'{o["tmdb"]}.json')
         try:
@@ -454,7 +495,7 @@ def main():
                 if sn <= 0:
                     continue
                 eps = tmdb_get(f'/tv/{o["tmdb"]}/season/{sn}', {}, token).get("episodes") or []
-                seasons[str(sn)] = [{"e": x.get("episode_number"), "name": x.get("name") or "", "ov": (x.get("overview") or "")[:600],
+                seasons[str(sn)] = [{"e": x.get("episode_number"), "name": x.get("name") or "", "ov": (x.get("overview") or "")[:2000],
                                      "still": x.get("still_path"), "rt": x.get("runtime"), "vote": round(x.get("vote_average") or 0, 1), "air": x.get("air_date") or ""}
                                     for x in eps if x.get("episode_number")]
                 time.sleep(0.03)
@@ -462,6 +503,13 @@ def main():
                 json.dump({"at": datetime.datetime.utcnow().isoformat(), "tmdb": o["tmdb"], "title": o["title"], "seasons": seasons}, f, ensure_ascii=False)
         except Exception as e:
             print("TMDB seasons failed:", o["tmdb"], e)
+
+    # 17 Nov (V2.4.2, Series that match TMDB · Good): compare my episode files with TMDB's episodes;
+    # matched shows get the series page, the rest go to "To check" with the reason.
+    for o in out:
+        if o["kind"] != "tv":
+            continue
+        o["epm"] = ep_match(o, lines, os.path.join(epdir, f'{o["tmdb"]}.json'))
 
     save("epcounts.json", epc)
     save("runtimes.json", {k: v for k, v in runtimes.items() if v})

@@ -237,7 +237,7 @@ html .ic.wm.open .opts button.on{background:#000;color:#fff;outline:2px solid #f
   var LEARN = true; // V2.3 live 10 Nov (was the ?v23 preview)
   var V24 = !/[?&]v23\b/.test(location.search); if (V24) document.documentElement.classList.add('v24'); // V2.4 live 11 Nov (?v23 shows the old view for comparison)
   var PROTO = /[?&]proto\b/.test(location.search); // V2.4.2 prototype: subscribe to folders, one channel each on Watching (this device only)
-  var BUILT = '2026-11-17 22:31'; /* set on every commit by the pre-commit hook; staging compares it to spot a newer version */ var NEXT = /[?&](staging|next)\b/.test(location.search); if (NEXT) document.documentElement.classList.add('isstg'); /* ?staging = preview of what's built but not live yet (?next kept as old alias) */ var NOTAP = NEXT; /* staging 17 Nov: Discover posters don't play; set to true on Javier's go */ var B2 = true; /* mini player, phone tabs at the bottom with icons, quieter TOC frame: live 14 Nov on Javier's go */ if (B2) document.documentElement.classList.add('pvnext'); // V2.4.1 preview (Lean onward): items flagged next only show with ?next until Javier says go
+  var BUILT = '2026-11-17 23:42'; /* set on every commit by the pre-commit hook; staging compares it to spot a newer version */ var NEXT = /[?&](staging|next)\b/.test(location.search); if (NEXT) document.documentElement.classList.add('isstg'); /* ?staging = preview of what's built but not live yet (?next kept as old alias) */ var NOTAP = NEXT; /* staging 17 Nov: Discover posters don't play; set to true on Javier's go */ var B2 = true; /* mini player, phone tabs at the bottom with icons, quieter TOC frame: live 14 Nov on Javier's go */ if (B2) document.documentElement.classList.add('pvnext'); // V2.4.1 preview (Lean onward): items flagged next only show with ?next until Javier says go
 
   /* staging 17 Nov: "New version · tap to reload" pill. Checks quietly on return to the page and every 30 s; never reloads by itself. */
   if (NEXT) (function () {
@@ -1095,9 +1095,13 @@ html .ic.wm.open .opts button.on{background:#000;color:#fff;outline:2px solid #f
     } else {
     /* 14 Nov: bottom tidied into one fold, one settings line, one credits line */
     var gm = unmatched.filter(function (u) { return !u.video; }), gv = unmatched.filter(function (u) { return u.video; });
-    if (gm.length || gv.length) { var tc = document.createElement('details'); tc.className = 'tocheck'; var ts = document.createElement('summary');
-      ts.textContent = 'To check' + (gm.length ? ' \u00b7 ' + gm.length + ' movies and docs' : '') + (gv.length ? ' \u00b7 ' + gv.length + ' videos' : ''); tc.appendChild(ts);
+    var gsr = NEXT ? items.filter(function (it) { return it.kind === 'tv' && it.epm && it.epm !== 'ok'; }) : []; /* staging 17 Nov: series whose episodes don't match TMDB (no series page for them yet) */
+    if (gm.length || gv.length || gsr.length) { var tc = document.createElement('details'); tc.className = 'tocheck'; var ts = document.createElement('summary');
+      ts.textContent = 'To check' + (gm.length ? ' \u00b7 ' + gm.length + ' movies and docs' : '') + (gsr.length ? ' \u00b7 ' + gsr.length + ' series' : '') + (gv.length ? ' \u00b7 ' + gv.length + ' videos' : ''); tc.appendChild(ts);
       gapList(gm, 'Movies and docs to check', 'Probably on TMDB. Open the \u201cMaybe\u201d link; if it\u2019s right, tell Claude and it becomes permanent.', tc);
+      if (gsr.length) { var sd = document.createElement('details'), ss = document.createElement('summary'); ss.textContent = 'Series to check (episodes don\u2019t match TMDB) \u00b7 ' + gsr.length; sd.appendChild(ss);
+        var sh = document.createElement('p'); sh.className = 'gaphint'; sh.textContent = 'No series page for these until they match: rename the files, or a second source (TVDB) or a fix by hand later.'; sd.appendChild(sh);
+        var sul = document.createElement('ul'); gsr.slice().sort(function (a, b) { return (b.files || 0) - (a.files || 0); }).forEach(function (it) { var li = document.createElement('li'); li.textContent = it.title + ' \u2014 ' + it.epm + ' (' + (it.files || 0) + ' files)'; sul.appendChild(li); }); sd.appendChild(sul); tc.appendChild(sd); }
       gapList(gv, 'Videos (not on TMDB)', 'YouTube clips, interviews and compilations. They will get their own home later.', tc); f.appendChild(tc); }
     var fs = document.createElement('div'); fs.className = 'fset';
     function lnk(txt, fn, title) { var b = document.createElement('button'); b.type = 'button'; b.textContent = txt; if (title) b.title = title; b.onclick = fn; return b; }
