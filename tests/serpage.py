@@ -44,6 +44,8 @@ with sync_playwright() as p:
         rec(f"P13 [{size}] on a watched episode the button is ✕ Mark not watched", pg.evaluate("document.querySelector('.sp-pic .ic.open .opts button').title") == "Mark not watched")
         pg.evaluate("document.querySelector('.sp-pic .ic.open .opts button').click()"); pg.wait_for_timeout(250)
         rec(f"P14 [{size}] ✕ unmarks it again", not pg.evaluate("!!document.querySelectorAll('.sp-row')[2].querySelector('.sp-wk')"))
+        pg.evaluate("window.scrollTo(0, 2000)"); pg.wait_for_timeout(150)
+        rec(f"P15 [{size}] the title + season chips stay on top while scrolling", pg.evaluate("window.scrollY > 300 && Math.abs(document.querySelector('.sp-head').getBoundingClientRect().top) < 80"), pg.evaluate("document.querySelector('.sp-head').getBoundingClientRect().top"))
         pg.evaluate("document.querySelector('.sp-bk').click()"); pg.wait_for_timeout(300)
         rec(f"P7 [{size}] ‹ goes back to Discover", not pg.evaluate("!!document.querySelector('.serp')") and pg.evaluate("document.querySelectorAll('#grid .card').length") > 0)
         rec(f"P8 [{size}] no page errors", not errs, errs)
