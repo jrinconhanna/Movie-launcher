@@ -10,6 +10,7 @@ R = []
 def rec(n, ok, d=""): R.append(ok); print(("PASS " if ok else "FAIL ") + n + ("" if ok else "  " + str(d)))
 lib = json.load(open(ROOT + "/library.json", encoding="utf-8"))
 ms = [i for i in lib["items"] if i.get("kind") == "tv" and i.get("epm") == "ok" and i.get("group") == "Series" and os.path.exists(f"{ROOT}/eps/{i['tmdb']}.json")][0]
+ms2 = ([i for i in lib["items"] if i.get("kind") == "tv" and i.get("epm") == "ok" and i.get("group") == "Series" and os.path.exists(f"{ROOT}/eps/{i['tmdb']}.json") and len(json.load(open(f"{ROOT}/eps/{i['tmdb']}.json"))["seasons"]) >= 5] or [None])[0]
 bad = [i for i in lib["items"] if i.get("kind") == "tv" and i.get("epm") not in (None, "ok") and i.get("group") == "Series"][0]
 E1 = json.load(open(f"{ROOT}/eps/{ms['tmdb']}.json")); s1 = sorted(E1["seasons"], key=int)[0]; n1 = len(E1["seasons"][s1])
 live = {"se": {str(ms["tmdb"]): {s1: [1, 2]}}, "er": {str(ms["tmdb"]): {s1 + "x2": 9}}, "s": {}, "m": [], "a": {}}
@@ -35,6 +36,10 @@ with sync_playwright() as p:
             rec(f"P6 [{size}] tapping a description opens it fully down", pg.evaluate("document.querySelector('.sp-row').classList.contains('full')") and pg.evaluate("document.querySelector('.sp-ov').getBoundingClientRect().height") >= h0)
         metas = pg.evaluate("[...document.querySelectorAll('.sp-row .sp-meta')].slice(0,3).map(m=>m.textContent)")
         rec(f"P9 [{size}] only my own rating shows (★ 9 on E2), no TMDB rating elsewhere", "\u2605 9" in metas[1] and "\u2605" not in metas[0] and "\u2605" not in metas[2], metas)
+        if pg.evaluate("document.querySelectorAll('.sp-chips button').length") > 2:
+            pg.evaluate("window.scrollTo(0, 400)"); pg.wait_for_timeout(100); cx0 = pg.evaluate("document.querySelector('.sp-chips').scrollLeft")
+            pg.evaluate("[...document.querySelectorAll('.sp-chips button')].find(b=>!b.classList.contains('on')).click()"); pg.wait_for_timeout(150)
+            rec(f"P16 [{size}] switching season keeps the chips where they were and doesn't jump the page down", abs(pg.evaluate("document.querySelector('.sp-chips').scrollLeft") - cx0) < 2 and pg.evaluate("window.scrollY") <= 400)
         rec(f"P10 [{size}] season chips stay on one row (scroll sideways)", pg.evaluate("getComputedStyle(document.querySelector('.sp-chips')||document.body).flexWrap") in ("nowrap",""))
         pg.evaluate("document.querySelectorAll('.sp-row')[2].querySelector('.sp-pic .more').click()"); pg.wait_for_timeout(100)
         rec(f"P11 [{size}] ⋯ on the picture opens ✓ for an unwatched episode", pg.evaluate("document.querySelector('.sp-pic .ic.open .opts button').title") == "Mark watched")
@@ -45,7 +50,7 @@ with sync_playwright() as p:
         pg.evaluate("document.querySelector('.sp-pic .ic.open .opts button').click()"); pg.wait_for_timeout(250)
         rec(f"P14 [{size}] ✕ unmarks it again", not pg.evaluate("!!document.querySelectorAll('.sp-row')[2].querySelector('.sp-wk')"))
         pg.evaluate("window.scrollTo(0, 2000)"); pg.wait_for_timeout(150)
-        rec(f"P15 [{size}] the title + season chips stay on top while scrolling", pg.evaluate("window.scrollY > 300 && Math.abs(document.querySelector('.sp-head').getBoundingClientRect().top) < 80"), pg.evaluate("document.querySelector('.sp-head').getBoundingClientRect().top"))
+        rec(f"P15 [{size}] the title + season chips stay on top while scrolling, below the tab bar (not under it)", pg.evaluate("(()=>{const h=document.querySelector('header').getBoundingClientRect(), t=document.querySelector('.sp-head').getBoundingClientRect(); return window.scrollY > 300 && t.top >= h.bottom - 1 && t.top < h.bottom + 40})()"), pg.evaluate("document.querySelector('.sp-head').getBoundingClientRect().top"))
         pg.evaluate("document.querySelector('.sp-bk').click()"); pg.wait_for_timeout(300)
         rec(f"P7 [{size}] ‹ goes back to Discover", not pg.evaluate("!!document.querySelector('.serp')") and pg.evaluate("document.querySelectorAll('#grid .card').length") > 0)
         # U (17 Nov): ▶| Up next on episodes, only when the series is on Watching or Next
@@ -71,6 +76,13 @@ with sync_playwright() as p:
         pg.evaluate("document.querySelectorAll('.sp-row')[4].querySelector('.sp-pic .more').click()"); pg.wait_for_timeout(100)
         pg.evaluate("document.querySelector('.sp-pic .ic.open .opts button').click()"); pg.wait_for_timeout(250)
         rec(f"S5 [{size}] marking E5 watched clears the pin", not pg.evaluate("k=>!!(JSON.parse(localStorage.getItem('proto2')).pin||{})['i:'+k]", ms["key"]) and not pg.evaluate("document.querySelectorAll('.sp-row')[4].classList.contains('next')"))
+        if ms2:
+            pg.evaluate("document.querySelector('.sp-bk') && document.querySelector('.sp-bk').click()"); pg.wait_for_timeout(250)
+            pg.evaluate("k=>document.querySelector('#grid .card[data-key=\"'+k+'\"] a.poster').click()", ms2["key"]); pg.wait_for_timeout(700)
+            pg.evaluate("window.scrollTo(0, 400)"); pg.wait_for_timeout(100); cx0 = pg.evaluate("document.querySelector('.sp-chips').scrollLeft")
+            pg.evaluate("[...document.querySelectorAll('.sp-chips button')].filter(b=>!b.classList.contains('on'))[1].click()"); pg.wait_for_timeout(200)
+            rec(f"P16 [{size}] switching season ({ms2['title']}) keeps the chips still and doesn't jump the page", abs(pg.evaluate("document.querySelector('.sp-chips').scrollLeft") - cx0) < 2 and pg.evaluate("window.scrollY") <= 400, (cx0, pg.evaluate("document.querySelector('.sp-chips').scrollLeft"), pg.evaluate("window.scrollY")))
+            pg.evaluate("document.querySelector('.sp-bk').click()"); pg.wait_for_timeout(250)
         rec(f"P8 [{size}] no page errors", not errs, errs)
         if size == "phone":
             pg.evaluate("document.querySelector('.sp-bk') && document.querySelector('.sp-bk').click()"); pg.wait_for_timeout(300)
