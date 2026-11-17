@@ -1565,6 +1565,14 @@
   "title": "That Thing You Do!",
   "tmdb": 9591
  },
+ "movie|1- Making it/The Aviator (2004).mp4": {
+  "date": "2004-12-17",
+  "kind": "movie",
+  "overview": "A biopic depicting the life of filmmaker and aviation pioneer Howard Hughes from 1927 to 1947, during which time he became a successful film producer and an aviation magnate, while simultaneously growing more unstable due to severe obsessive-compulsive disorder.",
+  "poster": "/lx4kWcZc3o9PaNxlQpEJZM17XUI.jpg",
+  "title": "The Aviator",
+  "tmdb": 2567
+ },
  "movie|1- Making it/The Color of Money (1986).mp4": {
   "date": "1986-10-17",
   "kind": "movie",
@@ -2198,6 +2206,14 @@
   "title": "Battleground",
   "tmdb": 31623
  },
+ "movie|11- War/Flags of Our Fathers (2006).mp4": {
+  "date": "2006-10-19",
+  "kind": "movie",
+  "overview": "There were five Marines and one Navy Corpsman photographed raising the U.S. flag on Mt. Suribachi by Joe Rosenthal on February 23, 1945. This is the story of three of the six surviving servicemen - John 'Doc' Bradley, Pvt. Rene Gagnon and Pvt. Ira Hayes - who fought in the battle to take Iwo Jima from the Japanese.",
+  "poster": "/2nkPrhf4YIyMFelfe4zdOnGRYz5.jpg",
+  "title": "Flags of Our Fathers",
+  "tmdb": 3683
+ },
  "movie|11- War/Harts war (2002).mp4": {
   "date": "2002-02-15",
   "kind": "movie",
@@ -2532,6 +2548,14 @@
   "title": "Any Given Sunday",
   "tmdb": 9563
  },
+ "movie|2- Sports/Chariots of fire (1981).mp4": {
+  "date": "1981-05-15",
+  "kind": "movie",
+  "overview": "In the class-obsessed and religiously divided UK of the early 1920s, two determined young runners train for the 1924 Paris Olympics. Eric Liddell, a devout Christian born to Scottish missionaries in China, sees running as part of his worship of God's glory and refuses to train or compete on the Sabbath. Harold Abrahams overcomes anti-Semitism and class bias, but neglects his beloved sweetheart in ",
+  "poster": "/qnRaum8k0HqGRml2i7OawFqUtEb.jpg",
+  "title": "Chariots of Fire",
+  "tmdb": 9443
+ },
  "movie|2- Sports/Draft day (2014).mp4": {
   "date": "2014-04-11",
   "kind": "movie",
@@ -2764,6 +2788,14 @@
   "title": "Woodlawn",
   "tmdb": 333596
  },
+ "movie|3- Sci-fi:Tech/Apollo 13 (1995).mp4": {
+  "date": "1995-06-30",
+  "kind": "movie",
+  "overview": "The true story of technical troubles that scuttle the Apollo 13 lunar mission in 1970, risking the lives of astronaut Jim Lovell and his crew, with the failed journey turning into a thrilling saga of heroism. Drifting more than 200,000 miles from Earth, the astronauts work furiously with the ground crew to avert tragedy.",
+  "poster": "/tVeKscCm2fY1xDXZk8PgnZ87h9S.jpg",
+  "title": "Apollo 13",
+  "tmdb": 568
+ },
  "movie|3- Sci-fi:Tech/Attack the block (2011).mp4": {
   "date": "2011-05-11",
   "kind": "movie",
@@ -2907,6 +2939,14 @@
   "poster": "/oQXj4NUfS3r3gHXtDOzcJgj1lLc.jpg",
   "title": "Jurassic Park III",
   "tmdb": 331
+ },
+ "movie|3- Sci-fi:Tech/Jurassic world (2015).mp4": {
+  "date": "2015-06-06",
+  "kind": "movie",
+  "overview": "Twenty-two years after the events of Jurassic Park, Isla Nublar now features a fully functioning dinosaur theme park, Jurassic World, as originally envisioned by John Hammond.",
+  "poster": "/rhr4y79GpxQF9IsfJItRXVaoGs4.jpg",
+  "title": "Jurassic World",
+  "tmdb": 135397
  },
  "movie|3- Sci-fi:Tech/Looper (2012).mp4": {
   "date": "2012-09-26",
@@ -3083,6 +3123,14 @@
   "poster": "/s4RkAQWI9hgzctXgNFos8sJUnXJ.jpg",
   "title": "The Lost World: Jurassic Park",
   "tmdb": 330
+ },
+ "movie|3- Sci-fi:Tech/The man who could work miracles (1936).mp4": {
+  "date": "1936-07-23",
+  "kind": "movie",
+  "overview": "An ordinary man, while vigorously asserting the impossibility of miracles, suddenly discovers that he can perform them.",
+  "poster": "/yAfQRixZWBzQhJ7vwgCIyQhxNW9.jpg",
+  "title": "The Man Who Could Work Miracles",
+  "tmdb": 68849
  },
  "movie|3- Sci-fi:Tech/The martian (2015).mp4": {
   "date": "2015-09-30",
@@ -4284,6 +4332,14 @@
   "title": "Spotlight",
   "tmdb": 314365
  },
+ "movie|5- Thriller:Mystery/State of play (2009).mp4": {
+  "date": "2009-04-17",
+  "kind": "movie",
+  "overview": "When a congressional aide is killed, a Washington, D.C. journalist starts investigating the case involving the Representative, his old college friend.",
+  "poster": "/mWsfeSFUM3NxWa62UrA9IIn240B.jpg",
+  "title": "State of Play",
+  "tmdb": 16995
+ },
  "movie|5- Thriller:Mystery/Stir of echoes (1999).mp4": {
   "date": "1999-09-10",
   "kind": "movie",
@@ -4411,6 +4467,14 @@
   "poster": "/il7ZUf1ys5ElbafW2VAEnX5NWD7.jpg",
   "title": "The High and the Mighty",
   "tmdb": 17761
+ },
+ "movie|5- Thriller:Mystery/The housemaid (2025).mp4": {
+  "date": "2025-12-18",
+  "kind": "movie",
+  "overview": "Trying to escape her past, Millie Calloway accepts a job as a live-in housemaid for the wealthy Nina and Andrew Winchester. But what begins as a dream job quickly unravels into something far more dangerous—a sexy, seductive game of secrets, scandal, and power.",
+  "poster": "/cWsBscZzwu5brg9YjNkGewRUvJX.jpg",
+  "title": "The Housemaid",
+  "tmdb": 1368166
  },
  "movie|5- Thriller:Mystery/The ides of march (2011).mp4": {
   "date": "2011-10-07",
@@ -4677,6 +4741,14 @@
   "title": "Carousel",
   "tmdb": 28100
  },
+ "movie|6- Romance:Drama/Casablanca (1942).mp4": {
+  "date": "1943-01-15",
+  "kind": "movie",
+  "overview": "In Casablanca, Morocco in December 1941, a cynical American expatriate meets a former lover, with unforeseen complications.",
+  "poster": "/lGCEKlJo2CnWydQj7aamY7s1S7Q.jpg",
+  "title": "Casablanca",
+  "tmdb": 289
+ },
  "movie|6- Romance:Drama/Cheaper by the dozen (1950).mp4": {
   "date": "1950-03-31",
   "kind": "movie",
@@ -4813,6 +4885,14 @@
   "title": "High Fidelity",
   "tmdb": 243
  },
+ "movie|6- Romance:Drama/Hot pursuit (1987).mp4": {
+  "date": "1987-05-08",
+  "kind": "movie",
+  "overview": "High school student Dan Bartlett misses the plane he was supposed to be on with his rich girlfriend and her family on the way to a Caribbean vacation during a school break. He flies there alone, and runs into a series of characters and misadventures as he tries to catch up.",
+  "poster": "/rCHL7yjawXxz9WLZ7Z5Q615OIHt.jpg",
+  "title": "Hot Pursuit",
+  "tmdb": 14464
+ },
  "movie|6- Romance:Drama/I still believe (2020).mp4": {
   "date": "2020-03-12",
   "kind": "movie",
@@ -4925,6 +5005,14 @@
   "title": "Only Yesterday",
   "tmdb": 15080
  },
+ "movie|6- Romance:Drama/Out of Africa (1985).mp4": {
+  "date": "1985-12-20",
+  "kind": "movie",
+  "overview": "Tells the life story of Danish author Karen Blixen, who at the beginning of the 20th century moved to Africa to build a new life for herself. The film is based on her 1937 autobiographical novel.",
+  "poster": "/6oMKqh08TfxmvnoFR4mm1wZB67P.jpg",
+  "title": "Out of Africa",
+  "tmdb": 606
+ },
  "movie|6- Romance:Drama/PS I love you (2007).mp4": {
   "date": "2007-11-15",
   "kind": "movie",
@@ -5021,6 +5109,14 @@
   "title": "The Way Back",
   "tmdb": 49009
  },
+ "movie|6- Romance:Drama/The Year of Living Dangerously (1982).mp4": {
+  "date": "1982-12-17",
+  "kind": "movie",
+  "overview": "A young Australian reporter tries to navigate the political turmoil of Indonesia during the rule of President Sukarno with the help of a diminutive photographer.",
+  "poster": "/y9GIM95xWWU4urqqu0kziby0Ykg.jpg",
+  "title": "The Year of Living Dangerously",
+  "tmdb": 11541
+ },
  "movie|6- Romance:Drama/The big year (2011).mp4": {
   "date": "2011-10-13",
   "kind": "movie",
@@ -5108,6 +5204,22 @@
   "poster": "/3y6aNrQd8K2bQjI2gRpmmDJGr99.jpg",
   "title": "Three Coins in the Fountain",
   "tmdb": 41503
+ },
+ "movie|6- Romance:Drama/Titanic (1997).mp4": {
+  "date": "1997-12-18",
+  "kind": "movie",
+  "overview": "101-year-old Rose DeWitt Bukater tells the story of her life aboard the Titanic, 84 years later. A young Rose boards the ship with her mother and fiancé. Meanwhile, Jack Dawson and Fabrizio De Rossi win third-class tickets aboard the ship. Rose tells the whole story from Titanic's departure through to its death—on its first and last voyage—on April 15, 1912.",
+  "poster": "/9xjZS2rlVxm8SFx8kPC3aIGCOYQ.jpg",
+  "title": "Titanic",
+  "tmdb": 597
+ },
+ "movie|6- Romance:Drama/To Have and Have Not (1944).mp4": {
+  "date": "1945-01-20",
+  "kind": "movie",
+  "overview": "A Martinique charter boat skipper gets mixed up with the underground French resistance operatives during WWII.",
+  "poster": "/m6EjBAY7gA6tx5RMutXGtZWFzyI.jpg",
+  "title": "To Have and Have Not",
+  "tmdb": 22584
  },
  "movie|6- Romance:Drama/Tracks (2013).mp4": {
   "date": "1976-12-15",
@@ -5727,6 +5839,14 @@
   "title": "Role Models",
   "tmdb": 15373
  },
+ "movie|9- Comedy/Sgt Bilko (1996).mp4": {
+  "date": "1996-03-29",
+  "kind": "movie",
+  "overview": "The US army is known for churning out lean mean fighting machines intent on protecting our great nation. Sergeant Ernie Bilko is the leader of a ragtag group of the sorriest soldiers ever to enlist in the armed forces.",
+  "poster": "/q4zmVdQq35ZBj8uyxsU2RCPOQxo.jpg",
+  "title": "Sgt. Bilko",
+  "tmdb": 9099
+ },
  "movie|9- Comedy/The Animal (2001).mp4": {
   "date": "2001-06-01",
   "kind": "movie",
@@ -5790,6 +5910,14 @@
   "poster": "/aHTUpo45qy9QYIOnVITGGqLoVcA.jpg",
   "title": "White Chicks",
   "tmdb": 12153
+ },
+ "movie|9- Comedy/Wrongfully accused (1998).mp4": {
+  "date": "1998-07-23",
+  "kind": "movie",
+  "overview": "Ryan Harrison, a violin god, superstar and sex symbol does not want to cheat on sexy Lauren Goodhue's husband with her. Mr. Goodhue is found murdered and Ryan suddenly finds himself being the main suspect. After being sentenced to death he manages to flee while being transferred to his execution site. Now, all the world is after him as he stumbles from one unfortunate incident to the next in order",
+  "poster": "/6FG3aldS4eVD4baKwmAi9P8kdRS.jpg",
+  "title": "Wrongfully Accused",
+  "tmdb": 9417
  },
  "movie|9- Comedy/Your highness (2011).mp4": {
   "date": "2011-04-08",
