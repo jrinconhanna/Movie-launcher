@@ -594,6 +594,7 @@
   {
    "category": "Business",
    "date": "",
+   "epm": "60 of 60 file names have no episode number",
    "files": 60,
    "group": "Docs",
    "key": "doc|1- Business/Company Man",
@@ -609,6 +610,7 @@
   {
    "category": "Business",
    "date": "2002-05-01",
+   "epm": "61/68 episodes match TMDB",
    "files": 68,
    "group": "Docs",
    "key": "doc|1- Business/G4 Icons",
@@ -633,6 +635,7 @@
   {
    "category": "Business",
    "date": "2020-06-26",
+   "epm": "6 of 6 file names have no episode number",
    "files": 6,
    "group": "Docs",
    "key": "doc|1- Business/Into the Unknown - Making Frozen II (2018)",
@@ -657,6 +660,7 @@
   {
    "category": "Business",
    "date": "2022-02-16",
+   "epm": "0/3 episodes match TMDB",
    "files": 3,
    "group": "Docs",
    "key": "doc|1- Business/Jeen-Yuhs",
@@ -681,6 +685,7 @@
   {
    "category": "Business",
    "date": "2022-07-27",
+   "epm": "6 of 6 file names have no episode number",
    "files": 6,
    "group": "Docs",
    "key": "doc|1- Business/Light & Magic (2022)",
@@ -705,6 +710,7 @@
   {
    "category": "Business",
    "date": "2021-07-30",
+   "epm": "ok",
    "files": 3,
    "group": "Docs",
    "key": "doc|1- Business/Myth mogul John Delorean",
@@ -723,6 +729,7 @@
   {
    "category": "Business",
    "date": "2021-03-01",
+   "epm": "ok",
    "files": 5,
    "group": "Docs",
    "key": "doc|1- Business/Playing With Power - The Nintendo Story",
@@ -741,6 +748,7 @@
   {
    "category": "Business",
    "date": "2025-06-04",
+   "epm": "ok",
    "files": 6,
    "group": "Docs",
    "key": "doc|1- Business/Power Moves with Shaquille O'Neal",
@@ -768,6 +776,7 @@
   {
    "category": "Business",
    "date": "2019-11-12",
+   "epm": "4/6 episodes match TMDB",
    "files": 6,
    "group": "Docs",
    "key": "doc|1- Business/The Imagineering Story",
@@ -792,6 +801,7 @@
   {
    "category": "Business",
    "date": "1996-06-12",
+   "epm": "ok",
    "files": 3,
    "group": "Docs",
    "key": "doc|1- Business/The Triumph of the Nerds (1996)",
@@ -819,6 +829,7 @@
   {
    "category": "Business",
    "date": "2023-08-25",
+   "epm": "ok",
    "files": 4,
    "group": "Docs",
    "key": "doc|1- Business/Wanted the escape of Carlos Ghosn",
@@ -885,6 +896,7 @@
   {
    "category": "American Football",
    "date": "2016-06-30",
+   "epm": "ok",
    "files": 40,
    "group": "Docs",
    "key": "doc|2- Sports/1- American Football/All or Nothing (2016)",
@@ -903,6 +915,7 @@
   {
    "category": "American Football",
    "date": "2018-04-06",
+   "epm": "ok",
    "files": 8,
    "group": "Docs",
    "key": "doc|2- Sports/1- American Football/All or Nothing - The Michigan Wolverines (2018)",
@@ -921,6 +934,7 @@
   {
    "category": "American Football",
    "date": "2022-01-06",
+   "epm": "ok",
    "files": 6,
    "group": "Docs",
    "key": "doc|2- Sports/1- American Football/Joe Montana Cool Under Pressure (2022)",
@@ -945,6 +959,7 @@
   {
    "category": "American Football",
    "date": "2021-11-16",
+   "epm": "ok",
    "files": 10,
    "group": "Docs",
    "key": "doc|2- Sports/1- American Football/Man in the Arena - Tom Brady (2021)",
@@ -963,6 +978,7 @@
   {
    "category": "American Football",
    "date": "2025-08-05",
+   "epm": "ok",
    "files": 7,
    "group": "Docs",
    "key": "doc|2- Sports/1- American Football/SEC Football Any Given Saturday (2025)",
@@ -981,6 +997,7 @@
   {
    "category": "American Football",
    "date": "2025-08-14",
+   "epm": "ok",
    "files": 6,
    "group": "Docs",
    "key": "doc|2- Sports/1- American Football/The Kingdom (2025)",
@@ -999,6 +1016,7 @@
   {
    "category": "American Football",
    "date": "2009-10-06",
+   "epm": "ok",
    "files": 1,
    "group": "Docs",
    "key": "doc|2- Sports/1- American Football/z- Preparing/30 for 30 (2009)/Season 1",
@@ -1214,6 +1232,7 @@
   {
    "category": "Tennis",
    "date": "2025-04-23",
+   "epm": "1/3 episodes match TMDB",
    "files": 3,
    "group": "Docs",
    "key": "doc|2- Sports/2- Tennis/Carlos Alcaraz My Way (2025)",
@@ -1241,6 +1260,7 @@
   {
    "category": "Tennis",
    "date": "2024-07-16",
+   "epm": "ok",
    "files": 8,
    "group": "Docs",
    "key": "doc|2- Sports/2- Tennis/In the Arena - Serena Williams",
@@ -1268,6 +1288,7 @@
   {
    "category": "Tennis",
    "date": "2026-05-29",
+   "epm": "2 of 10 file names have no episode number",
    "files": 10,
    "group": "Docs",
    "key": "doc|2- Sports/2- Tennis/Rafa",
@@ -1295,6 +1316,7 @@
   {
    "category": "Tennis",
    "date": "2021-09-17",
+   "epm": "ok",
    "files": 4,
    "group": "Docs",
    "key": "doc|2- Sports/2- Tennis/Rafa Nadal Academy",
@@ -1386,6 +1408,7 @@
   {
    "category": "Football",
    "date": "2021-02-23",
+   "epm": "2/3 episodes match TMDB",
    "files": 3,
    "group": "Docs",
    "key": "doc|2- Sports/3- Football/(-) Real Madrid/Galácticos",
@@ -1413,6 +1436,7 @@
   {
    "category": "Football",
    "date": "2025-02-10",
+   "epm": "ok",
    "files": 6,
    "group": "Docs",
    "key": "doc|2- Sports/3- Football/(-) Real Madrid/Real Madrid How Could I Not Love You (2025)",
@@ -1440,6 +1464,7 @@
   {
    "category": "Football",
    "date": "2022-02-11",
+   "epm": "1/6 episodes match TMDB",
    "files": 6,
    "group": "Docs",
    "key": "doc|2- Sports/3- Football/(-) Real Madrid/Real Madrid La Leyenda Blanca (2022)",
@@ -1467,6 +1492,7 @@
   {
    "category": "Football",
    "date": "2023-03-09",
+   "epm": "ok",
    "files": 3,
    "group": "Docs",
    "key": "doc|2- Sports/3- Football/(-) Real Madrid/Real Madrid until the End (2023)",
@@ -1574,6 +1600,7 @@
   {
    "category": "Football",
    "date": "2018-08-17",
+   "epm": "ok",
    "files": 8,
    "group": "Docs",
    "key": "doc|2- Sports/3- Football/All or Nothing - Manchester City",
@@ -1601,6 +1628,7 @@
   {
    "category": "Football",
    "date": "2023-10-04",
+   "epm": "ok",
    "files": 4,
    "group": "Docs",
    "key": "doc|2- Sports/3- Football/Beckham (2023)",
@@ -1625,6 +1653,7 @@
   {
    "category": "Football",
    "date": "2018-08-01",
+   "epm": "ok",
    "files": 9,
    "group": "Docs",
    "key": "doc|2- Sports/3- Football/Becoming Champions (2018)",
@@ -1649,6 +1678,7 @@
   {
    "category": "Football",
    "date": "2023-12-30",
+   "epm": "ok",
    "files": 6,
    "group": "Docs",
    "key": "doc|2- Sports/3- Football/Captains of the world (2023)",
@@ -1673,6 +1703,7 @@
   {
    "category": "Football",
    "date": "2025-01-21",
+   "epm": "ok",
    "files": 3,
    "group": "Docs",
    "key": "doc|2- Sports/3- Football/How to win the Champions League (2025)",
@@ -1700,6 +1731,7 @@
   {
    "category": "Football",
    "date": "2026-08-11",
+   "epm": "ok",
    "files": 3,
    "group": "Docs",
    "key": "doc|2- Sports/3- Football/Mourinho",
@@ -1727,6 +1759,7 @@
   {
    "category": "Football",
    "date": "2024-04-02",
+   "epm": "ok",
    "files": 6,
    "group": "Docs",
    "key": "doc|2- Sports/3- Football/Together treble winners",
@@ -2069,6 +2102,7 @@
   {
    "category": "Basketball",
    "date": "2020-04-19",
+   "epm": "0/10 episodes match TMDB",
    "files": 10,
    "group": "Docs",
    "key": "doc|2- Sports/4- Basketball/The Last Dance (2020)",
@@ -2087,6 +2121,7 @@
   {
    "category": "Basketball",
    "date": "2022-04-21",
+   "epm": "ok",
    "files": 4,
    "group": "Docs",
    "key": "doc|2- Sports/4- Basketball/They call me Magic (2022)",
@@ -2114,6 +2149,7 @@
   {
    "category": "Other",
    "date": "2023-06-07",
+   "epm": "ok",
    "files": 3,
    "group": "Docs",
    "key": "doc|2- Sports/5- Other/Arnold (2023)",
@@ -2221,6 +2257,7 @@
   {
    "category": "Other",
    "date": "2024-10-23",
+   "epm": "ok",
    "files": 3,
    "group": "Docs",
    "key": "doc|2- Sports/5- Other/The Comeback 2004 - Boston Red Sox (2024)",
@@ -2264,6 +2301,7 @@
   {
    "category": "Other",
    "date": "2020-09-22",
+   "epm": "ok",
    "files": 5,
    "group": "Docs",
    "key": "doc|2- Sports/5- Other/The Playbook (2020)",
@@ -2307,6 +2345,7 @@
   {
    "category": "History",
    "date": "2025-05-26",
+   "epm": "ok",
    "files": 8,
    "group": "Docs",
    "key": "doc|3- History/(-) Singles/Kevin Costner's The West/Season 1",
@@ -2331,6 +2370,7 @@
   {
    "category": "Rome & Caesar",
    "date": "2015-10-24",
+   "epm": "8 of 8 file names have no episode number",
    "files": 8,
    "group": "Docs",
    "key": "doc|3- History/1- Rome & Caesar/Ingenieria Romana",
@@ -2355,6 +2395,7 @@
   {
    "category": "Napoleon",
    "date": "2015-05-17",
+   "epm": "20 of 20 file names have no episode number",
    "files": 20,
    "group": "Docs",
    "key": "doc|3- History/2- Napoleon/Epic History TV",
@@ -2379,6 +2420,7 @@
   {
    "category": "Napoleon",
    "date": "2000-11-08",
+   "epm": "ok",
    "files": 4,
    "group": "Docs",
    "key": "doc|3- History/2- Napoleon/PBS Napoleon",
@@ -2406,6 +2448,7 @@
   {
    "category": "WW2",
    "date": "1973-10-31",
+   "epm": "ok",
    "files": 5,
    "group": "Docs",
    "key": "doc|3- History/3- WW2/The World at War",
@@ -2433,6 +2476,7 @@
   {
    "category": "Ken Burns",
    "date": "2020-04-02",
+   "epm": "1 of 1 file names have no episode number",
    "files": 1,
    "group": "Docs",
    "key": "doc|3- History/4- Ken Burns/Films",
@@ -2457,6 +2501,7 @@
   {
    "category": "Ken Burns",
    "date": "2022-04-13",
+   "epm": "0/6 episodes match TMDB",
    "files": 6,
    "group": "Docs",
    "key": "doc|3- History/4- Ken Burns/National Parks",
@@ -2484,6 +2529,7 @@
   {
    "category": "Ken Burns",
    "date": "2023-10-16",
+   "epm": "ok",
    "files": 2,
    "group": "Docs",
    "key": "doc|3- History/4- Ken Burns/The American Buffalo",
@@ -2511,6 +2557,7 @@
   {
    "category": "Ken Burns",
    "date": "2025-11-16",
+   "epm": "ok",
    "files": 6,
    "group": "Docs",
    "key": "doc|3- History/4- Ken Burns/The American Revolution",
@@ -2538,6 +2585,7 @@
   {
    "category": "Ken Burns",
    "date": "1997-02-18",
+   "epm": "ok",
    "files": 2,
    "group": "Docs",
    "key": "doc|3- History/4- Ken Burns/Thomas Jefferson",
@@ -2565,6 +2613,7 @@
   {
    "category": "Machines / Science",
    "date": "2003-04-13",
+   "epm": "ok",
    "files": 27,
    "group": "Docs",
    "key": "doc|4- Machines:Science/Extreme Engineering (2003)",
@@ -2592,6 +2641,7 @@
   {
    "category": "Machines / Science",
    "date": "2001-01-06",
+   "epm": "ok",
    "files": 10,
    "group": "Docs",
    "key": "doc|4- Machines:Science/How it's made (2001)",
@@ -2616,6 +2666,7 @@
   {
    "category": "Machines / Science",
    "date": "2001-07-22",
+   "epm": "ok",
    "files": 6,
    "group": "Docs",
    "key": "doc|4- Machines:Science/Hyperspace (2001)",
@@ -2643,6 +2694,7 @@
   {
    "category": "Machines / Science",
    "date": "1993-12-10",
+   "epm": "ok",
    "files": 33,
    "group": "Docs",
    "key": "doc|4- Machines:Science/Modern Marvels",
@@ -2670,6 +2722,7 @@
   {
    "category": "Machines / Science",
    "date": "2008-07-06",
+   "epm": "ok",
    "files": 6,
    "group": "Docs",
    "key": "doc|4- Machines:Science/Moon Machines (2008)",
@@ -2697,6 +2750,7 @@
   {
    "category": "Machines / Science",
    "date": "1988-11-15",
+   "epm": "ok",
    "files": 18,
    "group": "Docs",
    "key": "doc|4- Machines:Science/The Secret Life of Machines (1988)",
@@ -2724,6 +2778,7 @@
   {
    "category": "Japan",
    "date": "2008-04-14",
+   "epm": "ok",
    "files": 60,
    "group": "Docs",
    "key": "doc|5- Japan/Begin Japanology (2000)",
@@ -2895,6 +2950,7 @@
   {
    "category": "Entertainment",
    "date": "1995-11-19",
+   "epm": "0/9 episodes match TMDB",
    "files": 9,
    "group": "Docs",
    "key": "doc|6- Entertainment/The Beatles Anthology (1995)",
@@ -12202,6 +12258,7 @@
   {
    "category": "TV series",
    "date": "2001-09-09",
+   "epm": "ok",
    "files": 10,
    "group": "Series",
    "key": "tv|Band of Brothers",
@@ -12220,6 +12277,7 @@
   {
    "category": "TV series",
    "date": "1996-09-28",
+   "epm": "ok",
    "files": 50,
    "group": "Series",
    "key": "tv|Early Edition",
@@ -12247,6 +12305,7 @@
   {
    "category": "TV series",
    "date": "1994-09-22",
+   "epm": "ok",
    "files": 236,
    "group": "Series",
    "key": "tv|Friends",
@@ -12274,6 +12333,7 @@
   {
    "category": "TV series",
    "date": "2010-12-03",
+   "epm": "ok",
    "files": 44,
    "group": "Series",
    "key": "tv|Gold Rush",
@@ -12301,6 +12361,7 @@
   {
    "category": "TV series",
    "date": "1991-09-17",
+   "epm": "ok",
    "files": 23,
    "group": "Series",
    "key": "tv|Home Improvement",
@@ -12328,6 +12389,7 @@
   {
    "category": "TV series",
    "date": "1993-09-12",
+   "epm": "ok",
    "files": 14,
    "group": "Series",
    "key": "tv|Lois & Clark - The new adventures of superman",
@@ -12355,6 +12417,7 @@
   {
    "category": "TV series",
    "date": "2006-08-29",
+   "epm": "0/47 episodes match TMDB",
    "files": 47,
    "group": "Series",
    "key": "tv|Million Dollar Listing",
@@ -12382,6 +12445,7 @@
   {
    "category": "TV series",
    "date": "1984-09-30",
+   "epm": "ok",
    "files": 22,
    "group": "Series",
    "key": "tv|Murder She Wrote",
@@ -12409,6 +12473,7 @@
   {
    "category": "TV series",
    "date": "2013-12-02",
+   "epm": "ok",
    "files": 30,
    "group": "Series",
    "key": "tv|Rick and Morty",
@@ -12436,6 +12501,7 @@
   {
    "category": "TV series",
    "date": "1997-08-13",
+   "epm": "ok",
    "files": 21,
    "group": "Series",
    "key": "tv|South park",
@@ -12463,6 +12529,7 @@
   {
    "category": "TV series",
    "date": "1987-09-28",
+   "epm": "ok",
    "files": 176,
    "group": "Series",
    "key": "tv|Star Trek TNG",
@@ -12490,6 +12557,7 @@
   {
    "category": "TV series",
    "date": "1966-09-08",
+   "epm": "ok",
    "files": 30,
    "group": "Series",
    "key": "tv|Star Trek TOS",
@@ -12517,6 +12585,7 @@
   {
    "category": "TV series",
    "date": "2005-04-15",
+   "epm": "ok",
    "files": 12,
    "group": "Series",
    "key": "tv|Tiger and Dragon (2005)",
@@ -12544,6 +12613,7 @@
   {
    "category": "TV series",
    "date": "1993-09-10",
+   "epm": "ok",
    "files": 32,
    "group": "Series",
    "key": "tv|X-Files",
@@ -27649,5 +27719,5 @@
    "year": 1959
   }
  ],
- "updated": "2026-11-17T14:34Z"
+ "updated": "2026-11-17T22:42Z"
 }
