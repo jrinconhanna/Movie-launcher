@@ -12,6 +12,7 @@ srv = socketserver.TCPServer(("127.0.0.1", 0), Q); PORT = srv.server_address[1]
 threading.Thread(target=srv.serve_forever, daemon=True).start()
 BASE = f"http://127.0.0.1:{PORT}/index.html"
 R = []
+NOTAP_LIVE = False  # 17 Nov: flip to True when "Discover posters don't play" goes live (R5 then expects no links)
 def rec(n, ok, d=""): R.append(ok); print(("PASS " if ok else "FAIL ") + n + ("" if ok else "  " + str(d)[:300]))
 def page(b, vp, q=""):
     ctx = b.new_context(viewport=vp, permissions=["clipboard-read", "clipboard-write"])
@@ -35,7 +36,8 @@ with sync_playwright() as p:
         rec(f"R4 [{size}] Discover shows posters", pg.evaluate("document.querySelectorAll('#grid .card .poster img').length") > 20)
         gaps = pg.evaluate("[...document.querySelectorAll('#grid .card')].slice(0,30).map(c=>Math.round(c.querySelector('.t').getBoundingClientRect().top - c.querySelector('.poster').getBoundingClientRect().bottom))")
         rec(f"R9 [{size}] titles sit the same distance under every poster (no drift when a neighbour wraps)", len(set(gaps)) == 1, sorted(set(gaps)))
-        rec(f"R5 [{size}] Discover poster links open Infuse by TMDB id", pg.evaluate("[...document.querySelectorAll('#grid .card a.poster')].every(a=>/^infuse:\\/\\/(movie|series)\\/\\d+$/.test(a.getAttribute('href')))"))
+        if NOTAP_LIVE: rec(f"R5 [{size}] live: Discover movie/series posters are not links (no play from Discover)", pg.evaluate("[...document.querySelectorAll('#grid .card a.poster')].every(a=>!a.hasAttribute('href'))"))
+        else: rec(f"R5 [{size}] Discover poster links open Infuse by TMDB id", pg.evaluate("[...document.querySelectorAll('#grid .card a.poster')].every(a=>/^infuse:\\/\\/(movie|series)\\/\\d+$/.test(a.getAttribute('href')))"))
         rec(f"R6 [{size}] no page errors (regression)", not pg.errs, pg.errs)
         pg.context.close()
         # --- V2.3 ---
@@ -430,6 +432,21 @@ with sync_playwright() as p:
         pg.context.close()
         pg = page(b, vp); tab(pg, "Discover"); pg.wait_for_timeout(300)
         rec(f"N7 [{size}] live 14 Nov: without ?next Discover ⋯ has the new buttons too (no ⤒ / ⤓)", not pg.evaluate("[...document.querySelectorAll('#grid .opts button')].some(b=>b.textContent==='⤒'||b.textContent==='⤓')"))
+        pg.context.close()
+        # T (17 Nov, staging): Discover only feeds Next — tapping a movie/series poster does nothing
+        pg = page(b, vp, "?staging"); tab(pg, "Discover"); pg.wait_for_timeout(300)
+        movies = pg.evaluate("[...document.querySelectorAll('#tabs button')].find(b=>b.firstChild.textContent==='Movies')")
+        if movies is not None: pg.evaluate("[...document.querySelectorAll('#tabs button')].find(b=>b.firstChild.textContent==='Movies').click()"); pg.wait_for_timeout(300)
+        n = pg.evaluate("document.querySelectorAll('#grid .card a.poster').length")
+        rec(f"T1 [{size}] staging: Discover posters are not links", n > 0 and pg.evaluate("[...document.querySelectorAll('#grid .card a.poster')].every(a=>!a.hasAttribute('href'))"), n)
+        u0 = pg.url; pg.evaluate("document.querySelector('#grid .card a.poster').click()"); pg.wait_for_timeout(300)
+        rec(f"T2 [{size}] staging: tapping a Discover poster plays nothing and stays put", pg.url == u0 and not pg.evaluate("window.__went.length") and pg.evaluate("document.querySelectorAll('#grid .card').length") > 0, (pg.url, pg.evaluate("window.__went")))
+        pg.evaluate("document.querySelector('#grid .card .opts button, #grid .card .ic button').click()"); pg.wait_for_timeout(300)
+        labs = pg.evaluate("[...document.querySelectorAll('#grid .card')][0].querySelector('.opts') ? [...document.querySelectorAll('#grid .card')][0].querySelectorAll('.opts button').length : -1")
+        rec(f"T3 [{size}] staging: the poster menu is still there", labs != 0, labs)
+        tab(pg, "Watching"); pg.wait_for_timeout(300)
+        rec(f"T4 [{size}] staging: Watching posters still play (links kept)", pg.evaluate("[...document.querySelectorAll('#grid .card a.poster')].every(a=>/^infuse:/.test(a.getAttribute('href')||''))"))
+        rec(f"T5 [{size}] no page errors (?staging)", not pg.errs, pg.errs)
         pg.context.close()
         pg = page(b, vp, "?v23")
         tab(pg, "Discover"); pg.evaluate("[...document.querySelectorAll('#tabs button')].find(b=>b.firstChild.textContent==='Tech').click()"); pg.wait_for_timeout(300)

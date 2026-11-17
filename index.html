@@ -235,7 +235,7 @@ html .ic.wm.open .opts button.on{background:#000;color:#fff;outline:2px solid #f
   var LEARN = true; // V2.3 live 10 Nov (was the ?v23 preview)
   var V24 = !/[?&]v23\b/.test(location.search); if (V24) document.documentElement.classList.add('v24'); // V2.4 live 11 Nov (?v23 shows the old view for comparison)
   var PROTO = /[?&]proto\b/.test(location.search); // V2.4.2 prototype: subscribe to folders, one channel each on Watching (this device only)
-  var NEXT = /[?&](staging|next)\b/.test(location.search); if (NEXT) document.documentElement.classList.add('isstg'); /* ?staging = preview of what's built but not live yet (?next kept as old alias) */ var B2 = true; /* mini player, phone tabs at the bottom with icons, quieter TOC frame: live 14 Nov on Javier's go */ if (B2) document.documentElement.classList.add('pvnext'); // V2.4.1 preview (Lean onward): items flagged next only show with ?next until Javier says go
+  var NEXT = /[?&](staging|next)\b/.test(location.search); if (NEXT) document.documentElement.classList.add('isstg'); /* ?staging = preview of what's built but not live yet (?next kept as old alias) */ var NOTAP = NEXT; /* staging 17 Nov: Discover posters don't play; set to true on Javier's go */ var B2 = true; /* mini player, phone tabs at the bottom with icons, quieter TOC frame: live 14 Nov on Javier's go */ if (B2) document.documentElement.classList.add('pvnext'); // V2.4.1 preview (Lean onward): items flagged next only show with ?next until Javier says go
   var B1 = true; // 'One set of state buttons' (V2.4.2) piece 1: live 14 Nov on Javier's go
   var P2ON = !/[?&]v241\b/.test(location.search); // V2.4.2 Watching/Next by kind: live 12 Nov (?v241 shows the old shelves)
   var learn = [], learnDone = [], learnWatch = [], forder = {}, vorder = {}; // vorder: your video order per playlist (?next) // forder: your folder order per Tech level ('' = Tech › All), synced via Trakt
@@ -548,7 +548,9 @@ html .ic.wm.open .opts button.on{background:#000;color:#fff;outline:2px solid #f
   }
   function card(it) {
     var d = document.createElement('div'); d.className = 'card' + (state.wf === 'all' && state.shelf !== 'Watch Next' && isWatched(it) ? ' seen' : '');
-    var a = document.createElement('a'); a.className = 'poster'; a.href = link(it); a.addEventListener('click', function () { notePlay('i:' + sid(it)); }); a.setAttribute('aria-label', 'Open ' + it.title + ' in Infuse');
+    var a = document.createElement('a'); a.className = 'poster';
+    if (NOTAP && top === 'Discover') a.setAttribute('aria-label', it.title); /* staging 17 Nov: Discover only feeds Next (menu › Add to Next); tapping a movie/series poster does nothing (series will open its episodes in V2.5) */
+    else { a.href = link(it); a.addEventListener('click', function () { notePlay('i:' + sid(it)); }); a.setAttribute('aria-label', 'Open ' + it.title + ' in Infuse'); }
     if (it.poster) { var img = document.createElement('img'); img.loading = 'lazy'; img.alt = ''; img.src = 'https://image.tmdb.org/t/p/w342' + it.poster; a.appendChild(img); }
     else { var ph = document.createElement('div'); ph.className = 'ph'; ph.textContent = it.title; a.appendChild(ph); }
     if (isStarted(it)) { var mb = document.createElement('span'); mb.className = 'badge'; mb.textContent = paused[it.key] + '%'; a.appendChild(mb); if (BAR) { var mpb = document.createElement('span'); mpb.className = 'pbar'; var mpf = document.createElement('i'); mpf.style.width = Math.max(3, paused[it.key]) + '%'; mpb.appendChild(mpf); a.appendChild(mpb); } }
