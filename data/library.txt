@@ -1947,6 +1947,22 @@
 ./z- Other/1- Movies/14- Making of/Making of Fellowship of the Ring - Lords of the Ring.mp4
 ./z- Other/1- Movies/14- Making of/The Making of the Back to the Future Trilogy Documentary.mp4
 ./z- Other/1- Movies/14- Making of/We stand alone together (2001).mp4
+./z- Other/1- Movies/1- Making it/The Aviator (2004).mp4
+./z- Other/1- Movies/11- War/Flags of Our Fathers (2006).mp4
+./z- Other/1- Movies/2- Sports/Chariots of fire (1981).mp4
+./z- Other/1- Movies/3- Sci-fi:Tech/Apollo 13 (1995).mp4
+./z- Other/1- Movies/3- Sci-fi:Tech/Jurassic world (2015).mp4
+./z- Other/1- Movies/3- Sci-fi:Tech/The man who could work miracles (1936).mp4
+./z- Other/1- Movies/5- Thriller:Mystery/State of play (2009).mp4
+./z- Other/1- Movies/5- Thriller:Mystery/The housemaid (2025).mp4
+./z- Other/1- Movies/6- Romance:Drama/Casablanca (1942).mp4
+./z- Other/1- Movies/6- Romance:Drama/Hot pursuit (1987).mp4
+./z- Other/1- Movies/6- Romance:Drama/Out of Africa (1985).mp4
+./z- Other/1- Movies/6- Romance:Drama/The Year of Living Dangerously (1982).mp4
+./z- Other/1- Movies/6- Romance:Drama/Titanic (1997).mp4
+./z- Other/1- Movies/6- Romance:Drama/To Have and Have Not (1944).mp4
+./z- Other/1- Movies/9- Comedy/Sgt Bilko (1996).mp4
+./z- Other/1- Movies/9- Comedy/Wrongfully accused (1998).mp4
 ./z- Other/2- TV Series/Band of Brothers/Band of Brothers (2001) - 01x01 - Currahee.mp4
 ./z- Other/2- TV Series/Band of Brothers/Band of Brothers (2001) - 01x05 - Crossroads.mp4
 ./z- Other/2- TV Series/Band of Brothers/Band of Brothers (2001) - 01x03 - Carentan.mp4
