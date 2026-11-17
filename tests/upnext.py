@@ -31,7 +31,7 @@ with sync_playwright() as p:
         rec(f"U1 [{size}] unwatched videos in a channel's folder offer Up next", n_up > 1, n_up)
         title = pg.evaluate("(()=>{const c=[...document.querySelectorAll('#grid .lcard:not(.seen)')].filter(c=>c.querySelector('.opts button[aria-label=\"Up next\"]'))[2]; c.querySelector('.opts button[aria-label=\"Up next\"]').click(); return c.querySelector('.poster').getAttribute('aria-label')})()")
         pg.wait_for_timeout(300)
-        rec(f"U2 [{size}] the picked video is tagged Up next and no longer offers it", pg.evaluate("t=>{const c=[...document.querySelectorAll('#grid .lcard')].find(c=>c.querySelector('.poster').getAttribute('aria-label')===t); return c.querySelector('.where')?.textContent==='Up next' && !c.querySelector('.opts button[aria-label=\"Up next\"]')}", title), title)
+        rec(f"U2 [{size}] the picked video is tagged Up next and no longer offers it", pg.evaluate("t=>{const c=[...document.querySelectorAll('#grid .lcard')].find(c=>c.querySelector('.poster').getAttribute('aria-label')===t); return (c.querySelector('.where, .sp-un')?.textContent||'').includes('Up next') && !c.querySelector('.opts button[aria-label=\"Up next\"]')}", title), title)
         rec(f"U3 [{size}] nothing was marked watched", pg.evaluate("JSON.parse(localStorage.getItem('learndone')||'[]').length") == 0)
         btn(pg, "Watching"); pg.wait_for_timeout(300)
         rec(f"U4 [{size}] on Watching the channel's next video is the picked one", chan_next() == title, (first, chan_next(), title))
