@@ -218,6 +218,7 @@ html.p2dark { --bg: #0b0b0c; --surface: #1c1c1e; --fg: #f2f1ee; --muted: #9a9893
 html.p2light { --bg: #f4f2ee; --surface: #ffffff; --fg: #1c1b19; --muted: #6d6a63; --line: #e2ded6; --accent: #e8662a; --accent-ink: #ffffff; --chip: #ebe8e1; --good: #2f7d4f; color-scheme: light; }
 html.p2dark .p2r.top{background:rgba(214,60,60,.10)} html.p2dark .p2menu{background:#2c2c2e;color:#f2f1ee} html.p2dark .p2menu button{color:#f2f1ee} html.p2dark .p2menu button:hover{background:#3a3a3c}
 html .ic.wm.open .opts button.on{background:#000;color:#fff;outline:2px solid #fff}.ic.wm .opts button svg{display:block}
+#newver { white-space: nowrap; position: fixed; left: 50%; transform: translateX(-50%); bottom: calc(84px + env(safe-area-inset-bottom)); z-index: 50; border: 0; border-radius: 999px; padding: 9px 16px; background: #fff; color: #000; font: 600 14px var(--font); box-shadow: 0 4px 16px rgba(0,0,0,.45); cursor: pointer; }
 </style>
 </head>
 <body>
@@ -236,7 +237,17 @@ html .ic.wm.open .opts button.on{background:#000;color:#fff;outline:2px solid #f
   var LEARN = true; // V2.3 live 10 Nov (was the ?v23 preview)
   var V24 = !/[?&]v23\b/.test(location.search); if (V24) document.documentElement.classList.add('v24'); // V2.4 live 11 Nov (?v23 shows the old view for comparison)
   var PROTO = /[?&]proto\b/.test(location.search); // V2.4.2 prototype: subscribe to folders, one channel each on Watching (this device only)
-  var NEXT = /[?&](staging|next)\b/.test(location.search); if (NEXT) document.documentElement.classList.add('isstg'); /* ?staging = preview of what's built but not live yet (?next kept as old alias) */ var NOTAP = NEXT; /* staging 17 Nov: Discover posters don't play; set to true on Javier's go */ var B2 = true; /* mini player, phone tabs at the bottom with icons, quieter TOC frame: live 14 Nov on Javier's go */ if (B2) document.documentElement.classList.add('pvnext'); // V2.4.1 preview (Lean onward): items flagged next only show with ?next until Javier says go
+  var BUILT = '2026-11-17 22:19'; /* set on every commit by the pre-commit hook; staging compares it to spot a newer version */ var NEXT = /[?&](staging|next)\b/.test(location.search); if (NEXT) document.documentElement.classList.add('isstg'); /* ?staging = preview of what's built but not live yet (?next kept as old alias) */ var NOTAP = NEXT; /* staging 17 Nov: Discover posters don't play; set to true on Javier's go */ var B2 = true; /* mini player, phone tabs at the bottom with icons, quieter TOC frame: live 14 Nov on Javier's go */ if (B2) document.documentElement.classList.add('pvnext'); // V2.4.1 preview (Lean onward): items flagged next only show with ?next until Javier says go
+
+  /* staging 17 Nov: "New version · tap to reload" pill. Checks quietly on return to the page and every 30 s; never reloads by itself. */
+  if (NEXT) (function () {
+    var shown = false;
+    function check() { if (shown || document.hidden) return; fetch(location.pathname + '?nv=' + Date.now(), { cache: 'no-store' }).then(function (r) { return r.text(); }).then(function (t) { var m = t.match(new RegExp('var BUI' + 'LT = \'([^\']+)\'')); if (m && m[1] !== BUILT) pill(m[1]); }).catch(function () {}); }
+    function pill(v) { shown = true; var b = document.createElement('button'); b.type = 'button'; b.id = 'newver'; b.textContent = 'New version \u00b7 tap to reload';
+      b.onclick = function () { var q = location.search.replace(/[?&]r=\d+/, '').replace(/^\?/, ''); location.replace(location.pathname + '?' + (q ? q + '&' : '') + 'r=' + Date.now() + location.hash); };
+      document.body.appendChild(b); }
+    document.addEventListener('visibilitychange', check); setInterval(check, 30000); setTimeout(check, 3000);
+  })();
   var B1 = true; // 'One set of state buttons' (V2.4.2) piece 1: live 14 Nov on Javier's go
   var P2ON = !/[?&]v241\b/.test(location.search); // V2.4.2 Watching/Next by kind: live 12 Nov (?v241 shows the old shelves)
   var learn = [], learnDone = [], learnWatch = [], forder = {}, vorder = {}; // vorder: your video order per playlist (?next) // forder: your folder order per Tech level ('' = Tech › All), synced via Trakt
@@ -1075,7 +1086,7 @@ html .ic.wm.open .opts button.on{background:#000;color:#fff;outline:2px solid #f
     gapList(unmatched.filter(function (u) { return !u.video; }), 'Movies and docs to check', 'Probably on TMDB. Open the “Maybe” link; if it’s right, tell Claude and it becomes permanent.');
     gapList(unmatched.filter(function (u) { return u.video; }), 'Videos (not on TMDB)', 'YouTube clips, interviews and compilations. They will get their own home later.');
     var p = document.createElement('div');
-    var vr = document.createElement('button'); vr.type = 'button'; vr.className = 'vrl'; vr.title = 'Tap to reload'; vr.textContent = (NEXT ? 'Staging \u00b7 V2.4.2' : 'Live \u00b7 V2.4.1') + ' \u21bb'; vr.onclick = function () { location.reload(); }; /* tap the version to reload: Home Screen apps have no reload button */
+    var vr = document.createElement('button'); vr.type = 'button'; vr.className = 'vrl'; vr.title = 'Tap to reload'; vr.textContent = (NEXT ? 'Staging \u00b7 V2.4.2 \u00b7 ' + BUILT.slice(5) : 'Live \u00b7 V2.4.1') + ' \u21bb'; vr.onclick = function () { location.reload(); }; /* tap the version to reload: Home Screen apps have no reload button */
     p.appendChild(vr); p.appendChild(document.createTextNode(' \u00b7 ' + (updated ? 'Library updated ' + updated.replace('T', ' ').replace('Z', ' UTC') + '. ' : '') + 'Posters and titles from TMDB. This product uses the TMDB API but is not endorsed or certified by TMDB. Watched status from Trakt.'));
     f.appendChild(p);
     if (tok) { var fc = document.createElement('div'); fc.className = 'fconn'; fc.appendChild(document.createTextNode('Trakt connected on this device · ')); var stt = document.createElement('span'); stt.className = 'st'; stt.textContent = saveState; if (saveState) { fc.appendChild(stt); fc.appendChild(document.createTextNode(' · ')); } var dx = document.createElement('button'); dx.type = 'button'; dx.textContent = 'Disconnect'; dx.onclick = function () { setTok(null); synced = false; paused = {}; try { localStorage.removeItem('paused'); } catch (e) {} clearTimeout(pushT); pushT = null; render(); toast('Disconnected · saved on this device only'); }; fc.appendChild(dx); f.appendChild(fc); }
@@ -1089,7 +1100,7 @@ html .ic.wm.open .opts button.on{background:#000;color:#fff;outline:2px solid #f
     var fs = document.createElement('div'); fs.className = 'fset';
     function lnk(txt, fn, title) { var b = document.createElement('button'); b.type = 'button'; b.textContent = txt; if (title) b.title = title; b.onclick = fn; return b; }
     function dotc() { fs.appendChild(document.createTextNode(' \u00b7 ')); }
-    var vr = lnk((NEXT ? 'Staging \u00b7 V2.4.2' : 'Live \u00b7 V2.4.1') + ' \u21bb', function () { location.reload(); }, 'Tap to reload'); vr.className = 'vrl'; fs.appendChild(vr); /* tap the version to reload: Home Screen apps have no reload button */
+    var vr = lnk((NEXT ? 'Staging \u00b7 V2.4.2 \u00b7 ' + BUILT.slice(5) : 'Live \u00b7 V2.4.1') + ' \u21bb', function () { location.reload(); }, 'Tap to reload'); vr.className = 'vrl'; fs.appendChild(vr); /* tap the version to reload: Home Screen apps have no reload button */
     if (updated) { dotc(); var ud = new Date(updated); fs.appendChild(document.createTextNode('Updated ' + (isNaN(ud) ? updated : ud.toLocaleString('en-GB', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })))); }
     var dk = document.documentElement.classList.contains('p2dark'); dotc();
     fs.appendChild(lnk(dk ? '\u2600 Light' : '\u263e Dark', function () { var h = document.documentElement; h.classList.toggle('p2dark', !dk); h.classList.toggle('p2light', dk); try { localStorage.setItem('proto2-theme', dk ? 'light' : 'dark'); } catch (e) {} render(); }));
