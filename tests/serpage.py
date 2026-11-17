@@ -33,6 +33,9 @@ with sync_playwright() as p:
         rec(f"P18 [{size}] Vertical big: picture spans the row, title sits under it", pg.evaluate("(()=>{const r=document.querySelector('.sp-row'), p=r.querySelector('.sp-pic').getBoundingClientRect(), b=r.querySelector('b').getBoundingClientRect(), rr=r.getBoundingClientRect(); return p.width > rr.width*0.9 && b.top > p.bottom})()"))
         rec(f"P19 [{size}] length · rating · year sit on the picture bottom-right; the title has the full width", pg.evaluate("(()=>{const r=document.querySelector('.sp-row'), p=r.querySelector('.sp-pic').getBoundingClientRect(), m=r.querySelector('.sp-pic .sp-inf').getBoundingClientRect(); return Math.abs(m.right-(p.right-8))<2 && Math.abs(m.bottom-(p.bottom-8))<2 && !r.querySelector('.sp-tl .sp-meta')})()"))
         rec(f"P5 [{size}] header counts watched in the season", f"2/{n1} watched" in pg.evaluate("document.querySelector('.sp-top small').textContent"))
+        yr = sorted({e["air"][:4] for e in E1["seasons"][s1] if e.get("air")})
+        hdr = pg.evaluate("document.querySelector('.sp-top small').textContent")
+        rec(f"P21 [{size}] header shows the season's year in brackets, episodes don't repeat it", (f"Season {s1} (" + yr[0]) in hdr and not any(yr[0] in t for t in pg.evaluate("[...document.querySelectorAll('.sp-inf')].map(e=>e.textContent)")), hdr)
         has_ov = pg.evaluate("!!document.querySelector('.sp-ov')")
         if has_ov:
             h0 = pg.evaluate("document.querySelector('.sp-ov').getBoundingClientRect().height"); pg.evaluate("document.querySelector('.sp-ov').click()"); pg.wait_for_timeout(100)
