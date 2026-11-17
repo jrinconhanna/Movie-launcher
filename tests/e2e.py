@@ -415,9 +415,9 @@ with sync_playwright() as p:
         pg = page(b, vp, "?next"); tab(pg, "Discover"); pg.wait_for_timeout(300)
         c0 = "[...document.querySelectorAll('#grid .card')].find(c=>!c.querySelector('.where') && !c.classList.contains('seen'))"
         labs = pg.evaluate("(c=>[...c.querySelectorAll('.opts button')].map(b=>b.getAttribute('aria-label')))(" + c0 + ")")
-        rec(f"N1 [{size}] Discover ⋯ shows two buttons: add to Next + watched", labs == ["Add to Next (last in its kind)", "Mark watched"], labs)
+        rec(f"N1 [{size}] Discover ⋯ (staging) shows add to top of Next + add to bottom of Next + watched", labs == ["Add to top of Next", "Add to bottom of Next", "Mark watched"], labs)
         key = pg.evaluate("(" + c0 + ").dataset.key")
-        pg.evaluate("(c=>c.querySelector('.opts button').click())(" + c0 + ")"); pg.wait_for_timeout(300)
+        pg.evaluate("(c=>c.querySelector('.opts button[aria-label=\"Add to bottom of Next\"]').click())(" + c0 + ")"); pg.wait_for_timeout(300)
         L = pg.evaluate("JSON.parse(localStorage.getItem('proto2')).lists")
         kk = [k for k, v in L.items() if ("i:" + key) in v]
         rec(f"N2 [{size}] ≡＋ adds it as last in its kind", len(kk) == 1 and L[kk[0]][-1] == "i:" + key, (kk, key))
@@ -427,6 +427,14 @@ with sync_playwright() as p:
         pg.evaluate("(c=>c.querySelector('.opts button').click())(" + c1 + ")"); pg.wait_for_timeout(300)
         L2 = pg.evaluate("JSON.parse(localStorage.getItem('proto2')).lists")
         rec(f"N4 [{size}] ≡− takes it out of Next", all(("i:" + key) not in v for v in L2.values()))
+        # T14 (17 Nov, staging): Add to top of Next = first spot after the Watching slots of its kind
+        P2P = {"Tech": 1, "Playlists": 1, "Docu-series": 2, "Series": 2, "Movies": 1, "Other": 1}
+        c1b = "[...document.querySelectorAll('#grid .card')].find(c=>c.dataset.key===" + repr(key) + ")"
+        pg.evaluate("(c=>c.querySelector('.opts button[aria-label=\"Add to top of Next\"]').click())(" + c1b + ")"); pg.wait_for_timeout(300)
+        L3 = pg.evaluate("JSON.parse(localStorage.getItem('proto2')).lists")
+        k3 = [k for k, v in L3.items() if ("i:" + key) in v]
+        rec(f"T14 [{size}] staging: Add to top of Next lands right after the Watching slots", len(k3) == 1 and L3[k3[0]].index("i:" + key) == min(P2P[k3[0]], len(L3[k3[0]]) - 1), (k3, k3 and L3[k3[0]][:4]))
+        pg.evaluate("(c=>c.querySelector('.opts button').click())(" + c1b + ")"); pg.wait_for_timeout(300)
         rec(f"N5 [{size}] no ⤒ / ⤓ / ▶ / ⏸ / ＋ verbs left in Discover", not pg.evaluate("[...document.querySelectorAll('#grid .opts button')].some(b=>/^(⤒|⤓|▶|⏸|＋|↺)$/.test(b.textContent))"))
         rec(f"N6 [{size}] no page errors (?next)", not pg.errs, pg.errs)
         pg.context.close()
