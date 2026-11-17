@@ -459,7 +459,9 @@ with sync_playwright() as p:
           return {stray: stray && sid(stray), top: top && top.status!=='watched' ? sid(top) : null}; })""")
         pg.evaluate("k=>localStorage.setItem('lastplay', JSON.stringify({k:'i:'+k, at:Date.now(), w:1}))", sids["stray"])
         pg.reload(); pg.wait_for_timeout(1200)
-        rec(f"T6 [{size}] staging: a play that isn't on Watching (e.g. from Discover) shows no Now watching card", pg.evaluate("document.querySelectorAll('.nowc').length") == 0, sids)
+        nc = pg.evaluate("(()=>{const c=document.querySelector('.nowc'); return c ? {t:c.querySelector('b').textContent, lbl:!!document.querySelector('.nowlbl')} : null})()")
+        stray_t = pg.evaluate("k=>fetch('library.json').then(r=>r.json()).then(d=>{const i=d.items.find(i=>(i.kind==='movie'?'m':'t')+i.tmdb===k); return i&&i.title})", sids["stray"])
+        rec(f"T6 [{size}] staging: a stray play (e.g. from Discover) doesn't take the card; the first Watching row fills it, with 'Switch the channel' below", nc is not None and nc["lbl"] and nc["t"] != stray_t, (nc, stray_t))
         if sids["top"]:
             pg.evaluate("k=>localStorage.setItem('lastplay', JSON.stringify({k:'i:'+k, at:Date.now(), w:1}))", sids["top"])
             pg.reload(); pg.wait_for_timeout(1200)
