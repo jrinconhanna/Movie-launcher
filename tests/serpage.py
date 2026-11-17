@@ -26,10 +26,12 @@ with sync_playwright() as p:
         rec(f"P1 [{size}] an unmatched series (in To check) doesn't open a page", not pg.evaluate("!!document.querySelector('.serp')"))
         pg.evaluate("k=>document.querySelector('#grid .card[data-key=\"'+k+'\"] a.poster').click()", ms["key"]); pg.wait_for_timeout(1200)
         rec(f"P2 [{size}] a matched series opens its page with its title", pg.evaluate("t=>!!document.querySelector('.serp') && document.querySelector('.sp-top b').textContent===t", ms["title"]), ms["title"])
+        rec(f"P20 [{size}] episode number leads the title line, no chip on the picture", pg.evaluate("(()=>{const r=document.querySelector('.sp-row'); return !r.querySelector('.sp-ep') && /^E\\d+ /.test(r.querySelector('.sp-tl b').textContent)})()"))
         pg.evaluate("s=>{const b=[...document.querySelectorAll('.sp-chips button')].find(b=>b.textContent==='S'+s); b&&b.click()}", s1); pg.wait_for_timeout(200)
         rec(f"P3 [{size}] every episode of the season is listed", pg.evaluate("document.querySelectorAll('.sp-row').length") == n1, (pg.evaluate("document.querySelectorAll('.sp-row').length"), n1))
         rec(f"P4 [{size}] watched episodes (E1, E2 from Trakt) get the ✓ badge + grey, others don't", pg.evaluate("[...document.querySelectorAll('.sp-row')].slice(0,3).map(r=>!!r.querySelector('.sp-wk')).join()") == "true,true,false")
         rec(f"P18 [{size}] Vertical big: picture spans the row, title sits under it", pg.evaluate("(()=>{const r=document.querySelector('.sp-row'), p=r.querySelector('.sp-pic').getBoundingClientRect(), b=r.querySelector('b').getBoundingClientRect(), rr=r.getBoundingClientRect(); return p.width > rr.width*0.9 && b.top > p.bottom})()"))
+        rec(f"P19 [{size}] info line sits right-aligned on the title's line", pg.evaluate("(()=>{const r=document.querySelector('.sp-row'), b=r.querySelector('b').getBoundingClientRect(), m=r.querySelector('.sp-meta').getBoundingClientRect(), rr=r.querySelector('.sp-tl').getBoundingClientRect(); return Math.abs(m.right-rr.right)<2 && m.top < b.bottom})()"))
         rec(f"P5 [{size}] header counts watched in the season", f"2/{n1} watched" in pg.evaluate("document.querySelector('.sp-top small').textContent"))
         has_ov = pg.evaluate("!!document.querySelector('.sp-ov')")
         if has_ov:

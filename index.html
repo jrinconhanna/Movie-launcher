@@ -245,6 +245,10 @@ html .ic.wm.open .opts button.on{background:#000;color:#fff;outline:2px solid #f
 #grid.serp { max-width: 620px; } .sp-row { display: block; padding: 12px 0 14px; } .sp-row > div:last-child { margin-top: 9px; }
 .sp-row b { font-size: 16px; } .sp-row .sp-meta { margin-top: 3px; } .sp-row.next { padding: 12px 10px 14px; margin: 0 -10px; }
 .sp-pic .sp-un { font-size: 12px; padding: 5px 10px; } .sp-pic .ic button { width: 30px; height: 30px; }
+
+.sp-tl { display: flex; align-items: baseline; gap: 10px; } .sp-tl b { flex: 1; min-width: 0; } .sp-tl .sp-meta { flex: none; white-space: nowrap; margin-top: 0; }
+
+.sp-en { opacity: .55; margin-right: 2px; }
 </style>
 </head>
 <body>
@@ -263,7 +267,7 @@ html .ic.wm.open .opts button.on{background:#000;color:#fff;outline:2px solid #f
   var LEARN = true; // V2.3 live 10 Nov (was the ?v23 preview)
   var V24 = !/[?&]v23\b/.test(location.search); if (V24) document.documentElement.classList.add('v24'); // V2.4 live 11 Nov (?v23 shows the old view for comparison)
   var PROTO = /[?&]proto\b/.test(location.search); // V2.4.2 prototype: subscribe to folders, one channel each on Watching (this device only)
-  var BUILT = '2026-11-18 00:15'; /* set on every commit by the pre-commit hook; staging compares it to spot a newer version */ var NEXT = /[?&](staging|next)\b/.test(location.search); if (NEXT) document.documentElement.classList.add('isstg'); /* ?staging = preview of what's built but not live yet (?next kept as old alias) */ var NOTAP = NEXT; /* staging 17 Nov: Discover posters don't play; set to true on Javier's go */ var B2 = true; /* mini player, phone tabs at the bottom with icons, quieter TOC frame: live 14 Nov on Javier's go */ if (B2) document.documentElement.classList.add('pvnext'); // V2.4.1 preview (Lean onward): items flagged next only show with ?next until Javier says go
+  var BUILT = '2026-11-18 00:19'; /* set on every commit by the pre-commit hook; staging compares it to spot a newer version */ var NEXT = /[?&](staging|next)\b/.test(location.search); if (NEXT) document.documentElement.classList.add('isstg'); /* ?staging = preview of what's built but not live yet (?next kept as old alias) */ var NOTAP = NEXT; /* staging 17 Nov: Discover posters don't play; set to true on Javier's go */ var B2 = true; /* mini player, phone tabs at the bottom with icons, quieter TOC frame: live 14 Nov on Javier's go */ if (B2) document.documentElement.classList.add('pvnext'); // V2.4.1 preview (Lean onward): items flagged next only show with ?next until Javier says go
 
   /* staging 17 Nov: "New version · tap to reload" pill. Checks quietly on return to the page and every 30 s; never reloads by itself. */
   if (NEXT) (function () {
@@ -1067,15 +1071,15 @@ html .ic.wm.open .opts button.on{background:#000;color:#fff;outline:2px solid #f
       var r = document.createElement('div'); r.className = 'sp-row' + (isN ? ' next' : '') + (ww ? ' w' : '');
       var pc = document.createElement('div'); pc.className = 'sp-pic' + (ww ? ' seen' : ''); var src = x.still ? 'https://image.tmdb.org/t/p/w300' + x.still : it.poster ? 'https://image.tmdb.org/t/p/w300' + it.poster : '';
       if (src) { var im = document.createElement('img'); im.loading = 'lazy'; im.alt = ''; im.src = src; if (!x.still) im.className = 'nop'; pc.appendChild(im); }
-      pc.insertAdjacentHTML('beforeend', '<span class="sp-ep">E' + x.e + '</span>' + (ww ? '<span class="sp-wk">\u2713</span>' : '') + (isN ? '<span class="sp-un">\u25b6| Up next</span>' : ''));
+      pc.insertAdjacentHTML('beforeend', (ww ? '<span class="sp-wk">\u2713</span>' : '') + (isN ? '<span class="sp-un">\u25b6| Up next</span>' : ''));
       (function (x, ww, isN) { var ic = document.createElement('div'); ic.className = 'ic wm'; var op = document.createElement('span'); op.className = 'opts';
         var mk = document.createElement('button'); mk.type = 'button'; mk.textContent = ww ? '\u2715' : '\u2713'; if (ww) mk.classList.add('on'); mk.title = ww ? 'Mark not watched' : 'Mark watched'; mk.setAttribute('aria-label', mk.title); mk.onclick = function (e) { e.preventDefault(); e.stopPropagation(); markEp(it, sn, x.e, !ww); }; op.appendChild(mk);
         if (onList && !isN) { var up = document.createElement('button'); up.type = 'button'; up.innerHTML = ACT.upnext[0]; up.title = 'Up next'; up.setAttribute('aria-label', 'Up next'); up.onclick = function (e) { e.preventDefault(); e.stopPropagation(); p2.pin = p2.pin || {}; p2.pin['i:' + it.key] = { s: +sn, e: x.e, name: x.name, still: x.still, rt: x.rt, rw: ww ? 1 : 0 }; p2Save(); toast('E' + x.e + ' is up next on Watching'); render(); }; op.appendChild(up); }
         var mo = document.createElement('button'); mo.type = 'button'; mo.className = 'more'; mo.textContent = '\u22ef'; mo.setAttribute('aria-label', 'Options for E' + x.e); mo.onclick = function (e) { e.preventDefault(); e.stopPropagation(); var was = ic.classList.contains('open'); document.querySelectorAll('.sp-pic .ic.open').forEach(function (q) { q.classList.remove('open'); }); if (!was) ic.classList.add('open'); };
         ic.appendChild(op); ic.appendChild(mo); pc.appendChild(ic); })(x, ww, isN);
       r.appendChild(pc);
-      var tx = document.createElement('div'); var nm = document.createElement('b'); nm.textContent = x.name || ('Episode ' + x.e); tx.appendChild(nm);
-      var mt = document.createElement('div'); mt.className = 'sp-meta'; mt.textContent = [x.rt ? (x.rt < 60 ? x.rt + 'm' : Math.floor(x.rt / 60) + 'h' + (x.rt % 60 ? ' ' + x.rt % 60 + 'm' : '')) : '', myR ? '\u2605 ' + myR : '', (x.air || '').slice(0, 4)].filter(Boolean).join(' \u00b7 '); tx.appendChild(mt);
+      var tx = document.createElement('div'); var tl = document.createElement('div'); tl.className = 'sp-tl'; tx.appendChild(tl); var nm = document.createElement('b'); nm.innerHTML = '<span class="sp-en">E' + x.e + '</span> '; nm.appendChild(document.createTextNode(x.name || ('Episode ' + x.e))); tl.appendChild(nm); /* 18 Nov: episode number on the title line (was a small chip on the picture) */ /* 18 Nov: info line right-aligned after the title */
+      var mt = document.createElement('div'); mt.className = 'sp-meta'; mt.textContent = [x.rt ? (x.rt < 60 ? x.rt + 'm' : Math.floor(x.rt / 60) + 'h' + (x.rt % 60 ? ' ' + x.rt % 60 + 'm' : '')) : '', myR ? '\u2605 ' + myR : '', (x.air || '').slice(0, 4)].filter(Boolean).join(' \u00b7 '); tl.appendChild(mt);
       if (x.ov) { var ov = document.createElement('div'); ov.className = 'sp-ov'; ov.textContent = x.ov; ov.onclick = function () { r.classList.toggle('full'); }; tx.appendChild(ov); }
       r.appendChild(tx); ls0.appendChild(r);
     });
