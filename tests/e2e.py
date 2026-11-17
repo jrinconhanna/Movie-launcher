@@ -488,6 +488,15 @@ with sync_playwright() as p:
             on = pg.evaluate("[...document.querySelectorAll('button')].find(b=>b.textContent.trim().startsWith('Discover'))")
             rec(f"T12 [{size}] staging: Open folder lands in Discover › Tech inside that folder", '1976-1984' in pg.evaluate("document.body.innerText.slice(0,600)") and pg.evaluate("document.querySelectorAll('#grid .lcard').length") > 0, pg.evaluate("document.body.innerText.slice(0,200)"))
         else: rec(f"T11 [{size}] staging: a folder row exists in Next for the test", False, "no folder row")
+        # T13 (17 Nov, staging): a video inside a Tech folder in Discover doesn't play when tapped
+        pg.evaluate("window.__went=[]"); tab(pg, "Discover"); pg.evaluate("[...document.querySelectorAll('#tabs button')].find(b=>b.firstChild.textContent==='Tech').click()"); pg.wait_for_timeout(300)
+        pg.evaluate("document.querySelector('#grid .ccard .poster').click()"); pg.wait_for_timeout(300)
+        for _ in range(3):
+            if pg.evaluate("document.querySelectorAll('#grid .lcard:not(.ccard)').length"): break
+            pg.evaluate("document.querySelector('#grid .ccard .poster')?.click()"); pg.wait_for_timeout(300)
+        nv = pg.evaluate("document.querySelectorAll('#grid .lcard:not(.ccard)').length")
+        pg.evaluate("document.querySelector('#grid .lcard:not(.ccard) .poster').click()"); pg.wait_for_timeout(400)
+        rec(f"T13 [{size}] staging: tapping a video in Discover plays nothing", nv > 0 and not pg.evaluate("window.__went.length"), (nv, pg.evaluate("window.__went")))
         rec(f"T7 [{size}] no page errors (?staging, stray last play)", not pg.errs, pg.errs)
         pg.context.close()
         pg = page(b, vp, "?v23")

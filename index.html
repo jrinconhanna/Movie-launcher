@@ -720,7 +720,7 @@ html .ic.wm.open .opts button.on{background:#000;color:#fff;outline:2px solid #f
     if (cov) { var im = document.createElement('img'); im.className = 'fg'; im.loading = 'lazy'; im.alt = ''; im.src = cov; a.appendChild(im); a.classList.add('hascover'); }
     else { var n = document.createElement('span'); n.className = 'ln'; n.textContent = v._pos != null && top === 'Discover' && vDrag(v) ? v._pos : v.num != null ? v.num : v.n != null ? v.n : '·'; /* Lean: the session/episode number, not the position (Session 10 shows 10) */ a.appendChild(n);
     if (!(V24 && (v.ychip || isWeek(v.course) || (state.course && inWeek(state.course.split('/')))))) { var c = document.createElement('span'); c.className = 'lc'; c.textContent = v.course; a.appendChild(c); } } // ?next: the week heading already names it
-    a.onclick = function (e) { e.preventDefault(); if (a.dataset.noclick) return; playLearn(v); };
+    a.onclick = function (e) { e.preventDefault(); if (a.dataset.noclick) return; if (NOTAP && top === 'Discover') return; /* staging 17 Nov: videos in Discover don't play either; add the folder to Next */ playLearn(v); };
     var seen = learnDone.indexOf(lid(v)) >= 0; if (seen && !(V24 && top === 'Discover' && state.wf === 'watched')) d.classList.add('seen'); // V2.4: the Watched filter shows them in full colour, like movies
     var ic = document.createElement('div'); ic.className = 'ic wm';
     var opts = document.createElement('span'); opts.className = 'opts';
