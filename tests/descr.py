@@ -61,6 +61,10 @@ with sync_playwright() as p:
         if has:
             pg.evaluate(f"{jr}.querySelector('.t').click()"); pg.wait_for_timeout(400)
         rec(f"D14 [{size}] Watching: an episode with no TMDB text shows the toast and doesn't play", has and pg.evaluate("document.getElementById('toast').textContent.startsWith('No description yet')") and pg.evaluate("window.__plays") == p0 and pg.evaluate(f"!{jr}.querySelector('.tdsc')"), has)
+        btn(pg, "Next"); pg.wait_for_timeout(150); btn(pg, "Series"); pg.wait_for_timeout(150); sr = row(".p2list .p2n", "Star Trek")
+        rec(f"D16 [{size}] Next › Series: episode name first, then the series", pg.evaluate(f"(()=>{{const r={sr}; return r.querySelector('.nm').textContent.startsWith('Phantasms') && r.querySelector('.sn').textContent==='Star Trek: The Next Generation'}})()"), pg.evaluate(f"{sr}.querySelector('.nm').textContent"))
+        btn(pg, "Playlists"); pg.wait_for_timeout(150); fr = row(".p2list .p2n", "2000-2004")
+        rec(f"D17 [{size}] Next › Playlists: next video first, then the folder", pg.evaluate(f"(()=>{{const r={fr}; return r.querySelector('.nm').textContent.startsWith('Macworld') && r.querySelector('.sn').textContent.includes('2000-2004')}})()"), pg.evaluate(f"{fr}.querySelector('.nm').textContent"))
         pg.screenshot(path=f"/tmp/descr-{size}.png")
         rec(f"D11 [{size}] no page errors", not errs, errs); pg.close()
     # live (no ?staging): unchanged
