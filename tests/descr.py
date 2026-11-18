@@ -46,7 +46,11 @@ with sync_playwright() as p:
             pg.evaluate(f"{nr}.querySelector('.nm').click()"); pg.wait_for_timeout(400)
             t = pg.evaluate(f"{nr}.querySelector('.tdsc')?.textContent||''")
             rec(f"{n} [{size}] Next › {chip}: tap the title shows the description, no menu", len(t) > 30 and pg.evaluate("!document.getElementById('p2menu')"), t[:60])
-        btn(pg, "Movies"); pg.wait_for_timeout(150); pg.evaluate(f"{row('.p2list .p2n', 'Antitrust')}.querySelector('.th').click()"); pg.wait_for_timeout(150)
+        btn(pg, "Movies"); pg.wait_for_timeout(150)
+        ar = row('.p2list .p2n', 'Antitrust'); pg.evaluate(f"{ar}.querySelector('.tdsc') || {ar}.querySelector('.nm').click()"); pg.wait_for_timeout(300)
+        rec(f"D15 [{size}] Next: with the description open, the picture is top-aligned with the title", pg.evaluate(f"(()=>{{const r={ar}; const a=r.querySelector('.th').getBoundingClientRect().top, n=r.querySelector('.nm').getBoundingClientRect().top; return !!r.querySelector('.tdsc') && Math.abs(a-n) < 8}})()"))
+        pg.screenshot(path=f"/tmp/descr-top-{size}.png")
+        pg.evaluate(f"{ar}.querySelector('.th').click()"); pg.wait_for_timeout(150)
         rec(f"D10 [{size}] Next: tapping the picture still opens the menu", pg.evaluate("!!document.getElementById('p2menu')"))
         # no description: a short toast, nothing else happens
         pg.evaluate("document.getElementById('p2menu')?.remove()"); btn(pg, "Playlists"); pg.wait_for_timeout(150); gr = row(".p2list .p2n", "GSP")
