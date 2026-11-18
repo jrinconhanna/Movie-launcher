@@ -70,6 +70,9 @@ with sync_playwright() as p:
         rec(f"D18 [{size}] Next: one WAITING separator between the On Watching rows and the rest", bool(sep) and sep['txt'] == 'Waiting' and sep['before'] and sep['after'] and sep['n'] == 1, sep)
         ow = pg.evaluate("""(()=>{const r=document.querySelector('.p2list .p2n.live'), o=document.querySelectorAll('.p2list .p2n:not(.live)')[0]; const st=r.querySelector('.st'); return {starts:!st.textContent.startsWith('●'), tag:st.querySelector('.ow')?.textContent, x:Math.abs(st.getBoundingClientRect().left-o.querySelector('.st').getBoundingClientRect().left)}})()""")
         rec(f"D19 [{size}] Next: On Watching rows keep the count first, tag to its right", ow['starts'] and ow['tag'] == '● On Watching' and ow['x'] < 2, ow)
+        pg.evaluate("window.scrollTo(0, document.body.scrollHeight)"); pg.wait_for_timeout(250)
+        stk = pg.evaluate("""(()=>{const c=document.querySelector('.p2chips'), r=c.getBoundingClientRect(), h=document.querySelector('header'), hb=h?Math.max(0,h.getBoundingClientRect().bottom):0; const b=[...c.querySelectorAll('button')].find(x=>x.textContent.startsWith('Series')); const br=b.getBoundingClientRect(); const hit=document.elementFromPoint(br.x+br.width/2, br.y+br.height/2); return {sy:scrollY, top:r.top, hb:hb, hit:!!hit && b.contains(hit)}})()""")
+        rec(f"D20 [{size}] Next: chips stay at the top after scrolling down, and tappable", stk['sy'] > 100 and abs(stk['top'] - stk['hb']) < 12 and stk['hit'], stk)
         pg.screenshot(path=f"/tmp/descr-{size}.png")
         rec(f"D11 [{size}] no page errors", not errs, errs); pg.close()
     # live (no ?staging): unchanged
