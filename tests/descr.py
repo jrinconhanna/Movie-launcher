@@ -75,9 +75,9 @@ with sync_playwright() as p:
         rec(f"D20 [{size}] Next: chips stay at the top after scrolling down, and tappable", stk['sy'] > 100 and abs(stk['top'] - stk['hb']) < 12 and stk['hit'], stk)
         pg.screenshot(path=f"/tmp/descr-{size}.png")
         rec(f"D11 [{size}] no page errors", not errs, errs); pg.close()
-    # live (no ?staging): unchanged
+    # live (no ?staging): same as staging since V2.4.2 went live (18 Nov)
     pg = b.new_page(viewport={"width": 390, "height": 844}); pg.route("**/api.trakt.tv/**", lambda r: r.abort())
     pg.goto(f"http://127.0.0.1:{P}/index.html"); pg.wait_for_selector("#grid, .p2list", timeout=8000); pg.wait_for_timeout(500)
-    rec("D12 [live] no tappable titles until the go", pg.evaluate("document.querySelectorAll('.dtap').length") == 0); pg.close()
+    rec("D12 [live] titles are tappable (V2.4.2 live)", pg.evaluate("document.querySelectorAll('.dtap').length") > 0); pg.close()
     b.close()
 print(f"{sum(R)}/{len(R)} passed · {time.time()-T0:.0f}s")

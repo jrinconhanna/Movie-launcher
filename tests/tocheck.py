@@ -25,7 +25,7 @@ with sync_playwright() as p:
             t2 = pg.evaluate("document.querySelector('.tocheck').innerText")
             rec("C2 staging: the series is listed with its reason; matched ones aren't", (tv[0]["title"] + " — 0/47 episodes match TMDB") in t2 and (tv[1]["title"] + " —") not in t2, t2[:300])
         else:
-            rec("C3 live: no series section yet", "series" not in txt.lower(), txt[:120])
+            rec("C3 live: series section shows too (V2.4.2 live)", f"{NB} series" in txt, txt[:120])
         rec(f"C4 no page errors ({q or 'live'})", not errs, errs); pg.close()
     b.close()
 print(f"{sum(R)}/{len(R)} passed · {time.time()-T0:.0f}s")

@@ -42,7 +42,7 @@ with sync_playwright() as p:
                  pg.evaluate("window.scrollTo(0, 1500)"); pg.wait_for_timeout(150)
                  rec(f"T4 [{size}] staging: back chip row stays on top while scrolling", pg.evaluate("(()=>{const c=document.getElementById('crow').getBoundingClientRect(); return window.scrollY>300 && c.top>=0 && c.bottom<220})()"))
              else:
-                 rec(f"T5 [{size}] live: unchanged (grid of tiles)", not pg.evaluate("document.getElementById('grid').classList.contains('tbig')"))
+                 rec(f"T5 [{size}] live: big rows too (V2.4.2 live)", pg.evaluate("document.getElementById('grid').classList.contains('tbig')"))
              rec(f"T6 [{size}] no page errors ({q or 'live'})", not errs, errs)
              if q and size == "phone" and WANT=="Steve Jobs": pg.evaluate("window.scrollTo(0,0)"); pg.wait_for_timeout(100); pg.screenshot(path="/tmp/tbig.png",clip={"x":0,"y":0,"width":390,"height":420})
              pg.close()
