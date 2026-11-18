@@ -14370,6 +14370,7 @@
    "key": "learn|1- Tech/1- Steve Jobs/5) 2005-2007 (iPhone)/2005-01 - Macworld SF.mp4",
    "mon": 1,
    "n": 1,
+   "ov": "The iPod shuffle, Mac mini, iLife '05 and iWork. Jobs says Apple sold over 4.5 million iPods in the 2004 holiday quarter and calls 2005 the \"year of HD video editing\".",
    "sub": null,
    "title": "Macworld SF",
    "trail": [
@@ -14395,6 +14396,7 @@
    "key": "learn|1- Tech/1- Steve Jobs/5) 2005-2007 (iPhone)/2005-05 - Steve Jobs at D3.mp4",
    "mon": 5,
    "n": 2,
+   "ov": "At D: All Things Digital, Jobs demos a new version of iTunes with a podcast directory and one-click subscription, and talks about music, the iPod and phones.",
    "sub": null,
    "title": "Steve Jobs at D3",
    "trail": [
@@ -14420,6 +14422,7 @@
    "key": "learn|1- Tech/1- Steve Jobs/5) 2005-2007 (iPhone)/2005-06 - Stanford Commencement Address.mp4",
    "mon": 6,
    "n": 3,
+   "ov": "His speech to Stanford's graduating class on 12 June 2005: three stories from his life about connecting the dots, love and loss, and death. It ends with the Whole Earth Catalog's final message, \"Stay Hungry. Stay Foolish.\"",
    "sub": null,
    "title": "Stanford Commencement Address",
    "trail": [
@@ -14445,6 +14448,7 @@
    "key": "learn|1- Tech/1- Steve Jobs/5) 2005-2007 (iPhone)/2005-06 - WWDC (Switch to Intel, Podcasting).mp4",
    "mon": 6,
    "n": 4,
+   "ov": "Apple will move the Mac from PowerPC to Intel processors, and Wolfram Research talks about porting Mathematica to Intel. Also podcasts in iTunes 4.9.",
    "sub": null,
    "title": "WWDC (Switch to Intel, Podcasting)",
    "trail": [
@@ -14470,6 +14474,7 @@
    "key": "learn|1- Tech/1- Steve Jobs/5) 2005-2007 (iPhone)/2005-09 - Apple Special Music Event (iPod nano, Motorola, ROKR).mp4",
    "mon": 9,
    "n": 5,
+   "ov": "The iPod nano, which replaces the iPod mini, the Motorola ROKR phone with iTunes, and iTunes 5. Also Harry Potter audiobooks on iTunes, and Kanye West performs two songs.",
    "sub": null,
    "title": "Apple Special Music Event (iPod nano, Motorola, ROKR)",
    "trail": [
@@ -14495,6 +14500,7 @@
    "key": "learn|1- Tech/1- Steve Jobs/5) 2005-2007 (iPhone)/2005-10 - Apple Special Event (iPod 5G).mp4",
    "mon": 10,
    "n": 6,
+   "ov": "A new iMac G5 with a built-in camera and Photo Booth, and the iPod with video, plus a demo of video podcasts.",
    "sub": null,
    "title": "Apple Special Event (iPod 5G)",
    "trail": [
@@ -14520,6 +14526,7 @@
    "key": "learn|1- Tech/1- Steve Jobs/5) 2005-2007 (iPhone)/2006-01 - Macworld SF (original MacBook preview).mp4",
    "mon": 1,
    "n": 7,
+   "ov": "The first Intel-based iMac and MacBook Pro, iLife '06 and iWork '06, and the first universal version of Mac OS X (10.4.4).",
    "sub": null,
    "title": "Macworld SF (original MacBook preview)",
    "trail": [
@@ -14545,6 +14552,7 @@
    "key": "learn|1- Tech/1- Steve Jobs/5) 2005-2007 (iPhone)/2006-02 - Apple Special Music Event (iPod, Hi-Fi).mp4",
    "mon": 2,
    "n": 8,
+   "ov": "An Intel-based Mac mini, leather iPod cases and the iPod Hi-Fi speaker system, plus Front Row sharing media between Macs.",
    "sub": null,
    "title": "Apple Special Music Event (iPod, Hi-Fi)",
    "trail": [
@@ -14570,6 +14578,7 @@
    "key": "learn|1- Tech/1- Steve Jobs/5) 2005-2007 (iPhone)/2006-08 - WWDC (Previews OS X Leopard, Mac Pro).mp4",
    "mon": 8,
    "n": 9,
+   "ov": "The Mac Pro, which replaces the Power Mac G5, an updated Xserve, Mac OS X Leopard features including 64-bit apps, Time Machine and Boot Camp, and a revised Mac OS X Server.",
    "sub": null,
    "title": "WWDC (Previews OS X Leopard, Mac Pro)",
    "trail": [
@@ -14595,6 +14604,7 @@
    "key": "learn|1- Tech/1- Steve Jobs/5) 2005-2007 (iPhone)/2006-09 - Apple Special Event (Apple TV iTV).mp4",
    "mon": 9,
    "n": 10,
+   "ov": "Billed as \"It's Showtime\": Apple TV (code-named iTV), a second-generation iPod nano and a revised iPod shuffle.",
    "sub": null,
    "title": "Apple Special Event (Apple TV iTV)",
    "trail": [
@@ -14620,6 +14630,7 @@
    "key": "learn|1- Tech/1- Steve Jobs/5) 2005-2007 (iPhone)/2007-01 - Macworld SF(iPhone).mp4",
    "mon": 1,
    "n": 11,
+   "ov": "The iPhone, with Multi-Touch as its interface, in 4GB and 8GB models shipping in the US in June with Cingular. Also Apple TV, and the renaming from Apple Computer to Apple Inc.",
    "sub": null,
    "title": "Macworld SF(iPhone)",
    "trail": [
@@ -14645,6 +14656,7 @@
    "key": "learn|1- Tech/1- Steve Jobs/5) 2005-2007 (iPhone)/2007-05 - Steve Jobs at D5.mp4",
    "mon": 5,
    "n": 12,
+   "ov": "Interviewed by Walt Mossberg at D5 about the iPhone, due in late June, and Apple TV.",
    "sub": null,
    "title": "Steve Jobs at D5",
    "trail": [
@@ -14670,6 +14682,7 @@
    "key": "learn|1- Tech/1- Steve Jobs/5) 2005-2007 (iPhone)/2007-06 - WWDC (iPhone Web Apps, Safari for Windows).mp4",
    "mon": 6,
    "n": 13,
+   "ov": "A demo of the first feature-complete developer beta of Mac OS X Leopard with a redesigned Finder, Safari for Windows, and web apps in Safari as the way to build apps for the iPhone, which ships on 29 June.",
    "sub": null,
    "title": "WWDC (iPhone Web Apps, Safari for Windows)",
    "trail": [
@@ -14695,6 +14708,7 @@
    "key": "learn|1- Tech/1- Steve Jobs/5) 2005-2007 (iPhone)/2007-08 - Apple Town Hall (Aluminum iMacs, Wireless Keyboards).mp4",
    "mon": 8,
    "n": 14,
+   "ov": "The first aluminium iMacs, a refreshed Mac mini, and iLife '08 and iWork '08.",
    "sub": null,
    "title": "Apple Town Hall (Aluminum iMacs, Wireless Keyboards)",
    "trail": [
@@ -14720,6 +14734,7 @@
    "key": "learn|1- Tech/1- Steve Jobs/5) 2005-2007 (iPhone)/2007-09 - Apple Special Music Event (iPod Touch, iTunes, Wi Fi, Store).mp4",
    "mon": 9,
    "n": 15,
+   "ov": "Billed as \"The Beat Goes On\": the first iPod touch and a third-generation iPod nano. For the iPhone: custom ringtones, the 4GB model dropped and the 8GB cut from $599 to $399.",
    "sub": null,
    "title": "Apple Special Music Event (iPod Touch, iTunes, Wi Fi, Store)",
    "trail": [
@@ -27785,5 +27800,5 @@
    "year": 1959
   }
  ],
- "updated": "2026-11-18T00:06Z"
+ "updated": "2026-11-18T00:09Z"
 }
