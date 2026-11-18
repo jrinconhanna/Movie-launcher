@@ -1,0 +1,6 @@
+rm	2) 1985-1995 (Next & Pixar)/1995-06 - Steve Jobs Lost Interview.mp4	
+rm	2) 1985-1995 (Next & Pixar)/1995-06 - Steve Jobs Lost Interview.png	
+mv	2) 1985-1995 (Next & Pixar)/1995-06 - Triumph of the Nerds Interview.mp4	2) 1985-1995 (Next & Pixar)/1995-06 - Steve Jobs Lost Interview (Triumph of the Nerds).mp4
+mv	3) 1996-1999 (Apple Comeback)/1997-05-14 - WWDC (Steve Jobs QA).mp4	3) 1996-1999 (Apple Comeback)/1997-05-16 - WWDC (Steve Jobs QA).mp4
+mv	2) 1985-1995 (Next & Pixar)/1995-06 - Triumph of the Nerds Interview.png	2) 1985-1995 (Next & Pixar)/1995-06 - Steve Jobs Lost Interview (Triumph of the Nerds).png
+mv	3) 1996-1999 (Apple Comeback)/1997-05-14 - WWDC (Steve Jobs QA).png	3) 1996-1999 (Apple Comeback)/1997-05-16 - WWDC (Steve Jobs QA).png
