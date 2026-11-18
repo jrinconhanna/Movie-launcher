@@ -14760,6 +14760,7 @@
    "key": "learn|1- Tech/1- Steve Jobs/6) 2008-2011 (iPad & Final)/2008-01 - Macworld (MacBook Air, iTunes Move Rentals).mp4",
    "mon": 1,
    "n": 1,
+   "ov": "Software updates for Apple TV, iTunes, the iPhone and the iPod touch; iTunes movie rentals from all the major studios; Time Capsule, Apple's first network storage drive; and the MacBook Air, thin enough to fit in a manila envelope.",
    "sub": null,
    "title": "Macworld (MacBook Air, iTunes Move Rentals)",
    "trail": [
@@ -14785,6 +14786,7 @@
    "key": "learn|1- Tech/1- Steve Jobs/6) 2008-2011 (iPad & Final)/2008-03 - Apple Especial Event (App Store).mp4",
    "mon": 3,
    "n": 2,
+   "ov": "The iPhone SDK, Exchange support for business users, and the App Store, where developers set the price and keep 70% of sales. Kleiner Perkins announces a $100 million iFund for iPhone apps.",
    "sub": null,
    "title": "Apple Especial Event (App Store)",
    "trail": [
@@ -14810,6 +14812,7 @@
    "key": "learn|1- Tech/1- Steve Jobs/6) 2008-2011 (iPad & Final)/2008-06 - WWDC (iPhone 3G, MobileMe).mp4",
    "mon": 6,
    "n": 3,
+   "ov": "The iPhone 3G, iPhone OS 2 and the App Store, plus MobileMe, which replaces .Mac and syncs multiple devices.",
    "sub": null,
    "title": "WWDC (iPhone 3G, MobileMe)",
    "trail": [
@@ -14835,6 +14838,7 @@
    "key": "learn|1- Tech/1- Steve Jobs/6) 2008-2011 (iPad & Final)/2008-08 - Interview About The App Store.mp4",
    "mon": 8,
    "n": 4,
+   "ov": "Recorded on 7 August 2008 with WSJ reporter Nick Wingfield, a month after the App Store opened: over 60 million apps downloaded and about $30 million in sales in the first month, and the App Store's role for the iPhone compared to iTunes for the iPod.",
    "sub": null,
    "title": "Interview About The App Store",
    "trail": [
@@ -14860,6 +14864,7 @@
    "key": "learn|1- Tech/1- Steve Jobs/6) 2008-2011 (iPad & Final)/2008-10 - Apple Special Event Town Hall (Unibody MacBook Pro).mp4",
    "mon": 10,
    "n": 5,
+   "ov": "The event of 14 October 2008 introducing the new aluminium unibody MacBook and MacBook Pro.",
    "sub": null,
    "title": "Apple Special Event Town Hall (Unibody MacBook Pro)",
    "trail": [
@@ -14885,6 +14890,7 @@
    "key": "learn|1- Tech/1- Steve Jobs/6) 2008-2011 (iPad & Final)/2009-01 - Macworld.mp4",
    "mon": 1,
    "n": 6,
+   "ov": "Phil Schiller gives the keynote while Jobs recovers from illness: iLife '09, iWork '09 with the iWork.com beta, the 17-inch MacBook Pro, and iTunes songs without DRM.",
    "sub": null,
    "title": "Macworld",
    "trail": [
@@ -14910,6 +14916,7 @@
    "key": "learn|1- Tech/1- Steve Jobs/6) 2008-2011 (iPad & Final)/2009-06 - WWDC.mp4",
    "mon": 6,
    "n": 7,
+   "ov": "Mac OS X 10.6 Snow Leopard, iPhone OS 3 and the iPhone 3GS, with the iPhone 3G cut to $99 on contract.",
    "sub": null,
    "title": "WWDC",
    "trail": [
@@ -14935,6 +14942,7 @@
    "key": "learn|1- Tech/1- Steve Jobs/6) 2008-2011 (iPad & Final)/2010-01 - Apple Special Event (iPad).mp4",
    "mon": 1,
    "n": 8,
+   "ov": "Jobs announces the iPad on 27 January 2010 at the Yerba Buena Center for the Arts in San Francisco.",
    "sub": null,
    "title": "Apple Special Event (iPad)",
    "trail": [
@@ -14960,6 +14968,7 @@
    "key": "learn|1- Tech/1- Steve Jobs/6) 2008-2011 (iPad & Final)/2010-06 - Steve Jobs at D8.mp4",
    "mon": 6,
    "n": 9,
+   "ov": "A long interview with Walt Mossberg and Kara Swisher: Flash, Google, the iPad and the missing iPhone prototype. On whether tablets will replace PCs: \"PCs are going to be like trucks.\"",
    "sub": null,
    "title": "Steve Jobs at D8",
    "trail": [
@@ -14985,6 +14994,7 @@
    "key": "learn|1- Tech/1- Steve Jobs/6) 2008-2011 (iPad & Final)/2010-06 - WWDC (iPhone 4, FaceTime).mp4",
    "mon": 6,
    "n": 10,
+   "ov": "The iPhone 4 with Retina display and HD video recording, iPhone OS 4 renamed iOS 4, FaceTime, and iMovie for iPhone 4.",
    "sub": null,
    "title": "WWDC (iPhone 4, FaceTime)",
    "trail": [
@@ -15010,6 +15020,7 @@
    "key": "learn|1- Tech/1- Steve Jobs/6) 2008-2011 (iPad & Final)/2010-07 - Apple Special Event (Antennagate).mp4",
    "mon": 7,
    "n": 11,
+   "ov": "A press conference on the iPhone 4's antenna problem: Apple's data, and a free case for every iPhone 4 bought through 30 September, or a refund for anyone who already bought a Bumper.",
    "sub": null,
    "title": "Apple Special Event (Antennagate)",
    "trail": [
@@ -15035,6 +15046,7 @@
    "key": "learn|1- Tech/1- Steve Jobs/6) 2008-2011 (iPad & Final)/2010 - Sep - Apple Special Event.mp4",
    "mon": 9,
    "n": 12,
+   "ov": "A new iPod shuffle, an iPod nano with multi-touch, an iPod touch with FaceTime and Retina display, iTunes 10 with the Ping music social network, iOS 4.1 and 4.2, and a new Apple TV.",
    "sub": null,
    "title": "Apple Special Event",
    "trail": [
@@ -15060,6 +15072,7 @@
    "key": "learn|1- Tech/1- Steve Jobs/6) 2008-2011 (iPad & Final)/2010 Oct - Apple Special Event.mp4",
    "mon": 10,
    "n": 13,
+   "ov": "The \"Back to the Mac\" event: iLife '11 with updated iPhoto, iMovie and GarageBand.",
    "sub": null,
    "title": "Apple Special Event",
    "trail": [
@@ -15085,6 +15098,7 @@
    "key": "learn|1- Tech/1- Steve Jobs/6) 2008-2011 (iPad & Final)/2011-06 - WWDC (iCloud, iOS 5).mp4",
    "mon": 6,
    "n": 14,
+   "ov": "His last keynote: Mac OS X Lion, sold only through the Mac App Store for $29.99, a preview of iOS 5, and iCloud.",
    "sub": null,
    "title": "WWDC (iCloud, iOS 5)",
    "trail": [
@@ -15110,6 +15124,7 @@
    "key": "learn|1- Tech/1- Steve Jobs/6) 2008-2011 (iPad & Final)/2011-10 - Apple Special Event (iPhone 4S).mp4",
    "mon": 10,
    "n": 15,
+   "ov": "The iPhone 4S with an A5 chip, faster graphics and the Siri voice assistant.",
    "sub": null,
    "title": "Apple Special Event (iPhone 4S)",
    "trail": [
@@ -15135,6 +15150,7 @@
    "key": "learn|1- Tech/1- Steve Jobs/6) 2008-2011 (iPad & Final)/2011-10 - Celebrating Steve Jobs, a special memorial event.mp4",
    "mon": 10,
    "n": 16,
+   "ov": "Apple's employee memorial on its Cupertino campus on 19 October 2011: speeches from Tim Cook, Bill Campbell, Al Gore and Jony Ive, and performances by Norah Jones and Coldplay.",
    "sub": null,
    "title": "Celebrating Steve Jobs, a special memorial event",
    "trail": [
@@ -15160,6 +15176,7 @@
    "key": "learn|1- Tech/1- Steve Jobs/6) 2008-2011 (iPad & Final)/2012-10 - Apple Special Event.mp4",
    "mon": 10,
    "n": 17,
+   "ov": "A fourth-generation iPad with the Lightning connector, a 13-inch MacBook Pro with Retina display, and the 7.9-inch iPad mini.",
    "sub": null,
    "title": "Apple Special Event",
    "trail": [
@@ -27800,5 +27817,5 @@
    "year": 1959
   }
  ],
- "updated": "2026-11-18T00:09Z"
+ "updated": "2026-11-18T00:11Z"
 }
