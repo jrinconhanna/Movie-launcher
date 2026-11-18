@@ -289,12 +289,13 @@ body.tbigon .chips.wkrow button[aria-pressed="true"], body.tbigon .chips.wkrow b
   var LEARN = true; // V2.3 live 10 Nov (was the ?v23 preview)
   var V24 = !/[?&]v23\b/.test(location.search); if (V24) document.documentElement.classList.add('v24'); // V2.4 live 11 Nov (?v23 shows the old view for comparison)
   var PROTO = /[?&]proto\b/.test(location.search); // V2.4.2 prototype: subscribe to folders, one channel each on Watching (this device only)
-  var BUILT = '2026-11-18 08:44'; /* set on every commit by the pre-commit hook; staging compares it to spot a newer version */ var NEXT = /[?&](staging|next)\b/.test(location.search); if (NEXT) document.documentElement.classList.add('isstg'); /* ?staging = preview of what's built but not live yet (?next kept as old alias) */ var NOTAP = NEXT; /* staging 17 Nov: Discover posters don't play; set to true on Javier's go */ var B2 = true; /* mini player, phone tabs at the bottom with icons, quieter TOC frame: live 14 Nov on Javier's go */ if (B2) document.documentElement.classList.add('pvnext'); // V2.4.1 preview (Lean onward): items flagged next only show with ?next until Javier says go
+  var BUILT = '2026-11-18 08:47'; /* set on every commit by the pre-commit hook; staging compares it to spot a newer version */ var NEXT = /[?&](staging|next)\b/.test(location.search); if (NEXT) document.documentElement.classList.add('isstg'); /* ?staging = preview of what's built but not live yet (?next kept as old alias) */ var NOTAP = NEXT; /* staging 17 Nov: Discover posters don't play; set to true on Javier's go */ var B2 = true; /* mini player, phone tabs at the bottom with icons, quieter TOC frame: live 14 Nov on Javier's go */ if (B2) document.documentElement.classList.add('pvnext'); // V2.4.1 preview (Lean onward): items flagged next only show with ?next until Javier says go
 
+  var libLM = null; /* Last-Modified of the library.json this page loaded */
   /* staging 17 Nov: "New version · tap to reload" pill. Checks quietly on return to the page and every 30 s; never reloads by itself. */
   if (NEXT) (function () {
     var shown = false;
-    function check() { if (shown || document.hidden) return; fetch(location.pathname + '?nv=' + Date.now(), { cache: 'no-store' }).then(function (r) { return r.text(); }).then(function (t) { var m = t.match(new RegExp('var BUI' + 'LT = \'([^\']+)\'')); if (m && m[1] !== BUILT) pill(m[1]); }).catch(function () {}); }
+    function check() { if (shown || document.hidden) return; if (libLM) fetch('library.json?nv=' + Date.now(), { method: 'HEAD', cache: 'no-store' }).then(function (r) { var lm = r.headers.get('Last-Modified'); if (!shown && r.ok && lm && lm !== libLM) pill('data'); }).catch(function () {}); /* 18 Nov: data-only changes (hourly library build) show the pill too; a HEAD request, so nothing is downloaded */ fetch(location.pathname + '?nv=' + Date.now(), { cache: 'no-store' }).then(function (r) { return r.text(); }).then(function (t) { var m = t.match(new RegExp('var BUI' + 'LT = \'([^\']+)\'')); if (m && m[1] !== BUILT) pill(m[1]); }).catch(function () {}); }
     function pill(v) { shown = true; var b = document.createElement('button'); b.type = 'button'; b.id = 'newver'; b.textContent = 'New version \u00b7 tap to reload';
       b.onclick = function () { var q = location.search.replace(/[?&]r=\d+/, '').replace(/^\?/, ''); location.replace(location.pathname + '?' + (q ? q + '&' : '') + 'r=' + Date.now() + location.hash); };
       document.body.appendChild(b); }
@@ -1253,7 +1254,7 @@ body.tbigon .chips.wkrow button[aria-pressed="true"], body.tbigon .chips.wkrow b
   $('wf').onchange = function () { state.wf = this.value; save(); render(); window.scrollTo(0, 0); };
 
   renew();
-  fetch('library.json', { cache: 'no-cache' }).then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); }).then(function (d) {
+  fetch('library.json', { cache: 'no-cache' }).then(function (r) { if (!r.ok) throw new Error(r.status); libLM = r.headers.get('Last-Modified'); return r.json(); }).then(function (d) {
     items = d.items || []; learn = (d.learn || []).filter(function (v) { return V24 ? !v.old && (!v.next || NEXT) : !v.v24; }); unmatched = d.unmatched || []; updated = d.updated || ''; applyLive(); render(); pull(); loadPaused(); loadLive();
   }).catch(function () {
     $('grid').innerHTML = '<div class="empty">The library isn’t built yet. It appears here a few minutes after the GitHub job runs.</div>';

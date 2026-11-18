@@ -28,6 +28,15 @@ with sync_playwright() as p:
                 pg.click("#newver"); pg.wait_for_timeout(1200)
                 rec(f"V5 [{size}] tap reloads past the cache, still on staging", "staging" in pg.url and "r=" in pg.url, pg.url)
             rec(f"V6 [{size}] no page errors", not errs, errs); pg.close()
+        # 18 Nov: a newer library (data-only change) shows the pill; the same library doesn't
+        for libnew in [True, False]:
+            pg = b.new_page(viewport=vp); errs = []; pg.on("pageerror", lambda e: errs.append(str(e))); pg.route("**/api.trakt.tv/**", lambda r: r.abort())
+            if libnew: pg.route("**/library.json?nv=*", lambda r: r.fulfill(status=200, headers={"Last-Modified": "Fri, 01 Jan 2099 00:00:00 GMT"}, body=""))
+            pg.goto(f"http://127.0.0.1:{P}/index.html?staging"); pg.wait_for_timeout(4500)
+            has = pg.evaluate("!!document.getElementById('newver')")
+            if libnew: rec(f"V8 [{size}] staging: pill shows when the library is newer (code unchanged)", has)
+            else: rec(f"V9 [{size}] staging: no pill when the library is the same", not has)
+            rec(f"V10 [{size}] no page errors", not errs, errs); pg.close()
         pg = b.new_page(viewport=vp); pg.route("**/api.trakt.tv/**", lambda r: r.abort())
         pg.route("**/index.html?nv=*", lambda r: r.fulfill(status=200, content_type="text/html", body=src.replace(built, "2099-01-01 00:00")))
         pg.goto(f"http://127.0.0.1:{P}/index.html"); pg.wait_for_timeout(4500)
