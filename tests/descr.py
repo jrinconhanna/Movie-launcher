@@ -65,6 +65,11 @@ with sync_playwright() as p:
         rec(f"D16 [{size}] Next › Series: episode name first, then the series", pg.evaluate(f"(()=>{{const r={sr}; return r.querySelector('.nm').textContent.startsWith('Phantasms') && r.querySelector('.sn').textContent==='Star Trek: The Next Generation'}})()"), pg.evaluate(f"{sr}.querySelector('.nm').textContent"))
         btn(pg, "Playlists"); pg.wait_for_timeout(150); fr = row(".p2list .p2n", "2000-2004")
         rec(f"D17 [{size}] Next › Playlists: next video first, then the folder", pg.evaluate(f"(()=>{{const r={fr}; return r.querySelector('.nm').textContent.startsWith('Macworld') && r.querySelector('.sn').textContent.includes('2000-2004')}})()"), pg.evaluate(f"{fr}.querySelector('.nm').textContent"))
+        btn(pg, "Series"); pg.wait_for_timeout(150)
+        sep = pg.evaluate("""(()=>{const w=document.querySelector('.p2list'); const kids=[...w.children]; const i=kids.findIndex(e=>e.classList.contains('p2sep')); if(i<0) return null; return {txt:kids[i].textContent, before:kids[i-1].classList.contains('live'), after:!kids[i+1].classList.contains('live'), n:w.querySelectorAll('.p2sep').length}})()""")
+        rec(f"D18 [{size}] Next: one WAITING separator between the On Watching rows and the rest", bool(sep) and sep['txt'] == 'Waiting' and sep['before'] and sep['after'] and sep['n'] == 1, sep)
+        ow = pg.evaluate("""(()=>{const r=document.querySelector('.p2list .p2n.live'), o=document.querySelectorAll('.p2list .p2n:not(.live)')[0]; const st=r.querySelector('.st'); return {starts:!st.textContent.startsWith('●'), tag:st.querySelector('.ow')?.textContent, x:Math.abs(st.getBoundingClientRect().left-o.querySelector('.st').getBoundingClientRect().left)}})()""")
+        rec(f"D19 [{size}] Next: On Watching rows keep the count first, tag to its right", ow['starts'] and ow['tag'] == '● On Watching' and ow['x'] < 2, ow)
         pg.screenshot(path=f"/tmp/descr-{size}.png")
         rec(f"D11 [{size}] no page errors", not errs, errs); pg.close()
     # live (no ?staging): unchanged
