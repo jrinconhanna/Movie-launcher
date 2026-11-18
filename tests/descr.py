@@ -12,7 +12,7 @@ R = []
 def rec(n, ok, d=""): R.append(ok); print(("PASS " if ok else "FAIL ") + n + ("" if ok else "  " + str(d)))
 TNG, FILM, SJ = "i:tv|Star Trek TNG", "i:movie|1- Making it/Antitrust (2001).mp4", "f:Steve Jobs/2000-2004 (iPod & Digital Hub)"
 SEED = """([t,m,s])=>{const d=JSON.parse(localStorage.getItem('proto2')); const put=(k,id)=>{d.lists[k]=[id].concat(d.lists[k].filter(x=>x!==id))};
-  d.lists.Tech=[]; put('Playlists',s); put('Series',t); put('Movies',m); localStorage.setItem('proto2', JSON.stringify(d)); localStorage.removeItem('lastplay');}"""
+  d.lists.Tech=[]; d.lists.Playlists=d.lists.Playlists.filter(x=>x!=='f:TOC/GSP Series'); d.lists.Playlists.splice(0,0,'f:TOC/GSP Series'); put('Playlists',s); put('Series',t); put('Movies',m); localStorage.setItem('proto2', JSON.stringify(d)); localStorage.removeItem('lastplay');}"""
 def btn(pg, label): return pg.evaluate("l=>[...document.querySelectorAll('button')].find(b=>b.textContent.trim().startsWith(l))?.click()", label)
 def row(sel, text): return f"[...document.querySelectorAll('{sel}')].find(e=>e.textContent.includes({text!r}))"
 with sync_playwright() as p:
@@ -48,6 +48,15 @@ with sync_playwright() as p:
             rec(f"{n} [{size}] Next › {chip}: tap the title shows the description, no menu", len(t) > 30 and pg.evaluate("!document.getElementById('p2menu')"), t[:60])
         btn(pg, "Movies"); pg.wait_for_timeout(150); pg.evaluate(f"{row('.p2list .p2n', 'Antitrust')}.querySelector('.th').click()"); pg.wait_for_timeout(150)
         rec(f"D10 [{size}] Next: tapping the picture still opens the menu", pg.evaluate("!!document.getElementById('p2menu')"))
+        # no description: a short toast, nothing else happens
+        pg.evaluate("document.getElementById('p2menu')?.remove()"); btn(pg, "Playlists"); pg.wait_for_timeout(150); gr = row(".p2list .p2n", "GSP")
+        pg.evaluate(f"{gr}.querySelector('.nm').click()"); pg.wait_for_timeout(200)
+        rec(f"D13 [{size}] Next: a title with no description shows 'No description yet', no menu, no text", pg.evaluate("(()=>{const t=document.getElementById('toast'); return !t.hidden && t.textContent.startsWith('No description yet')})()") and pg.evaluate("!document.getElementById('p2menu')") and pg.evaluate(f"!{gr}.querySelector('.tdsc')"))
+        btn(pg, "Watching"); pg.wait_for_timeout(250); jr = row(".p2list .p2r", "Japanology"); p0 = pg.evaluate("window.__plays")
+        has = pg.evaluate(f"!!{jr}")
+        if has:
+            pg.evaluate(f"{jr}.querySelector('.t').click()"); pg.wait_for_timeout(400)
+        rec(f"D14 [{size}] Watching: an episode with no TMDB text shows the toast and doesn't play", has and pg.evaluate("document.getElementById('toast').textContent.startsWith('No description yet')") and pg.evaluate("window.__plays") == p0 and pg.evaluate(f"!{jr}.querySelector('.tdsc')"), has)
         pg.screenshot(path=f"/tmp/descr-{size}.png")
         rec(f"D11 [{size}] no page errors", not errs, errs); pg.close()
     # live (no ?staging): unchanged
