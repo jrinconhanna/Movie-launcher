@@ -1,4 +1,0 @@
-rm	2) 1985-1995 (Next & Pixar)/1995-04 - The Steve Jobs 95 Interview Unabridged.mp4	
-rm	2) 1985-1995 (Next & Pixar)/1995-04 - The Steve Jobs 95 Interview Unabridged.png	
-rm	4) 2000-2004 (iPod & Digital Hub)/2000-05-03 - Apple Expo 2000 (new iBook).mp4	
-rm	4) 2000-2004 (iPod & Digital Hub)/2000-05-03 - Apple Expo 2000 (new iBook).png	
