@@ -10,14 +10,14 @@ def check(name, ok, detail=""):
     print(("PASS " if ok else "FAIL ") + name + ("" if ok else "  " + detail)); fails += 0 if ok else 1
 ALL = tech_items(open(os.path.join(ROOT, "data", "tech-files.txt"), encoding="utf-8").readlines())
 FIRST = [t for t in ALL if t["category"] == "Steve Jobs"]
-check("S0 all of Steve Jobs: 6 eras (98) + Other (3) + Apple ads (72)", len(FIRST) == 173 and {t["course"] for t in FIRST} == {"1976-1984 (Apple I & Mac)", "1985-1995 (Next & Pixar)", "1996-1999 (Apple Comeback)", "2000-2004 (iPod & Digital Hub)", "2005-2007 (iPhone)", "2008-2011 (iPad & Final)", "Other", "Apple ads"}, str(len(FIRST)))
+check("S0 all of Steve Jobs: 6 eras (95) + Other (3) + Apple ads (72)", len(FIRST) == 170 and {t["course"] for t in FIRST} == {"1976-1984 (Apple I & Mac)", "1985-1995 (Next & Pixar)", "1996-1999 (Apple Comeback)", "2000-2004 (iPod & Digital Hub)", "2005-2007 (iPhone)", "2008-2011 (iPad & Final)", "Other", "Apple ads"}, str(len(FIRST)))
 lib_ids = {t["id"] for t in ALL}
 tech.ONLY = []  # the rules below run on the whole Steve Jobs folder
 T = tech_items(open(os.path.join(ROOT, "data", "tech-files.txt"), encoding="utf-8").readlines())
 sj = [t for t in T if t["category"] == "Steve Jobs"]
 by = lambda c: [t for t in sj if t["course"] == c]
 courses = list(dict.fromkeys(t["course"] for t in sj))
-check("S1 Steve Jobs: 173 videos", len(sj) == 173, str(len(sj)))
+check("S1 Steve Jobs: 170 videos", len(sj) == 170, str(len(sj)))
 check("S2 eight folders in order, eras first, then Other, Apple ads", courses == ["1976-1984 (Apple I & Mac)", "1985-1995 (Next & Pixar)", "1996-1999 (Apple Comeback)", "2000-2004 (iPod & Digital Hub)", "2005-2007 (iPhone)", "2008-2011 (iPad & Final)", "Other", "Apple ads"], str(courses))
 check("S3 date order inside an era (Expo Paris Sept 2002 after Macworld SF Jan 2002)", [t["title"] for t in by("2000-2004 (iPod & Digital Hub)")].index("Apple Expo Paris") > [t["title"] for t in by("2000-2004 (iPod & Digital Hub)")].index("Macworld SF"))
 check("S4 title without the date, year kept", split_date("1997-01-07 - Macworld (Return, NeXT, OpenStep)") == (1997, 1, 7, "Macworld (Return, NeXT, OpenStep)"))
@@ -31,7 +31,7 @@ check("S10 numbered 1..n inside each folder", all([t["n"] for t in by(c)] == lis
 lib = json.load(open(os.path.join(ROOT, "library.json"), encoding="utf-8"))
 check("S11 library.json carries them, flagged v24", {x["id"] for x in lib.get("learn", []) if x.get("v24")} == lib_ids)
 e4 = [t["title"] for t in T if t["course"] == "2000-2004 (iPod & Digital Hub)"]
-check("S12 year-only names ordered by event month (2002: Macworld SF Jan, Xserve May, WWDC, Macworld NY, Apple Expo Paris Sep)", e4[11:16] == ["Macworld SF", "Apple Special Event (Xserve)", "WWDC (Death of OS 9)", "Macworld NY", "Apple Expo Paris"], str(e4[11:16]))
+check("S12 year-only names ordered by event month (2002: Macworld SF Jan, Xserve May, WWDC, Macworld NY, Apple Expo Paris Sep)", e4[10:15] == ["Macworld SF", "Apple Special Event (Xserve)", "WWDC (Death of OS 9)", "Macworld NY", "Apple Expo Paris"], str(e4[10:15]))
 check("S13 original iPod event (Oct 2001) after Macworld NY (Jul 2001)", e4.index("Apple Special Event Town Hall (Original iPod)") > e4.index("Macworld NY"))
 ads = [t for t in FIRST if t["course"] == "Apple ads"]
 check("S14 Apple ads: one folder per year inside it (10 years, in order)", [t["trail"] for t in ads][0] == ["Steve Jobs", "Apple ads", "1984"] and sorted({t["trail"][2] for t in ads}) == ["1984", "1985", "1997", "1998", "1999", "2000", "2001", "2002", "2004", "2007"] and [t["trail"][2] for t in ads] == sorted(t["trail"][2] for t in ads), str({t["trail"][2] for t in ads}))
