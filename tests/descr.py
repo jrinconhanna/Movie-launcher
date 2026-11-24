@@ -73,6 +73,14 @@ with sync_playwright() as p:
         pg.evaluate("window.scrollTo(0, document.body.scrollHeight)"); pg.wait_for_timeout(250)
         stk = pg.evaluate("""(()=>{const c=document.querySelector('.p2chips'), r=c.getBoundingClientRect(), h=document.querySelector('header'), hb=h?Math.max(0,h.getBoundingClientRect().bottom):0; const b=[...c.querySelectorAll('button')].find(x=>x.textContent.startsWith('Series')); const br=b.getBoundingClientRect(); const hit=document.elementFromPoint(br.x+br.width/2, br.y+br.height/2); return {sy:scrollY, top:r.top, hb:hb, hit:!!hit && b.contains(hit)}})()""")
         rec(f"D20 [{size}] Next: chips stay at the top after scrolling down, and tappable", stk['sy'] > 100 and abs(stk['top'] - stk['hb']) < 12 and stk['hit'], stk)
+        # D21 (staging 24 Nov, phone): Next's chips sit exactly like Discover's: same height at rest and stuck, same gap, run to the screen edge
+        G = "s=>{const b=[...document.querySelectorAll(s)].filter(e=>e.offsetParent); const r=b.map(e=>e.getBoundingClientRect()); const c=b[0].parentElement.getBoundingClientRect(); return {top:Math.round(r[0].top), left:Math.round(r[0].left), gap:Math.round(r[1].left-r[0].right), edge:Math.round(c.right)}}"
+        stuck = pg.evaluate(G, ".p2chips button") if size == "phone" else None
+        if size == "phone":
+          pg.evaluate("window.scrollTo(0,0)"); pg.wait_for_timeout(150); rest = pg.evaluate(G, ".p2chips button")
+          pg.evaluate("[...document.querySelectorAll('#top button')].find(b=>b.textContent.includes('Discover')).click()"); pg.wait_for_timeout(400); dsc = pg.evaluate(G, "#tabs button")
+          W = vp["width"]
+          rec(f"D21 [{size}] Next chips line up with Discover's (height at rest and stuck, gap, screen edge)", rest['top'] == dsc['top'] == stuck['top'] and rest['left'] == dsc['left'] and rest['gap'] == dsc['gap'] and rest['edge'] >= W - 1, {"next": rest, "stuck": stuck, "discover": dsc})
         pg.screenshot(path=f"/tmp/descr-{size}.png")
         rec(f"D11 [{size}] no page errors", not errs, errs); pg.close()
     # live (no ?staging): same as staging since V2.4.2 went live (18 Nov)
