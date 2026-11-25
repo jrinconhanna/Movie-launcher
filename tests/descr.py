@@ -87,6 +87,12 @@ with sync_playwright() as p:
         pg.evaluate("[...document.querySelectorAll('#top button')].find(b=>b.textContent.includes('Next')).click()"); pg.wait_for_timeout(400)
         n = pg.evaluate("(()=>{const h=document.querySelector('.p2sep.nwtl'), r=document.querySelector('.p2list .p2n.live'); return {txt:h&&h.offsetParent?h.textContent:'', above:!!(h&&r)&&h.getBoundingClientRect().bottom<=r.getBoundingClientRect().top, pill:!!document.getElementById('nwtpill')}})()")
         rec(f"D22 [{size}] titles: Now watching above the card (no badge), On Watching above Next's top rows, no mockup pill", w['txt']=='Now watching' and w['above'] and not w['badge'] and n['txt']=='On Watching' and n['above'] and not n['pill'], {"watching": w, "next": n})
+        # D23 (staging 25 Nov): Watching + Next keep the same tight spacing on first open and after Discover (Tech's 'tbig' used to leak in)
+        TOPS = "()=>{const g=document.getElementById('grid');const y0=g.getBoundingClientRect().top;return [...g.children].filter(e=>e.offsetParent).slice(0,4).map(e=>Math.round(e.getBoundingClientRect().top-y0))}"
+        tab = lambda t: (pg.evaluate("t=>[...document.querySelectorAll('#top button')].find(b=>b.textContent.includes(t)).click()", t), pg.wait_for_timeout(400))
+        pg.reload(); pg.wait_for_timeout(800); tab("Watching"); w1 = pg.evaluate(TOPS); tab("Next"); n1 = pg.evaluate(TOPS)
+        tab("Discover"); pg.evaluate("document.getElementById('grid').classList.add('tbig')"); tab("Watching"); w2 = pg.evaluate(TOPS); tab("Discover"); pg.evaluate("document.getElementById('grid').classList.add('tbig')"); tab("Next"); n2 = pg.evaluate(TOPS)
+        rec(f"D23 [{size}] Watching + Next spacing is the same on first open and after Discover", w1 == w2 and n1 == n2 and len(w1) > 2, {"watching": [w1, w2], "next": [n1, n2]})
         pg.screenshot(path=f"/tmp/descr-{size}.png")
         rec(f"D11 [{size}] no page errors", not errs, errs); pg.close()
     # live (no ?staging): same as staging since V2.4.2 went live (18 Nov)
