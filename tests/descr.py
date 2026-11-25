@@ -66,7 +66,7 @@ with sync_playwright() as p:
         btn(pg, "Playlists"); pg.wait_for_timeout(150); fr = row(".p2list .p2n", "2000-2004")
         rec(f"D17 [{size}] Next › Playlists: next video first, then the folder", pg.evaluate(f"(()=>{{const r={fr}; return r.querySelector('.nm').textContent.startsWith('Macworld') && r.querySelector('.sn').textContent.includes('2000-2004')}})()"), pg.evaluate(f"{fr}.querySelector('.nm').textContent"))
         btn(pg, "Series"); pg.wait_for_timeout(150)
-        sep = pg.evaluate("""(()=>{const w=document.querySelector('.p2list'); const kids=[...w.children]; const i=kids.findIndex(e=>e.classList.contains('p2sep')); if(i<0) return null; return {txt:kids[i].textContent, before:kids[i-1].classList.contains('live'), after:!kids[i+1].classList.contains('live'), n:w.querySelectorAll('.p2sep').length}})()""")
+        sep = pg.evaluate("""(()=>{const w=document.querySelector('.p2list'); const kids=[...w.children]; const i=kids.findIndex(e=>e.classList.contains('p2sep')&&!e.classList.contains('nwtl')); if(i<0) return null; return {txt:kids[i].textContent, before:kids[i-1].classList.contains('live'), after:!kids[i+1].classList.contains('live'), n:w.querySelectorAll('.p2sep:not(.nwtl)').length}})()""")
         rec(f"D18 [{size}] Next: one WAITING separator between the On Watching rows and the rest", bool(sep) and sep['txt'] == 'Waiting' and sep['before'] and sep['after'] and sep['n'] == 1, sep)
         ow = pg.evaluate("""(()=>{const r=document.querySelector('.p2list .p2n.live'), o=document.querySelectorAll('.p2list .p2n:not(.live)')[0]; const st=r.querySelector('.st'); return {starts:!st.textContent.startsWith('●'), tag:st.querySelector('.ow')?.textContent, x:Math.abs(st.getBoundingClientRect().left-o.querySelector('.st').getBoundingClientRect().left)}})()""")
         rec(f"D19 [{size}] Next: On Watching rows keep the count first, tag to its right", ow['starts'] and ow['tag'] == '● On Watching' and ow['x'] < 2, ow)
@@ -81,6 +81,12 @@ with sync_playwright() as p:
           pg.evaluate("[...document.querySelectorAll('#top button')].find(b=>b.textContent.includes('Discover')).click()"); pg.wait_for_timeout(400); dsc = pg.evaluate(G, "#tabs button")
           W = vp["width"]
           rec(f"D21 [{size}] Next chips line up with Discover's (height at rest and stuck, gap, screen edge)", rest['top'] == dsc['top'] == stuck['top'] and rest['left'] == dsc['left'] and rest['gap'] == dsc['gap'] and rest['edge'] >= W - 1, {"next": rest, "stuck": stuck, "discover": dsc})
+        # D22 (staging 25 Nov): section titles: 'Now watching' above the card on Watching (badge gone), 'On Watching' above the top rows on Next
+        pg.evaluate("[...document.querySelectorAll('#top button')].find(b=>b.textContent.includes('Watching')).click()"); pg.wait_for_timeout(400)
+        w = pg.evaluate("(()=>{const l=document.querySelector('.nowlbl.nwtl'), c=document.querySelector('.nowc'), b=c&&c.querySelector('.lb'); return {txt:l&&l.offsetParent?l.textContent:'', above:!!(l&&c)&&l.getBoundingClientRect().bottom<=c.getBoundingClientRect().top, badge:!!(b&&b.offsetParent)}})()")
+        pg.evaluate("[...document.querySelectorAll('#top button')].find(b=>b.textContent.includes('Next')).click()"); pg.wait_for_timeout(400)
+        n = pg.evaluate("(()=>{const h=document.querySelector('.p2sep.nwtl'), r=document.querySelector('.p2list .p2n.live'); return {txt:h&&h.offsetParent?h.textContent:'', above:!!(h&&r)&&h.getBoundingClientRect().bottom<=r.getBoundingClientRect().top, pill:!!document.getElementById('nwtpill')}})()")
+        rec(f"D22 [{size}] titles: Now watching above the card (no badge), On Watching above Next's top rows, no mockup pill", w['txt']=='Now watching' and w['above'] and not w['badge'] and n['txt']=='On Watching' and n['above'] and not n['pill'], {"watching": w, "next": n})
         pg.screenshot(path=f"/tmp/descr-{size}.png")
         rec(f"D11 [{size}] no page errors", not errs, errs); pg.close()
     # live (no ?staging): same as staging since V2.4.2 went live (18 Nov)
