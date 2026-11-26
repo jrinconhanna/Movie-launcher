@@ -2949,6 +2949,22 @@
   },
   {
    "category": "Entertainment",
+   "date": "2026-11-24",
+   "files": 1,
+   "group": "Docs",
+   "key": "doc|6- Entertainment/Rob Lowe the outsider (2026).mp4",
+   "kind": "movie",
+   "order": "006",
+   "overview": "Traces Lowe's career from his breakout roles in “The Outsiders” and “St. Elmo’s Fire” to his Emmy-nominated performance on “The West Wing” and how he maintained his Hollywood career.",
+   "poster": "/dydflxYhZ0UCS5gaz8iCKFcEAvE.jpg",
+   "progress": null,
+   "rt": 91,
+   "status": "unwatched",
+   "title": "Rob Lowe: The Outsider",
+   "tmdb": 1802703
+  },
+  {
+   "category": "Entertainment",
    "date": "1995-11-19",
    "epm": "0/9 episodes match TMDB",
    "files": 9,
@@ -3694,6 +3710,22 @@
    "status": "unwatched",
    "title": "The Fountainhead",
    "tmdb": 24650
+  },
+  {
+   "category": "Making it",
+   "date": "2006-10-14",
+   "files": 1,
+   "group": "Movies",
+   "key": "movie|1- Making it/The hoax (2006).mp4",
+   "kind": "movie",
+   "order": "001",
+   "overview": "In what would cause a fantastic media frenzy, Clifford Irving sells his bogus biography of Howard Hughes to a premiere publishing house in the early 1970s.",
+   "poster": "/u5KESAGmNa5NLsSbpHVUDWT4ENR.jpg",
+   "progress": null,
+   "rt": 116,
+   "status": "unwatched",
+   "title": "The Hoax",
+   "tmdb": 9903
   },
   {
    "category": "Making it",
@@ -10446,6 +10478,22 @@
    "status": "watched",
    "title": "P.S. I Love You",
    "tmdb": 6023
+  },
+  {
+   "category": "Romance / Drama",
+   "date": "2000-10-20",
+   "files": 1,
+   "group": "Movies",
+   "key": "movie|6- Romance:Drama/Pay it forward (2000).mp4",
+   "kind": "movie",
+   "order": "006",
+   "overview": "Like some other kids, 12-year-old Trevor McKinney believed in the goodness of human nature. Like many other kids, he was determined to change the world for the better. Unlike most other kids, he succeeded.",
+   "poster": "/62OIokwaxFwBFWM147ijLJsaVJD.jpg",
+   "progress": null,
+   "rt": 122,
+   "status": "unwatched",
+   "title": "Pay It Forward",
+   "tmdb": 10647
   },
   {
    "category": "Romance / Drama",
@@ -27739,5 +27787,5 @@
    "year": 1959
   }
  ],
- "updated": "2026-11-26T09:38Z"
+ "updated": "2026-11-26T10:45Z"
 }
