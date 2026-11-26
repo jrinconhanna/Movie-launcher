@@ -2768,3 +2768,6 @@
 ./z- Other/2- TV Series/Murder She Wrote/Murder, She Wrote (1984) - 01x20 - Armed Response.mp4
 ./z- Other/2- TV Series/Murder She Wrote/Murder, She Wrote (1984) - 01x21 - Murder at the Oasis.mp4
 ./z- Other/2- TV Series/Murder She Wrote/Murder, She Wrote (1984) - 01x22 - Funeral at Fifty-Mile.mp4
+./2- Docu-series/6- Entertainment/Rob Lowe the outsider (2026).mp4
+./z- Other/1- Movies/1- Making it/The hoax (2006).mp4
+./z- Other/1- Movies/6- Romance:Drama/Pay it forward (2000).mp4
