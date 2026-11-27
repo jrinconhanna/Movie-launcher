@@ -71,16 +71,7 @@
   <div class="btns"><button class="share" id="save">Save</button><button id="cancel">Cancel</button></div>
 </div></div>
 <script>
-  const DBX = (id, key, name) => `https://www.dropbox.com/scl/fi/${id}/${name}?rlkey=${key}`;
-  const VIDEOS = [
-    { id:'this-man-lost-everything-in-a-fire-but-cries-with-joy-when-h', dur:40, cat:'Inspiration',
-      title:'This Man Lost Everything in a Fire, but Cries With Joy When His Kitten Survived',
-      desc:'Test description: one or two lines from Notion will go here.',
-      link: DBX('r54owgumuuqd0bibottvq','d4snoiy0cu5q0rvc5n7x2opd7','This-Man-Lost-Everything-in-a-Fire-but-Cries-With-Joy-When-His-Kitten-Survived.mp4') },
-    { id:'the-winning-streak', dur:91, cat:'Inspiration', title:'The Winning Streak',
-      desc:'Test description: one or two lines from Notion will go here.',
-      link: DBX('sgkksv7my6w7049xn216d','appqcvt6fykqxsb8juq6nbzqh','The-Winning-Streak.mp4') },
-  ];
+  let VIDEOS = [];
   const $ = id => document.getElementById(id);
   const esc = t => t.replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
   const mmss = s => `${Math.floor(s/60)}:${String(Math.round(s%60)).padStart(2,'0')}`;
@@ -103,7 +94,7 @@
   $('cancel').onclick = () => { $('sheet').hidden = true; pending = null; };
   $('chg').onclick = () => askNum(null);
   function share(x) {
-    const go = () => { location.href = 'https://wa.me/' + getNum() + '?text=' + encodeURIComponent(x.title + '\n' + x.link + '&dl=0'); };
+    const go = () => { location.href = 'https://wa.me/' + getNum() + '?text=' + encodeURIComponent(x.title + '\n' + location.href.replace(/[^/]*$/, '') + 'insp/' + x.id + '.html'); };
     getNum() ? go() : askNum(go);
   }
 
@@ -139,7 +130,8 @@
     paintW(); $('list').hidden = true; $('player').hidden = false; scrollTo(0, 0);
     v.play().catch(() => {});
   }
-  addEventListener('hashchange', route); route();
+  addEventListener('hashchange', route);
+  fetch('data/inspiration.json', { cache: 'no-cache' }).then(r => r.json()).then(d => { VIDEOS = d; route(); });
 </script>
 </body>
 </html>
