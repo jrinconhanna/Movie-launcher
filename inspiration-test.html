@@ -61,7 +61,7 @@
     <div class="p-ttl" id="pt"></div>
     <div class="cat" id="pc"></div>
     <p class="p-desc" id="pd"></p>
-    <div class="btns"><button id="pw">Mark as watched</button><button class="share" id="ps">Share with Chrissi</button></div>
+    <div class="btns"><button id="pw">Mark as watched</button><button class="share" id="ps"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-2px;margin-right:6px"><path d="M12 3v12"/><path d="M7 8l5-5 5 5"/><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7"/></svg>Chrissi</button></div>
   </section>
 </div>
 <div class="sheet" id="sheet" hidden><div class="box">
@@ -104,7 +104,7 @@
         <div class="th"><img src="covers/insp/${x.id}.jpg" alt="" loading="lazy">
           ${watched(x.id) ? '<span class="seen">✓</span>' : ''}<span class="badge">${mmss(x.dur)}</span></div>
         <div class="info"><div class="ttl">${esc(x.title)}</div><div class="cat">${esc(x.cat)}</div>
-          <button class="share" data-share="${x.id}">Share with Chrissi</button></div>
+          <button class="share" data-share="${x.id}"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-2px;margin-right:6px"><path d="M12 3v12"/><path d="M7 8l5-5 5 5"/><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7"/></svg>Chrissi</button></div>
       </div>`).join('');
   }
   $('items').addEventListener('click', e => {
