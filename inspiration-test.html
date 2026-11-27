@@ -19,6 +19,8 @@
   button.share { background:var(--accent); border-color:var(--accent); color:var(--accent-ink); font-weight:600; }
   button.on { background:var(--good); border-color:var(--good); color:#fff; }
 
+  .top { position:sticky; top:0; z-index:5; background:var(--bg); margin:0 -16px; padding:calc(8px + env(safe-area-inset-top)) 16px 8px; border-bottom:1px solid var(--line); }
+  body { padding-top:0 !important; }
   /* list */
   .item { display:flex; gap:14px; padding:14px 0; border-bottom:1px solid var(--line); cursor:pointer; }
   .item:last-child { border-bottom:0; }
@@ -64,10 +66,12 @@
 <body>
 <div class="wrap">
   <section id="list">
+    <div class="top">
     <h1>Inspiration</h1>
     <div class="seg" id="seg"><button data-p="Discover">Discover</button><button data-p="Shared">Shared</button></div>
     <div class="chips" id="chips"></div>
     <div class="bar"><span class="count" id="count"></span><button id="rnd">🎲 Random</button></div>
+    </div>
     <div id="items"></div>
     <button class="link" id="chg">Change Chrissi's number</button>
   </section>
