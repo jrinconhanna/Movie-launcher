@@ -125,7 +125,7 @@
     cur = VIDEOS.find(x => x.id === id) || null;
     const v = $('v');
     if (!cur) { v.pause(); v.removeAttribute('src'); v.load(); $('player').hidden = true; $('list').hidden = false; renderList(); return; }
-    $('pt').textContent = cur.title; $('pc').textContent = cur.cat; $('pd').textContent = cur.desc;
+    $('pt').textContent = cur.title; $('pc').textContent = cur.cat; $('pd').textContent = cur.desc || '';
     v.poster = `covers/insp/${cur.id}.jpg`; v.src = cur.link + '&raw=1';
     paintW(); $('list').hidden = true; $('player').hidden = false; scrollTo(0, 0);
     v.play().catch(() => {});

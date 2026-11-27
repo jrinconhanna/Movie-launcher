@@ -9,7 +9,9 @@ videos = json.load(open(os.path.join(ROOT, "data", "inspiration.json")))
 tpl = open(os.path.join(ROOT, "insp", "template.html")).read()
 for v in videos:
     e = {k: html.escape(str(x), quote=True) for k, x in v.items()}
-    page = (tpl.replace("{{TITLE}}", e["title"]).replace("{{DESC}}", e["desc"])
+    od = f'<meta property="og:description" content="{e["desc"]}">\n' if v.get("desc") else ""
+    pd = f'  <p>{e["desc"]}</p>\n' if v.get("desc") else ""
+    page = (tpl.replace("{{OGDESC}}", od).replace("{{PDESC}}", pd).replace("{{TITLE}}", e["title"]).replace("{{DESC}}", e["desc"])
                .replace("{{IMG}}", f"{SITE}/covers/insp/{v['id']}.jpg")
                .replace("{{URL}}", f"{SITE}/insp/{v['id']}.html")
                .replace("{{SRC}}", html.escape(v["link"] + "&raw=1", quote=True))
