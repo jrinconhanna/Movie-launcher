@@ -39,6 +39,13 @@
   .p-ttl { font-weight:650; font-size:18px; margin:14px 0 2px; }
   .p-desc { color:var(--muted); margin:4px 0 14px; }
   .btns { display:flex; gap:8px; flex-wrap:wrap; }
+  .sheet { position:fixed; inset:0; background:rgba(0,0,0,.55); display:flex; align-items:flex-end; justify-content:center; z-index:9; }
+  .sheet[hidden] { display:none; }
+  .sheet .box { background:var(--surface); width:100%; max-width:640px; border-radius:16px 16px 0 0; padding:18px 16px calc(18px + env(safe-area-inset-bottom)); }
+  .sheet h2 { font-size:17px; margin:0 0 4px; }
+  .sheet p { color:var(--muted); font-size:13px; margin:0 0 12px; }
+  .sheet input { width:100%; font:inherit; font-size:17px; padding:10px 12px; border-radius:10px; border:1px solid var(--line); background:var(--bg); color:var(--fg); margin-bottom:12px; }
+  .link { background:none; border:0; color:var(--muted); font-size:13px; padding:16px 0 0; text-decoration:underline; }
 </style>
 </head>
 <body>
@@ -46,6 +53,7 @@
   <section id="list">
     <h1>Inspiration</h1>
     <div id="items"></div>
+    <button class="link" id="chg">Change Chrissi's number</button>
   </section>
   <section id="player" hidden>
     <button class="back" id="back">‹ Back</button>
@@ -56,6 +64,12 @@
     <div class="btns"><button id="pw">Mark as watched</button><button class="share" id="ps">Share with Chrissi</button></div>
   </section>
 </div>
+<div class="sheet" id="sheet" hidden><div class="box">
+  <h2>Chrissi's WhatsApp number</h2>
+  <p>With country code, e.g. +49 151 2345678. Saved only on this device — never in the launcher's code.</p>
+  <input id="num" type="tel" inputmode="tel" autocomplete="off" placeholder="+49 …">
+  <div class="btns"><button class="share" id="save">Save</button><button id="cancel">Cancel</button></div>
+</div></div>
 <script>
   const DBX = (id, key, name) => `https://www.dropbox.com/scl/fi/${id}/${name}?rlkey=${key}`;
   const VIDEOS = [
@@ -73,10 +87,24 @@
   const watched = id => { try { return localStorage.getItem('insp-watched-'+id) === '1'; } catch { return false; } };
   const setWatched = (id, on) => { try { localStorage.setItem('insp-watched-'+id, on ? '1' : '0'); } catch {} };
 
-  async function share(x) {
-    const url = x.link + '&dl=0';
-    if (navigator.share) { try { await navigator.share({ title:x.title, text:x.title, url }); } catch {} }
-    else window.open('https://wa.me/?text=' + encodeURIComponent(x.title + '\n' + url), '_blank');
+  const NKEY = 'insp-chrissi-wa';
+  const getNum = () => { try { return localStorage.getItem(NKEY) || ''; } catch { return ''; } };
+  let pending = null;
+  function askNum(then) {
+    pending = then; $('num').value = getNum() ? '+' + getNum() : ''; $('sheet').hidden = false; setTimeout(() => $('num').focus(), 50);
+  }
+  $('save').onclick = () => {
+    let n = $('num').value.trim().replace(/^00/, '+');
+    const digits = n.replace(/\D/g, '');
+    if (!n.startsWith('+') || digits.length < 8) { $('num').style.borderColor = 'var(--accent)'; return; }
+    try { localStorage.setItem(NKEY, digits); } catch {}
+    $('sheet').hidden = true; const f = pending; pending = null; f && f();
+  };
+  $('cancel').onclick = () => { $('sheet').hidden = true; pending = null; };
+  $('chg').onclick = () => askNum(null);
+  function share(x) {
+    const go = () => { location.href = 'https://wa.me/' + getNum() + '?text=' + encodeURIComponent(x.title + '\n' + x.link + '&dl=0'); };
+    getNum() ? go() : askNum(go);
   }
 
   function renderList() {
