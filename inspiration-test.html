@@ -4,72 +4,114 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex">
-<title>Inspiration · playback test</title>
+<title>Inspiration · test</title>
 <style>
   :root { --bg:#f4f2ee; --surface:#fff; --fg:#1c1b19; --muted:#6d6a63; --line:#e2ded6; --accent:#e8662a; --accent-ink:#fff; --chip:#ebe8e1; --good:#2f7d4f;
           --font:-apple-system,BlinkMacSystemFont,"SF Pro Text",system-ui,sans-serif; }
   @media (prefers-color-scheme: dark) {
-    :root { --bg:#131210; --surface:#1d1c19; --fg:#f0eee9; --muted:#9c988f; --line:#2e2c28; --accent:#f07a3e; --accent-ink:#1a0f08; --chip:#24221f; --good:#5fbf86; }
+    :root { --bg:#0b0b0c; --surface:#1c1c1e; --fg:#f2f1ee; --muted:#9a9893; --line:#262628; --accent:#f07a3e; --accent-ink:#1a0f08; --chip:#1f1f21; --good:#5fbf86; }
   }
-  * { box-sizing: border-box; }
-  body { margin:0; background:var(--bg); color:var(--fg); font:15px/1.45 var(--font); padding:24px 16px 48px; }
-  .wrap { max-width:480px; margin:0 auto; }
-  h1 { font-size:20px; margin:0 0 2px; }
-  .sub { color:var(--muted); font-size:13px; margin:0 0 20px; }
-  .card { margin-bottom:18px; background:var(--surface); border:1px solid var(--line); border-radius:14px; overflow:hidden; }
-  .thumb { position:relative; width:100%; aspect-ratio:9/16; max-height:70vh; background:#000; cursor:pointer; display:flex; align-items:center; justify-content:center; }
-  .thumb video { width:100%; height:100%; object-fit:contain; background:#000; }
-  .play { position:absolute; width:64px; height:64px; border-radius:50%; background:rgba(0,0,0,.55); display:flex; align-items:center; justify-content:center; pointer-events:none; }
-  .play::after { content:""; border-left:22px solid #fff; border-top:13px solid transparent; border-bottom:13px solid transparent; margin-left:6px; }
-  .playing .play { display:none; }
-  .meta { padding:12px 14px 14px; }
-  .row { display:flex; align-items:center; gap:8px; }
-  .title { font-weight:600; font-size:16px; flex:1; }
-  .chip { font-size:12px; background:var(--chip); color:var(--muted); border-radius:999px; padding:2px 9px; }
-  .desc { color:var(--muted); margin:6px 0 12px; }
-  button { font:inherit; font-size:14px; padding:8px 14px; border-radius:10px; border:1px solid var(--line); background:var(--surface); color:var(--fg); cursor:pointer; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--fg); font:15px/1.4 var(--font); padding:calc(16px + env(safe-area-inset-top)) 16px 48px; }
+  .wrap { max-width:640px; margin:0 auto; }
+  h1 { font-size:22px; margin:4px 0 14px; }
+  button { font:inherit; font-size:14px; padding:7px 13px; border-radius:10px; border:1px solid var(--line); background:var(--surface); color:var(--fg); cursor:pointer; }
+  button.share { background:var(--accent); border-color:var(--accent); color:var(--accent-ink); font-weight:600; }
   button.on { background:var(--good); border-color:var(--good); color:#fff; }
-  #log { margin-top:16px; font:12px/1.5 ui-monospace,Menlo,monospace; color:var(--muted); white-space:pre-wrap; }
+
+  /* list */
+  .item { display:flex; gap:14px; padding:14px 0; border-bottom:1px solid var(--line); cursor:pointer; }
+  .item:last-child { border-bottom:0; }
+  .th { position:relative; flex:0 0 46%; aspect-ratio:16/10; border-radius:12px; overflow:hidden; background:#000; }
+  .th img { width:100%; height:100%; object-fit:cover; object-position:50% 30%; display:block; }
+  .badge { position:absolute; right:8px; bottom:8px; background:rgba(0,0,0,.72); color:#fff; font-size:13px; font-weight:600; padding:2px 8px; border-radius:7px; }
+  .seen { position:absolute; left:8px; top:8px; background:var(--good); color:#fff; font-size:12px; font-weight:700; padding:2px 7px; border-radius:7px; }
+  .info { flex:1; min-width:0; display:flex; flex-direction:column; }
+  .ttl { font-weight:650; font-size:17px; line-height:1.25; display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden; }
+  .cat { color:var(--muted); margin:4px 0 10px; }
+  .info .share { align-self:flex-start; margin-top:auto; }
+
+  /* player */
+  #player[hidden], #list[hidden] { display:none; }
+  .back { margin-bottom:14px; }
+  .stage { width:100%; aspect-ratio:9/16; max-height:72vh; background:#000; border-radius:14px; overflow:hidden; }
+  .stage video { width:100%; height:100%; object-fit:contain; background:#000; display:block; }
+  .p-ttl { font-weight:650; font-size:18px; margin:14px 0 2px; }
+  .p-desc { color:var(--muted); margin:4px 0 14px; }
+  .btns { display:flex; gap:8px; flex-wrap:wrap; }
 </style>
 </head>
 <body>
 <div class="wrap">
-  <h1>Inspiration</h1>
-  <p class="sub">Hidden test page: videos hosted on Dropbox, played right here.</p>
-
-  <div id="list"></div>
-  <div id="log"></div>
+  <section id="list">
+    <h1>Inspiration</h1>
+    <div id="items"></div>
+  </section>
+  <section id="player" hidden>
+    <button class="back" id="back">‹ Back</button>
+    <div class="stage"><video id="v" playsinline controls preload="metadata"></video></div>
+    <div class="p-ttl" id="pt"></div>
+    <div class="cat" id="pc"></div>
+    <p class="p-desc" id="pd"></p>
+    <div class="btns"><button id="pw">Mark as watched</button><button class="share" id="ps">Share with Chrissi</button></div>
+  </section>
 </div>
 <script>
+  const DBX = (id, key, name) => `https://www.dropbox.com/scl/fi/${id}/${name}?rlkey=${key}`;
   const VIDEOS = [
-    { id:'the-winning-streak', title:'The Winning Streak', cat:'Inspiration',
+    { id:'this-man-lost-everything-in-a-fire-but-cries-with-joy-when-h', dur:40, cat:'Inspiration',
+      title:'This Man Lost Everything in a Fire, but Cries With Joy When His Kitten Survived',
       desc:'Test description: one or two lines from Notion will go here.',
-      src:'https://www.dropbox.com/scl/fi/sgkksv7my6w7049xn216d/The-Winning-Streak.mp4?rlkey=appqcvt6fykqxsb8juq6nbzqh&raw=1' },
-    { id:'kitten-survived-fire', title:'This Man Lost Everything in a Fire, but Cries With Joy When His Kitten Survived', cat:'Inspiration',
+      link: DBX('r54owgumuuqd0bibottvq','d4snoiy0cu5q0rvc5n7x2opd7','This-Man-Lost-Everything-in-a-Fire-but-Cries-With-Joy-When-His-Kitten-Survived.mp4') },
+    { id:'the-winning-streak', dur:91, cat:'Inspiration', title:'The Winning Streak',
       desc:'Test description: one or two lines from Notion will go here.',
-      src:'https://www.dropbox.com/scl/fi/r54owgumuuqd0bibottvq/This-Man-Lost-Everything-in-a-Fire-but-Cries-With-Joy-When-His-Kitten-Survived.mp4?rlkey=d4snoiy0cu5q0rvc5n7x2opd7&raw=1' },
+      link: DBX('sgkksv7my6w7049xn216d','appqcvt6fykqxsb8juq6nbzqh','The-Winning-Streak.mp4') },
   ];
-  const log = document.getElementById('log'), list = document.getElementById('list'), t0 = performance.now();
-  const say = m => log.textContent += m + '\n';
+  const $ = id => document.getElementById(id);
   const esc = t => t.replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-  for (const x of VIDEOS) {
-    const KEY = 'insp-watched-' + x.id;
-    const card = document.createElement('div'); card.className = 'card';
-    card.innerHTML = `<div class="thumb"><video playsinline preload="metadata" controls src="${x.src}#t=0.5"></video><div class="play"></div></div>
-      <div class="meta"><div class="row"><span class="title">${esc(x.title)}</span><span class="chip">${esc(x.cat)}</span></div>
-      <p class="desc">${esc(x.desc)}</p><button>Mark as watched</button></div>`;
-    list.appendChild(card);
-    const v = card.querySelector('video'), thumb = card.querySelector('.thumb'), btn = card.querySelector('button');
-    const get = () => { try { return localStorage.getItem(KEY) === '1'; } catch { return false; } };
-    const paint = () => { const on = get(); btn.textContent = on ? '✓ Watched' : 'Mark as watched'; btn.classList.toggle('on', on); };
-    const set = on => { try { localStorage.setItem(KEY, on ? '1' : '0'); } catch {} paint(); };
-    btn.onclick = () => set(!get());
-    v.addEventListener('play', () => { thumb.classList.add('playing'); document.querySelectorAll('video').forEach(o => o !== v && o.pause()); });
-    v.addEventListener('loadedmetadata', () => say(`${x.title.slice(0,24)}… ready in ${((performance.now()-t0)/1000).toFixed(1)}s`));
-    v.addEventListener('ended', () => { set(true); say(`${x.title.slice(0,24)}… finished → watched`); });
-    v.addEventListener('error', () => say(`${x.title.slice(0,24)}… video error ${v.error && v.error.code}`));
-    paint();
+  const mmss = s => `${Math.floor(s/60)}:${String(Math.round(s%60)).padStart(2,'0')}`;
+  const watched = id => { try { return localStorage.getItem('insp-watched-'+id) === '1'; } catch { return false; } };
+  const setWatched = (id, on) => { try { localStorage.setItem('insp-watched-'+id, on ? '1' : '0'); } catch {} };
+
+  async function share(x) {
+    const url = x.link + '&dl=0';
+    if (navigator.share) { try { await navigator.share({ title:x.title, text:x.title, url }); } catch {} }
+    else window.open('https://wa.me/?text=' + encodeURIComponent(x.title + '\n' + url), '_blank');
   }
+
+  function renderList() {
+    $('items').innerHTML = VIDEOS.map(x => `
+      <div class="item" data-id="${x.id}">
+        <div class="th"><img src="covers/insp/${x.id}.jpg" alt="" loading="lazy">
+          ${watched(x.id) ? '<span class="seen">✓</span>' : ''}<span class="badge">${mmss(x.dur)}</span></div>
+        <div class="info"><div class="ttl">${esc(x.title)}</div><div class="cat">${esc(x.cat)}</div>
+          <button class="share" data-share="${x.id}">Share with Chrissi</button></div>
+      </div>`).join('');
+  }
+  $('items').addEventListener('click', e => {
+    const s = e.target.closest('[data-share]');
+    if (s) { e.stopPropagation(); return share(VIDEOS.find(x => x.id === s.dataset.share)); }
+    const it = e.target.closest('.item'); if (it) location.hash = 'v=' + it.dataset.id;
+  });
+
+  let cur = null;
+  const paintW = () => { const on = watched(cur.id); $('pw').textContent = on ? '✓ Watched' : 'Mark as watched'; $('pw').classList.toggle('on', on); };
+  $('pw').onclick = () => { setWatched(cur.id, !watched(cur.id)); paintW(); };
+  $('ps').onclick = () => share(cur);
+  $('back').onclick = () => { location.hash = ''; };
+  $('v').addEventListener('ended', () => { setWatched(cur.id, true); paintW(); });
+
+  function route() {
+    const id = (location.hash.match(/v=([\w-]+)/) || [])[1];
+    cur = VIDEOS.find(x => x.id === id) || null;
+    const v = $('v');
+    if (!cur) { v.pause(); v.removeAttribute('src'); v.load(); $('player').hidden = true; $('list').hidden = false; renderList(); return; }
+    $('pt').textContent = cur.title; $('pc').textContent = cur.cat; $('pd').textContent = cur.desc;
+    v.poster = `covers/insp/${cur.id}.jpg`; v.src = cur.link + '&raw=1';
+    paintW(); $('list').hidden = true; $('player').hidden = false; scrollTo(0, 0);
+    v.play().catch(() => {});
+  }
+  addEventListener('hashchange', route); route();
 </script>
 </body>
 </html>
