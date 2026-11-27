@@ -31,6 +31,15 @@
   .cat { color:var(--muted); margin:4px 0 10px; }
   .info .share { align-self:flex-start; margin-top:10px; }
 
+  .chips { display:flex; gap:8px; overflow-x:auto; padding:2px 0 12px; margin:0 -16px; padding-left:16px; padding-right:16px; scrollbar-width:none; }
+  .chips::-webkit-scrollbar { display:none; }
+  .chip { flex:0 0 auto; font-size:14px; padding:6px 13px; border-radius:999px; border:1px solid var(--line); background:var(--chip); color:var(--fg); cursor:pointer; white-space:nowrap; }
+  .chip.on { background:var(--fg); color:var(--bg); border-color:var(--fg); }
+  .bar { display:flex; align-items:center; justify-content:space-between; margin:0 0 4px; }
+  .count { color:var(--muted); font-size:13px; }
+  button.sent { background:var(--chip); border-color:var(--line); color:var(--muted); }
+  .when { color:var(--muted); font-size:13px; margin-top:4px; }
+  .empty { color:var(--muted); padding:30px 0; text-align:center; }
   /* player */
   #player[hidden], #list[hidden] { display:none; }
   .back { margin-bottom:14px; }
@@ -52,6 +61,8 @@
 <div class="wrap">
   <section id="list">
     <h1>Inspiration</h1>
+    <div class="chips" id="chips"></div>
+    <div class="bar"><span class="count" id="count"></span><button id="rnd">🎲 Random</button></div>
     <div id="items"></div>
     <button class="link" id="chg">Change Chrissi's number</button>
   </section>
@@ -60,7 +71,7 @@
     <div class="stage"><video id="v" playsinline controls preload="metadata"></video></div>
     <div class="p-ttl" id="pt"></div>
     <p class="p-desc" id="pd"></p>
-    <div class="btns"><button id="pw">Mark as watched</button><button class="share" id="ps"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-2px;margin-right:6px"><path d="M12 3v12"/><path d="M7 8l5-5 5 5"/><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7"/></svg>Chrissi</button></div>
+    <div class="btns"><button id="pw">Mark as watched</button><button class="share" id="ps"></button></div>
   </section>
 </div>
 <div class="sheet" id="sheet" hidden><div class="box">
@@ -71,6 +82,7 @@
 </div></div>
 <script>
   let VIDEOS = [];
+  const ICON = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-2px;margin-right:6px"><path d="M12 3v12"/><path d="M7 8l5-5 5 5"/><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7"/></svg>';
   const $ = id => document.getElementById(id);
   const esc = t => t.replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
   const mmss = s => `${Math.floor(s/60)}:${String(Math.round(s%60)).padStart(2,'0')}`;
@@ -92,20 +104,40 @@
   };
   $('cancel').onclick = () => { $('sheet').hidden = true; pending = null; };
   $('chg').onclick = () => askNum(null);
+  const SKEY = 'insp-shared';
+  const sharedMap = () => { try { return JSON.parse(localStorage.getItem(SKEY) || '{}'); } catch { return {}; } };
+  const markShared = id => { const m = sharedMap(); m[id] = new Date().toISOString(); try { localStorage.setItem(SKEY, JSON.stringify(m)); } catch {} };
+  const shareBtn = x => sharedMap()[x.id] ? '✓ Sent' : ICON + 'Chrissi';
   function share(x) {
-    const go = () => { location.href = 'https://wa.me/' + getNum() + '?text=' + encodeURIComponent(x.title + '\n' + location.href.replace(/[^/]*$/, '') + 'insp/' + x.id + '.html'); };
+    const go = () => { markShared(x.id); renderList(); if (cur) paintS(); location.href = 'https://wa.me/' + getNum() + '?text=' + encodeURIComponent(x.title + '\n' + location.href.replace(/[^/]*$/, '') + 'insp/' + x.id + '.html'); };
     getNum() ? go() : askNum(go);
   }
 
+  const CATS = [['All',null],['Atlas','Atlas Inspiration'],['Chrissi Resilience','Chrissi Resilience'],['Chrissi Education','Chrissi Education'],['Javi','Javi Inspiration'],['Shared','__shared']];
+  let filt = (() => { try { return localStorage.getItem('insp-filter') || 'All'; } catch { return 'All'; } })();
+  const fmtDay = iso => new Date(iso).toLocaleDateString('en-GB', { day:'numeric', month:'short' });
+  function visible() {
+    const c = CATS.find(c => c[0] === filt) || CATS[0], sm = sharedMap();
+    if (c[1] === '__shared') return VIDEOS.filter(x => sm[x.id]).sort((a, b) => sm[b.id].localeCompare(sm[a.id]));
+    return VIDEOS.filter(x => !c[1] || x.cat === c[1]).sort((a, b) => (b.added || '').localeCompare(a.added || ''));
+  }
   function renderList() {
-    $('items').innerHTML = VIDEOS.map(x => `
+    $('chips').innerHTML = CATS.map(c => `<button class="chip ${c[0] === filt ? 'on' : ''}" data-f="${c[0]}">${c[0]}</button>`).join('');
+    const list = visible(), sm = sharedMap(), isShared = filt === 'Shared';
+    $('count').textContent = list.length + (list.length === 1 ? ' video' : ' videos');
+    $('rnd').hidden = isShared;
+    $('items').innerHTML = list.length ? list.map(x => `
       <div class="item" data-id="${x.id}">
         <div class="th"><img src="covers/insp/${x.id}.jpg" alt="" loading="lazy">
           ${watched(x.id) ? '<span class="seen">✓</span>' : ''}<span class="badge">${mmss(x.dur)}</span></div>
         <div class="info"><div class="ttl">${esc(x.title)}</div>
-          <button class="share" data-share="${x.id}"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-2px;margin-right:6px"><path d="M12 3v12"/><path d="M7 8l5-5 5 5"/><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7"/></svg>Chrissi</button></div>
-      </div>`).join('');
+          ${isShared ? `<div class="when">Sent ${fmtDay(sm[x.id])}</div>` : ''}
+          <button class="share ${sm[x.id] ? 'sent' : ''}" data-share="${x.id}">${shareBtn(x)}</button></div>
+      </div>`).join('') : `<div class="empty">${isShared ? 'Nothing shared with Chrissi yet.' : 'No videos here yet.'}</div>`;
   }
+  $('chips').addEventListener('click', e => { const c = e.target.closest('[data-f]'); if (!c) return; filt = c.dataset.f; try { localStorage.setItem('insp-filter', filt); } catch {} renderList(); });
+  $('rnd').onclick = () => { const sm = sharedMap(), l = visible(), pool = l.filter(x => !sm[x.id]).length ? l.filter(x => !sm[x.id]) : l; if (pool.length) location.hash = 'v=' + pool[Math.floor(Math.random() * pool.length)].id; };
+
   $('items').addEventListener('click', e => {
     const s = e.target.closest('[data-share]');
     if (s) { e.stopPropagation(); return share(VIDEOS.find(x => x.id === s.dataset.share)); }
@@ -115,6 +147,7 @@
   let cur = null;
   const paintW = () => { const on = watched(cur.id); $('pw').textContent = on ? '✓ Watched' : 'Mark as watched'; $('pw').classList.toggle('on', on); };
   $('pw').onclick = () => { setWatched(cur.id, !watched(cur.id)); paintW(); };
+  const paintS = () => { const on = !!sharedMap()[cur.id]; $('ps').innerHTML = shareBtn(cur); $('ps').classList.toggle('sent', on); };
   $('ps').onclick = () => share(cur);
   $('back').onclick = () => { location.hash = ''; };
   $('v').addEventListener('ended', () => { setWatched(cur.id, true); paintW(); });
@@ -126,7 +159,7 @@
     if (!cur) { v.pause(); v.removeAttribute('src'); v.load(); $('player').hidden = true; $('list').hidden = false; renderList(); return; }
     $('pt').textContent = cur.title; $('pd').textContent = cur.desc || '';
     v.poster = `covers/insp/${cur.id}.jpg`; v.src = cur.link + '&raw=1';
-    paintW(); $('list').hidden = true; $('player').hidden = false; scrollTo(0, 0);
+    paintW(); paintS(); $('list').hidden = true; $('player').hidden = false; scrollTo(0, 0);
     v.play().catch(() => {});
   }
   addEventListener('hashchange', route);
