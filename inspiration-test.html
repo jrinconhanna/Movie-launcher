@@ -31,8 +31,12 @@
   .cat { color:var(--muted); margin:4px 0 10px; }
   .info .share { align-self:flex-start; margin-top:10px; }
 
+  .chips[hidden] { display:none; }
   .chips { display:flex; gap:8px; overflow-x:auto; padding:2px 0 12px; margin:0 -16px; padding-left:16px; padding-right:16px; scrollbar-width:none; }
   .chips::-webkit-scrollbar { display:none; }
+  .seg { display:flex; gap:4px; padding:4px; background:var(--chip); border-radius:12px; margin:0 0 12px; }
+  .seg button { flex:1; border:0; background:transparent; font-weight:600; padding:8px 0; border-radius:9px; color:var(--muted); }
+  .seg button.on { background:var(--surface); color:var(--fg); box-shadow:0 1px 3px rgba(0,0,0,.25); }
   .chip { flex:0 0 auto; font-size:14px; padding:6px 13px; border-radius:999px; border:1px solid var(--line); background:var(--chip); color:var(--fg); cursor:pointer; white-space:nowrap; }
   .chip.on { background:var(--fg); color:var(--bg); border-color:var(--fg); }
   .bar { display:flex; align-items:center; justify-content:space-between; margin:0 0 4px; }
@@ -61,6 +65,7 @@
 <div class="wrap">
   <section id="list">
     <h1>Inspiration</h1>
+    <div class="seg" id="seg"><button data-p="Discover">Discover</button><button data-p="Shared">Shared</button></div>
     <div class="chips" id="chips"></div>
     <div class="bar"><span class="count" id="count"></span><button id="rnd">🎲 Random</button></div>
     <div id="items"></div>
@@ -113,17 +118,21 @@
     getNum() ? go() : askNum(go);
   }
 
-  const CATS = [['All',null],['Atlas','Atlas Inspiration'],['Chrissi Resilience','Chrissi Resilience'],['Chrissi Education','Chrissi Education'],['Javi','Javi Inspiration'],['Shared','__shared']];
-  let filt = (() => { try { return localStorage.getItem('insp-filter') || 'All'; } catch { return 'All'; } })();
+  const CATS = [['All',null],['Atlas','Atlas Inspiration'],['Chrissi Resilience','Chrissi Resilience'],['Chrissi Education','Chrissi Education'],['Javi','Javi Inspiration']];
+  const ls = (k, d) => { try { return localStorage.getItem(k) || d; } catch { return d; } };
+  let parent = ls('insp-parent', 'Discover'), filt = ls('insp-filter', 'All');
+  if (!CATS.find(c => c[0] === filt)) filt = 'All';
   const fmtDay = iso => new Date(iso).toLocaleDateString('en-GB', { day:'numeric', month:'short' });
   function visible() {
     const c = CATS.find(c => c[0] === filt) || CATS[0], sm = sharedMap();
-    if (c[1] === '__shared') return VIDEOS.filter(x => sm[x.id]).sort((a, b) => sm[b.id].localeCompare(sm[a.id]));
+    if (parent === 'Shared') return VIDEOS.filter(x => sm[x.id]).sort((a, b) => sm[b.id].localeCompare(sm[a.id]));
     return VIDEOS.filter(x => !c[1] || x.cat === c[1]).sort((a, b) => (b.added || '').localeCompare(a.added || ''));
   }
   function renderList() {
+    document.querySelectorAll('#seg button').forEach(b => b.classList.toggle('on', b.dataset.p === parent));
+    $('chips').hidden = parent === 'Shared';
     $('chips').innerHTML = CATS.map(c => `<button class="chip ${c[0] === filt ? 'on' : ''}" data-f="${c[0]}">${c[0]}</button>`).join('');
-    const list = visible(), sm = sharedMap(), isShared = filt === 'Shared';
+    const list = visible(), sm = sharedMap(), isShared = parent === 'Shared';
     $('count').textContent = list.length + (list.length === 1 ? ' video' : ' videos');
     $('rnd').hidden = isShared;
     $('items').innerHTML = list.length ? list.map(x => `
@@ -135,6 +144,7 @@
           <button class="share ${sm[x.id] ? 'sent' : ''}" data-share="${x.id}">${shareBtn(x)}</button></div>
       </div>`).join('') : `<div class="empty">${isShared ? 'Nothing shared with Chrissi yet.' : 'No videos here yet.'}</div>`;
   }
+  $('seg').addEventListener('click', e => { const b = e.target.closest('[data-p]'); if (!b) return; parent = b.dataset.p; try { localStorage.setItem('insp-parent', parent); } catch {} renderList(); });
   $('chips').addEventListener('click', e => { const c = e.target.closest('[data-f]'); if (!c) return; filt = c.dataset.f; try { localStorage.setItem('insp-filter', filt); } catch {} renderList(); });
   $('rnd').onclick = () => { const sm = sharedMap(), l = visible(), pool = l.filter(x => !sm[x.id]).length ? l.filter(x => !sm[x.id]) : l; if (pool.length) location.hash = 'v=' + pool[Math.floor(Math.random() * pool.length)].id; };
 
