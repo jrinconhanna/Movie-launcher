@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>Inspiration · playback test</title>
+<style>
+  :root { --bg:#f4f2ee; --surface:#fff; --fg:#1c1b19; --muted:#6d6a63; --line:#e2ded6; --accent:#e8662a; --accent-ink:#fff; --chip:#ebe8e1; --good:#2f7d4f;
+          --font:-apple-system,BlinkMacSystemFont,"SF Pro Text",system-ui,sans-serif; }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg:#131210; --surface:#1d1c19; --fg:#f0eee9; --muted:#9c988f; --line:#2e2c28; --accent:#f07a3e; --accent-ink:#1a0f08; --chip:#24221f; --good:#5fbf86; }
+  }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--bg); color:var(--fg); font:15px/1.45 var(--font); padding:24px 16px 48px; }
+  .wrap { max-width:480px; margin:0 auto; }
+  h1 { font-size:20px; margin:0 0 2px; }
+  .sub { color:var(--muted); font-size:13px; margin:0 0 20px; }
+  .card { background:var(--surface); border:1px solid var(--line); border-radius:14px; overflow:hidden; }
+  .thumb { position:relative; width:100%; aspect-ratio:9/16; max-height:70vh; background:#000; cursor:pointer; display:flex; align-items:center; justify-content:center; }
+  .thumb video { width:100%; height:100%; object-fit:contain; background:#000; }
+  .play { position:absolute; width:64px; height:64px; border-radius:50%; background:rgba(0,0,0,.55); display:flex; align-items:center; justify-content:center; pointer-events:none; }
+  .play::after { content:""; border-left:22px solid #fff; border-top:13px solid transparent; border-bottom:13px solid transparent; margin-left:6px; }
+  .playing .play { display:none; }
+  .meta { padding:12px 14px 14px; }
+  .row { display:flex; align-items:center; gap:8px; }
+  .title { font-weight:600; font-size:16px; flex:1; }
+  .chip { font-size:12px; background:var(--chip); color:var(--muted); border-radius:999px; padding:2px 9px; }
+  .desc { color:var(--muted); margin:6px 0 12px; }
+  button { font:inherit; font-size:14px; padding:8px 14px; border-radius:10px; border:1px solid var(--line); background:var(--surface); color:var(--fg); cursor:pointer; }
+  button.on { background:var(--good); border-color:var(--good); color:#fff; }
+  #log { margin-top:16px; font:12px/1.5 ui-monospace,Menlo,monospace; color:var(--muted); white-space:pre-wrap; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Inspiration</h1>
+  <p class="sub">Hidden test page: one video, hosted on Dropbox, played right here.</p>
+
+  <div class="card">
+    <div class="thumb" id="thumb">
+      <video id="v" playsinline preload="metadata" controls
+        src="https://www.dropbox.com/scl/fi/sgkksv7my6w7049xn216d/The-Winning-Streak.mp4?rlkey=appqcvt6fykqxsb8juq6nbzqh&raw=1#t=0.5"></video>
+      <div class="play"></div>
+    </div>
+    <div class="meta">
+      <div class="row"><span class="title">The Winning Streak</span><span class="chip">Inspiration</span></div>
+      <p class="desc">Test description: one or two lines from Notion will go here.</p>
+      <button id="watched">Mark as watched</button>
+    </div>
+  </div>
+  <div id="log"></div>
+</div>
+<script>
+  const v = document.getElementById('v'), thumb = document.getElementById('thumb'),
+        btn = document.getElementById('watched'), log = document.getElementById('log');
+  const KEY = 'insp-watched-the-winning-streak', t0 = performance.now();
+  const say = m => log.textContent += m + '\n';
+  const get = () => { try { return localStorage.getItem(KEY) === '1'; } catch { return false; } };
+  const set = on => { try { localStorage.setItem(KEY, on ? '1' : '0'); } catch {} paint(); };
+  const paint = () => { const on = get(); btn.textContent = on ? '✓ Watched' : 'Mark as watched'; btn.classList.toggle('on', on); };
+  btn.onclick = () => set(!get());
+  v.addEventListener('play', () => thumb.classList.add('playing'));
+  v.addEventListener('loadedmetadata', () => say(`Ready in ${((performance.now()-t0)/1000).toFixed(1)}s · ${v.videoWidth}×${v.videoHeight} · ${Math.round(v.duration)}s`));
+  v.addEventListener('playing', () => say(`Playing (started ${((performance.now()-t0)/1000).toFixed(1)}s after page load)`));
+  v.addEventListener('ended', () => { set(true); say('Finished → marked as watched'); });
+  v.addEventListener('error', () => say('Video error: ' + (v.error && v.error.code)));
+  paint();
+</script>
+</body>
+</html>
