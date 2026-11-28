@@ -36,7 +36,12 @@
   .info { flex:1; min-width:0; display:flex; flex-direction:column; }
   .ttl { font-weight:650; font-size:17px; line-height:1.25; display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden; }
   .cat { color:var(--muted); margin:4px 0 10px; }
-  .info .share { align-self:flex-start; margin-top:10px; }
+  .info { position:relative; }
+  .ishare { position:absolute; right:0; bottom:0; width:32px; height:32px; padding:0; border-radius:50%; background:transparent; border:1px solid var(--line); color:var(--muted); display:flex; align-items:center; justify-content:center; font-size:14px; }
+  .ishare svg { margin:0 !important; }
+  .ishare:active { background:var(--accent); border-color:var(--accent); color:var(--accent-ink); }
+  .ishare.sent { color:var(--muted); background:var(--chip); }
+  .ttl { padding-right:4px; }
 
   .chips[hidden] { display:none; }
   .chips { display:flex; gap:8px; overflow-x:auto; padding:2px 0 12px; margin:0 -16px; padding-left:16px; padding-right:16px; scrollbar-width:none; }
@@ -172,7 +177,7 @@
           ${(() => { const d = WHO.filter(w => isW(w[0], x.id)).map(w => `<span>${w[2]}</span>`).join(''); return d ? `<span class="dots">${d}</span>` : ''; })()}<span class="badge">${mmss(x.dur)}</span></div>
         <div class="info"><div class="ttl">${esc(x.title)}</div>
           ${isShared ? `<div class="when">Sent ${fmtDay(sm[x.id])}</div>` : ''}
-          <button class="share ${sm[x.id] ? 'sent' : ''}" data-share="${x.id}">${shareBtn(x)}</button></div>
+          <button class="ishare ${sm[x.id] ? 'sent' : ''}" data-share="${x.id}" aria-label="Share with Chrissi">${sm[x.id] ? '✓' : ICON}</button></div>
       </div>`).join('') : `<div class="empty">${isShared ? 'Nothing shared with Chrissi yet.' : 'No videos here yet.'}</div>`;
   }
   $('seg').addEventListener('click', e => { const b = e.target.closest('[data-p]'); if (!b) return; parent = b.dataset.p; try { localStorage.setItem('insp-parent', parent); } catch {} renderList(); });
