@@ -46,6 +46,11 @@
   button.sent { background:var(--chip); border-color:var(--line); color:var(--muted); }
   .when { color:var(--muted); font-size:13px; margin-top:4px; }
   .empty { color:var(--muted); padding:30px 0; text-align:center; }
+  .who { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:10px; }
+  .who button { color:var(--muted); }
+  .who button.on { background:var(--good); border-color:var(--good); color:#fff; }
+  .dots { position:absolute; left:8px; top:8px; display:flex; gap:4px; }
+  .dots span { background:var(--good); color:#fff; font-size:11px; font-weight:700; width:20px; height:20px; border-radius:50%; display:flex; align-items:center; justify-content:center; }
   /* player */
   #player[hidden], #list[hidden] { display:none; }
   .back { margin-bottom:14px; }
@@ -80,7 +85,8 @@
     <div class="stage"><video id="v" playsinline controls preload="metadata"></video></div>
     <div class="p-ttl" id="pt"></div>
     <p class="p-desc" id="pd"></p>
-    <div class="btns"><button id="pw">Mark as watched</button><button class="share" id="ps"></button></div>
+    <div class="who" id="who"></div>
+    <div class="btns"><button class="share" id="ps"></button></div>
   </section>
 </div>
 <div class="sheet" id="sheet" hidden><div class="box">
@@ -97,6 +103,11 @@
   const mmss = s => `${Math.floor(s/60)}:${String(Math.round(s%60)).padStart(2,'0')}`;
   const watched = id => { try { return localStorage.getItem('insp-watched-'+id) === '1'; } catch { return false; } };
   const setWatched = (id, on) => { try { localStorage.setItem('insp-watched-'+id, on ? '1' : '0'); } catch {} };
+  const WHO = [['me','Me','M'],['atlas','Atlas','A'],['chrissi','Chrissi','C']];
+  const wKey = (w, id) => w === 'me' ? 'insp-watched-' + id : 'insp-w-' + w + '-' + id;
+  const isW = (w, id) => { try { return localStorage.getItem(wKey(w, id)) === '1'; } catch { return false; } };
+  const setW = (w, id, on) => { try { localStorage.setItem(wKey(w, id), on ? '1' : '0'); } catch {} };
+  const EYE = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-2px;margin-right:5px"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>', CHK = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-2px;margin-right:5px"><path d="M5 12l5 5L20 7"/></svg>';
 
   const NKEY = 'insp-chrissi-wa';
   const getNum = () => { try { return localStorage.getItem(NKEY) || ''; } catch { return ''; } };
@@ -142,7 +153,7 @@
     $('items').innerHTML = list.length ? list.map(x => `
       <div class="item" data-id="${x.id}">
         <div class="th"><img src="covers/insp/${x.id}.jpg" alt="" loading="lazy">
-          ${watched(x.id) ? '<span class="seen">✓</span>' : ''}<span class="badge">${mmss(x.dur)}</span></div>
+          ${(() => { const d = WHO.filter(w => isW(w[0], x.id)).map(w => `<span>${w[2]}</span>`).join(''); return d ? `<span class="dots">${d}</span>` : ''; })()}<span class="badge">${mmss(x.dur)}</span></div>
         <div class="info"><div class="ttl">${esc(x.title)}</div>
           ${isShared ? `<div class="when">Sent ${fmtDay(sm[x.id])}</div>` : ''}
           <button class="share ${sm[x.id] ? 'sent' : ''}" data-share="${x.id}">${shareBtn(x)}</button></div>
@@ -159,8 +170,8 @@
   });
 
   let cur = null;
-  const paintW = () => { const on = watched(cur.id); $('pw').textContent = on ? '✓ Watched' : 'Mark as watched'; $('pw').classList.toggle('on', on); };
-  $('pw').onclick = () => { setWatched(cur.id, !watched(cur.id)); paintW(); };
+  const paintW = () => { $('who').innerHTML = WHO.map(w => { const on = isW(w[0], cur.id); return `<button class="${on ? 'on' : ''}" data-w="${w[0]}">${on ? CHK : EYE}${w[1]}</button>`; }).join(''); };
+  $('who').addEventListener('click', e => { const b = e.target.closest('[data-w]'); if (!b) return; setW(b.dataset.w, cur.id, !isW(b.dataset.w, cur.id)); paintW(); });
   const paintS = () => { const on = !!sharedMap()[cur.id]; $('ps').innerHTML = shareBtn(cur); $('ps').classList.toggle('sent', on); };
   $('ps').onclick = () => share(cur);
   $('back').onclick = () => { location.hash = ''; };
