@@ -308,6 +308,8 @@ html.stg2 .p2chips{gap:6px;margin-right:calc(-1 * max(14px, env(safe-area-inset-
   var P2ON = !/[?&]v241\b/.test(location.search); // V2.4.2 Watching/Next by kind: live 12 Nov (?v241 shows the old shelves)
   var learn = [], learnDone = [], learnWatch = [], forder = {}, vorder = {}; // vorder: your video order per playlist (?next) // forder: your folder order per Tech level ('' = Tech › All), synced via Trakt
   var SHELVES = AFTER ? ['Movies', 'Series', 'Docs'] : ['Watch Next', 'Movies', 'Series', 'Docs'];
+  var INSP = STAGE; /* staging 28 Nov: Inspiration tab (last in Discover); embeds inspiration.html — live on Javier's go */ var inspN = 0, inspFrame = null;
+  if (INSP) fetch('data/inspiration.json', { cache: 'no-cache' }).then(function (r) { return r.json(); }).then(function (d) { inspN = d.length; if (typeof renderTabs === 'function' && top === 'Discover') renderTabs(); }).catch(function () {});
   var TOP = ['Watching', 'Next', 'Discover'], top = 'Watching';
   var items = [], unmatched = [], updated = '';
   var state = { shelf: 'Movies', cat: 'All', wf: 'unwatched' };
@@ -512,7 +514,7 @@ html.stg2 .p2chips{gap:6px;margin-right:calc(-1 * max(14px, env(safe-area-inset-
   function shows(it) { return state.wf === 'all' || (state.wf === 'watched' ? isWatched(it) : !isWatched(it)); }
   function toast(m, undo) { var t = $('toast'); t.textContent = m; if (undo) { var u = document.createElement('button'); u.type = 'button'; u.className = 'undo'; u.textContent = 'Undo'; u.onclick = function () { t.hidden = true; undo(); }; t.appendChild(u); } t.hidden = false; clearTimeout(toast.t); toast.t = setTimeout(function () { t.hidden = true; }, undo ? 4000 : 1800); }
 
-  function shelves() { return (LEARN && learn.length ? ['Tech'] : []).concat(SHELVES); } // V2.3: Learn videos get their own shelf, first
+  function shelves() { return (LEARN && learn.length ? ['Tech'] : []).concat(SHELVES).concat(INSP ? ['Inspiration'] : []); } // V2.3: Learn videos get their own shelf, first
   function showsL(v) { var w = learnDone.indexOf(lid(v)) >= 0; return state.wf === 'all' || (state.wf === 'watched' ? w : !w); }
   function pool() {
     if (state.shelf === 'Tech' && V24) return techLevel().list;
@@ -577,7 +579,7 @@ html.stg2 .p2chips{gap:6px;margin-right:calc(-1 * max(14px, env(safe-area-inset-
     shelves().forEach(function (s) {
       var b = document.createElement('button'); b.type = 'button'; b.setAttribute('role', 'tab');
       b.setAttribute('aria-selected', s === state.shelf ? 'true' : 'false');
-      var n = s === 'Tech' ? learn.filter(showsL).length : s === 'Watch Next' ? next.length : items.filter(function (i) { return i.group === s && shows(i); }).length;
+      var n = s === 'Inspiration' ? inspN : s === 'Tech' ? learn.filter(showsL).length : s === 'Watch Next' ? next.length : items.filter(function (i) { return i.group === s && shows(i); }).length;
       b.textContent = s === 'Watch Next' ? 'Next' : s; var c = document.createElement('span'); c.className = 'n'; c.textContent = n; b.appendChild(c);
       b.onclick = function () { serPage = null; /* fix 18 Nov: a kind tab closes the series page */ state.shelf = s; state.cat = 'All'; state.course = ''; save(); render(); window.scrollTo(0, 0); };
       t.appendChild(b);
@@ -1154,6 +1156,13 @@ html.stg2 .p2chips{gap:6px;margin-right:calc(-1 * max(14px, env(safe-area-inset-
     tapi(on ? '/sync/history' : '/sync/history/remove', 'POST', { shows: [{ ids: { tmdb: it.tmdb }, seasons: [{ number: +sn, episodes: [{ number: e }] }] }] })
       .then(function (r) { if (!r.ok) throw new Error(r.status); toast(word + ' \u00b7 saved to Trakt'); }).catch(function (x) { toast(word + ' on this device \u00b7 couldn\u2019t save to Trakt (' + x.message + ')'); });
   }
+  function inspShow() { /* staging 28 Nov: Inspiration lives in its own page (inspiration.html), shown in a frame that fills the screen between the tabs and the bottom bar; it keeps its own scroll, so its header stays put */
+    $('crow').hidden = true; $('wkrow').hidden = true; var g = $('grid'); g.innerHTML = ''; g.classList.remove('vids', 'techin', 'tbig', 'p2g'); document.body.classList.remove('tbigon');
+    if (!inspFrame) { inspFrame = document.createElement('iframe'); inspFrame.src = 'inspiration.html?embed=1'; inspFrame.title = 'Inspiration'; inspFrame.setAttribute('allow', 'fullscreen; autoplay'); inspFrame.setAttribute('allowfullscreen', ''); inspFrame.style.cssText = 'display:block;width:100%;border:0;background:var(--bg)'; window.addEventListener('resize', inspFit); }
+    inspFrame.hidden = false; g.appendChild(inspFrame); window.scrollTo(0, 0); setTimeout(inspFit, 0); }
+  function inspFit() { if (!inspFrame || inspFrame.hidden || !inspFrame.isConnected) return; var t = inspFrame.getBoundingClientRect().top + window.scrollY, b = window.innerHeight;
+    ['top', 'minidock'].forEach(function (id) { var e = $(id); if (e && !e.hidden && getComputedStyle(e).position === 'fixed') { var r = e.getBoundingClientRect(); if (r.height && r.top > window.innerHeight / 2) b = Math.min(b, r.top); } });
+    inspFrame.style.height = Math.max(300, b - t) + 'px'; }
   function render() {
     applyPins(); renderTop(); renderTabs();
     if (NEXT && serPage && top === 'Discover') { seriesPage(); return; } else if (serPage && top !== 'Discover') serPage = null;
@@ -1181,6 +1190,8 @@ html.stg2 .p2chips{gap:6px;margin-right:calc(-1 * max(14px, env(safe-area-inset-
       });
       sortable(gn);
       renderFoot(); state.shelf = real; return; }
+    if (top === 'Discover' && state.shelf === 'Inspiration') { if (!INSP) { state.shelf = 'Movies'; save(); } else { inspShow(); renderFoot(); state.shelf = real; return; } }
+    else if (inspFrame) inspFrame.hidden = true;
     var list = pool();
     renderChips(list);
     if (state.shelf !== 'Watch Next' && !(state.shelf === 'Tech' && state.course) && state.cat !== 'All') list = list.filter(function (i) { return i.category === state.cat; });
