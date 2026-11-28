@@ -309,8 +309,8 @@ html.stg2 .p2chips{gap:6px;margin-right:calc(-1 * max(14px, env(safe-area-inset-
   var learn = [], learnDone = [], learnWatch = [], forder = {}, vorder = {}; // vorder: your video order per playlist (?next) // forder: your folder order per Tech level ('' = Tech › All), synced via Trakt
   var SHELVES = AFTER ? ['Movies', 'Series', 'Docs'] : ['Watch Next', 'Movies', 'Series', 'Docs'];
   var INSP = STAGE; /* staging 28 Nov: Inspiration tab (last in Discover); embeds inspiration.html — live on Javier's go */ var inspN = 0, inspFrame = null;
-  if (INSP) fetch('data/inspiration.json', { cache: 'no-cache' }).then(function (r) { return r.json(); }).then(function (d) { inspN = d.length; if (typeof renderTabs === 'function' && top === 'Discover') renderTabs(); }).catch(function () {});
-  var TOP = ['Watching', 'Next', 'Discover'], top = 'Watching';
+  if (INSP) fetch('data/inspiration.json', { cache: 'no-cache' }).then(function (r) { return r.json(); }).then(function (d) { inspN = d.length; if (typeof renderTabs === 'function' && top === 'Discover') renderTabs(); try { if (top === 'Discover' && sessionStorage.getItem('mlInsp') === '1') inspOpen(); } catch (e) {} /* staging 28 Nov: a refresh inside Inspiration reopens it */ }).catch(function () {});
+  var TOP = ['Watching', 'Next', 'Discover'], top = 'Watching'; if (STAGE) try { var tS = sessionStorage.getItem('mlTop'); if (TOP.indexOf(tS) >= 0) top = tS; } catch (e) {} /* staging 28 Nov: a refresh keeps the top tab (this browser tab only; a fresh open starts on Watching) */
   var items = [], unmatched = [], updated = '';
   var state = { shelf: 'Movies', cat: 'All', wf: 'unwatched' };
   var next = [], worder = [], watch = [], parked = [], removed = [], done = [], undone = [];
@@ -1163,9 +1163,10 @@ html.stg2 .p2chips{gap:6px;margin-right:calc(-1 * max(14px, env(safe-area-inset-
       var f = document.createElement('iframe'); f.src = 'inspiration.html?embed=1&t=' + Date.now(); /* always the latest page, never a cached one */ f.title = 'Inspiration'; f.setAttribute('allow', 'fullscreen; autoplay'); f.setAttribute('allowfullscreen', '');
       f.style.cssText = 'display:block;width:1px;min-width:100%;max-width:100%;height:100%;border:0'; /* iPhone trick: frame pinned to screen width */
       inspFrame.appendChild(f); document.body.appendChild(inspFrame); }
-    inspFrame.hidden = false; document.documentElement.style.overflow = 'hidden'; }
-  window.inspClose = function () { if (inspFrame) inspFrame.hidden = true; document.documentElement.style.overflow = ''; };
+    inspFrame.hidden = false; document.documentElement.style.overflow = 'hidden'; try { sessionStorage.setItem('mlInsp', '1'); } catch (e) {} }
+  window.inspClose = function () { if (inspFrame) inspFrame.hidden = true; document.documentElement.style.overflow = ''; try { sessionStorage.removeItem('mlInsp'); } catch (e) {} };
   function render() {
+    if (STAGE) try { sessionStorage.setItem('mlTop', top); } catch (e) {}
     applyPins(); renderTop(); renderTabs();
     if (NEXT && serPage && top === 'Discover') { seriesPage(); return; } else if (serPage && top !== 'Discover') serPage = null;
     var gS = $('grid'); if (gS.classList.contains('serp')) { gS.className = gS.dataset.cls || 'grid'; ['crow', 'wkrow'].forEach(function (id) { if ($(id)) $(id).hidden = false; }); }
