@@ -21,6 +21,11 @@
 
   .top { position:sticky; top:0; z-index:5; background:var(--bg); margin:0 -16px; padding:calc(8px + env(safe-area-inset-top)) 16px 8px; border-bottom:1px solid var(--line); }
   body { padding-top:0 !important; }
+  .hrow { display:flex; align-items:center; justify-content:space-between; }
+  .hrow h1 { margin:4px 0 12px; }
+  h1 .count { font-weight:500; font-size:20px; color:var(--muted); }
+  .dice { font-size:20px; padding:4px 10px; line-height:1.2; }
+  .dice[hidden] { display:none; }
   /* list */
   .item { display:flex; gap:14px; padding:14px 0; border-bottom:1px solid var(--line); cursor:pointer; }
   .item:last-child { border-bottom:0; }
@@ -57,7 +62,8 @@
   .item.dim { opacity:.35; filter:grayscale(1); }
   /* player */
   #player[hidden], #list[hidden] { display:none; }
-  .back { margin-bottom:14px; }
+  .pbar { position:sticky; top:0; z-index:5; background:var(--bg); margin:0 -16px 10px; padding:calc(8px + env(safe-area-inset-top)) 16px 8px; }
+  .back { margin:0; }
   .stage { width:100%; aspect-ratio:9/16; max-height:72vh; background:#000; border-radius:14px; overflow:hidden; }
   .stage video { width:100%; height:100%; object-fit:contain; background:#000; display:block; }
   .p-ttl { font-weight:650; font-size:18px; margin:14px 0 2px; }
@@ -76,17 +82,16 @@
 <div class="wrap">
   <section id="list">
     <div class="top">
-    <h1>Inspiration</h1>
+    <div class="hrow"><h1>Inspiration <span class="count" id="count"></span></h1><button id="rnd" class="dice" aria-label="Random video">🎲</button></div>
     <div class="seg" id="seg"><button data-p="Discover">Discover</button><button data-p="Shared">Shared</button></div>
     <div class="chips" id="chips"></div>
     <div class="wf" id="wf"></div>
-    <div class="bar"><span class="count" id="count"></span><button id="rnd">🎲 Random</button></div>
     </div>
     <div id="items"></div>
     <button class="link" id="chg">Change Chrissi's number</button>
   </section>
   <section id="player" hidden>
-    <button class="back" id="back">‹ Back</button>
+    <div class="pbar"><button class="back" id="back">‹ Back</button></div>
     <div class="stage"><video id="v" playsinline controls preload="metadata"></video></div>
     <div class="p-ttl" id="pt"></div>
     <p class="p-desc" id="pd"></p>
@@ -155,7 +160,7 @@
     $('wf').innerHTML = WHO.map(w => `<button class="${wfilt === w[0] ? 'on' : ''}" data-wf="${w[0]}">${EYE}${w[1]}</button>`).join('');
     $('chips').innerHTML = CATS.map(c => `<button class="chip ${c[0] === filt ? 'on' : ''}" data-f="${c[0]}">${c[0]}</button>`).join('');
     const list = visible(), sm = sharedMap(), isShared = parent === 'Shared';
-    $('count').textContent = list.length + (list.length === 1 ? ' video' : ' videos');
+    $('count').textContent = '(' + list.length + ')';
     $('rnd').hidden = isShared;
     $('items').innerHTML = list.length ? list.map(x => `
       <div class="item ${wfilt && isW(wfilt, x.id) ? 'dim' : ''}" data-id="${x.id}">
