@@ -42,6 +42,7 @@
   .ishare:active { background:var(--accent); border-color:var(--accent); color:var(--accent-ink); }
   .ishare.sent { color:var(--muted); background:var(--chip); }
   .ttl { padding-right:4px; }
+  .unshare { background:none; border:0; padding:0; font-size:13px; color:var(--muted); text-decoration:underline; }
 
   .chips[hidden] { display:none; }
   .chips { display:flex; gap:8px; overflow-x:auto; padding:2px 0 12px; margin:0 -16px; padding-left:16px; padding-right:16px; scrollbar-width:none; }
@@ -176,7 +177,7 @@
         <div class="th"><img src="covers/insp/${x.id}.jpg" alt="" loading="lazy">
           ${(() => { const d = WHO.filter(w => isW(w[0], x.id)).map(w => `<span>${w[2]}</span>`).join(''); return d ? `<span class="dots">${d}</span>` : ''; })()}<span class="badge">${mmss(x.dur)}</span></div>
         <div class="info"><div class="ttl">${esc(x.title)}</div>
-          ${isShared ? `<div class="when">Sent ${fmtDay(sm[x.id])}</div>` : ''}
+          ${isShared ? `<div class="when">Sent ${fmtDay(sm[x.id])} · <button class="unshare" data-unshare="${x.id}">Unshare</button></div>` : ''}
           <button class="ishare ${sm[x.id] ? 'sent' : ''}" data-share="${x.id}" aria-label="Share with Chrissi">${sm[x.id] ? '✓' : ICON}</button></div>
       </div>`).join('') : `<div class="empty">${isShared ? 'Nothing shared with Chrissi yet.' : 'No videos here yet.'}</div>`;
   }
@@ -186,6 +187,8 @@
   $('rnd').onclick = () => { const sm = sharedMap(), l = visible().filter(x => !isDim(x.id)), pool = l.filter(x => !sm[x.id]).length ? l.filter(x => !sm[x.id]) : l; if (pool.length) location.hash = 'v=' + pool[Math.floor(Math.random() * pool.length)].id; };
 
   $('items').addEventListener('click', e => {
+    const u = e.target.closest('[data-unshare]');
+    if (u) { e.stopPropagation(); const m = sharedMap(); delete m[u.dataset.unshare]; try { localStorage.setItem(SKEY, JSON.stringify(m)); } catch {} return renderList(); }
     const s = e.target.closest('[data-share]');
     if (s) { e.stopPropagation(); return share(VIDEOS.find(x => x.id === s.dataset.share)); }
     const it = e.target.closest('.item'); if (it) { listY = scrollY; try { sessionStorage.setItem('insp-y', listY); } catch {} location.hash = 'v=' + it.dataset.id; }
