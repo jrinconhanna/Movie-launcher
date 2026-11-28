@@ -88,6 +88,7 @@
   .sheet p { color:var(--muted); font-size:13px; margin:0 0 12px; }
   .sheet input { width:100%; font:inherit; font-size:17px; padding:10px 12px; border-radius:10px; border:1px solid var(--line); background:var(--bg); color:var(--fg); margin-bottom:12px; }
   .link { background:none; border:0; color:var(--muted); font-size:13px; padding:16px 0 0; text-decoration:underline; }
+  .close { font-size:26px; line-height:1; padding:0 12px 4px 0; border:0; background:none; color:var(--fg); vertical-align:1px; }
   html.embed body { padding-left:14px; padding-right:14px; }
   html.embed .top, html.embed .pbar { padding-top:8px; margin-left:-14px; margin-right:-14px; padding-left:14px; padding-right:14px; }
 </style>
@@ -96,7 +97,7 @@
 <div class="wrap">
   <section id="list">
     <div class="top">
-    <div class="hrow"><h1>Inspiration <span class="count" id="count"></span></h1><button id="rnd" class="dice" aria-label="Random video">🎲</button></div>
+    <div class="hrow"><h1><button class="close" id="close" aria-label="Back to the launcher" hidden>‹</button>Inspiration <span class="count" id="count"></span></h1><button id="rnd" class="dice" aria-label="Random video">🎲</button></div>
     <div class="seg" id="seg"><button data-p="Discover">Discover</button><button data-p="Shared">Shared</button></div>
     <div class="chips" id="chips"></div>
     <div class="wf" id="wf"></div>
@@ -122,6 +123,7 @@
 </div></div>
 <script>
   const EMBED = /[?&]embed\b/.test(location.search); if (EMBED) document.documentElement.classList.add("embed");
+  if (EMBED) { const c = document.getElementById("close"); c.hidden = false; c.onclick = () => { try { window.parent.inspClose(); } catch (e) { location.href = "./"; } }; }
   let VIDEOS = [];
   const ICON = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-2px;margin-right:6px"><path d="M12 3v12"/><path d="M7 8l5-5 5 5"/><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7"/></svg>';
   const $ = id => document.getElementById(id);
