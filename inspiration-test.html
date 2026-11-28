@@ -51,6 +51,10 @@
   .who button.on { background:var(--good); border-color:var(--good); color:#fff; }
   .dots { position:absolute; left:8px; top:8px; display:flex; gap:4px; }
   .dots span { background:var(--good); color:#fff; font-size:11px; font-weight:700; width:20px; height:20px; border-radius:50%; display:flex; align-items:center; justify-content:center; }
+  .wf { display:flex; gap:8px; margin:0 0 10px; }
+  .wf button { font-size:13px; padding:5px 11px; border-radius:999px; color:var(--muted); }
+  .wf button.on { background:var(--fg); color:var(--bg); border-color:var(--fg); }
+  .item.dim { opacity:.35; filter:grayscale(1); }
   /* player */
   #player[hidden], #list[hidden] { display:none; }
   .back { margin-bottom:14px; }
@@ -75,6 +79,7 @@
     <h1>Inspiration</h1>
     <div class="seg" id="seg"><button data-p="Discover">Discover</button><button data-p="Shared">Shared</button></div>
     <div class="chips" id="chips"></div>
+    <div class="wf" id="wf"></div>
     <div class="bar"><span class="count" id="count"></span><button id="rnd">🎲 Random</button></div>
     </div>
     <div id="items"></div>
@@ -137,6 +142,7 @@
   const ls = (k, d) => { try { return localStorage.getItem(k) || d; } catch { return d; } };
   let parent = ls('insp-parent', 'Discover'), filt = ls('insp-filter', 'All');
   if (!CATS.find(c => c[0] === filt)) filt = 'All';
+  let wfilt = ls('insp-wfilter', '');
   const fmtDay = iso => new Date(iso).toLocaleDateString('en-GB', { day:'numeric', month:'short' });
   function visible() {
     const c = CATS.find(c => c[0] === filt) || CATS[0], sm = sharedMap();
@@ -146,12 +152,13 @@
   function renderList() {
     document.querySelectorAll('#seg button').forEach(b => b.classList.toggle('on', b.dataset.p === parent));
     $('chips').hidden = parent === 'Shared';
+    $('wf').innerHTML = WHO.map(w => `<button class="${wfilt === w[0] ? 'on' : ''}" data-wf="${w[0]}">${EYE}${w[1]}</button>`).join('');
     $('chips').innerHTML = CATS.map(c => `<button class="chip ${c[0] === filt ? 'on' : ''}" data-f="${c[0]}">${c[0]}</button>`).join('');
     const list = visible(), sm = sharedMap(), isShared = parent === 'Shared';
     $('count').textContent = list.length + (list.length === 1 ? ' video' : ' videos');
     $('rnd').hidden = isShared;
     $('items').innerHTML = list.length ? list.map(x => `
-      <div class="item" data-id="${x.id}">
+      <div class="item ${wfilt && isW(wfilt, x.id) ? 'dim' : ''}" data-id="${x.id}">
         <div class="th"><img src="covers/insp/${x.id}.jpg" alt="" loading="lazy">
           ${(() => { const d = WHO.filter(w => isW(w[0], x.id)).map(w => `<span>${w[2]}</span>`).join(''); return d ? `<span class="dots">${d}</span>` : ''; })()}<span class="badge">${mmss(x.dur)}</span></div>
         <div class="info"><div class="ttl">${esc(x.title)}</div>
@@ -160,8 +167,9 @@
       </div>`).join('') : `<div class="empty">${isShared ? 'Nothing shared with Chrissi yet.' : 'No videos here yet.'}</div>`;
   }
   $('seg').addEventListener('click', e => { const b = e.target.closest('[data-p]'); if (!b) return; parent = b.dataset.p; try { localStorage.setItem('insp-parent', parent); } catch {} renderList(); });
+  $('wf').addEventListener('click', e => { const b = e.target.closest('[data-wf]'); if (!b) return; wfilt = wfilt === b.dataset.wf ? '' : b.dataset.wf; try { localStorage.setItem('insp-wfilter', wfilt); } catch {} renderList(); });
   $('chips').addEventListener('click', e => { const c = e.target.closest('[data-f]'); if (!c) return; filt = c.dataset.f; try { localStorage.setItem('insp-filter', filt); } catch {} renderList(); });
-  $('rnd').onclick = () => { const sm = sharedMap(), l = visible(), pool = l.filter(x => !sm[x.id]).length ? l.filter(x => !sm[x.id]) : l; if (pool.length) location.hash = 'v=' + pool[Math.floor(Math.random() * pool.length)].id; };
+  $('rnd').onclick = () => { const sm = sharedMap(), l = visible().filter(x => !(wfilt && isW(wfilt, x.id))), pool = l.filter(x => !sm[x.id]).length ? l.filter(x => !sm[x.id]) : l; if (pool.length) location.hash = 'v=' + pool[Math.floor(Math.random() * pool.length)].id; };
 
   $('items').addEventListener('click', e => {
     const s = e.target.closest('[data-share]');
