@@ -174,10 +174,11 @@
   $('items').addEventListener('click', e => {
     const s = e.target.closest('[data-share]');
     if (s) { e.stopPropagation(); return share(VIDEOS.find(x => x.id === s.dataset.share)); }
-    const it = e.target.closest('.item'); if (it) location.hash = 'v=' + it.dataset.id;
+    const it = e.target.closest('.item'); if (it) { listY = scrollY; try { sessionStorage.setItem('insp-y', listY); } catch {} location.hash = 'v=' + it.dataset.id; }
   });
 
   let cur = null;
+  let listY = (() => { try { return +sessionStorage.getItem('insp-y') || 0; } catch { return 0; } })();
   const paintW = () => { $('who').innerHTML = WHO.map(w => { const on = isW(w[0], cur.id); return `<button class="${on ? 'on' : ''}" data-w="${w[0]}">${on ? CHK : EYE}${w[1]}</button>`; }).join(''); };
   $('who').addEventListener('click', e => { const b = e.target.closest('[data-w]'); if (!b) return; setW(b.dataset.w, cur.id, !isW(b.dataset.w, cur.id)); paintW(); });
   const paintS = () => { const on = !!sharedMap()[cur.id]; $('ps').innerHTML = shareBtn(cur); $('ps').classList.toggle('sent', on); };
@@ -189,7 +190,7 @@
     const id = (location.hash.match(/v=([\w-]+)/) || [])[1];
     cur = VIDEOS.find(x => x.id === id) || null;
     const v = $('v');
-    if (!cur) { v.pause(); v.removeAttribute('src'); v.load(); $('player').hidden = true; $('list').hidden = false; renderList(); return; }
+    if (!cur) { v.pause(); v.removeAttribute('src'); v.load(); $('player').hidden = true; $('list').hidden = false; renderList(); requestAnimationFrame(() => scrollTo(0, listY)); return; }
     $('pt').textContent = cur.title; $('pd').textContent = cur.desc || '';
     v.poster = `covers/insp/${cur.id}.jpg`; v.src = cur.link + '&raw=1';
     paintW(); paintS(); $('list').hidden = true; $('player').hidden = false; scrollTo(0, 0);
