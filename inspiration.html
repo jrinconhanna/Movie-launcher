@@ -91,7 +91,7 @@
   .close { font-size:26px; line-height:1; padding:0 12px 4px 0; border:0; background:none; color:var(--fg); vertical-align:1px; }
   html.embed body { padding-left:14px; padding-right:14px; }
   html.embed .top, html.embed .pbar { padding-top:8px; margin-left:-14px; margin-right:-14px; padding-left:14px; padding-right:14px; }
-html.embed,html.embed body{overflow-x:hidden;max-width:100%;overscroll-behavior-x:none;touch-action:pan-y} /* fix 28 Nov: only up/down scrolling inside the launcher */
+html.embed,html.embed body{overflow-x:clip;max-width:100%;overscroll-behavior-x:none;touch-action:pan-y} /* fix 28 Nov: only up/down scrolling inside the launcher; clip (not hidden) keeps the top bars pinned */
 </style>
 </head>
 <body>
